@@ -1,0 +1,365 @@
+## Default values for iot-agent-ul.
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+# option to override the name config in the _helpers.tpl
+nameOverride: ""
+# option to override the fullname config in the _helpers.tpl
+fullnameOverride: ""
+
+## configuration for the k8s service to access iotagent
+service:
+  # -- service type
+  type: ClusterIP
+  # -- addtional annotations, if required
+  annotations: {}
+  # -- port to be used by the service for northBound communication
+  httpNorthPort: 4061
+  # -- port to be used by the service for southBound communication
+  httpSouthPort: 7896
+  # -- port to be used by the service for mqtt communication
+  mqttPort: 1883
+  # -- port to be used by the service for amqp communication
+  amqpPort: 5672
+
+## if a iot-agent specific service account should be used, it can be configured here
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # -- specifies if the account should be created
+  create: false
+
+## deployment specific configuration
+deployment:
+  # -- initial number of target replications, can be different if autoscaling is enabled
+  replicaCount: 1
+  # -- number of old replicas to be retained
+  revisionHistoryLimit: 3
+  # -- configuration of the iotagent update strategy
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 1
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 0
+  ## configuration of the image to be used
+  image:
+    # -- iotagent image name
+    # ref: https://hub.docker.com/r/fiware/iotagent-ul/
+    repository: fiware/iotagent-ul
+    # -- tag of the image to be used
+    tag: 1.14.0
+    # -- specification of the image pull policy
+    pullPolicy: IfNotPresent
+  # -- port to be used by the service for northBound communication
+  httpNorthPort: 4061
+  # -- port to be used by the service for southBound communication
+  httpSouthPort: 7896
+  # -- port to be used by the service for mqtt communication
+  mqttPort: 1883
+  # -- port to be used by the service for amqp communication
+  amqpPort: 5672
+  # -- additional labels for the deployment, if required
+  additionalLabels: {}
+  # -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  # -- iotagent resource requests and limits, we leave the default empty to make that a concious choice by the user.
+  # for the autoscaling to make sense, you should configure this.
+  resources: {}
+    # limits:
+    # cpu: 100m
+    # memory: 128Mi
+    # requests:
+    # cpu: 100m
+  # memory: 128Mi
+  # -- selector template
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  # -- tolerations template
+  # ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  # -- affinity template
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+  ## liveness and readiness probes of the iotagent broker, they will be evaluated against the version endpoint
+  # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 30
+  readinessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 30
+
+## pod autoscaling configuration, use for automatic scaling of the broker pods
+autoscaling:
+  # -- should autoscaling be enabled
+  enabled: false
+  # -- minimum number of running pods
+  minReplicas: 1
+  # -- maximum number of running pods
+  maxReplicas: 10
+  # -- metrics to react on
+  metrics: []
+    ## List of MetricSpecs to decide whether to scale
+    ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#metricspec-v2beta2-autoscaling
+    ## scaler targets to hold average cpu around 80%
+    # - type: Resource
+    # resource:
+    #   name: cpu
+    #    target:
+    #     type: Utilization
+    #      averageUtilization: 80
+    ## scaler targets to hold average memory around 80%
+    #- type: Resource
+    #  resource:
+    #    name: memory
+     #   target:
+     #     type: Utilization
+      #    averageUtilization: 80
+
+## ingress configuration
+ingress:
+  # -- configuration for the south bound http ingress
+  httpSouth:
+    # -- should there be an ingress to connect iotagent with the public internet
+    enabled: true
+    # -- annotations to be added to the ingress
+    annotations: {}
+      # kubernetes.io/ingress.class: "ambassador"
+      ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
+      # kubernetes.io/tls-acme: "true"
+    # ingress.kubernetes.io/ssl-redirect: "true"
+    #  -- all hosts to be provided
+    hosts: []
+      # - host: localhost
+        # paths:
+         # - /
+      ## provide a host an the paths that should be available
+      # - host: iota-ul.fiware.org
+      # paths: [ ]
+    # - /v2
+    # -- configure the ingress' tls
+    tls: []
+      # - secretName: iota-tls
+      # hosts:
+    # - iota-ul.fiware.org
+  # -- configuration for the north bound http ingress
+  httpNorth:
+    # -- should there be an ingress to connect iotagent with the public internet
+    enabled: true
+    # -- annotations to be added to the ingress
+    annotations:
+      # kubernetes.io/ingress.class: "ambassador"
+    ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
+    # kubernetes.io/tls-acme: "true"
+    # ingress.kubernetes.io/ssl-redirect: "true"
+    # -- all hosts to be provided
+    hosts:
+      # - host: localhost
+        # paths:
+        #  - /
+      ## provide a host an the paths that should be available
+    # - host: iota-ul.fiware.org
+    # paths: [ ]
+    # - /v2
+    # -- configure the ingress' tls
+    tls: [ ]
+    # - secretName: iota-tls
+    # hosts:
+    # - iota-ul.fiware.org
+  # -- configuration for the amqp ingress
+  amqp:
+    # -- should there be an ingress to connect iotagent with the public internet
+    enabled: false
+    # -- annotations to be added to the ingress
+    annotations: { }
+    ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
+    # kubernetes.io/tls-acme: "true"
+    # ingress.kubernetes.io/ssl-redirect: "true"
+    # -- all hosts to be provided
+    hosts: [ ]
+    ## provide a host an the paths that should be available
+    # - host: iota-ul.fiware.org
+    # paths: [ ]
+    # - /v2
+    # -- configure the ingress' tls
+    tls: [ ]
+      # - secretName: iota-tls
+      # hosts:
+      # - iota-ul.fiware.org
+  # -- configuration for the mqtt ingress
+  mqtt:
+    # -- should there be an ingress to connect iotagent with the public internet
+    enabled: false
+    # -- annotations to be added to the ingress
+    annotations: { }
+    ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
+    # kubernetes.io/tls-acme: "true"
+    # ingress.kubernetes.io/ssl-redirect: "true"
+    # -- all hosts to be provided
+    hosts: [ ]
+    ## provide a host an the paths that should be available
+    # - host: iota-ul.fiware.org
+    # paths: [ ]
+    # - /v2
+    # -- configure the ingress' tls
+    tls: [ ]
+      # - secretName: iota-tls
+      # hosts:
+      # - iota-ul.fiware.org
+
+## configuration of the mqtt binding
+# mqtt:
+  ## configuration for the used mqtt broker
+  # broker:
+    ## mqtt broker host
+    # host: localhost
+    ## mqtt broker port
+    # port: 1883
+    ## protocol to use for connecting with the MQTT broker
+    # one of `mqtt`, `mqtts`, `tcp`, `tls`, `ws`, `wss`
+    # protocol: mqtt
+    ## authentication configuration for the broker, if required
+    # auth:
+      # username: username
+      # password: password
+  ## configuration of certificates to be used with mqtt
+  # certs:
+    ## if set, only validated certificates are accepted
+    # rejectUnauthorized: true
+  ## MQTT Quality of Service configuration
+  # qos: 0
+  ## Retain flag
+  # retain: false
+  ## Number of MQTT connection error retries
+  # retryNumber: 5
+  ##Time between MQTT connection retries in seconds
+  # retryTime: 0
+  ## Time to keep connection open between client and MQTT broker in seconds
+  # keepAlive: 0
+  ## Whether to use slashes at the beginning of topic when sending or not
+  # avoidLeadingSlash: false
+
+## configuration of the amqp binding
+# amqp:
+  ## amqp host
+  # host: localhost
+  ## amqp port
+  # port: 5672
+  ## authentication configuration, if required
+  # auth:
+    # username: username
+    # password: password
+  ## exchange to be used
+  # exchange: iota-exchange
+  ## queue to be used
+  # queue: iotaqueue
+  ## should the queue be durable (or transient)
+  # durable: true
+
+## configuration of the http binding
+http:
+  # -- Timeout for the http command endpoint (in milliseconds)
+  timeout: 1000
+
+## agent specific configuration
+iota:
+  # -- Configures the log level. Appropriate values are: FATAL, ERROR, INFO, WARN and DEBUG.
+  logLevel: DEBUG
+  # -- should a timestamp be added to every entity, metadata and attributecreated
+  timestamp: true
+  # -- contextbroker to be used with the agent
+  contextBroker:
+    # -- host of the broker
+    host: orion
+    # -- port of the broker
+    port: 1026
+  ## config for the secured access to the contextbroker via a PEP Proxy
+  # ref: https://fiware-pep-proxy.readthedocs.io/en/latest/
+  # authentication:
+    ## config for the auth manager to be used
+    # identityManager:
+      ## type of the manager to be used, either keystone or oauth2
+      # type: keystone
+      ## name of the header to pass for authentication
+      # headerName: Authorization
+      ## host of the identity manager
+      # host: localhost
+      ## port of the identity manager
+      # port: 5000
+      ## configuration for keystone, only when type keystone is used
+      # keystone:
+        ## username to be used
+        # user: user
+        ## password to be used
+        # password: password
+      ## configuration for oauth2, only when type 'oauth2' is used
+      # oauth2:
+        ## URL path for retrieving the token
+        # tokenPath: /oauth2/token
+        ## Does the token needs to be refreshed periodically
+        # permanentToken: true
+        ## clientId to be used for oauth2
+        # clientId: clientId
+        ## clientSecret to be used for oauth2
+        # clientSecret: clientSecret
+  # -- Default service, for IoT Agent installations that won't require preregistration
+  service: howtoService
+  # -- Default subservice, for IoT Agent installations that won't require preregistration.
+  subservice: /howto
+  # -- URL Where the IoT Agent Will listen for incoming updateContext and queryContext requests
+  providerUrl: http://localhost:4061
+  # -- Default maximum expire date for device registrations
+  deviceRegistrationDuration: P20Y
+  # -- Default type, for IoT Agent installations that won't require preregistration.
+  defaultType: Thing
+  # -- whether the incoming measures to the IoTAgent should be processed as per the "attributes" field.
+  explicitAttributes: false
+  # -- indicating whether the incoming notifications to the IoTAgent should be processed using the bidirectionality
+  # plugin from the latest versions of the library or the UL-specific configuration retrieval mechanism.
+  configRetrieval: false
+  # -- Default API Key, to use with device that have been provisioned without a Configuration Group.
+  defaultKey: TEF
+  # -- Default transport protocol when no transport is provisioned through the Device Provisioning API.
+  defaultTransport: HTTP
+
+
+
+## Configuration for the IoT Manager. If the IoT Agent is part of a configuration composed of multiple IoTAgents
+## coordinated by an IoT Manager, this section defines the information that will be used to connect with that
+## manager.
+## ref: https://github.com/telefonicaid/iotagent-manager
+# iotManager:
+  ## host of the iot manager
+  # host: localhost
+  ## port of the iot manager
+  # port: 8082
+  ## path where the manager accepts subscriptions
+  # path: /protocols
+  ## Protocol code identifying this IoT Agent
+  # protocolCode: MQTT_UL
+  ## Default resource of the IoT Agent. This value must be different for every IoT Agent connecting to the IoT
+  ## Manager. If unset, helm will generate a random one.
+  # defaultResource: /iot/d
+
+## configuration for the Device Registry, where all the information about devices and configuration groups will be
+## stored
+deviceRegistry:
+  # -- type of the registry, currently 'memory'(wiped on restart) and 'mongodb' are supported
+  type: memory
+  ## configuration of the mongoDb if used
+  # mongodb:
+    ## host of the mongodb
+    # host: localhost
+    ## port of the mongodb
+    # port: 27017
+    ## name of the db used
+    # dbName: iotagentul
+    ## name of the replicaset, if used
+    # replicaSet: dr

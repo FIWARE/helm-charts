@@ -1,0 +1,43 @@
+{{- if .Values.ingress.httpSouth.enabled -}}
+{{- $fullName := include "iota-ul.fullname" . -}}
+{{- $httpSouthPort := .Values.service.httpSouthPort -}}
+{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
+kind: Ingress
+metadata:
+  name: {{ include "iota-ul.fullname" . }}-south
+  labels:
+    {{ include "iota-ul.labels" . | nindent 4 }}
+  {{- if .Values.ingress.httpSouth.annotations }}
+  annotations:
+    {{- with .Values.ingress.httpSouth.annotations }}
+      {{- toYaml . | nindent 4 }}
+      {{- end }}
+  {{- end }}
+spec:
+  {{- if .Values.ingress.httpSouth.tls }}
+  tls:
+    {{- range .Values.ingress.httpSouth.tls }}
+    - hosts:
+      {{- range .hosts }}
+        - {{ . | quote }}
+      {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+  {{- range .Values.ingress.httpSouth.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+        {{- range .paths }}
+        - path: {{ . }}
+          backend:
+            serviceName: {{ $fullName }}
+            servicePort: {{ $httpSouthPort }}
+        {{- end }}
+  {{- end }}
+{{- end }}

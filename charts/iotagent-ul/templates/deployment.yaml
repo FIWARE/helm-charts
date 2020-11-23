@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "iota-ul.fullname" . }}
+  labels:
+    {{ include "iota-ul.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicaCount }}
+  revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
+  strategy:
+  {{- with .Values.deployment.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "iota-ul.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{ include "iota-ul.labels" . | nindent 8 }}
+        {{- with .Values.deployment.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.deployment.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.deployment.additionalAnnotations }}
+          {{- toYaml . | nindent 8 }}
+          {{- end }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "iota-ul.serviceAccountName" . }}
+      containers:
+        - name: {{ .Chart.Name }}
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          ports:
+            - name: http-north
+              containerPort: {{ .Values.deployment.httpNorthPort }}
+              protocol: TCP
+            {{- if .Values.deployment.httpSouthPort }}
+            - name: http-south
+              containerPort: {{ .Values.deployment.httpSouthPort }}
+              protocol: TCP
+            {{- end }}
+            {{- if .Values.deployment.mqttPort }}
+            - name: mqtt
+              containerPort: {{ .Values.deployment.mqttPort }}
+              protocol: TCP
+            {{- end }}
+            {{- if .Values.deployment.amqpPort }}
+            - name: amqp
+              containerPort: {{ .Values.deployment.amqpPort }}
+              protocol: TCP
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /iot/about
+              port: http-north
+            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /iot/about
+              port: http-north
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+          env:
+            {{- if .Values.iota.authentication -}}
+            {{- if eq .Values.iota.authentication.identityManager.type "keystone" -}}
+            - name: IOTA_AUTH_USER
+              valueFrom:
+                secretKeyRef: {{ include "orion.fullname" . }}
+                key: iotaUser
+            - name: IOTA_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef: {{ include "orion.fullname" . }}
+                key: iotaPassword
+            {{- end }}
+            {{- if eq .Values.iota.authentication.identityManager.type "oauth2" -}}
+              - name: IOTA_AUTH_CLIENT_ID
+                valueFrom:
+                  secretKeyRef: {{ include "orion.fullname" . }}
+                  key: clientId
+              - name: IOTA_AUTH_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef: {{ include "orion.fullname" . }}
+                  key: clientSecret
+            {{- end }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /opt/iotaul/config.js
+              subPath: config.js
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "iota-ul.fullname" . }}
+            items:
+              - key: config.js
+                path: config.js
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

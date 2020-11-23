@@ -1,0 +1,17 @@
+apiVersion: v1
+name: Orion
+version: 0.0.1
+appVersion: 2.5.0
+home: https://fiware-orion.readthedocs.io/en/master/
+description: A Helm chart for running the fiware orion broker on kubernetes.
+icon: https://fiware.github.io/catalogue/img/fiware.png
+keywords:
+- fiware
+- orion
+- orion-ld
+sources:
+- https://github.com/telefonicaid/fiware-orion
+- https://github.com/FIWARE/context.Orion-LD
+maintainers:
+- name: wistefan
+  email: stefan.wiedemann@fiware.org

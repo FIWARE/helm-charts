@@ -1,0 +1,16 @@
+apiVersion: v1
+name: Iotagent-Ul
+version: 0.0.1
+appVersion: 1.14.0
+home: https://fiware-iotagent-ul.readthedocs.io/en/latest/
+description: A Helm chart for running the fiware iot agent for the ultralight 2.0 protocol on kubernetes.
+icon: https://fiware.github.io/catalogue/img/fiware.png
+keywords:
+  - fiware
+  - iot-agent
+  - ultralight-protocol
+sources:
+  - https://github.com/telefonicaid/iotagent-ul
+maintainers:
+  - name: wistefan
+    email: stefan.wiedemann@fiware.org

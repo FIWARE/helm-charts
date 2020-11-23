@@ -1,0 +1,5 @@
+Administrator credentials:
+
+  Username: {{ .Values.admin.user }}
+  Email: {{ .Values.admin.email }}
+  Password: echo  $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "keyrock.fullname" . }} -o jsonpath="{.data.adminPassword}" | base64 --decode)
