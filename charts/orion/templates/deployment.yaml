@@ -193,7 +193,7 @@ spec:
             
             # metrics
             {{- if .Values.broker.metrics }}
-            {{- if eq .Values.broker.metrics.enabled "false" }}
+            {{- if eq .Values.broker.metrics.enabled false }}
             - name: {{ .Values.broker.envPrefix }}DISABLE_METRICS
               value: TRUE
             {{- else -}}
