@@ -193,7 +193,7 @@ broker:
   ## logging configuration of the orion broker
   logging:
     # -- log level of the broker
-    level: WARN
+    level: "WARN"
     ## specifies the initial trace levels for logging
     # trace: 70
     ## log summary period in seconds
