@@ -210,8 +210,8 @@ broker:
   ## database configuration
   db:
     # -- configuration of the mongo-db hosts. if multiple hosts are inserted, its assumed that mongo is running as a replica set
-    hosts:
-     - mongodb
+    hosts: []
+    # - mongodb
     # -- the db to use. if running in multiservice mode, its used as a prefix.
     name: orion
     # -- Database authentication (not needed if MongoDB doesn't use --auth)
