@@ -62,11 +62,11 @@ spec:
               value: "TRUE"
             {{- if and (eq .Values.broker.ipv4enabled true) (eq .Values.broker.ipv6enabled false) }}
             - name: {{ .Values.broker.envPrefix }}USEIPV4
-              value: TRUE
+              value: "TRUE"
             {{- end }}
             {{- if and (eq .Values.broker.ipv6enabled true) (eq .Values.broker.ipv4enabled false) }}
             - name: {{ .Values.broker.envPrefix }}USEIPV6
-              value: TRUE
+              value: "TRUE"
             {{- end }}
             {{- if .Values.broker.httpTimeout }}
             - name: {{ .Values.broker.envPrefix }}HTTP_TIMEOUT
@@ -195,10 +195,10 @@ spec:
             {{- if .Values.broker.metrics }}
             {{- if eq .Values.broker.metrics.enabled "false" }}
             - name: {{ .Values.broker.envPrefix }}DISABLE_METRICS
-              value: TRUE
+              value: "TRUE"
             {{- else -}}
             - name: {{ .Values.broker.envPrefix }}DISABLE_METRICS
-              value: FALSE
+              value: "FALSE"
             {{- end }}
             {{- if .Values.broker.metrics.statCountersEnabled }}
             - name: {{ .Values.broker.envPrefix }}STAT_COUNTERS
