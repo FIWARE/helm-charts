@@ -29,7 +29,7 @@ After the repo is added all charts can be installed via:
 
 ## License
 
-The IoT Agent for ISOXML/ADAPT is licensed under [Affero General Public License (GPL) version 3](./LICENSE).
+The Fiware Helm Charts are licensed under [Affero General Public License (GPL) version 3](./LICENSE).
 
 © 2020 FIWARE Foundation e.V.
 
