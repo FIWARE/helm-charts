@@ -3,7 +3,7 @@
 ![FIWARE Catalogue](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/cross-chapter.svg)
 [![License: APGL](https://img.shields.io/github/license/FIWARE/iotagent-isoxml.svg)](https://opensource.org/licenses/AGPL-3.0)
 [![Releases downloads](https://img.shields.io/github/downloads/fiware/helm-charts/total.svg)](https://github.com/fiware/helm-charts/releases)
-[![Release Charts](https://github.com/fiware/helm-charts/workflows/Build/badge.svg)](https://github.com/fiware/helm-charts/commits/main)
+[![Release Charts](https://github.com/fiware/helm-charts/workflows/Deploy/badge.svg)](https://github.com/fiware/helm-charts/commits/main)
 [![Fiware](https://nexus.lab.fiware.org/repository/raw/public/badges/stackoverflow/fiware.svg)](https://stackoverflow.com/questions/tagged/fiware)
 [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/fiware)](https://artifacthub.io/packages/search?repo=fiware)
 <br/>
