@@ -1,0 +1,68 @@
+apiVersion: v1
+entries:
+  iotagent-ul:
+  - apiVersion: v1
+    appVersion: 1.14.0
+    created: "2020-11-24T06:32:42.693358413Z"
+    description: A Helm chart for running the fiware iot agent for the ultralight
+      2.0 protocol on kubernetes.
+    digest: 75132a93cbacc6b90f9e20d448e780aa67fe4ebdd2ade009fdc188f064a6e216
+    home: https://fiware-iotagent-ul.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - iot-agent
+    - ultralight-protocol
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: iotagent-ul
+    sources:
+    - https://github.com/telefonicaid/iotagent-ul
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/iotagent-ul-0.0.1/iotagent-ul-0.0.1.tgz
+    version: 0.0.1
+  keyrock:
+  - apiVersion: v1
+    appVersion: 7.9.0
+    created: "2020-11-24T06:32:42.827473036Z"
+    description: A Helm chart for running the fiware idm keyrock on kubernetes.
+    digest: 794e59aefa5c0db700ba3d01390934540d43f7141689ed0cadf65775b4362ce1
+    home: https://fiware-idm.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - keyrock
+    - idm
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: keyrock
+    sources:
+    - https://github.com/ging/fiware-idm
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/keyrock-0.0.1/keyrock-0.0.1.tgz
+    version: 0.0.1
+  orion:
+  - apiVersion: v1
+    appVersion: 2.5.0
+    created: "2020-11-24T06:32:42.956987701Z"
+    description: A Helm chart for running the fiware orion broker on kubernetes.
+    digest: c6ac41efb4c014eabb39facfc76cf98cf4805af8f16c3131708a75072836e05a
+    home: https://fiware-orion.readthedocs.io/en/master/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion
+    - orion-ld
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: orion
+    sources:
+    - https://github.com/telefonicaid/fiware-orion
+    - https://github.com/FIWARE/context.Orion-LD
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/orion-0.0.1/orion-0.0.1.tgz
+    version: 0.0.1
+generated: "2020-11-24T06:32:42.475297151Z"
