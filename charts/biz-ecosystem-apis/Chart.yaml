@@ -1,0 +1,24 @@
+apiVersion: v2
+name: biz-ecosystem-apis
+description: A Helm chart for running the FIWARE business ecosystem APIs on Kubernetes
+icon: https://fiware.github.io/catalogue/img/fiware.png
+version: 0.0.1
+appVersion: 7.6.0
+home: https://business-api-ecosystem.readthedocs.io/en/latest/
+keywords:
+  - fiware
+  - marketplace
+  - bae
+  - tmforum
+sources:
+  - https://github.com/FIWARE-TMForum/Business-API-Ecosystem
+  - https://github.com/FIWARE-TMForum/DSPRODUCTCATALOG2
+  - https://github.com/FIWARE-TMForum/DSPRODUCTORDERING
+  - https://github.com/FIWARE-TMForum/DSPRODUCTINVENTORY
+  - https://github.com/FIWARE-TMForum/DSPARTYMANAGEMENT
+  - https://github.com/FIWARE-TMForum/DSCUSTOMER
+  - https://github.com/FIWARE-TMForum/DSBILLINGMANAGEMENT
+  - https://github.com/FIWARE-TMForum/DSUSAGEMANAGEMENT
+maintainers:
+  - name: dwendland
+    email: dennis.wendland@fiware.org

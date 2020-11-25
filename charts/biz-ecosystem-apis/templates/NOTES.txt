@@ -1,0 +1,10 @@
+The BIZ Ecosystem TMForum APIs can be accessed via port 8080 on the following DNS name from within your cluster:
+{{ include "biz-ecosystem-apis.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+
+To connect from outside the K8s cluster:
+export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "biz-ecosystem-apis.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+
+kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
+
+
