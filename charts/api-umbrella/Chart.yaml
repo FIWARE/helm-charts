@@ -1,0 +1,15 @@
+apiVersion: v1
+name: api-umbrella
+version: 0.0.1
+appVersion: v0.15.1
+home: https://api-umbrella.readthedocs.io/en/latest/index.html
+description: A Helm chart for running api-umbrella on kubernetes.
+icon: https://fiware.github.io/catalogue/img/fiware.png
+keywords:
+  - fiware
+  - api-umbrella
+sources:
+  - https://github.com/NREL/api-umbrella
+maintainers:
+  - name: wistefan
+    email: stefan.wiedemann@fiware.org

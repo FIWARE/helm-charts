@@ -1,0 +1,27 @@
+{{- $mongoPassword := include "api-umbrella.mongoPassword" . -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "api-umbrella.fullname" . }}
+  labels:
+    {{- include "api-umbrella.labels" . | nindent 4 }}
+data:
+  api-umbrella.yml: |-
+    app_env: production
+
+    services:
+      {{- range .Values.umbrella.services }}
+      - {{ . }}
+     {{- end }}
+
+    router:
+      web_app_host: {{ .Values.umbrella.webHost | quote }}
+    mongodb:
+      url: "mongodb://{{ .Values.umbrella.mongodb.username }}:{{ $mongoPassword }}@{{ .Values.umbrella.mongodb.host }}:{{ .Values.umbrella.mongodb.port }}/{{ .Values.umbrella.mongodb.name }}"
+
+    {{- with .Values.umbrella.config }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+
+    log:
+      destination: console
