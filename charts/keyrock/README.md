@@ -1,6 +1,6 @@
-# Keyrock
+# keyrock
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: 7.9.0](https://img.shields.io/badge/AppVersion-7.9.0-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![AppVersion: 7.9.0](https://img.shields.io/badge/AppVersion-7.9.0-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -42,7 +42,7 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | deployment.livenessProbe.successThreshold | int | `1` |  |
 | deployment.livenessProbe.timeoutSeconds | int | `30` |  |
 | deployment.nodeSelector | object | `{}` |  |
-| deployment.readinessProbe.initialDelaySeconds | int | `30` |  |
+| deployment.readinessProbe.initialDelaySeconds | int | `31` |  |
 | deployment.readinessProbe.periodSeconds | int | `10` |  |
 | deployment.readinessProbe.successThreshold | int | `1` |  |
 | deployment.readinessProbe.timeoutSeconds | int | `30` |  |
@@ -56,11 +56,14 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | fullnameOverride | string | `""` | option to override the fullname config in the _helpers.tpl |
 | host | string | `"http://localhost"` | host where keyrock is available at |
 | ingress.annotations | object | `{}` | annotations to be added to the ingress |
-| ingress.enabled | bool | `true` | should there be an ingress to connect keyrock with the public internet |
+| ingress.enabled | bool | `false` | should there be an ingress to connect keyrock with the public internet |
 | ingress.hosts | list | `[]` |  |
 | ingress.tls | list | `[]` |  |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | port | int | `8080` | port that the keyrock container uses |
+| route.annotations | object | `{}` | annotations to be added to the route |
+| route.enabled | bool | `false` |  |
+| route.tls | object | `{}` | host to be used host: localhost -- tls configuration for the route |
 | service.annotations | object | `{}` | addtional annotations, if required |
 | service.port | int | `8080` | port to be used by the service |
 | service.type | string | `"ClusterIP"` | service type |

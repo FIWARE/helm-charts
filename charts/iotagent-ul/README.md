@@ -1,4 +1,4 @@
-# Iotagent-Ul
+# iotagent-ul
 
 ![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
 
@@ -42,7 +42,7 @@ A Helm chart for running the fiware iot agent for the ultralight 2.0 protocol on
 | deployment.readinessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.readinessProbe.periodSeconds | int | `10` |  |
 | deployment.readinessProbe.successThreshold | int | `1` |  |
-| deployment.readinessProbe.timeoutSeconds | int | `30` |  |
+| deployment.readinessProbe.timeoutSeconds | int | `31` |  |
 | deployment.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | deployment.resources | object | `{}` | iotagent resource requests and limits, we leave the default empty to make that a concious choice by the user. for the autoscaling to make sense, you should configure this. |
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |

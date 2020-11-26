@@ -109,10 +109,22 @@ autoscaling:
   #        type: Utilization
   #        averageUtilization: 80
 
+## openshift specific route definition. Will not work on plain k8s
+route:
+  ## -- should the deployment create openshift routes
+  enabled: false
+  # -- annotations to be added to the route
+  annotations: {}
+  # -- host to be used
+  # host: localhost
+  # -- tls configuration for the route
+  tls: {}
+  # termination: edge
+
 ## ingress configuration
 ingress:
   # -- should there be an ingress to connect keyrock with the public internet
-  enabled: true
+  enabled: false
   # -- annotations to be added to the ingress
   annotations: {}
     # kubernetes.io/ingress.class: "ambassador"
