@@ -1,6 +1,6 @@
-# Orion
+# orion
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: 2.5.0](https://img.shields.io/badge/AppVersion-2.5.0-informational?style=flat-square)
+![Version: 0.0.3](https://img.shields.io/badge/Version-0.0.3-informational?style=flat-square) ![AppVersion: 2.5.0](https://img.shields.io/badge/AppVersion-2.5.0-informational?style=flat-square)
 
 A Helm chart for running the fiware orion broker on kubernetes.
 
@@ -25,13 +25,13 @@ A Helm chart for running the fiware orion broker on kubernetes.
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |
 | autoscaling.minReplicas | int | `1` | minimum number of running pods |
-| broker.db.hosts | list | `["mongodb"]` | configuration of the mongo-db hosts. if multiple hosts are inserted, its assumed that mongo is running as a replica set |
-| broker.db.name | string | `"orion"` | the db to use. if running in multiservice mode, its used as a prefix. |
+| broker.db.hosts | list | `[]` | configuration of the mongo-db hosts. if multiple hosts are inserted, its assumed that mongo is running as a replica set |
+| broker.db.name | string | `"orion"` |  |
 | broker.envPrefix | string | `"ORIONLD_"` | Prefix to be used for env-vars in orion. Must be ORION_ for orion and ORIONLD_ for orion-ld |
 | broker.ipv4enabled | bool | `false` | set to true if only ipv4 should be used, do not set both options to true |
 | broker.ipv6enabled | bool | `false` | set to true if only ipv6 should be used, do not set both options to true |
 | broker.logging.level | string | `"WARN"` | log level of the broker |
-| broker.metrics.enabled | bool | `false` | enable or disable metrics gathering |
+| broker.metrics.enabled | string | `"false"` | enable or disable metrics gathering |
 | broker.port | int | `1026` | port that the broker is listening to |
 | deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
@@ -61,6 +61,9 @@ A Helm chart for running the fiware orion broker on kubernetes.
 | ingress.hosts | list | `[]` |  |
 | ingress.tls | list | `[]` | provide a hosts and the paths that should be available - host: localhost paths: - / -- configure the ingress' tls |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
+| route.annotations | object | `{}` | annotations to be added to the route |
+| route.enabled | bool | `false` |  |
+| route.tls | object | `{}` | host to be used host: localhost -- tls configuration for the route |
 | service.annotations | object | `{}` | addtional annotations, if required |
 | service.port | int | `1026` | port to be used by the service |
 | service.type | string | `"ClusterIP"` | service type |
