@@ -1,0 +1,154 @@
+## Default values for orion.
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+# -- option to override the name config in the _helpers.tpl
+nameOverride: ""
+# -- option to override the fullname config in the _helpers.tpl
+fullnameOverride: ""
+
+## configuration for the k8s service to access orion
+service:
+  # -- service type
+  type: ClusterIP
+  # -- port to be used by the service
+  port: 80
+  # -- addtional annotations, if required
+  annotations: {}
+
+## if a orion specific service account should be used, it can be configured here
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # -- specifies if the account should be created, be aware that the chart needs to run as root and sets the corresponding security context
+  create: false
+
+## deployment specific configuration
+deployment:
+  # -- initial number of target replications, can be different if autoscaling is enabled
+  replicaCount: 1
+  # -- number of old replicas to be retained
+  revisionHistoryLimit: 3
+  # -- configuration of the orion update strategy
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 1
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 0
+  # -- configuration of the image to be used
+  image:
+    ## orion image name
+    # -- ref: https://hub.docker.com/r/fiware/orion/
+    repository: profirator/api-umbrella
+    # -- tag of the image to be used
+    tag: 0.15.3
+    # -- specification of the image pull policy
+    pullPolicy: IfNotPresent
+  # -- additional labels for the deployment, if required
+  additionalLabels: {}
+  # -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  ## orion resource requests and limits, we leave the default empty to make that a concious choice by the user.
+  ## for the autoscaling to make sense, you should configure this.
+#  resources:
+#    limits:
+#      cpu: 100m
+#      memory: 128Mi
+#    requests:
+#      cpu: 100m
+#      memory: 128Mi
+  # -- selector template
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  # -- tolerations template
+  # ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  # -- affinity template
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+  # -- liveness and readiness probes of the orion broker, they will be evaluated against the version endpoint
+  # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 30
+  readinessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 30
+
+## ingress configuration
+ingress:
+  # -- should there be an ingress to connect orion with the public internet
+  enabled: false
+  # -- annotations to be added to the ingress
+  annotations: {}
+    # kubernetes.io/ingress.class: "ambassador"
+    ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
+    # kubernetes.io/tls-acme: "true"
+    # ingress.kubernetes.io/ssl-redirect: "true"
+  # -- all hosts to be provided
+  hosts:
+    ## provide a hosts and the paths that should be available
+    # - host: localhost
+      # paths:
+      # - /
+  ## configure the ingress' tls
+  tls: []
+    # - secretName: orion-tls
+    # hosts:
+  # - api-umbrella.fiware.org
+
+## openshift specific route definition. Will not work on plain k8s
+route:
+  ## -- should the deployment create openshift routes
+  enabled: false
+  # -- annotations to be added to the route
+  annotations: { }
+  # -- host to be used
+  # host: localhost
+  # -- tls configuration for the route
+  tls: { }
+  # termination: edge
+
+# configuration of api umbrella
+umbrella:
+  # -- list services that should be run by api-umbrella. See https://github.com/Profirator/api-umbrella/tree/master/config and
+  # https://api-umbrella.readthedocs.io/en/latest/ for more
+  services:
+    - router
+    - web
+
+  # -- configure the host of the frontend here
+  webHost: umbrella.fiware.dev
+
+  # database connection
+  mongodb:
+    # -- username to authenticate with. If the user does not exist, admin config is required and a user will be created
+    username: umbrella
+    # -- password to authenticate with, if not set, we will create it
+    password: pass
+    # -- host of the mongodb
+    host: mongodb
+    # -- port of the mongodb
+    port: 27071
+    # -- name of the database, needs to exist on startup
+    name: api_umbrella
+
+  # -- configuration of the umbrella. See https://github.com/Profirator/api-umbrella/tree/master/config and
+  # https://api-umbrella.readthedocs.io/en/latest/ for more or use the out-commented part as a sane default
+  config: {}
+    # gatekeeper:
+      # api_key_methods:
+        # - fiware-oauth2
+        # - header
+        # - getParam
+      # api_key_cache: true
+      # default_idp:
+        # backend_name: fiware-oauth2
+        # host: https://my-keyrock.de
