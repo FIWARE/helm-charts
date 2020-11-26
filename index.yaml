@@ -1,5 +1,25 @@
 apiVersion: v1
 entries:
+  api-umbrella:
+  - apiVersion: v1
+    appVersion: v0.15.1
+    created: "2020-11-26T15:27:21.929065432Z"
+    description: A Helm chart for running api-umbrella on kubernetes.
+    digest: 94fd5bfdc33d1f5785eba6a4379301455822a33e8ac5e03ab64f28f2f0bd09e4
+    home: https://api-umbrella.readthedocs.io/en/latest/index.html
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - api-umbrella
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: api-umbrella
+    sources:
+    - https://github.com/NREL/api-umbrella
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/api-umbrella-0.0.1/api-umbrella-0.0.1.tgz
+    version: 0.0.1
   iotagent-ul:
   - apiVersion: v1
     appVersion: 1.14.0
