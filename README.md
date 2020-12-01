@@ -1,14 +1,14 @@
-# Helm Repository for Fiware Components
+# Helm Repository for FIWARE Components
 
 ![FIWARE Catalogue](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/cross-chapter.svg)
 [![License: APGL](https://img.shields.io/github/license/FIWARE/iotagent-isoxml.svg)](https://opensource.org/licenses/AGPL-3.0)
 [![Releases downloads](https://img.shields.io/github/downloads/fiware/helm-charts/total.svg)](https://github.com/fiware/helm-charts/releases)
 [![Release Charts](https://github.com/fiware/helm-charts/workflows/Deploy/badge.svg)](https://github.com/fiware/helm-charts/commits/main)
-[![Fiware](https://nexus.lab.fiware.org/repository/raw/public/badges/stackoverflow/fiware.svg)](https://stackoverflow.com/questions/tagged/fiware)
+[![FIWARE](https://nexus.lab.fiware.org/repository/raw/public/badges/stackoverflow/fiware.svg)](https://stackoverflow.com/questions/tagged/fiware)
 [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/fiware)](https://artifacthub.io/packages/search?repo=fiware)
 <br/>
 
-Repository for providing [HELM Charts](https://helm.sh/) of [Fiware Components](https://github.com/FIWARE/catalogue). The charts can be install into
+Repository for providing [HELM Charts](https://helm.sh/) of [FIWARE Components](https://github.com/FIWARE/catalogue). The charts can be install into
  [Kubernetes](https://kubernetes.io/) with [helm3](https://helm.sh/docs/) .
 
 For further information, please look into the individual chart-readme's.
@@ -29,7 +29,7 @@ After the repo is added all charts can be installed via:
 
 ## License
 
-The Fiware Helm Charts are licensed under [Affero General Public License (GPL) version 3](./LICENSE).
+The FIWARE Helm Charts are licensed under [Affero General Public License (GPL) version 3](./LICENSE).
 
 © 2020 FIWARE Foundation e.V.
 
