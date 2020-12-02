@@ -1,0 +1,209 @@
+{{- if .Values.bizEcosystemLogicProxy.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+  labels:
+    {{- include "bizEcosystemLogicProxy.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.bizEcosystemLogicProxy.deployment.replicaCount }}
+  revisionHistoryLimit: {{ .Values.bizEcosystemLogicProxy.deployment.revisionHistoryLimit }}
+  strategy:
+  {{- with .Values.bizEcosystemLogicProxy.deployment.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "bizEcosystemLogicProxy.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{ include "bizEcosystemLogicProxy.labels" . | nindent 8 }}
+        {{- with .Values.bizEcosystemLogicProxy.deployment.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.bizEcosystemLogicProxy.deployment.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.bizEcosystemLogicProxy.deployment.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "bizEcosystemLogicProxy.serviceAccountName" . }}
+      initContainers:
+        - name: {{ .Release.Name }}-{{ .Values.bizEcosystemLogicProxy.name }}-{{ .Values.initContainer.mongodb.name }}
+          image: '{{ .Values.initContainer.mongodb.image }}:{{ .Values.initContainer.mongodb.imageTag }}'
+          imagePullPolicy: {{ .Values.initContainer.mongodb.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! mongo --host {{ .Values.bizEcosystemLogicProxy.db.host | quote }} --eval "printjson(db.serverStatus())"; do echo "Waiting for MongoDB"; sleep 10; done;']
+        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-inventory
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductInventory"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-catalog
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductCatalog"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-ordering
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductOrdering"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-party
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSPartyManagement"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-billing
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSBillingManagement"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-customer
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSCustomerManagement"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-usage
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSUsageManagement"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-charging
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemChargingBackend.fullhostname" . }}/charging/api/assetManagement/currencyCodes"; do echo "Waiting for Charging Backend"; sleep 20; done;']
+      containers:
+        - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemLogicProxy.name }}
+          imagePullPolicy: {{ .Values.bizEcosystemLogicProxy.deployment.image.pullPolicy }}
+          image: "{{ .Values.bizEcosystemLogicProxy.deployment.image.repository }}:{{ .Values.bizEcosystemLogicProxy.deployment.image.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.bizEcosystemLogicProxy.port}}
+              protocol: TCP
+          {{- if .Values.bizEcosystemLogicProxy.securityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.bizEcosystemLogicProxy.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.bizEcosystemLogicProxy.securityContext.runAsGroup }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /version
+              port: {{ .Values.bizEcosystemLogicProxy.port}}
+            initialDelaySeconds: {{ .Values.bizEcosystemLogicProxy.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bizEcosystemLogicProxy.deployment.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.bizEcosystemLogicProxy.deployment.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.bizEcosystemLogicProxy.deployment.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /version
+              port: {{ .Values.bizEcosystemLogicProxy.port}}
+            initialDelaySeconds: {{ .Values.bizEcosystemLogicProxy.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bizEcosystemLogicProxy.deployment.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.bizEcosystemLogicProxy.deployment.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.bizEcosystemLogicProxy.deployment.readinessProbe.timeoutSeconds }}
+          env:
+            - name: NODE_ENV
+              value: {{ .Values.bizEcosystemLogicProxy.nodeEnvironment | quote }}
+            - name: COLLECT
+              value: {{ .Values.bizEcosystemLogicProxy.collectStaticCommand | quote }}
+            - name: BAE_LP_PORT
+              value: {{ .Values.bizEcosystemLogicProxy.port | quote }}
+            - name: BAE_LP_HOST
+              value: http://{{ include "bizEcosystemLogicProxy.fullhostname" . }}
+            {{- if .Values.bizEcosystemLogicProxy.proxyHost }}
+            - name: BAE_SERVICE_HOST
+              value: {{ .Values.bizEcosystemLogicProxy.proxyHost | quote }}
+            {{- end }}
+            - name: BAE_LP_MONGO_SERVER
+              value: {{ .Values.bizEcosystemLogicProxy.db.host | quote }}
+            - name: BAE_LP_MONGO_PORT
+              value: {{ .Values.bizEcosystemLogicProxy.db.port | quote }}
+            - name: BAE_LP_MONGO_DB
+              value: {{ .Values.bizEcosystemLogicProxy.db.database | quote }}
+            - name: BAE_LP_MONGO_USER
+              value: {{ .Values.bizEcosystemLogicProxy.db.user | quote }}
+            - name: BAE_LP_MONGO_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+                  key: dbPassword
+            - name: BAE_LP_OAUTH2_SERVER
+              value: {{ .Values.oauth.server | quote }}
+            - name: BAE_LP_OAUTH2_CLIENT_ID
+              value: {{ .Values.oauth.clientId | quote }}
+            - name: BAE_LP_OAUTH2_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+                  key: oauthClientSecret
+            - name: BAE_LP_OAUTH2_CALLBACK
+              value: {{ .Values.externalUrl }}{{ .Values.oauth.callbackPath }}
+            - name: BAE_LP_OAUTH2_ADMIN_ROLE
+              value: {{ .Values.oauth.adminrole | quote }}
+            - name: BAE_LP_OAUTH2_SELLER_ROLE
+              value: {{ .Values.oauth.sellerrole | quote }}
+            - name: BAE_LP_OAUTH2_CUSTOMER_ROLE
+              value: {{ .Values.oauth.customerrole | quote }}
+            - name: BAE_LP_OAUTH2_ORG_ADMIN_ROLE
+              value: {{ .Values.oauth.orgadminrole | quote }}
+            - name: BAE_LP_OAUTH2_IS_LEGACY
+              value: {{ .Values.oauth.isLegacy | quote }}
+            {{- if .Values.bizEcosystemLogicProxy.theme }}
+            - name: BAE_LP_THEME
+              value: {{ .Values.bizEcosystemLogicProxy.theme | quote }}
+            {{- end }}
+            - name: BAE_LP_REVENUE_MODEL
+              value: {{ .Values.bizEcosystemLogicProxy.revenueModel | quote }}
+            - name: BAE_LP_ENDPOINT_CATALOG_HOST
+              value: {{ include "bizEcosystemApis.hostnameonly" . }}
+            - name: BAE_LP_ENDPOINT_CATALOG_PORT
+              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+            - name: BAE_LP_ENDPOINT_INVENTORY_HOST
+              value: {{ include "bizEcosystemApis.hostnameonly" . }}
+            - name: BAE_LP_ENDPOINT_INVENTORY_PORT
+              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+            - name: BAE_LP_ENDPOINT_ORDERING_HOST
+              value: {{ include "bizEcosystemApis.hostnameonly" . }}
+            - name: BAE_LP_ENDPOINT_ORDERING_PORT
+              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+            - name: BAE_LP_ENDPOINT_BILLING_HOST
+              value: {{ include "bizEcosystemApis.hostnameonly" . }}
+            - name: BAE_LP_ENDPOINT_BILLING_PORT
+              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+            - name: BAE_LP_ENDPOINT_RSS_HOST
+              value: {{ include "bizEcosystemRss.hostnameonly" . }}
+            - name: BAE_LP_ENDPOINT_RSS_PORT
+              value: {{ .Values.bizEcosystemRss.service.port | quote }}
+            - name: BAE_LP_ENDPOINT_USAGE_HOST
+              value: {{ include "bizEcosystemApis.hostnameonly" . }}
+            - name: BAE_LP_ENDPOINT_USAGE_PORT
+              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+            - name: BAE_LP_ENDPOINT_PARTY_HOST
+              value: {{ include "bizEcosystemApis.hostnameonly" . }}
+            - name: BAE_LP_ENDPOINT_PARTY_PORT
+              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+            - name: BAE_LP_ENDPOINT_CUSTOMER_HOST
+              value: {{ include "bizEcosystemApis.hostnameonly" . }}
+            - name: BAE_LP_ENDPOINT_CUSTOMER_PORT
+              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+            - name: BAE_LP_ENDPOINT_CHARGING_HOST
+              value: {{ include "bizEcosystemChargingBackend.hostnameonly" . }}
+            - name: BAE_LP_ENDPOINT_CHARGING_PORT
+              value: {{ .Values.bizEcosystemChargingBackend.service.port | quote }}
+      {{- with .Values.bizEcosystemLogicProxy.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bizEcosystemLogicProxy.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bizEcosystemLogicProxy.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}    
+{{- end }}

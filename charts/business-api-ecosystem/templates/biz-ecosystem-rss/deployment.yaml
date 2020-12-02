@@ -1,0 +1,141 @@
+{{- if .Values.bizEcosystemRss.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bizEcosystemRss.fullname" . }}
+  labels:
+    {{- include "bizEcosystemRss.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.bizEcosystemRss.deployment.replicaCount }}
+  revisionHistoryLimit: {{ .Values.bizEcosystemRss.deployment.revisionHistoryLimit }}
+  strategy:
+  {{- with .Values.bizEcosystemRss.deployment.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "bizEcosystemRss.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{ include "bizEcosystemRss.labels" . | nindent 8 }}
+        {{- with .Values.bizEcosystemRss.deployment.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.bizEcosystemRss.deployment.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.bizEcosystemRss.deployment.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "bizEcosystemRss.serviceAccountName" . }}
+      initContainers:
+        - name: {{ include "bizEcosystemRss.fullname" . }}-{{ .Values.initContainer.mysql.name }}
+          image: '{{ .Values.initContainer.mysql.image }}:{{ .Values.initContainer.mysql.imageTag }}'
+          imagePullPolicy: {{ .Values.initContainer.mysql.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! mysqladmin ping -h{{ .Values.bizEcosystemRss.db.host | quote }} --silent; do echo "Waiting for MySQL"; sleep 10; done;']
+        - name: {{ include "bizEcosystemRss.apiInitContainer" . }}-inventory
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductInventory"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemRss.apiInitContainer" . }}-catalog
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductCatalog"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemRss.apiInitContainer" . }}-ordering
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductOrdering"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemRss.apiInitContainer" . }}-party
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSPartyManagement"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemRss.apiInitContainer" . }}-billing
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSBillingManagement"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemRss.apiInitContainer" . }}-customer
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSCustomerManagement"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemRss.apiInitContainer" . }}-usage
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSUsageManagement"; do echo "Waiting for APIs"; sleep 20; done;']
+      containers:
+        - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemRss.name }}
+          imagePullPolicy: {{ .Values.bizEcosystemRss.deployment.image.pullPolicy }}
+          image: "{{ .Values.bizEcosystemRss.deployment.image.repository }}:{{ .Values.bizEcosystemRss.deployment.image.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.bizEcosystemRss.port}}
+              protocol: TCP
+          {{- if .Values.bizEcosystemRss.securityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.bizEcosystemRss.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.bizEcosystemRss.securityContext.runAsGroup }}
+          {{- end }}
+          livenessProbe:
+            exec:
+              command:
+                - /glassfish4/glassfish/bin/asadmin
+                - show-component-status
+                - DSRevenueSharing
+            initialDelaySeconds: {{ .Values.bizEcosystemRss.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bizEcosystemRss.deployment.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.bizEcosystemRss.deployment.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.bizEcosystemRss.deployment.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            exec:
+              command:
+                - /glassfish4/glassfish/bin/asadmin
+                - show-component-status
+                - DSRevenueSharing
+            initialDelaySeconds: {{ .Values.bizEcosystemRss.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bizEcosystemRss.deployment.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.bizEcosystemRss.deployment.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.bizEcosystemRss.deployment.readinessProbe.timeoutSeconds }}
+          env:
+            - name: MYSQL_HOST
+              value: {{ .Values.bizEcosystemRss.db.host | quote }}
+            - name: MYSQL_PORT
+              value: {{ .Values.bizEcosystemRss.db.port | quote }}
+            - name: BAE_RSS_DATABASE_URL
+              value: {{ .Values.bizEcosystemRss.db.url | quote }}
+            - name: BAE_RSS_DATABASE_USERNAME
+              value: {{ .Values.bizEcosystemRss.db.user | quote }}
+            - name: BAE_RSS_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                   name: {{ include "bizEcosystemRss.fullname" . }}
+                   key: dbPassword
+            - name: BAE_RSS_DATABASE_DRIVERCLASSNAME
+              value: {{ .Values.bizEcosystemRss.db.driver | quote }}
+            - name: BAE_RSS_OAUTH_CONFIG_GRANTEDROLE
+              value: {{ .Values.oauth.grantedrole | quote }}
+            - name: BAE_RSS_OAUTH_CONFIG_SELLERROLE
+              value: {{ .Values.oauth.sellerrole | quote }}
+            - name: BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE
+              value: {{ .Values.oauth.aggregatorrole | quote }}
+      {{- with .Values.bizEcosystemRss.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bizEcosystemRss.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bizEcosystemRss.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}    
+{{- end }}
