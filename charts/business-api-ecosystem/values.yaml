@@ -1,0 +1,573 @@
+# Default values for business-api-ecosystem.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+## -- option to override the name config in the _helpers.tpl for the whole chart
+nameOverride: ""
+## -- option to override the fullname config in the _helpers.tpl for the whole chart
+fullnameOverride: ""
+
+
+## Marketplace OAuth, roles and IdM configuration
+##
+oauth:
+  # -- External URL of the FIWARE IDM used for user authentication
+  server: http://accounts.fiware.org
+  # -- OAuth2 Client ID of the BAE application
+  clientId: market-clientId
+  # -- OAuth2 Client Secret of the BAE application
+  clientSecret: market-clientSecret
+  # -- Callback URL path of frontend logic proxy for receiving the access tokens
+  # (callback URL would be e.g. externalUrl/auth/fiware/callback)
+  callbackPath: /auth/fiware/callback
+  # -- Granted role
+  grantedrole: admin
+  # -- Admin role
+  adminrole: admin
+  # -- Seller role
+  sellerrole: seller
+  # -- Customer role
+  customerrole: customer
+  # -- Aggregator role
+  aggregatorrole: Aggregator
+  # -- Role defined in the IDM client app for organization admins of the BAE 
+  orgadminrole: orgAdmin
+  # -- Whether the used FIWARE IDM is version 6 or lower
+  isLegacy: False
+  
+
+## -- External URL used to access the BAE frontend (logic proxy)
+## Should match the host of the Ingress or Route of the Logic Proxy
+##
+externalUrl: https://marketplace.fiware.org
+
+  
+## -- initContainer images configuration needed to wait for dependant containers
+##
+initContainer:
+  ## -- Wait for MySQL database
+  mysql:
+    ## -- Name
+    name: wait-for-mysql
+    ## -- Image
+    image: "mysql"
+    ## -- Tag
+    imageTag: "5.7"
+    ## -- Image pull policy
+    imagePullPolicy: IfNotPresent
+  ## -- Wait for MongoDB database
+  mongodb:
+    ## -- Name
+    name: wait-for-mongodb
+    ## -- Image
+    image: "bitnami/mongodb"
+    ## -- Tag
+    imageTag: "3.6.21"
+    ## -- Image pull policy
+    imagePullPolicy: IfNotPresent
+  ## -- Wait for TMForum APIs
+  apis:
+    ## -- Name:
+    name: wait-for-apis
+    ## -- Image
+    image: busybox
+    ## -- Image pull policy
+    imagePullPolicy: IfNotPresent
+
+
+  
+## -- Configuration for biz-ecosystem-apis component
+##
+bizEcosystemApis:
+  ## -- If false, will not be installed
+  enabled: true
+
+  ## -- Component name
+  name: biz-ecosystem-apis
+
+  ## -- option to override the fullname config in the _helpers.tpl
+  fullnameOverride: ""
+
+  ## -- configuration for the k8s service to access the TMForum APIs
+  service:
+    ## -- service type
+    type: ClusterIP
+    ## -- port to be used by the service
+    port: 8080
+    ## -- addtional annotations, if required
+    annotations: {}
+
+  ## -- Service account
+  serviceAccount:
+    create: false
+    name: ssc
+    annotations: {}
+
+  ## -- Security context
+  securityContext:
+    ## -- specifies if security context will be set
+    enabled: false
+    ## -- specifies the user UID
+    runAsUser: 0
+    ## -- specifies the group GID
+    runAsGroup: 0
+  
+  ## -- deployment specific configuration
+  deployment:
+    ## -- initial number of target replications, can be different if autoscaling is enabled
+    replicaCount: 1
+    ## -- number of old replicas to be retained
+    revisionHistoryLimit: 3
+    ## -- configuration of the update strategy
+    updateStrategy:
+      ## -- type of the update
+      type: RollingUpdate
+      ## -- new pods will be added gradually
+      rollingUpdate:
+        ## -- number of pods that can be created above the desired amount while updating
+        maxSurge: 1
+        ## -- number of pods that can be unavailable while updating 
+        maxUnavailable: 0
+    ## -- configuration of the image to be used
+    image:
+      ## -- BAE APIs image name
+      ## ref: https://hub.docker.com/r/fiware/biz-ecosystem-apis
+      repository: fiware/biz-ecosystem-apis
+      ## -- tag of the image to be used
+      tag: v7.6.0
+      ## -- specification of the image pull policy
+      pullPolicy: IfNotPresent
+    ## -- additional labels for the deployment, if required  
+    additionalLabels: {}
+    ## -- additional annotations for the deployment, if required
+    additionalAnnotations: {}
+    ## -- selector template  
+    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    nodeSelector: {}
+    ## -- tolerations template
+    ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    tolerations: []
+    ## -- affinity template
+    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    affinity: {}
+    ## -- liveness and readiness probes
+    # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    livenessProbe:
+      initialDelaySeconds: 120
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 61
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 30
+
+  ## -- port that the APIs container uses
+  port: 8080
+
+  ## -- database configuration for APIs
+  db:
+    ## -- host of the database to be used
+    host: mysql
+    ## -- password for connecting the database
+    password: pass
+    
+
+
+## -- Configuration for biz-ecosystem-rss component
+##
+bizEcosystemRss:
+  ## -- If false, will not be installed
+  enabled: true
+
+  ## -- Component name
+  name: biz-ecosystem-rss
+
+  ## -- option to override the fullname config in the _helpers.tpl
+  fullnameOverride: ""
+
+  ## -- configuration for the k8s service to access the RSS API
+  service:
+    ## -- service type
+    type: ClusterIP
+    ## -- port to be used by the service
+    port: 8080
+    ## -- addtional annotations, if required
+    annotations: {}
+
+  ## -- Service account
+  serviceAccount:
+    create: false
+    name: ssc
+    annotations: {}
+
+  ## -- Security context
+  securityContext:
+    ## -- specifies if security context will be set
+    enabled: false
+    ## -- specifies the user UID
+    runAsUser: 0
+    ## -- specifies the group GID
+    runAsGroup: 0
+
+  ## -- deployment specific configuration
+  deployment:
+    ## -- initial number of target replications, can be different if autoscaling is enabled
+    replicaCount: 1
+    ## -- number of old replicas to be retained
+    revisionHistoryLimit: 3
+    ## -- configuration of the update strategy
+    updateStrategy:
+      ## -- type of the update
+      type: RollingUpdate
+      ## -- new pods will be added gradually
+      rollingUpdate:
+        ## -- number of pods that can be created above the desired amount while updating
+        maxSurge: 1
+        ## -- number of pods that can be unavailable while updating 
+        maxUnavailable: 0
+    ## -- configuration of the image to be used
+    image:
+      ## -- BAE RSS image name
+      ## ref: https://hub.docker.com/r/fiware/biz-ecosystem-rss
+      repository: fiware/biz-ecosystem-rss
+      ## -- tag of the image to be used
+      tag: v7.6.0
+      ## -- specification of the image pull policy
+      pullPolicy: IfNotPresent
+    ## -- additional labels for the deployment, if required  
+    additionalLabels: {}
+    ## -- additional annotations for the deployment, if required
+    additionalAnnotations: {}
+    ## -- selector template  
+    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    nodeSelector: {}
+    ## -- tolerations template
+    ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    tolerations: []
+    ## -- affinity template
+    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    affinity: {}
+    ## -- liveness and readiness probes
+    # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    livenessProbe:
+      initialDelaySeconds: 120
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 61
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 30
+
+  ## -- port that the RSS container uses
+  port: 8080
+  
+  ## -- database configuration for RSS
+  db:
+    ## -- host of the database to be used
+    host: mysql
+    ## -- port of the database to be used
+    port: 3306
+    ## -- URL connection string of the database to be used
+    url: jdbc:mysql://mysql:3306/RSS
+    ## -- driver class name for connection to the database to be used
+    driver: com.mysql.jdbc.Driver
+    ## -- username for connecting the database
+    user: root
+    ## -- password for connecting the database
+    password: pass
+
+
+
+## -- Configuration for biz-ecosystem-charging-backend component
+##
+bizEcosystemChargingBackend:
+  ## -- If false, will not be installed
+  enabled: true
+
+  ## -- Component name
+  name: biz-ecosystem-charging-backend
+
+  ## -- option to override the fullname config in the _helpers.tpl
+  fullnameOverride: ""
+
+  ## -- configuration for the k8s service to access the Charging Backend API
+  service:
+    ## -- service type
+    type: ClusterIP
+    ## -- port to be used by the service
+    port: 8006
+    ## -- addtional annotations, if required
+    annotations: {}
+
+  ## -- Service account
+  serviceAccount:
+    create: false
+    name: ssc
+    annotations: {}
+
+  ## -- Security context
+  securityContext:
+    ## -- specifies if security context will be set
+    enabled: false
+    ## -- specifies the user UID
+    runAsUser: 0
+    ## -- specifies the group GID
+    runAsGroup: 0
+
+  ## -- deployment specific configuration
+  deployment:
+    ## -- initial number of target replications, can be different if autoscaling is enabled
+    replicaCount: 1
+    ## -- number of old replicas to be retained
+    revisionHistoryLimit: 3
+    ## -- configuration of the update strategy
+    updateStrategy:
+      ## -- type of the update
+      type: RollingUpdate
+      ## -- new pods will be added gradually
+      rollingUpdate:
+        ## -- number of pods that can be created above the desired amount while updating
+        maxSurge: 1
+        ## -- number of pods that can be unavailable while updating 
+        maxUnavailable: 0
+    ## -- configuration of the image to be used
+    image:
+      ## -- BAE Charging backend image name
+      ## ref: https://hub.docker.com/r/fiware/biz-ecosystem-charging-backend
+      repository: fiware/biz-ecosystem-charging-backend
+      ## -- tag of the image to be used
+      tag: v7.6.1
+      ## -- specification of the image pull policy
+      pullPolicy: IfNotPresent
+    ## -- additional labels for the deployment, if required  
+    additionalLabels: {}
+    ## -- additional annotations for the deployment, if required
+    additionalAnnotations: {}
+    ## -- selector template  
+    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    nodeSelector: {}
+    ## -- tolerations template
+    ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    tolerations: []
+    ## -- affinity template
+    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    affinity: {}
+    ## -- liveness and readiness probes
+    # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    livenessProbe:
+      initialDelaySeconds: 61
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 60
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 30
+
+  ## -- port that the charging backend container uses
+  port: 8006
+
+  ## -- payment configuration
+  payment:
+    ## -- method: paypal or None (testing mode payment disconected)
+    method: None
+
+  ## -- Paypal Oauth2 configuration
+  # paypal:
+    ## -- Paypal Client-ID
+    # clientId: myid
+    ## -- Paypal Client-Secret
+    # clientSecret: mysecret
+
+  ## -- database configuration for Charging backend (MongoDB)
+  db:
+    ## -- host of the database to be used
+    host: mongo
+    ## -- port of the database to be used
+    port: 27017
+    ## -- Database name for connecting the database
+    database: charging_db
+    ## -- username for connecting the database
+    user: root
+    ## -- password for connecting the database
+    password: pass
+
+  ## -- Mailing configuration
+  email:
+    ## -- Mail address
+    mail: charging@email.com
+    ## -- SMTP configuration
+    # smtp:
+      ## -- User name
+      # user: smtp-user
+      ## -- Password
+      # password: smtp-password
+      ## -- SMTP server hostname
+      # server: smtp-host
+      ## -- SMTP server port
+      # port: 587
+
+  ## -- Whether or not the BAE validates SSL certificates on requests to external components
+  verifyRequests: True
+
+  ## -- Authorize service path of the logic proxy
+  authorizeServicePath: /authorizeService/apiKeys
+
+
+
+## -- Configuration for biz-ecosystem-logic-proxy component
+##
+bizEcosystemLogicProxy:
+  ## -- If false, will not be installed
+  enabled: true
+
+  ## -- Component name
+  name: biz-ecosystem-logic-proxy
+
+  ## -- option to override the fullname config in the _helpers.tpl
+  fullnameOverride: ""
+
+  ## -- configuration for the k8s service to access the TMForum APIs
+  service:
+    ## -- service type
+    type: ClusterIP
+    ## -- port to be used by the service
+    port: 8004
+    ## -- addtional annotations, if required
+    annotations: {}
+
+  ## -- Service account
+  serviceAccount:
+    create: false
+    name: ssc
+    annotations: {}
+
+  ## -- Security context
+  securityContext:
+    ## -- specifies if security context will be set
+    enabled: false
+    ## -- specifies the user UID
+    runAsUser: 0
+    ## -- specifies the group GID
+    runAsGroup: 0
+
+  ## -- deployment specific configuration
+  deployment:
+    ## -- initial number of target replications, can be different if autoscaling is enabled
+    replicaCount: 1
+    ## -- number of old replicas to be retained
+    revisionHistoryLimit: 3
+    ## -- configuration of the update strategy
+    updateStrategy:
+      ## -- type of the update
+      type: RollingUpdate
+      ## -- new pods will be added gradually
+      rollingUpdate:
+        ## -- number of pods that can be created above the desired amount while updating
+        maxSurge: 1
+        ## -- number of pods that can be unavailable while updating 
+        maxUnavailable: 0
+    ## -- configuration of the image to be used
+    image:
+      ## -- BAE Logic Proxy image name
+      ## ref: https://hub.docker.com/r/fiware/biz-ecosystem-logic-proxy
+      repository: fiware/biz-ecosystem-logic-proxy
+      ## -- tag of the image to be used
+      tag: v7.6.1
+      ## -- specification of the image pull policy
+      pullPolicy: IfNotPresent
+    ## -- additional labels for the deployment, if required  
+    additionalLabels: {}
+    ## -- additional annotations for the deployment, if required
+    additionalAnnotations: {}
+    ## -- selector template  
+    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    nodeSelector: {}
+    ## -- tolerations template
+    ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    tolerations: []
+    ## -- affinity template
+    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    affinity: {}
+    ## -- liveness and readiness probes
+    # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    livenessProbe:
+      initialDelaySeconds: 11
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 30
+
+  ## -- ingress configuration
+  ingress:
+    # -- should there be an ingress to connect the logic proxy with the public internet
+    enabled: false
+    # -- annotations to be added to the ingress
+    annotations: {}
+      ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
+      # kubernetes.io/ingress.class: "ambassador"
+      # kubernetes.io/tls-acme: "true"
+      # ingress.kubernetes.io/ssl-redirect: "true"  
+    # -- all hosts to be provided
+    hosts: []
+      ## -- provide hosts and the paths that should be available
+      # - host: localhost
+        # paths:
+        # - /
+    # -- configure the ingress' tls
+    tls: []
+    # - secretName: marketplace-tls
+      # hosts:
+        # - marketplace.fiware.org
+
+  ## -- openshift specific route definition. Will not work on plain k8s
+  route:
+    ## -- should the deployment create openshift routes
+    enabled: false
+    # -- annotations to be added to the route
+    annotations: {}
+    # -- host to be used
+    # host: localhost
+    # -- tls configuration for the route
+    tls: {}
+    # termination: edge
+
+  ## -- port that the logic proxy container uses
+  port: 8004
+
+  ## -- If provided, this URL specifies the actual URL that is used to access the BAE when the component is proxied (e.g Apache)
+  # proxyHost: http://marketplace.fiware-proxy.org
+
+  ## -- Deployment in development or in production
+  nodeEnvironment: development
+  
+  ## -- Execute the collect static command on startup
+  collectStaticCommand: True
+  
+  ## -- database configuration for Logic Proxy (MongoDB)
+  db:
+    # -- host of the database to be used
+    host: mongo
+    # -- port of the database to be used
+    port: 27017
+    # -- Database name for connecting the database
+    database: belp_db
+    # -- username for connecting the database
+    user: root
+    # -- password for connecting the database
+    password: pass
+
+  ## -- If provided custom theme to be used by the web site, it must be included in themes volume
+  # theme: my-theme
+
+  ## -- Default market owner precentage for Revenue Sharing models
+  revenueModel: 30

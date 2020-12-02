@@ -1,0 +1,189 @@
+{{- if .Values.bizEcosystemChargingBackend.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bizEcosystemChargingBackend.fullname" . }}
+  labels:
+    {{- include "bizEcosystemChargingBackend.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.bizEcosystemChargingBackend.deployment.replicaCount }}
+  revisionHistoryLimit: {{ .Values.bizEcosystemChargingBackend.deployment.revisionHistoryLimit }}
+  strategy:
+  {{- with .Values.bizEcosystemChargingBackend.deployment.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "bizEcosystemChargingBackend.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{ include "bizEcosystemChargingBackend.labels" . | nindent 8 }}
+        {{- with .Values.bizEcosystemChargingBackend.deployment.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.bizEcosystemChargingBackend.deployment.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.bizEcosystemChargingBackend.deployment.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "bizEcosystemChargingBackend.serviceAccountName" . }}
+      initContainers:
+        - name: {{ .Release.Name }}-{{ .Values.bizEcosystemChargingBackend.name }}-{{ .Values.initContainer.mongodb.name }}
+          image: '{{ .Values.initContainer.mongodb.image }}:{{ .Values.initContainer.mongodb.imageTag }}'
+          imagePullPolicy: {{ .Values.initContainer.mongodb.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! mongo --host {{ .Values.bizEcosystemChargingBackend.db.host | quote }} --eval "printjson(db.serverStatus())"; do echo "Waiting for MongoDB"; sleep 10; done;']
+        - name: {{ include "bizEcosystemChargingBackend.apiInitContainer" . }}-inventory
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductInventory"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemChargingBackend.apiInitContainer" . }}-catalog
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductCatalog"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemChargingBackend.apiInitContainer" . }}-ordering
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductOrdering"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemChargingBackend.apiInitContainer" . }}-party
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSPartyManagement"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemChargingBackend.apiInitContainer" . }}-billing
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSBillingManagement"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemChargingBackend.apiInitContainer" . }}-customer
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSCustomerManagement"; do echo "Waiting for APIs"; sleep 20; done;']
+        - name: {{ include "bizEcosystemChargingBackend.apiInitContainer" . }}-usage
+          image: "{{ .Values.initContainer.apis.image }}"
+          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSUsageManagement"; do echo "Waiting for APIs"; sleep 20; done;']
+      containers:
+        - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemChargingBackend.name }}
+          imagePullPolicy: {{ .Values.bizEcosystemChargingBackend.deployment.image.pullPolicy }}
+          image: "{{ .Values.bizEcosystemChargingBackend.deployment.image.repository }}:{{ .Values.bizEcosystemChargingBackend.deployment.image.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.bizEcosystemChargingBackend.port}}
+              protocol: TCP
+          {{- if .Values.bizEcosystemChargingBackend.securityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.bizEcosystemChargingBackend.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.bizEcosystemChargingBackend.securityContext.runAsGroup }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /charging/api/assetManagement/currencyCodes
+              port: {{ .Values.bizEcosystemChargingBackend.port}}
+            initialDelaySeconds: {{ .Values.bizEcosystemChargingBackend.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bizEcosystemChargingBackend.deployment.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.bizEcosystemChargingBackend.deployment.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.bizEcosystemChargingBackend.deployment.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /charging/api/assetManagement/currencyCodes
+              port: {{ .Values.bizEcosystemChargingBackend.port}}
+            initialDelaySeconds: {{ .Values.bizEcosystemChargingBackend.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bizEcosystemChargingBackend.deployment.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.bizEcosystemChargingBackend.deployment.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.bizEcosystemChargingBackend.deployment.readinessProbe.timeoutSeconds }}
+          env:
+            - name: BAE_CB_PAYMENT_METHOD
+              value: {{ .Values.bizEcosystemChargingBackend.payment.method | quote }}
+            {{- if .Values.bizEcosystemChargingBackend.paypal }}
+            - name: BAE_CB_PAYPAL_CLIENT_ID
+              value: {{ .Values.bizEcosystemChargingBackend.paypal.clientId | quote }}
+            - name: BAE_CB_PAYPAL_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bizEcosystemChargingBackend.fullname" . }}
+                  key: paypalClientSecret
+            {{- end }}
+            - name: BAE_CB_MONGO_SERVER
+              value: {{ .Values.bizEcosystemChargingBackend.db.host | quote }}
+            - name: BAE_CB_MONGO_PORT
+              value: {{ .Values.bizEcosystemChargingBackend.db.port | quote }}
+            - name: BAE_CB_MONGO_DB
+              value: {{ .Values.bizEcosystemChargingBackend.db.database | quote }}
+            - name: BAE_CB_MONGO_USER
+              value: {{ .Values.bizEcosystemChargingBackend.db.user | quote }}
+            - name: BAE_CB_MONGO_PASS
+              valueFrom:
+                secretKeyRef:
+                   name: {{ include "bizEcosystemChargingBackend.fullname" . }}
+                   key: dbPassword
+            - name: BAE_LP_OAUTH2_ADMIN_ROLE
+              value: {{ .Values.oauth.adminrole | quote }}
+            - name: BAE_LP_OAUTH2_SELLER_ROLE
+              value: {{ .Values.oauth.sellerrole | quote }}
+            - name: BAE_LP_OAUTH2_CUSTOMER_ROLE
+              value: {{ .Values.oauth.customerrole | quote }}
+            - name: BAE_CB_EMAIL
+              value: {{ .Values.bizEcosystemChargingBackend.email.mail | quote }}
+            {{- if .Values.bizEcosystemChargingBackend.email.smtp }}
+            {{- if .Values.bizEcosystemChargingBackend.email.smtp.user }}
+            - name: BAE_CB_EMAIL_USER
+              value: {{ .Values.bizEcosystemChargingBackend.email.smtp.user | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemChargingBackend.email.smtp.password }}
+            - name: BAE_CB_EMAIL_PASS
+              valueFrom:
+                secretKeyRef:
+                   name: {{ include "bizEcosystemChargingBackend.fullname" . }}
+                   key: smtpPassword
+            {{- end }}
+            {{- if .Values.bizEcosystemChargingBackend.email.smtp.server }}
+            - name: BAE_CB_EMAIL_SMTP_SERVER
+              value: {{ .Values.bizEcosystemChargingBackend.email.smtp.server | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemChargingBackend.email.smtp.port }}
+            - name: BAE_CB_EMAIL_SMTP_PORT
+              value: {{ .Values.bizEcosystemChargingBackend.email.smtp.port | quote }}
+            {{- end }}
+            {{- end }}
+            - name: BAE_CB_VERIFY_REQUESTS
+              value: {{ .Values.bizEcosystemChargingBackend.verifyRequests | quote }}
+            - name: BAE_SERVICE_HOST
+              value: {{ .Values.externalUrl | quote }}
+            - name: BAE_CB_LOCAL_SITE
+              value: http://{{ include "bizEcosystemChargingBackend.fullhostname" . }}
+            - name: BAE_CB_CATALOG
+              value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductCatalog
+            - name: BAE_CB_INVENTORY
+              value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductInventory
+            - name: BAE_CB_ORDERING
+              value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductOrdering
+            - name: BAE_CB_BILLING
+              value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSBillingManagement
+            - name: BAE_CB_RSS
+              value: http://{{ include "bizEcosystemRss.fullhostname" . }}/DSRevenueSharing
+            - name: BAE_CB_USAGE
+              value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSUsageManagement
+            - name: BAE_CB_AUTHORIZE_SERVICE
+              value: http://{{ include "bizEcosystemLogicProxy.fullhostname" . }}{{ .Values.bizEcosystemChargingBackend.authorizeServicePath }}
+      {{- with .Values.bizEcosystemChargingBackend.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bizEcosystemChargingBackend.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bizEcosystemChargingBackend.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}    
+{{- end }}

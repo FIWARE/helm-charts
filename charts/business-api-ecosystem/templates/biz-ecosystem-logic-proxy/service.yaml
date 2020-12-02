@@ -1,0 +1,21 @@
+{{- if .Values.bizEcosystemLogicProxy.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+  {{- if .Values.bizEcosystemLogicProxy.service.annotations }}
+  annotations:
+    {{ toYaml .Values.bizEcosystemLogicProxy.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{ include "bizEcosystemLogicProxy.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.bizEcosystemLogicProxy.service.type }}
+  ports:
+    - port: {{ .Values.bizEcosystemLogicProxy.service.port }}
+      targetPort: {{ .Values.bizEcosystemLogicProxy.port }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "bizEcosystemLogicProxy.matchLabels" . | nindent 4 }}
+{{- end }}

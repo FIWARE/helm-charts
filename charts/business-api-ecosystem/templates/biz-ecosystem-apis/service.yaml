@@ -1,0 +1,21 @@
+{{- if .Values.bizEcosystemApis.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "bizEcosystemApis.fullname" . }}
+  {{- if .Values.bizEcosystemApis.service.annotations }}
+  annotations:
+    {{ toYaml .Values.bizEcosystemApis.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "bizEcosystemApis.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.bizEcosystemApis.service.type }}
+  ports:
+    - port: {{ .Values.bizEcosystemApis.service.port }}
+      targetPort: {{ .Values.bizEcosystemApis.port }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "bizEcosystemApis.matchLabels" . | nindent 4 }}
+{{- end }}

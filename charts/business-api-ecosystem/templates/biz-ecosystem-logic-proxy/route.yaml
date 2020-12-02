@@ -1,0 +1,26 @@
+{{- if and .Values.bizEcosystemLogicProxy.enabled .Values.bizEcosystemLogicProxy.route.enabled -}}
+{{- $fullName := include "bizEcosystemLogicProxy.fullname" . -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+  labels:
+    {{ include "bizEcosystemLogicProxy.labels" . | nindent 4 }}
+  {{- if .Values.bizEcosystemLogicProxy.route.annotations }}
+  annotations:
+    {{- with .Values.bizEcosystemLogicProxy.route.annotations }}
+      {{- toYaml . | nindent 4 }}
+      {{- end }}
+  {{- end }}
+spec:
+  host: {{ .Values.bizEcosystemLogicProxy.route.host}}
+  to:
+    kind: Service
+    name: {{ $fullName }}
+  {{- if .Values.bizEcosystemLogicProxy.route.tls }}
+  tls:
+  {{- with .Values.bizEcosystemLogicProxy.route.tls }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

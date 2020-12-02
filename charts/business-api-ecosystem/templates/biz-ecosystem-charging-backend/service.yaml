@@ -1,0 +1,21 @@
+{{- if .Values.bizEcosystemChargingBackend.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "bizEcosystemChargingBackend.fullname" . }}
+  {{- if .Values.bizEcosystemChargingBackend.service.annotations }}
+  annotations:
+    {{ toYaml .Values.bizEcosystemChargingBackend.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "bizEcosystemChargingBackend.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.bizEcosystemChargingBackend.service.type }}
+  ports:
+    - port: {{ .Values.bizEcosystemChargingBackend.service.port }}
+      targetPort: {{ .Values.bizEcosystemChargingBackend.port }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "bizEcosystemChargingBackend.matchLabels" . | nindent 4 }}
+{{- end }}

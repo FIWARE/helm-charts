@@ -1,0 +1,90 @@
+{{- if .Values.bizEcosystemApis.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bizEcosystemApis.fullname" . }}
+  labels:
+    {{- include "bizEcosystemApis.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.bizEcosystemApis.deployment.replicaCount }}
+  revisionHistoryLimit: {{ .Values.bizEcosystemApis.deployment.revisionHistoryLimit }}
+  strategy:
+  {{- with .Values.bizEcosystemApis.deployment.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "bizEcosystemApis.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{ include "bizEcosystemApis.labels" . | nindent 8 }}
+        {{- with .Values.bizEcosystemApis.deployment.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.bizEcosystemApis.deployment.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.bizEcosystemApis.deployment.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "bizEcosystemApis.serviceAccountName" . }}
+      initContainers:
+        - name: {{ include "bizEcosystemApis.fullname" . }}-{{ .Values.initContainer.mysql.name }}
+          image: '{{ .Values.initContainer.mysql.image }}:{{ .Values.initContainer.mysql.imageTag }}'
+          imagePullPolicy: {{ .Values.initContainer.mysql.imagePullPolicy | quote }}
+          command: ['sh', '-c',
+            'while ! mysqladmin ping -h{{ .Values.bizEcosystemApis.db.host | quote }} --silent; do echo "Waiting for MySQL"; sleep 10; done;']
+      containers:
+        - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemApis.name }}
+          imagePullPolicy: {{ .Values.bizEcosystemApis.deployment.image.pullPolicy }}
+          image: '{{ .Values.bizEcosystemApis.deployment.image.repository }}:{{ .Values.bizEcosystemApis.deployment.image.tag }}'
+          ports:
+            - name: http
+              containerPort: {{ .Values.bizEcosystemApis.port}}
+              protocol: TCP
+          {{- if .Values.bizEcosystemApis.securityContext.enabled }}
+          securityContext:
+            runAsUser: {{ .Values.bizEcosystemApis.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.bizEcosystemApis.securityContext.runAsGroup }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /DSProductInventory
+              port: 8080
+            initialDelaySeconds: {{ .Values.bizEcosystemApis.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bizEcosystemApis.deployment.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.bizEcosystemApis.deployment.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.bizEcosystemApis.deployment.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /DSProductInventory
+              port: 8080
+            initialDelaySeconds: {{ .Values.bizEcosystemApis.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bizEcosystemApis.deployment.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.bizEcosystemApis.deployment.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.bizEcosystemApis.deployment.readinessProbe.timeoutSeconds }}
+          env:
+            - name: MYSQL_HOST
+              value: {{ .Values.bizEcosystemApis.db.host | quote }}
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                   name: {{ include "bizEcosystemApis.fullname" . }}
+                   key: dbPassword
+            - name: BAE_SERVICE_HOST
+              value: http://{{ include "bizEcosystemLogicProxy.fullhostname" . }}
+      {{- with .Values.bizEcosystemApis.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bizEcosystemApis.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bizEcosystemApis.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}    
+{{- end }}
