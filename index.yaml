@@ -127,6 +127,27 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/keyrock-0.0.1/keyrock-0.0.1.tgz
     version: 0.0.1
+  mintaka:
+  - apiVersion: v1
+    appVersion: 0.0.1
+    created: "2020-12-04T07:46:46.864208441Z"
+    description: A Helm chart for running mintaka on kubernetes.
+    digest: c1ce35e00e633aa7644287d14a5d8c09c1b8549759c8691404af331cb84d52fd
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion
+    - orion-ld
+    - mintaka
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: mintaka
+    sources:
+    - https://github.com/Trigyn-Technologies/Mintaka
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/mintaka-0.0.1/mintaka-0.0.1.tgz
+    version: 0.0.1
   orion:
   - apiVersion: v1
     appVersion: 2.5.0
