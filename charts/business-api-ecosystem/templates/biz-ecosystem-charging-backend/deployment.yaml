@@ -31,46 +31,14 @@ spec:
     spec:
       serviceAccountName: {{ include "bizEcosystemChargingBackend.serviceAccountName" . }}
       initContainers:
-        - name: {{ .Release.Name }}-{{ .Values.bizEcosystemChargingBackend.name }}-{{ .Values.initContainer.mongodb.name }}
-          image: '{{ .Values.initContainer.mongodb.image }}:{{ .Values.initContainer.mongodb.imageTag }}'
-          imagePullPolicy: {{ .Values.initContainer.mongodb.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! mongo --host {{ .Values.bizEcosystemChargingBackend.db.host | quote }} --eval "printjson(db.serverStatus())"; do echo "Waiting for MongoDB"; sleep 10; done;']
-        - name: {{ include "bizEcosystemChargingBackend.apiInitContainer" . }}-inventory
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductInventory"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemChargingBackend.apiInitContainer" . }}-catalog
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductCatalog"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemChargingBackend.apiInitContainer" . }}-ordering
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductOrdering"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemChargingBackend.apiInitContainer" . }}-party
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSPartyManagement"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemChargingBackend.apiInitContainer" . }}-billing
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSBillingManagement"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemChargingBackend.apiInitContainer" . }}-customer
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSCustomerManagement"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemChargingBackend.apiInitContainer" . }}-usage
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSUsageManagement"; do echo "Waiting for APIs"; sleep 20; done;']
+        {{- include "business-api-ecosystem.initContainer.mongodb" ( dict "ctx" . "name" .Values.bizEcosystemChargingBackend.name "host" .Values.bizEcosystemChargingBackend.db.host ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-inventory" "path" "DSProductInventory" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-catalog" "path" "DSProductCatalog" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-ordering" "path" "DSProductOrdering" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-party" "path" "DSPartyManagement" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-billing" "path" "DSBillingManagement" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-customer" "path" "DSCustomerManagement" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-usage" "path" "DSUsageManagement" ) | nindent 8 }}
       containers:
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemChargingBackend.name }}
           imagePullPolicy: {{ .Values.bizEcosystemChargingBackend.deployment.image.pullPolicy }}
@@ -79,10 +47,9 @@ spec:
             - name: http
               containerPort: {{ .Values.bizEcosystemChargingBackend.port}}
               protocol: TCP
-          {{- if .Values.bizEcosystemChargingBackend.securityContext.enabled }}
+          {{- with .Values.bizEcosystemChargingBackend.securityContext }}
           securityContext:
-            runAsUser: {{ .Values.bizEcosystemChargingBackend.securityContext.runAsUser }}
-            runAsGroup: {{ .Values.bizEcosystemChargingBackend.securityContext.runAsGroup }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           livenessProbe:
             httpGet:
@@ -100,6 +67,11 @@ spec:
             periodSeconds: {{ .Values.bizEcosystemChargingBackend.deployment.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.bizEcosystemChargingBackend.deployment.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.bizEcosystemChargingBackend.deployment.readinessProbe.timeoutSeconds }}
+          volumeMounts:
+            - name: plugins
+              mountPath: /business-ecosystem-charging-backend/src/plugins
+            - name: inst-plugins
+              mountPath: /business-ecosystem-charging-backend/src/wstore/asset_manager/resource_plugins/plugin
           env:
             - name: BAE_CB_PAYMENT_METHOD
               value: {{ .Values.bizEcosystemChargingBackend.payment.method | quote }}
@@ -185,5 +157,20 @@ spec:
       {{- with .Values.bizEcosystemChargingBackend.deployment.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
-      {{- end }}    
+      {{- end }}
+      volumes:
+        - name: plugins
+          {{- if .Values.bizEcosystemChargingBackend.plugins.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "bizEcosystemChargingBackend.fullname" . }}-plugins
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: inst-plugins
+          {{- if .Values.bizEcosystemChargingBackend.plugins.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "bizEcosystemChargingBackend.fullname" . }}-inst-plugins
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
 {{- end }}

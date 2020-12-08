@@ -55,6 +55,10 @@ initContainer:
     imageTag: "5.7"
     ## -- Image pull policy
     imagePullPolicy: IfNotPresent
+    ## -- Maximum number of retries to check for DB avilability
+    maxRetries: 60
+    ## -- Sleep interval in s between each retry
+    sleepInterval: 5
   ## -- Wait for MongoDB database
   mongodb:
     ## -- Name
@@ -65,7 +69,11 @@ initContainer:
     imageTag: "3.6.21"
     ## -- Image pull policy
     imagePullPolicy: IfNotPresent
-  ## -- Wait for TMForum APIs
+    ## -- Maximum number of retries to check for DB avilability
+    maxRetries: 60
+    ## -- Sleep interval in s between each retry
+    sleepInterval: 5
+  ## -- Wait for APIs
   apis:
     ## -- Name:
     name: wait-for-apis
@@ -73,6 +81,10 @@ initContainer:
     image: busybox
     ## -- Image pull policy
     imagePullPolicy: IfNotPresent
+    ## -- Maximum number of retries to check for API avilability
+    maxRetries: 60
+    ## -- Sleep interval in s between each retry
+    sleepInterval: 10
 
 
   
@@ -104,14 +116,9 @@ bizEcosystemApis:
     annotations: {}
 
   ## -- Security context
-  securityContext:
-    ## -- specifies if security context will be set
-    enabled: false
-    ## -- specifies the user UID
-    runAsUser: 0
-    ## -- specifies the group GID
-    runAsGroup: 0
-  
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  securityContext: {}
+
   ## -- deployment specific configuration
   deployment:
     ## -- initial number of target replications, can be different if autoscaling is enabled
@@ -203,13 +210,8 @@ bizEcosystemRss:
     annotations: {}
 
   ## -- Security context
-  securityContext:
-    ## -- specifies if security context will be set
-    enabled: false
-    ## -- specifies the user UID
-    runAsUser: 0
-    ## -- specifies the group GID
-    runAsGroup: 0
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  securityContext: {}
 
   ## -- deployment specific configuration
   deployment:
@@ -310,13 +312,8 @@ bizEcosystemChargingBackend:
     annotations: {}
 
   ## -- Security context
-  securityContext:
-    ## -- specifies if security context will be set
-    enabled: false
-    ## -- specifies the user UID
-    runAsUser: 0
-    ## -- specifies the group GID
-    runAsGroup: 0
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  securityContext: {}
 
   ## -- deployment specific configuration
   deployment:
@@ -369,6 +366,15 @@ bizEcosystemChargingBackend:
       successThreshold: 1
       timeoutSeconds: 30
 
+  ## -- PVC configuration for charging backend plugins
+  plugins:
+    ## -- Enable the PVC for plugins storage
+    enabled: false
+    ## -- Size of the PVC
+    size: 4Gi
+    ## -- Annotations
+    annotations: {}
+    
   ## -- port that the charging backend container uses
   port: 8006
 
@@ -448,13 +454,8 @@ bizEcosystemLogicProxy:
     annotations: {}
 
   ## -- Security context
-  securityContext:
-    ## -- specifies if security context will be set
-    enabled: false
-    ## -- specifies the user UID
-    runAsUser: 0
-    ## -- specifies the group GID
-    runAsGroup: 0
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  securityContext: {}
 
   ## -- deployment specific configuration
   deployment:
