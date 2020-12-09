@@ -31,51 +31,15 @@ spec:
     spec:
       serviceAccountName: {{ include "bizEcosystemLogicProxy.serviceAccountName" . }}
       initContainers:
-        - name: {{ .Release.Name }}-{{ .Values.bizEcosystemLogicProxy.name }}-{{ .Values.initContainer.mongodb.name }}
-          image: '{{ .Values.initContainer.mongodb.image }}:{{ .Values.initContainer.mongodb.imageTag }}'
-          imagePullPolicy: {{ .Values.initContainer.mongodb.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! mongo --host {{ .Values.bizEcosystemLogicProxy.db.host | quote }} --eval "printjson(db.serverStatus())"; do echo "Waiting for MongoDB"; sleep 10; done;']
-        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-inventory
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductInventory"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-catalog
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductCatalog"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-ordering
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductOrdering"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-party
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSPartyManagement"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-billing
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSBillingManagement"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-customer
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSCustomerManagement"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-usage
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSUsageManagement"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemLogicProxy.apiInitContainer" . }}-charging
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemChargingBackend.fullhostname" . }}/charging/api/assetManagement/currencyCodes"; do echo "Waiting for Charging Backend"; sleep 20; done;']
+        {{- include "business-api-ecosystem.initContainer.mongodb" ( dict "ctx" . "name" .Values.bizEcosystemLogicProxy.name "host" .Values.bizEcosystemLogicProxy.db.host ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-inventory" "path" "DSProductInventory" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-catalog" "path" "DSProductCatalog" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-ordering" "path" "DSProductOrdering" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-party" "path" "DSPartyManagement" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-billing" "path" "DSBillingManagement" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-customer" "path" "DSCustomerManagement" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-usage" "path" "DSUsageManagement" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.charging" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-charging" "path" "charging/api/assetManagement/currencyCodes" ) | nindent 8 }}
       containers:
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemLogicProxy.name }}
           imagePullPolicy: {{ .Values.bizEcosystemLogicProxy.deployment.image.pullPolicy }}
@@ -84,10 +48,9 @@ spec:
             - name: http
               containerPort: {{ .Values.bizEcosystemLogicProxy.port}}
               protocol: TCP
-          {{- if .Values.bizEcosystemLogicProxy.securityContext.enabled }}
+          {{- with .Values.bizEcosystemLogicProxy.securityContext }}
           securityContext:
-            runAsUser: {{ .Values.bizEcosystemLogicProxy.securityContext.runAsUser }}
-            runAsGroup: {{ .Values.bizEcosystemLogicProxy.securityContext.runAsGroup }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           livenessProbe:
             httpGet:

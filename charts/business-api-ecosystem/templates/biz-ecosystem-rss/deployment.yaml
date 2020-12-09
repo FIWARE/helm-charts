@@ -31,46 +31,14 @@ spec:
     spec:
       serviceAccountName: {{ include "bizEcosystemRss.serviceAccountName" . }}
       initContainers:
-        - name: {{ include "bizEcosystemRss.fullname" . }}-{{ .Values.initContainer.mysql.name }}
-          image: '{{ .Values.initContainer.mysql.image }}:{{ .Values.initContainer.mysql.imageTag }}'
-          imagePullPolicy: {{ .Values.initContainer.mysql.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! mysqladmin ping -h{{ .Values.bizEcosystemRss.db.host | quote }} --silent; do echo "Waiting for MySQL"; sleep 10; done;']
-        - name: {{ include "bizEcosystemRss.apiInitContainer" . }}-inventory
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductInventory"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemRss.apiInitContainer" . }}-catalog
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductCatalog"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemRss.apiInitContainer" . }}-ordering
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductOrdering"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemRss.apiInitContainer" . }}-party
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSPartyManagement"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemRss.apiInitContainer" . }}-billing
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSBillingManagement"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemRss.apiInitContainer" . }}-customer
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSCustomerManagement"; do echo "Waiting for APIs"; sleep 20; done;']
-        - name: {{ include "bizEcosystemRss.apiInitContainer" . }}-usage
-          image: "{{ .Values.initContainer.apis.image }}"
-          imagePullPolicy: {{ .Values.initContainer.apis.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" . }}/DSUsageManagement"; do echo "Waiting for APIs"; sleep 20; done;']
+        {{- include "business-api-ecosystem.initContainer.mysql" ( dict "ctx" . "name" "{{ include \"bizEcosystemRss.fullname\" . }}" "host" .Values.bizEcosystemRss.db.host ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemRss.apiInitContainer\" . }}-inventory" "path" "DSProductInventory" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemRss.apiInitContainer\" . }}-catalog" "path" "DSProductCatalog" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemRss.apiInitContainer\" . }}-ordering" "path" "DSProductOrdering" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemRss.apiInitContainer\" . }}-party" "path" "DSPartyManagement" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemRss.apiInitContainer\" . }}-billing" "path" "DSBillingManagement" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemRss.apiInitContainer\" . }}-customer" "path" "DSCustomerManagement" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemRss.apiInitContainer\" . }}-usage" "path" "DSUsageManagement" ) | nindent 8 }}
       containers:
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemRss.name }}
           imagePullPolicy: {{ .Values.bizEcosystemRss.deployment.image.pullPolicy }}
@@ -79,10 +47,9 @@ spec:
             - name: http
               containerPort: {{ .Values.bizEcosystemRss.port}}
               protocol: TCP
-          {{- if .Values.bizEcosystemRss.securityContext.enabled }}
+          {{- with .Values.bizEcosystemRss.securityContext }}
           securityContext:
-            runAsUser: {{ .Values.bizEcosystemRss.securityContext.runAsUser }}
-            runAsGroup: {{ .Values.bizEcosystemRss.securityContext.runAsGroup }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           livenessProbe:
             exec:

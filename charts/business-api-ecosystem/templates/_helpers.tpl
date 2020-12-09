@@ -293,3 +293,48 @@ Create the name of the API check initContainer for bizEcosystemLogicProxy
 {{- define "bizEcosystemLogicProxy.apiInitContainer" -}}
 {{- printf "%s-%s-%s" .Release.Name .Values.bizEcosystemLogicProxy.name .Values.initContainer.apis.name | trunc 50 | trimSuffix "-" -}}
 {{- end }}
+
+{{/*
+Template for MySQL initContainer check
+*/}}
+{{- define "business-api-ecosystem.initContainer.mysql" }}
+- name: {{ tpl .name .ctx }}-{{ .ctx.Values.initContainer.mysql.name }}
+  image: '{{ .ctx.Values.initContainer.mysql.image }}:{{ .ctx.Values.initContainer.mysql.imageTag }}'
+  imagePullPolicy: {{ .ctx.Values.initContainer.mysql.imagePullPolicy | quote }}
+  command: ['sh', '-c',
+    'while ! mysqladmin ping -h{{ .host | quote }} --silent; do echo "Waiting for MySQL"; ((i++)) && ((i=={{ .ctx.Values.initContainer.mysql.maxRetries }})) && break; sleep {{ .ctx.Values.initContainer.mysql.sleepInterval }}; done;']        
+{{- end }}
+
+{{/*
+
+*/}}
+{{- define "business-api-ecosystem.initContainer.mongodb" }}
+- name: {{ .ctx.Release.Name }}-{{ tpl .name .ctx }}-{{ .ctx.Values.initContainer.mongodb.name }}
+  image: '{{ .ctx.Values.initContainer.mongodb.image }}:{{ .ctx.Values.initContainer.mongodb.imageTag }}'
+  imagePullPolicy: {{ .ctx.Values.initContainer.mongodb.imagePullPolicy | quote }}
+  command: ['sh', '-c',
+    'while ! mongo --host {{ .host | quote }} --eval "printjson(db.serverStatus())"; do echo "Waiting for MongoDB"; ((i++)) && ((i=={{ .ctx.Values.initContainer.mongodb.maxRetries }})) && break; sleep {{ .ctx.Values.initContainer.mongodb.sleepInterval }}; done;']
+{{- end }}
+
+{{/*
+Template for TMForum APIs initContainer check
+*/}}
+{{- define "business-api-ecosystem.initContainer.apis" }}
+- name: {{ tpl .name .ctx }}
+  image: "{{ .ctx.Values.initContainer.apis.image }}"
+  imagePullPolicy: {{ .ctx.Values.initContainer.apis.imagePullPolicy | quote }}
+  command: ['sh', '-c',
+    'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" .ctx }}/{{ .path }}"; do echo "Waiting for APIs"; ((i++)) && ((i=={{ .ctx.Values.initContainer.apis.maxRetries }})) && break; sleep {{ .ctx.Values.initContainer.apis.sleepInterval }}; done;']
+{{- end }}
+
+{{/*
+Template for CHarging Backend initContainer check
+*/}}
+{{- define "business-api-ecosystem.initContainer.charging" }}
+- name: {{ tpl .name .ctx }}
+  image: "{{ .ctx.Values.initContainer.apis.image }}"
+  imagePullPolicy: {{ .ctx.Values.initContainer.apis.imagePullPolicy | quote }}
+  command: ['sh', '-c',
+    'while ! wget "http://{{ include "bizEcosystemChargingBackend.fullhostname" .ctx }}/{{ .path }}"; do echo "Waiting for APIs"; ((i++)) && ((i=={{ .ctx.Values.initContainer.apis.maxRetries }})) && break; sleep {{ .ctx.Values.initContainer.apis.sleepInterval }}; done;']
+{{- end }}
+

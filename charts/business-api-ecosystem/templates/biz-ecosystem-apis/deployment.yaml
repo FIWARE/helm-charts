@@ -31,11 +31,7 @@ spec:
     spec:
       serviceAccountName: {{ include "bizEcosystemApis.serviceAccountName" . }}
       initContainers:
-        - name: {{ include "bizEcosystemApis.fullname" . }}-{{ .Values.initContainer.mysql.name }}
-          image: '{{ .Values.initContainer.mysql.image }}:{{ .Values.initContainer.mysql.imageTag }}'
-          imagePullPolicy: {{ .Values.initContainer.mysql.imagePullPolicy | quote }}
-          command: ['sh', '-c',
-            'while ! mysqladmin ping -h{{ .Values.bizEcosystemApis.db.host | quote }} --silent; do echo "Waiting for MySQL"; sleep 10; done;']
+        {{- include "business-api-ecosystem.initContainer.mysql" ( dict "ctx" . "name" "{{ include \"bizEcosystemApis.fullname\" . }}" "host" .Values.bizEcosystemApis.db.host ) | nindent 8 }}          
       containers:
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemApis.name }}
           imagePullPolicy: {{ .Values.bizEcosystemApis.deployment.image.pullPolicy }}
@@ -44,15 +40,14 @@ spec:
             - name: http
               containerPort: {{ .Values.bizEcosystemApis.port}}
               protocol: TCP
-          {{- if .Values.bizEcosystemApis.securityContext.enabled }}
+          {{- with .Values.bizEcosystemApis.securityContext }}
           securityContext:
-            runAsUser: {{ .Values.bizEcosystemApis.securityContext.runAsUser }}
-            runAsGroup: {{ .Values.bizEcosystemApis.securityContext.runAsGroup }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           livenessProbe:
             httpGet:
               path: /DSProductInventory
-              port: 8080
+              port: {{ .Values.bizEcosystemApis.port }}
             initialDelaySeconds: {{ .Values.bizEcosystemApis.deployment.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bizEcosystemApis.deployment.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.bizEcosystemApis.deployment.livenessProbe.successThreshold }}
@@ -60,7 +55,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /DSProductInventory
-              port: 8080
+              port: {{ .Values.bizEcosystemApis.port }}
             initialDelaySeconds: {{ .Values.bizEcosystemApis.deployment.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bizEcosystemApis.deployment.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.bizEcosystemApis.deployment.readinessProbe.successThreshold }}
