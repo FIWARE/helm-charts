@@ -158,6 +158,8 @@ broker:
   ipv6enabled: false
   # -- set to true if only ipv4 should be used, do not set both options to true
   ipv4enabled: false
+  # -- should the extended development tracing be disabled?
+  noDevTrace: true
   ## timeout in milliseconds for forwarding messages and notifications
   # httpTimeout: 5
   ## the timeout in seconds for REST connection
@@ -201,8 +203,6 @@ broker:
   ## enables multiservice/multitenant mode
   ## ref: https://fiware-orion.readthedocs.io/en/master/user/multitenancy/index.html
   # multiserviceEnabled: true
-  ## should the extended development tracing be disabled?
-  noDevTrace: true
 
   ## logging configuration of the orion broker
   logging:

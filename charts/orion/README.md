@@ -32,7 +32,7 @@ A Helm chart for running the fiware orion broker on kubernetes.
 | broker.ipv6enabled | bool | `false` | set to true if only ipv6 should be used, do not set both options to true |
 | broker.logging.level | string | `"WARN"` | log level of the broker |
 | broker.metrics.enabled | string | `"false"` | enable or disable metrics gathering |
-| broker.noDevTrace | bool | `true` |  |
+| broker.noDevTrace | bool | `true` | should the extended development tracing be disabled? |
 | broker.port | int | `1026` | port that the broker is listening to |
 | deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
