@@ -158,6 +158,8 @@ broker:
   ipv6enabled: false
   # -- set to true if only ipv4 should be used, do not set both options to true
   ipv4enabled: false
+  # -- should the extended development tracing be disabled?
+  noDevTrace: true
   ## timeout in milliseconds for forwarding messages and notifications
   # httpTimeout: 5
   ## the timeout in seconds for REST connection

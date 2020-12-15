@@ -34,6 +34,9 @@ spec:
         - name: {{ .Chart.Name }}
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          {{ if .Values.broker.noDevTrace }}
+          args: ["-lmtmp"]
+          {{ end }}
           ports:
             - name: http
               containerPort: {{ .Values.broker.port}}
@@ -60,6 +63,8 @@ spec:
               value: {{ .Values.broker.port | quote }}
             - name: {{ .Values.broker.envPrefix }}DISABLE_FILE_LOG
               value: "TRUE"
+            - name: {{ .Values.broker.envPrefix }}CACHED_CONTEXT_DIRECTORY
+              value: "/opt/orion/ldcontexts"
             {{- if and (eq .Values.broker.ipv4enabled true) (eq .Values.broker.ipv6enabled false) }}
             - name: {{ .Values.broker.envPrefix }}USEIPV4
               value: "TRUE"
@@ -106,11 +111,11 @@ spec:
             {{- end }}
             {{- if .Values.broker.maxConnections }}
             - name: {{ .Values.broker.envPrefix }}MAX_CONN
-              value: {{ .Values.broker.maxConnections }}
+              value: {{ .Values.broker.maxConnections | quote }}
             {{- end }}
             {{- if .Values.broker.reqPoolSize }}
             - name: {{ .Values.broker.envPrefix }}TRQ_POOL_SIZE
-              value: {{ .Values.broker.reqPoolSize }}
+              value: {{ .Values.broker.reqPoolSize | quote }}
             {{- end }}
             {{- if .Values.broker.inReqPayloadMaxSize }}
             - name: {{ .Values.broker.envPrefix }}IN_REQ_PAYLOAD_MAX_SIZE
@@ -174,7 +179,7 @@ spec:
             {{- end }}
             {{- if .Values.broker.db.poolSize }}
             - name: {{ .Values.broker.envPrefix }}MONGO_POOL_SIZE
-              value: {{ .Values.broker.db.poolSize }}
+              value: {{ .Values.broker.db.poolSize | quote }}
             {{- end }}
              {{- if .Values.broker.db.writeConcern }}
             - name: {{ .Values.broker.envPrefix }}MONGO_WRITE_CONCERN
@@ -182,37 +187,37 @@ spec:
             {{- end }}
 
             # tenancy
-            {{- if .Values.broker.multiserviceEnabled }}
+            {{- if .Values.broker.multiserviceEnabled -}}
             - name: {{ .Values.broker.envPrefix }}MULTI_SERVICE
               value: {{ .Values.broker.multiserviceEnabled | upper }}
             {{- end }}
-            {{- if .Values.broker.multiserviceEnabled }}
+            {{- if .Values.broker.multiserviceEnabled -}}
             - name: {{ .Values.broker.envPrefix }}MONGO_AUTH_SOURCE
               value: admin
             {{- end }}
             
             # metrics
-            {{- if .Values.broker.metrics }}
-            {{- if eq .Values.broker.metrics.enabled "false" }}
+            {{ if .Values.broker.metrics  }}
+            {{ if eq .Values.broker.metrics.enabled "false"  }}
             - name: {{ .Values.broker.envPrefix }}DISABLE_METRICS
               value: "TRUE"
-            {{- else -}}
+            {{ else }}
             - name: {{ .Values.broker.envPrefix }}DISABLE_METRICS
               value: "FALSE"
-            {{- end }}
-            {{- if .Values.broker.metrics.statCountersEnabled }}
+            {{- end -}}
+            {{- if .Values.broker.metrics.statCountersEnabled -}}
             - name: {{ .Values.broker.envPrefix }}STAT_COUNTERS
               value: {{ .Values.broker.metrics.statCountersEnabled | upper }}
             {{- end }}
-            {{- if .Values.broker.metrics.statSemWaitEnabled }}
+            {{ if .Values.broker.metrics.statSemWaitEnabled }}
             - name: {{ .Values.broker.envPrefix }}STAT_SEM_WAIT
               value: {{ .Values.broker.metrics.statSemWaitEnabled | upper }}
             {{- end }}
-            {{- if .Values.broker.metrics.statTimingEnabled }}
+            {{ if .Values.broker.metrics.statTimingEnabled }}
             - name: {{ .Values.broker.envPrefix }}STAT_TIMING
               value: {{ .Values.broker.metrics.statTimingEnabled | upper }}
             {{- end }}
-            {{- if .Values.broker.metrics.statNotifQueueEnabled }}
+            {{ if .Values.broker.metrics.statNotifQueueEnabled }}
             - name: {{ .Values.broker.envPrefix }}STAT_NOTIF_QUEUE
               value: {{ .Values.broker.metrics.statNotifQueueEnabled | upper }}
             {{- end }}
