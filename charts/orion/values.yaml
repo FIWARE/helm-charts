@@ -201,6 +201,8 @@ broker:
   ## enables multiservice/multitenant mode
   ## ref: https://fiware-orion.readthedocs.io/en/master/user/multitenancy/index.html
   # multiserviceEnabled: true
+  ## should the extended development tracing be disabled?
+  noDevTrace: true
 
   ## logging configuration of the orion broker
   logging:
