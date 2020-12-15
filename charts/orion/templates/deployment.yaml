@@ -34,9 +34,9 @@ spec:
         - name: {{ .Chart.Name }}
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
-          {{- if .Values.broker.noDevTrace -}}
+          {{ if .Values.broker.noDevTrace }}
           args: ["-lmtmp"]
-          {{- end }}
+          {{ end }}
           ports:
             - name: http
               containerPort: {{ .Values.broker.port}}
