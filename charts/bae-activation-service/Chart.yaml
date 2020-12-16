@@ -1,0 +1,16 @@
+apiVersion: v1
+name: bae-activation-service
+version: 0.0.1
+appVersion: 0.0.2
+home: https://github.com/FIWARE-AI-Marketplace/bae-activation-service
+description: A Helm chart for running the fiware BAE activation service PoC on kubernetes.
+icon: https://fiware.github.io/catalogue/img/fiware.png
+keywords:
+- fiware
+- bae
+sources:
+- https://github.com/FIWARE-AI-Marketplace/bae-activation-service
+maintainers:
+- name: dwendland
+  email: dennis.wendland@fiware.org
+  
