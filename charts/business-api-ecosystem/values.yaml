@@ -552,7 +552,7 @@ bizEcosystemLogicProxy:
   nodeEnvironment: development
   
   ## -- Execute the collect static command on startup
-  collectStaticCommand: True
+  collectStaticCommand: "True"
   
   ## -- database configuration for Logic Proxy (MongoDB)
   db:
@@ -567,8 +567,23 @@ bizEcosystemLogicProxy:
     # -- password for connecting the database
     password: pass
 
-  ## -- If provided custom theme to be used by the web site, it must be included in themes volume
-  # theme: my-theme
+  ## -- Custom theme configuration
+  theme:
+    ## -- Enable theme
+    enabled: false
+    ## -- Name of the theme
+    name: default
+    ## -- Size of PVC to be created
+    size: 4Gi
+    ## -- PVC Annotations
+    annotations: {}
+    ## Image which holds the theme files
+    image: my-theme-image:latest
+    ## -- specification of the image pull policy
+    imagePullPolicy: IfNotPresent
+    ## Path to the source theme files inside the container
+    #  Files will be copied to /themes/{{name}} with the PVC mounted at /themes
+    sourcePath: /my-theme
 
   ## -- Default market owner precentage for Revenue Sharing models
   revenueModel: 30
