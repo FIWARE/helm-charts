@@ -44,7 +44,7 @@ deployment:
     # ref: https://hub.docker.com/r/fiware/bae-activation-service
     repository: fiware/bae-activation-service
     # -- tag of the image to be used
-    tag: v0.0.2
+    tag: v0.0.3
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
