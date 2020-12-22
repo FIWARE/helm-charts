@@ -71,7 +71,7 @@ spec:
             - name: plugins
               mountPath: /business-ecosystem-charging-backend/src/plugins
             - name: inst-plugins
-              mountPath: /business-ecosystem-charging-backend/src/wstore/asset_manager/resource_plugins/plugin
+              mountPath: /business-ecosystem-charging-backend/src/wstore/asset_manager/resource_plugins/plugins
           env:
             - name: BAE_CB_PAYMENT_METHOD
               value: {{ .Values.bizEcosystemChargingBackend.payment.method | quote }}
@@ -146,6 +146,14 @@ spec:
               value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSUsageManagement
             - name: BAE_CB_AUTHORIZE_SERVICE
               value: http://{{ include "bizEcosystemLogicProxy.fullhostname" . }}{{ .Values.bizEcosystemChargingBackend.authorizeServicePath }}
+            {{- if .Values.bizEcosystemChargingBackend.plugins.enabled }}
+            - name: BAE_ASSET_IDM_USER
+              value: {{ .Values.bizEcosystemChargingBackend.plugins.idmUser | quote }}
+            - name: BAE_ASSET_IDM_PASSWORD
+              value: {{ .Values.bizEcosystemChargingBackend.plugins.idmPassword | quote }}
+            - name: BAE_ASSET_IDM_URL
+              value: {{ .Values.oauth.server | quote }}
+            {{- end }}
       {{- with .Values.bizEcosystemChargingBackend.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

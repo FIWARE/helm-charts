@@ -171,6 +171,14 @@ spec:
               value: {{ include "bizEcosystemChargingBackend.hostnameonly" . }}
             - name: BAE_LP_ENDPOINT_CHARGING_PORT
               value: {{ .Values.bizEcosystemChargingBackend.service.port | quote }}
+            - name: BAE_LP_INDEX_ENGINE
+              value: {{ .Values.bizEcosystemLogicProxy.elastic.engine | quote }}
+            - name: BAE_LP_INDEX_API_VERSION
+              value: {{ .Values.bizEcosystemLogicProxy.elastic.version | quote }}
+            - name: BAE_LP_INDEX_URL
+              value: {{ .Values.bizEcosystemLogicProxy.elastic.url | quote }}
+            - name: BAE_SERVICE_HOST
+              value: {{ .Values.externalUrl | quote }}
       {{- with .Values.bizEcosystemLogicProxy.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

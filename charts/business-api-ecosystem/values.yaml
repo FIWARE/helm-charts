@@ -337,7 +337,8 @@ bizEcosystemChargingBackend:
       ## ref: https://hub.docker.com/r/fiware/biz-ecosystem-charging-backend
       repository: fiware/biz-ecosystem-charging-backend
       ## -- tag of the image to be used
-      tag: v7.6.1
+      tag: v7.8.0
+      #tag: v7.6.1
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
     ## -- additional labels for the deployment, if required  
@@ -374,6 +375,10 @@ bizEcosystemChargingBackend:
     size: 4Gi
     ## -- Annotations
     annotations: {}
+    ## -- IDM Admin username
+    idmUser: admin
+    ## -- IDM Admin password
+    idmPassword: admin-password
     
   ## -- port that the charging backend container uses
   port: 8006
@@ -479,7 +484,8 @@ bizEcosystemLogicProxy:
       ## ref: https://hub.docker.com/r/fiware/biz-ecosystem-logic-proxy
       repository: fiware/biz-ecosystem-logic-proxy
       ## -- tag of the image to be used
-      tag: v7.6.1
+      tag: v7.8.0
+      #tag: v7.6.1
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
     ## -- additional labels for the deployment, if required  
@@ -498,12 +504,12 @@ bizEcosystemLogicProxy:
     ## -- liveness and readiness probes
     # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
     livenessProbe:
-      initialDelaySeconds: 11
+      initialDelaySeconds: 61
       periodSeconds: 30
       successThreshold: 1
       timeoutSeconds: 30
     readinessProbe:
-      initialDelaySeconds: 10
+      initialDelaySeconds: 60
       periodSeconds: 30
       successThreshold: 1
       timeoutSeconds: 30
@@ -566,6 +572,15 @@ bizEcosystemLogicProxy:
     user: root
     # -- password for connecting the database
     password: pass
+
+  ## -- elasticsearch configuration
+  elastic:
+    ## -- indexing engine of logic proxy
+    engine: elasticsearch
+    ## -- URL of elasticsearch service
+    url: elasticsearch:9200
+    ## -- API version of elasticsearch
+    version: 7
 
   ## -- Custom theme configuration
   theme:
