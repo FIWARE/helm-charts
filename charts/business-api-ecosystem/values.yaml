@@ -235,7 +235,7 @@ bizEcosystemRss:
       ## ref: https://hub.docker.com/r/fiware/biz-ecosystem-rss
       repository: fiware/biz-ecosystem-rss
       ## -- tag of the image to be used
-      tag: v7.6.0
+      tag: v7.8.0
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
     ## -- additional labels for the deployment, if required  
@@ -338,7 +338,6 @@ bizEcosystemChargingBackend:
       repository: fiware/biz-ecosystem-charging-backend
       ## -- tag of the image to be used
       tag: v7.8.0
-      #tag: v7.6.1
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
     ## -- additional labels for the deployment, if required  
@@ -485,7 +484,6 @@ bizEcosystemLogicProxy:
       repository: fiware/biz-ecosystem-logic-proxy
       ## -- tag of the image to be used
       tag: v7.8.0
-      #tag: v7.6.1
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
     ## -- additional labels for the deployment, if required  
