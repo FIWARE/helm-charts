@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: 7.6.1](https://img.shields.io/badge/AppVersion-7.6.1-informational?style=flat-square)
+![Version: 0.0.4](https://img.shields.io/badge/Version-0.0.4-informational?style=flat-square) ![AppVersion: 7.8.0](https://img.shields.io/badge/AppVersion-7.8.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -47,9 +47,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemApis.fullnameOverride | string | `""` |  |
 | bizEcosystemApis.name | string | `"biz-ecosystem-apis"` |  |
 | bizEcosystemApis.port | int | `8080` |  |
-| bizEcosystemApis.securityContext.enabled | bool | `false` |  |
-| bizEcosystemApis.securityContext.runAsGroup | int | `0` |  |
-| bizEcosystemApis.securityContext.runAsUser | int | `0` |  |
+| bizEcosystemApis.securityContext | object | `{}` |  |
 | bizEcosystemApis.service.annotations | object | `{}` |  |
 | bizEcosystemApis.service.port | int | `8080` |  |
 | bizEcosystemApis.service.type | string | `"ClusterIP"` |  |
@@ -67,7 +65,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.deployment.affinity | object | `{}` |  |
 | bizEcosystemChargingBackend.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemChargingBackend.deployment.image.repository | string | `"fiware/biz-ecosystem-charging-backend"` |  |
-| bizEcosystemChargingBackend.deployment.image.tag | string | `"v7.6.1"` |  |
+| bizEcosystemChargingBackend.deployment.image.tag | string | `"v7.8.0"` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.initialDelaySeconds | int | `61` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.successThreshold | int | `1` |  |
@@ -88,10 +86,13 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.fullnameOverride | string | `""` |  |
 | bizEcosystemChargingBackend.name | string | `"biz-ecosystem-charging-backend"` |  |
 | bizEcosystemChargingBackend.payment.method | string | `"None"` |  |
+| bizEcosystemChargingBackend.plugins.annotations | object | `{}` |  |
+| bizEcosystemChargingBackend.plugins.enabled | bool | `false` |  |
+| bizEcosystemChargingBackend.plugins.idmPassword | string | `"admin-password"` |  |
+| bizEcosystemChargingBackend.plugins.idmUser | string | `"admin"` |  |
+| bizEcosystemChargingBackend.plugins.size | string | `"4Gi"` |  |
 | bizEcosystemChargingBackend.port | int | `8006` |  |
-| bizEcosystemChargingBackend.securityContext.enabled | bool | `false` |  |
-| bizEcosystemChargingBackend.securityContext.runAsGroup | int | `0` |  |
-| bizEcosystemChargingBackend.securityContext.runAsUser | int | `0` |  |
+| bizEcosystemChargingBackend.securityContext | object | `{}` |  |
 | bizEcosystemChargingBackend.service.annotations | object | `{}` |  |
 | bizEcosystemChargingBackend.service.port | int | `8006` |  |
 | bizEcosystemChargingBackend.service.type | string | `"ClusterIP"` |  |
@@ -99,7 +100,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.serviceAccount.create | bool | `false` |  |
 | bizEcosystemChargingBackend.serviceAccount.name | string | `"ssc"` |  |
 | bizEcosystemChargingBackend.verifyRequests | bool | `true` |  |
-| bizEcosystemLogicProxy.collectStaticCommand | bool | `true` |  |
+| bizEcosystemLogicProxy.collectStaticCommand | string | `"True"` |  |
 | bizEcosystemLogicProxy.db.database | string | `"belp_db"` | Database name for connecting the database |
 | bizEcosystemLogicProxy.db.host | string | `"mongo"` | host of the database to be used |
 | bizEcosystemLogicProxy.db.password | string | `"pass"` | password for connecting the database |
@@ -110,13 +111,13 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.deployment.affinity | object | `{}` |  |
 | bizEcosystemLogicProxy.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemLogicProxy.deployment.image.repository | string | `"fiware/biz-ecosystem-logic-proxy"` |  |
-| bizEcosystemLogicProxy.deployment.image.tag | string | `"v7.6.1"` |  |
-| bizEcosystemLogicProxy.deployment.livenessProbe.initialDelaySeconds | int | `11` |  |
+| bizEcosystemLogicProxy.deployment.image.tag | string | `"v7.8.0"` |  |
+| bizEcosystemLogicProxy.deployment.livenessProbe.initialDelaySeconds | int | `61` |  |
 | bizEcosystemLogicProxy.deployment.livenessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemLogicProxy.deployment.livenessProbe.successThreshold | int | `1` |  |
 | bizEcosystemLogicProxy.deployment.livenessProbe.timeoutSeconds | int | `30` |  |
 | bizEcosystemLogicProxy.deployment.nodeSelector | object | `{}` |  |
-| bizEcosystemLogicProxy.deployment.readinessProbe.initialDelaySeconds | int | `10` |  |
+| bizEcosystemLogicProxy.deployment.readinessProbe.initialDelaySeconds | int | `60` |  |
 | bizEcosystemLogicProxy.deployment.readinessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemLogicProxy.deployment.readinessProbe.successThreshold | int | `1` |  |
 | bizEcosystemLogicProxy.deployment.readinessProbe.timeoutSeconds | int | `30` |  |
@@ -126,6 +127,9 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` |  |
 | bizEcosystemLogicProxy.deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` |  |
 | bizEcosystemLogicProxy.deployment.updateStrategy.type | string | `"RollingUpdate"` |  |
+| bizEcosystemLogicProxy.elastic.engine | string | `"elasticsearch"` |  |
+| bizEcosystemLogicProxy.elastic.url | string | `"elasticsearch:9200"` |  |
+| bizEcosystemLogicProxy.elastic.version | int | `7` |  |
 | bizEcosystemLogicProxy.enabled | bool | `true` |  |
 | bizEcosystemLogicProxy.fullnameOverride | string | `""` |  |
 | bizEcosystemLogicProxy.ingress.annotations | object | `{}` | annotations to be added to the ingress |
@@ -139,15 +143,20 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.route.annotations | object | `{}` | annotations to be added to the route |
 | bizEcosystemLogicProxy.route.enabled | bool | `false` |  |
 | bizEcosystemLogicProxy.route.tls | object | `{}` | host to be used host: localhost -- tls configuration for the route |
-| bizEcosystemLogicProxy.securityContext.enabled | bool | `false` |  |
-| bizEcosystemLogicProxy.securityContext.runAsGroup | int | `0` |  |
-| bizEcosystemLogicProxy.securityContext.runAsUser | int | `0` |  |
+| bizEcosystemLogicProxy.securityContext | object | `{}` |  |
 | bizEcosystemLogicProxy.service.annotations | object | `{}` |  |
 | bizEcosystemLogicProxy.service.port | int | `8004` |  |
 | bizEcosystemLogicProxy.service.type | string | `"ClusterIP"` |  |
 | bizEcosystemLogicProxy.serviceAccount.annotations | object | `{}` |  |
 | bizEcosystemLogicProxy.serviceAccount.create | bool | `false` |  |
 | bizEcosystemLogicProxy.serviceAccount.name | string | `"ssc"` |  |
+| bizEcosystemLogicProxy.theme.annotations | object | `{}` |  |
+| bizEcosystemLogicProxy.theme.enabled | bool | `false` |  |
+| bizEcosystemLogicProxy.theme.image | string | `"my-theme-image:latest"` |  |
+| bizEcosystemLogicProxy.theme.imagePullPolicy | string | `"IfNotPresent"` |  |
+| bizEcosystemLogicProxy.theme.name | string | `"default"` |  |
+| bizEcosystemLogicProxy.theme.size | string | `"4Gi"` |  |
+| bizEcosystemLogicProxy.theme.sourcePath | string | `"/my-theme"` |  |
 | bizEcosystemRss.db.driver | string | `"com.mysql.jdbc.Driver"` |  |
 | bizEcosystemRss.db.host | string | `"mysql"` |  |
 | bizEcosystemRss.db.password | string | `"pass"` |  |
@@ -159,7 +168,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemRss.deployment.affinity | object | `{}` |  |
 | bizEcosystemRss.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemRss.deployment.image.repository | string | `"fiware/biz-ecosystem-rss"` |  |
-| bizEcosystemRss.deployment.image.tag | string | `"v7.6.0"` |  |
+| bizEcosystemRss.deployment.image.tag | string | `"v7.8.0"` |  |
 | bizEcosystemRss.deployment.livenessProbe.initialDelaySeconds | int | `120` |  |
 | bizEcosystemRss.deployment.livenessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemRss.deployment.livenessProbe.successThreshold | int | `1` |  |
@@ -179,9 +188,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemRss.fullnameOverride | string | `""` |  |
 | bizEcosystemRss.name | string | `"biz-ecosystem-rss"` |  |
 | bizEcosystemRss.port | int | `8080` |  |
-| bizEcosystemRss.securityContext.enabled | bool | `false` |  |
-| bizEcosystemRss.securityContext.runAsGroup | int | `0` |  |
-| bizEcosystemRss.securityContext.runAsUser | int | `0` |  |
+| bizEcosystemRss.securityContext | object | `{}` |  |
 | bizEcosystemRss.service.annotations | object | `{}` |  |
 | bizEcosystemRss.service.port | int | `8080` |  |
 | bizEcosystemRss.service.type | string | `"ClusterIP"` |  |
@@ -192,15 +199,21 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | fullnameOverride | string | `""` |  |
 | initContainer.apis.image | string | `"busybox"` |  |
 | initContainer.apis.imagePullPolicy | string | `"IfNotPresent"` |  |
+| initContainer.apis.maxRetries | int | `60` |  |
 | initContainer.apis.name | string | `"wait-for-apis"` |  |
+| initContainer.apis.sleepInterval | int | `10` |  |
 | initContainer.mongodb.image | string | `"bitnami/mongodb"` |  |
 | initContainer.mongodb.imagePullPolicy | string | `"IfNotPresent"` |  |
 | initContainer.mongodb.imageTag | string | `"3.6.21"` |  |
+| initContainer.mongodb.maxRetries | int | `60` |  |
 | initContainer.mongodb.name | string | `"wait-for-mongodb"` |  |
+| initContainer.mongodb.sleepInterval | int | `5` |  |
 | initContainer.mysql.image | string | `"mysql"` |  |
 | initContainer.mysql.imagePullPolicy | string | `"IfNotPresent"` |  |
 | initContainer.mysql.imageTag | string | `"5.7"` |  |
+| initContainer.mysql.maxRetries | int | `60` |  |
 | initContainer.mysql.name | string | `"wait-for-mysql"` |  |
+| initContainer.mysql.sleepInterval | int | `5` |  |
 | nameOverride | string | `""` |  |
 | oauth.adminrole | string | `"admin"` | Admin role |
 | oauth.aggregatorrole | string | `"Aggregator"` | Aggregator role |
