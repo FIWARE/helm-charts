@@ -40,6 +40,15 @@ spec:
         {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-customer" "path" "DSCustomerManagement" ) | nindent 8 }}
         {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-usage" "path" "DSUsageManagement" ) | nindent 8 }}
         {{- include "business-api-ecosystem.initContainer.charging" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-charging" "path" "charging/api/assetManagement/currencyCodes" ) | nindent 8 }}
+        {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
+        - name: {{ include "bizEcosystemLogicProxy.fullname" . }}-theme-init
+          image: {{ .Values.bizEcosystemLogicProxy.theme.image }}
+          imagePullPolicy: {{ .Values.bizEcosystemLogicProxy.theme.imagePullPolicy }}
+          command: ['sh', '-c', 'mkdir -p /themes/{{ .Values.bizEcosystemLogicProxy.theme.name }} && cp -r {{ .Values.bizEcosystemLogicProxy.theme.sourcePath }}/* /themes/{{ .Values.bizEcosystemLogicProxy.theme.name }}/.']
+          volumeMounts:
+            - name: themes
+              mountPath: /themes
+        {{- end }}
       containers:
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemLogicProxy.name }}
           imagePullPolicy: {{ .Values.bizEcosystemLogicProxy.deployment.image.pullPolicy }}
@@ -68,6 +77,11 @@ spec:
             periodSeconds: {{ .Values.bizEcosystemLogicProxy.deployment.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.bizEcosystemLogicProxy.deployment.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.bizEcosystemLogicProxy.deployment.readinessProbe.timeoutSeconds }}
+          {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
+          volumeMounts:
+            - name: themes
+              mountPath: /business-ecosystem-logic-proxy/themes
+          {{- end }}
           env:
             - name: NODE_ENV
               value: {{ .Values.bizEcosystemLogicProxy.nodeEnvironment | quote }}
@@ -115,9 +129,9 @@ spec:
               value: {{ .Values.oauth.orgadminrole | quote }}
             - name: BAE_LP_OAUTH2_IS_LEGACY
               value: {{ .Values.oauth.isLegacy | quote }}
-            {{- if .Values.bizEcosystemLogicProxy.theme }}
+            {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
             - name: BAE_LP_THEME
-              value: {{ .Values.bizEcosystemLogicProxy.theme | quote }}
+              value: {{ .Values.bizEcosystemLogicProxy.theme.name | quote }}
             {{- end }}
             - name: BAE_LP_REVENUE_MODEL
               value: {{ .Values.bizEcosystemLogicProxy.revenueModel | quote }}
@@ -157,6 +171,14 @@ spec:
               value: {{ include "bizEcosystemChargingBackend.hostnameonly" . }}
             - name: BAE_LP_ENDPOINT_CHARGING_PORT
               value: {{ .Values.bizEcosystemChargingBackend.service.port | quote }}
+            - name: BAE_LP_INDEX_ENGINE
+              value: {{ .Values.bizEcosystemLogicProxy.elastic.engine | quote }}
+            - name: BAE_LP_INDEX_API_VERSION
+              value: {{ .Values.bizEcosystemLogicProxy.elastic.version | quote }}
+            - name: BAE_LP_INDEX_URL
+              value: {{ .Values.bizEcosystemLogicProxy.elastic.url | quote }}
+            - name: BAE_SERVICE_HOST
+              value: {{ .Values.externalUrl | quote }}
       {{- with .Values.bizEcosystemLogicProxy.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -168,5 +190,11 @@ spec:
       {{- with .Values.bizEcosystemLogicProxy.deployment.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
-      {{- end }}    
+      {{- end }}
+      {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
+      volumes:
+        - name: themes
+          persistentVolumeClaim:
+            claimName: {{ include "bizEcosystemLogicProxy.fullname" . }}-themes
+      {{- end }}
 {{- end }}

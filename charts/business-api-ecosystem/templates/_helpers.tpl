@@ -328,7 +328,7 @@ Template for TMForum APIs initContainer check
 {{- end }}
 
 {{/*
-Template for CHarging Backend initContainer check
+Template for Charging Backend initContainer check
 */}}
 {{- define "business-api-ecosystem.initContainer.charging" }}
 - name: {{ tpl .name .ctx }}
