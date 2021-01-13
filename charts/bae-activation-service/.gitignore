@@ -1,0 +1,7 @@
+# Common backup files
+*~
+# Various IDEs
+.project
+.idea/
+*.tmproj
+.vscode/
