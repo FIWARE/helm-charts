@@ -41,26 +41,24 @@ spec:
             - name: http
               containerPort: {{ .Values.broker.port}}
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /version
-              port: http
-            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
-            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
-            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
-          readinessProbe:
-            httpGet:
-              path: /version
-              port: http
-            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
-            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
-            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+#          readinessProbe:
+#            tcpSocket:
+#              port: 1027
+#            initialDelaySeconds: 5
+#            periodSeconds: 10
+#          livenessProbe:
+#            tcpSocket:
+#              port: 1027
+#            initialDelaySeconds: 15
+#            periodSeconds: 20
           env:
             # general
             - name: {{ .Values.broker.envPrefix }}PORT
               value: {{ .Values.broker.port | quote }}
+            - name: {{ .Values.broker.envPrefix }}SOCKET_SERVICE
+              value: "TRUE"
+            - name: {{ .Values.broker.envPrefix }}SOCKET_SERVICE_PORT
+              value: "1027"
             - name: {{ .Values.broker.envPrefix }}DISABLE_FILE_LOG
               value: "TRUE"
             - name: {{ .Values.broker.envPrefix }}CACHED_CONTEXT_DIRECTORY
