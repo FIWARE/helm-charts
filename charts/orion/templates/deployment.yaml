@@ -34,23 +34,25 @@ spec:
         - name: {{ .Chart.Name }}
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
-          {{ if .Values.broker.noDevTrace }}
+          {{ if and (.Values.broker.noDevTrace) (eq .Values.deployment.image.repository "fiware/orion-ld") }}
           args: ["-lmtmp"]
           {{ end }}
           ports:
             - name: http
               containerPort: {{ .Values.broker.port}}
               protocol: TCP
-#          readinessProbe:
-#            tcpSocket:
-#              port: 1027
-#            initialDelaySeconds: 5
-#            periodSeconds: 10
-#          livenessProbe:
-#            tcpSocket:
-#              port: 1027
-#            initialDelaySeconds: 15
-#            periodSeconds: 20
+          {{ if eq .Values.deployment.image.repository "fiware/orion-ld" }}
+          readinessProbe:
+            tcpSocket:
+              port: 1027
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 1027
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          {{ end }}
           env:
             # general
             - name: {{ .Values.broker.envPrefix }}PORT
