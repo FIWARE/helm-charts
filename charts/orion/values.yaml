@@ -160,6 +160,20 @@ broker:
   ipv4enabled: false
   # -- should the extended development tracing be disabled?
   noDevTrace: true
+  # -- configuration of temporal entity representation
+  troe:
+    # -- should temporal representation of entities be enabled
+    enabled: true
+    # -- host of the postgres to be used
+    host: postgres
+    # -- port of the postgres to be used
+    port: 5432
+    # -- username to authenticate with at postgres
+    user: user
+    # -- password to authenticate with at postgres
+    password: password
+    ## connection pool of postgres
+    # poolSize: 10
   ## timeout in milliseconds for forwarding messages and notifications
   # httpTimeout: 5
   ## the timeout in seconds for REST connection
