@@ -1,6 +1,6 @@
 # Helm Repository for FIWARE Components
 
-![FIWARE Catalogue](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/cross-chapter.svg)
+![FIWARE Catalogue](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/deployment-tools.svg)
 [![License: APGL](https://img.shields.io/github/license/FIWARE/iotagent-isoxml.svg)](https://opensource.org/licenses/AGPL-3.0)
 [![Releases downloads](https://img.shields.io/github/downloads/fiware/helm-charts/total.svg)](https://github.com/fiware/helm-charts/releases)
 [![Chart Test](https://github.com/FIWARE/helm-charts/workflows/Chart%20Test/badge.svg)](https://github.com/fiware/helm-charts/commits/main)
