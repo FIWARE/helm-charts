@@ -1,0 +1,35 @@
+{{- if .Values.bizEcosystemChargingBackend.media.enabled }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "bizEcosystemChargingBackend.fullname" . }}-media-assets
+  {{- with .Values.bizEcosystemChargingBackend.media.annotations  }}
+  annotations:
+  {{ toYaml . | indent 4 }}
+  {{- end }}
+  labels:
+    {{- include "bizEcosystemChargingBackend.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.bizEcosystemChargingBackend.media.size | quote }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "bizEcosystemChargingBackend.fullname" . }}-media-bills
+  {{- with .Values.bizEcosystemChargingBackend.media.annotations  }}
+  annotations:
+  {{ toYaml . | indent 4 }}
+  {{- end }}
+  labels:
+    {{- include "bizEcosystemChargingBackend.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.bizEcosystemChargingBackend.media.size | quote }}
+{{- end }}
