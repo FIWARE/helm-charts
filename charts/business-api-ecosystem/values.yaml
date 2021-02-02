@@ -378,6 +378,15 @@ bizEcosystemChargingBackend:
     idmUser: admin
     ## -- IDM Admin password
     idmPassword: admin-password
+
+  ## -- PVC configuration for charging backend media directories (/assets and /bills)
+  media:
+    ## -- Enable the PVC for media storage
+    enabled: true
+    ## -- Size of the PVC
+    size: 8Gi
+    ## -- Annotations
+    annotations: {}
     
   ## -- port that the charging backend container uses
   port: 8006
@@ -470,13 +479,13 @@ bizEcosystemLogicProxy:
     ## -- configuration of the update strategy
     updateStrategy:
       ## -- type of the update
-      type: RollingUpdate
-      ## -- new pods will be added gradually
-      rollingUpdate:
+      type: Recreate
+      ## -- new pods will be added gradually (not allowed with 'Recreate' strategy)
+      #rollingUpdate:
         ## -- number of pods that can be created above the desired amount while updating
-        maxSurge: 1
+      #  maxSurge: 1
         ## -- number of pods that can be unavailable while updating 
-        maxUnavailable: 0
+      #  maxUnavailable: 0
     ## -- configuration of the image to be used
     image:
       ## -- BAE Logic Proxy image name

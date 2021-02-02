@@ -72,6 +72,10 @@ spec:
               mountPath: /business-ecosystem-charging-backend/src/plugins
             - name: inst-plugins
               mountPath: /business-ecosystem-charging-backend/src/wstore/asset_manager/resource_plugins/plugins
+            - name: media-assets
+              mountPath: /business-ecosystem-charging-backend/src/media/assets
+            - name: media-bills
+              mountPath: /business-ecosystem-charging-backend/src/media/bills
           env:
             - name: BAE_CB_PAYMENT_METHOD
               value: {{ .Values.bizEcosystemChargingBackend.payment.method | quote }}
@@ -178,6 +182,20 @@ spec:
           {{- if .Values.bizEcosystemChargingBackend.plugins.enabled }}
           persistentVolumeClaim:
             claimName: {{ include "bizEcosystemChargingBackend.fullname" . }}-inst-plugins
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: media-assets
+          {{- if .Values.bizEcosystemChargingBackend.media.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "bizEcosystemChargingBackend.fullname" . }}-media-assets
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: media-bills
+          {{- if .Values.bizEcosystemChargingBackend.media.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "bizEcosystemChargingBackend.fullname" . }}-media-bills
           {{- else }}
           emptyDir: {}
           {{- end }}
