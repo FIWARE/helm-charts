@@ -103,7 +103,7 @@ spec:
             {{- end }}
             {{- if .Values.broker.noCache }}
             - name: {{ .Values.broker.envPrefix }}NOCACHE
-              value: {{ .Values.broker.noCache | upper }}
+              value: {{ .Values.broker.noCache | upper | quote }}
             {{- end }}
             {{- if .Values.broker.connectionMemory }}
             - name: {{ .Values.broker.envPrefix }}CONN_MEMORY
