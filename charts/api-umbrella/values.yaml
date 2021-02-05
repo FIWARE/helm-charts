@@ -40,8 +40,7 @@ deployment:
       maxUnavailable: 0
   # -- configuration of the image to be used
   image:
-    ## orion image name
-    # -- ref: https://hub.docker.com/r/fiware/orion/
+    ## api-umbrella image name
     repository: profirator/api-umbrella
     # -- tag of the image to be used
     tag: 0.15.3
