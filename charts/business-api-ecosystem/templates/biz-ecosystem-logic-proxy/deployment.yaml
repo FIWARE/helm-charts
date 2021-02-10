@@ -90,7 +90,7 @@ spec:
             - name: BAE_LP_PORT
               value: {{ .Values.bizEcosystemLogicProxy.port | quote }}
             - name: BAE_LP_HOST
-              value: http://{{ include "bizEcosystemLogicProxy.fullhostname" . }}
+              value: {{ include "bizEcosystemLogicProxy.hostnameonly" . }}
             {{- if .Values.bizEcosystemLogicProxy.proxyHost }}
             - name: BAE_SERVICE_HOST
               value: {{ .Values.bizEcosystemLogicProxy.proxyHost | quote }}
