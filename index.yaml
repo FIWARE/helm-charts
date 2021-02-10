@@ -3,6 +3,25 @@ entries:
   api-umbrella:
   - apiVersion: v1
     appVersion: v0.15.1
+    created: "2021-02-10T12:28:17.241679502Z"
+    description: A Helm chart for running api-umbrella on kubernetes.
+    digest: 308e9802ddf6f43dc2c1de4047dc15c56b939e2b803c510c98cc238aaf8951c0
+    home: https://api-umbrella.readthedocs.io/en/latest/index.html
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - api-umbrella
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: api-umbrella
+    sources:
+    - https://github.com/NREL/api-umbrella
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/api-umbrella-0.0.2/api-umbrella-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v1
+    appVersion: v0.15.1
     created: "2020-11-26T15:27:21.929065432Z"
     description: A Helm chart for running api-umbrella on kubernetes.
     digest: 94fd5bfdc33d1f5785eba6a4379301455822a33e8ac5e03ab64f28f2f0bd09e4
@@ -42,6 +61,28 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/bae-activation-service-0.0.1/bae-activation-service-0.0.1.tgz
     version: 0.0.1
   business-api-ecosystem:
+  - apiVersion: v2
+    appVersion: 7.8.0
+    created: "2021-02-10T12:28:17.379073828Z"
+    description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
+      Marketplace) on Kubernetes
+    digest: d6c5dde93ff10fefbf1d159082c88182c7175e526fd025498f595175684aad59
+    home: https://business-api-ecosystem.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - marketplace
+    - bae
+    - tmforum
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: business-api-ecosystem
+    sources:
+    - https://github.com/FIWARE-TMForum/Business-API-Ecosystem
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-0.0.6/business-api-ecosystem-0.0.6.tgz
+    version: 0.0.6
   - apiVersion: v2
     appVersion: 7.8.0
     created: "2021-02-02T12:20:23.754708695Z"
