@@ -24,8 +24,8 @@ and other solutions can build on top of it as well. Listings of many _FIWARE Rea
 found on the [FIWARE Marketplace](http://marketplace.fiware.org/).
 
 For additional Helm Charts collections for supplementary open-source components such as Grafana, Apache Spark, Keycloak and Kong we recommend other 
-community-maintained listings such as [Bitnami](https://github.com/bitnami/charts/tree/master/bitnami) or searching for a specific helm chart
-on [Artifact Hub](https://artifacthub.io/packages/search?page=1&kind=0) 
+community-maintained listings such as [Bitnami](https://github.com/bitnami/charts/tree/master/bitnami) or [Orchestra Cities](https://github.com/orchestracities/charts)
+or searching for a specific helm chart on [Artifact Hub](https://artifacthub.io/packages/search?page=1&kind=0) 
 
 More information on each individual FIWARE component, can be found within the individual chart READMEs.
 
