@@ -18,10 +18,10 @@ accelerate the development of Smart Solutions. The main and only mandatory compo
 solution: the need to manage context information, enabling to perform updates and bring access to context.
 
 Note that FIWARE is not about take it all or nothing. With the exception of a mandatory FIWARE Context Broker you should feel free to 
-mix [FIWARE Catalogue](https://github.com/FIWARE/catalogue) elements with other third platform components to design the hybrid platform of your 
-choice. As long as it uses the FIWARE Context Broker technology to manage context information, your platform can be labeled as _“Powered by FIWARE”_ 
-and other solutions can build on top of it as well. Listings of many _FIWARE Ready_ devices and commercial _“Powered by FIWARE”_ solutions can be 
-found on the [FIWARE Marketplace](http://marketplace.fiware.org/).
+mix [FIWARE Catalogue](https://github.com/FIWARE/catalogue) elements with other open-source and commercial third-party platform components to 
+design the hybrid platform of your choice. As long as it uses the FIWARE Context Broker technology to manage context information, your platform 
+can be labeled as _“Powered by FIWARE”_  and other solutions can build on top of it as well. Listings of many _FIWARE Ready_ software enablers
+and devices and commercial _“Powered by FIWARE”_ solutions can be found on the [FIWARE Marketplace](http://marketplace.fiware.org/).
 
 For additional Helm Charts collections for supplementary open-source components such as Grafana, Apache Spark, Keycloak and Kong we recommend other 
 community-maintained listings such as [Bitnami](https://github.com/bitnami/charts/tree/master/bitnami) or [Orchestra Cities](https://github.com/orchestracities/charts)
