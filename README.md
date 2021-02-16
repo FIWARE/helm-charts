@@ -1,4 +1,4 @@
-# Helm Repository for Catalogue<img src="https://fiware.github.io//catalogue/img/fiware-black.png" width="145" align="left">  Components
+# Helm Repository for <img src="https://fiware.github.io//catalogue/img/fiware-black.png" width="145" align="left">  Components
 
 ![FIWARE Catalogue](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/deployment-tools.svg)
 [![License: MIT](https://img.shields.io/github/license/FIWARE/helm-charts.svg)](https://opensource.org/licenses/MIT)
