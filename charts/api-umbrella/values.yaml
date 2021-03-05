@@ -135,7 +135,7 @@ umbrella:
     # -- host of the mongodb
     host: mongodb
     # -- port of the mongodb
-    port: 27071
+    port: 27017
     # -- name of the database, needs to exist on startup
     name: api_umbrella
 
