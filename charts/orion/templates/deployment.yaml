@@ -64,7 +64,7 @@ spec:
             - name: {{ .Values.broker.envPrefix }}DISABLE_FILE_LOG
               value: "TRUE"
             - name: {{ .Values.broker.envPrefix }}CACHED_CONTEXT_DIRECTORY
-              value: "/opt/orion/ldcontexts"
+              value: {{ .Values.broker.cachedContextFolder }}
             {{- if and (eq .Values.broker.ipv4enabled true) (eq .Values.broker.ipv6enabled false) }}
             - name: {{ .Values.broker.envPrefix }}USEIPV4
               value: "TRUE"
@@ -145,6 +145,11 @@ spec:
             - name: {{ .Values.broker.envPrefix }}INSECURE_NOTIF
               value: {{ .Values.broker.insecureNotifEnabled | upper }}
             {{- end }}
+            {{- if .Values.broker.forwardingEnabled }}
+            - name: {{ .Values.broker.envPrefix }}FORWARDING
+              value: {{ .Values.broker.forwardingEnabled | quote | upper }}
+            {{- end }}
+
 
             # db
             - name: {{ .Values.broker.envPrefix }}MONGO_HOST
@@ -258,7 +263,37 @@ spec:
             - name: {{ .Values.broker.envPrefix }}LOG_INFO_PAYLOAD_MAX_SIZE
               value: {{ .Values.broker.logging.infoPayloadMaxSize }}
             {{- end }}
-            
+
+            ##TROE
+            {{ if .Values.broker.troe }}
+            {{ if eq .Values.broker.troe.enabled "true" }}
+            - name: {{ .Values.broker.envPrefix }}TROE
+              value: "TRUE"
+            {{ else }}
+            - name: {{ .Values.broker.envPrefix }}TROE
+              value: "FALSE"
+            {{- end -}}
+            {{- if .Values.broker.troe.dbUser -}}
+            - name: {{ .Values.broker.envPrefix }}TROE_USER
+              value: {{ .Values.broker.troe.dbUser }}
+            {{- end }}
+            {{- if .Values.broker.troe.dbPassword -}}
+            - name: {{ .Values.broker.envPrefix }}TROE_PWD
+              value: {{ .Values.broker.troe.dbPassword }}
+            {{- end }}
+            {{- if .Values.broker.troe.dbHost -}}
+            - name: {{ .Values.broker.envPrefix }}TROE_HOST
+              value: {{ .Values.broker.troe.dbHost }}
+            {{- end }}
+            {{- if .Values.broker.troe.dbPort -}}
+            - name: {{ .Values.broker.envPrefix }}TROE_PORT
+              value: {{ .Values.broker.troe.dbPort }}
+            {{- end }}
+            {{- if .Values.broker.troe.dbPoolsize -}}
+            - name: {{ .Values.broker.envPrefix }}TROE_POOL_SIZE
+              value: {{ .Values.broker.troe.dbPoolsize }}
+            {{- end }}
+            {{- end }}
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
       {{- with .Values.deployment.nodeSelector }}
