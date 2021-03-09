@@ -266,7 +266,7 @@ spec:
 
             ##TROE
             {{ if .Values.broker.troe }}
-            {{ if eq .Values.broker.troe.enabled "true" }}
+            {{ if eq .Values.broker.troe.enabled true }}
             - name: {{ .Values.broker.envPrefix }}TROE
               value: "TRUE"
             {{ else }}
