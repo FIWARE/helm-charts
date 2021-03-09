@@ -209,11 +209,11 @@ spec:
             {{ else }}
             - name: {{ .Values.broker.envPrefix }}DISABLE_METRICS
               value: "FALSE"
-            {{- end -}}
-            {{- if .Values.broker.metrics.statCountersEnabled -}}
+            {{- end }}
+            {{ if .Values.broker.metrics.statCountersEnabled  }}
             - name: {{ .Values.broker.envPrefix }}STAT_COUNTERS
               value: {{ .Values.broker.metrics.statCountersEnabled | upper }}
-            {{- end }}
+            {{ end }}
             {{ if .Values.broker.metrics.statSemWaitEnabled }}
             - name: {{ .Values.broker.envPrefix }}STAT_SEM_WAIT
               value: {{ .Values.broker.metrics.statSemWaitEnabled | upper }}
@@ -273,26 +273,26 @@ spec:
             - name: {{ .Values.broker.envPrefix }}TROE
               value: "FALSE"
             {{- end -}}
-            {{- if .Values.broker.troe.dbUser -}}
+            {{ if .Values.broker.troe.dbUser }}
             - name: {{ .Values.broker.envPrefix }}TROE_USER
               value: {{ .Values.broker.troe.dbUser }}
-            {{- end }}
-            {{- if .Values.broker.troe.dbPassword -}}
+            {{ end }}
+            {{ if .Values.broker.troe.dbPassword }}
             - name: {{ .Values.broker.envPrefix }}TROE_PWD
               value: {{ .Values.broker.troe.dbPassword }}
-            {{- end }}
-            {{- if .Values.broker.troe.dbHost -}}
+            {{ end }}
+            {{ if .Values.broker.troe.dbHost }}
             - name: {{ .Values.broker.envPrefix }}TROE_HOST
               value: {{ .Values.broker.troe.dbHost }}
-            {{- end }}
-            {{- if .Values.broker.troe.dbPort -}}
+            {{ end }}
+            {{ if .Values.broker.troe.dbPort }}
             - name: {{ .Values.broker.envPrefix }}TROE_PORT
               value: {{ .Values.broker.troe.dbPort }}
-            {{- end }}
-            {{- if .Values.broker.troe.dbPoolsize -}}
+            {{ end }}
+            {{ if .Values.broker.troe.dbPoolsize }}
             - name: {{ .Values.broker.envPrefix }}TROE_POOL_SIZE
               value: {{ .Values.broker.troe.dbPoolsize }}
-            {{- end }}
+            {{ end }}
             {{- end }}
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
