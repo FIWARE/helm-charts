@@ -291,7 +291,7 @@ spec:
             {{ end }}
             {{ if .Values.broker.troe.dbPoolsize }}
             - name: {{ .Values.broker.envPrefix }}TROE_POOL_SIZE
-              value: {{ .Values.broker.troe.dbPoolsize }}
+              value: {{ .Values.broker.troe.dbPoolsize | quote }}
             {{ end }}
             {{- end }}
           resources:
