@@ -287,7 +287,7 @@ spec:
             {{ end }}
             {{ if .Values.broker.troe.dbPort }}
             - name: {{ .Values.broker.envPrefix }}TROE_PORT
-              value: {{ .Values.broker.troe.dbPort }}
+              value: {{ .Values.broker.troe.dbPort | quote }}
             {{ end }}
             {{ if .Values.broker.troe.dbPoolsize }}
             - name: {{ .Values.broker.envPrefix }}TROE_POOL_SIZE
