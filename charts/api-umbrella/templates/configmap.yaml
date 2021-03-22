@@ -23,5 +23,37 @@ data:
     {{- toYaml . | nindent 4 }}
     {{- end }}
 
+    {{ if .Values.umbrella.authorisation_registry -}}
+    authorisation_registry:
+      host: {{ .Values.umbrella.authorisation_registry.host | quote }}
+      token_endpoint: {{ .Values.umbrella.authorisation_registry.token_endpoint | quote }}
+      delegation_endpoint: {{ .Values.umbrella.authorisation_registry.delegation_endpoint | quote }}
+      identifier: {{ .Values.umbrella.authorisation_registry.identifier | quote }}
+    {{- end }}
+
+    {{ if .Values.umbrella.jws -}}
+    jws:
+      identifier: {{ .Values.umbrella.jws.identifier | quote }}
+      x5c: {{- range .Values.umbrella.jws.x5c }}
+        - {{.}}{{- end }}
+      private_key: {{ .Values.umbrella.jws.private_key | nindent 8  }}
+      {{ if .Values.umbrella.jws.root_ca -}}
+      root_ca_file: "/app/rootCA.pem"
+      {{- end }}
+    {{- end }}
+
     log:
       destination: console
+
+{{ if .Values.umbrella.jws.root_ca -}}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "api-umbrella.fullname" . }}-rootca
+  labels:
+    {{- include "api-umbrella.labels" . | nindent 4 }}
+data:
+  rootCA.pem: |-
+    {{ .Values.umbrella.jws.root_ca | nindent 4 }}
+{{- end }}
