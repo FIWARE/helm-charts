@@ -36,7 +36,8 @@ data:
       identifier: {{ .Values.umbrella.jws.identifier | quote }}
       x5c: {{- range .Values.umbrella.jws.x5c }}
         - {{.}}{{- end }}
-      private_key: {{ .Values.umbrella.jws.private_key | nindent 8  }}
+      private_key: |
+        {{- .Values.umbrella.jws.private_key | nindent 8  }}
       {{ if .Values.umbrella.jws.root_ca -}}
       root_ca_file: "/app/rootCA.pem"
       {{- end }}
