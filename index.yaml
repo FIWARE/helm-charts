@@ -276,6 +276,26 @@ entries:
     version: 0.0.1
   mintaka:
   - apiVersion: v1
+    appVersion: 0.0.5
+    created: "2021-03-24T10:43:02.78867142Z"
+    description: A Helm chart for running mintaka on kubernetes.
+    digest: 8ba26f0820dcd64fd34fc84ca301c2027305d8ada9d1f529751dc8072d15d57d
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion
+    - orion-ld
+    - mintaka
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: mintaka
+    sources:
+    - https://github.com/fiware/mintaka
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/mintaka-0.0.2/mintaka-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v1
     appVersion: 0.0.1
     created: "2020-12-04T07:46:46.864208441Z"
     description: A Helm chart for running mintaka on kubernetes.
