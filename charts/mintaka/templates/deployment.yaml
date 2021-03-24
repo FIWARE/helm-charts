@@ -24,6 +24,9 @@ spec:
         {{- end }}
       {{- if .Values.deployment.additionalAnnotations -}}
       annotations:
+        prometheus.io/scrape: {{ .Values.prometheus.enabled | quote }}
+        prometheus.io/path: {{ .Values.prometheus.path }}
+        prometheus.io/port: { { .Values.prometheus.port } }
         {{- with .Values.deployment.additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -38,30 +41,37 @@ spec:
             - name: http
               containerPort: {{ .Values.port}}
               protocol: TCP
+            - name: http-health
+              containerPort: {{ .Values.deployment.healthPort }}
+              protocol: TCP
           livenessProbe:
             httpGet:
-              path: /version
-              port: http
+              path: /health
+              port: http-health
             initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
-              path: /version
-              port: http
+              path: /health
+              port: http-health
             initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
           env:
-            - name: POSTGRES_HOST
+            - name: ENDPOINTS_ALL_PORT
+              value: {{ .Values.deployment.healthPort | quote }}
+            - name: DATASOURCES_DEFAULT_HOST
               value: {{ .Values.db.host }}
-            - name: POSTGRES_DB
+            - name: DATASOURCES_DEFAULT_PORT
+              value: {{ .Values.db.port | quote }}
+            - name: DATASOURCES_DEFAULT_DATABASE
               value: {{ .Values.db.name }}
-            - name: POSTGRES_USER
+            - name: DATASOURCES_DEFAULT_USERNAME
               value: {{ .Values.db.user | quote }}
-            - name: POSTGRES_PASSWORD
+            - name: DATASOURCES_DEFAULT_PASSWORD
               valueFrom:
                  secretKeyRef:
                    name: {{ include "mintaka.fullname" . }}
