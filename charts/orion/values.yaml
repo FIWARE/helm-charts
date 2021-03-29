@@ -163,7 +163,7 @@ broker:
   # -- configuration of temporal entity representation
   troe:
     # -- should temporal representation of entities be enabled
-    enabled: true
+    enabled: false
     # -- host of the postgres to be used
     dbHost: postgres
     # -- port of the postgres to be used
