@@ -40,7 +40,7 @@ A Helm chart for running the fiware orion broker on kubernetes.
 | broker.troe.dbPassword | string | `"password"` | password to authenticate with at postgres |
 | broker.troe.dbPort | int | `5432` | port of the postgres to be used |
 | broker.troe.dbUser | string | `"user"` | username to authenticate with at postgres |
-| broker.troe.enabled | bool | `true` | should temporal representation of entities be enabled |
+| broker.troe.enabled | bool | `false` | should temporal representation of entities be enabled |
 | deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
