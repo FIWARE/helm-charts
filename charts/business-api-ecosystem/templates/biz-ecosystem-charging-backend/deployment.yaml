@@ -76,6 +76,14 @@ spec:
               mountPath: /business-ecosystem-charging-backend/src/media/assets
             - name: media-bills
               mountPath: /business-ecosystem-charging-backend/src/media/bills
+            {{- if .Values.bizEcosystemChargingBackend.token.enabled }}
+            - name: key-volume
+              mountPath: /business-ecosystem-charging-backend/key.pem
+              subPath: key.pem
+            - name: cert-volume
+              mountPath: /business-ecosystem-charging-backend/cert.pem
+              subPath: cert.pem
+          {{- end }}
           env:
             - name: BAE_CB_PAYMENT_METHOD
               value: {{ .Values.bizEcosystemChargingBackend.payment.method | quote }}
@@ -158,6 +166,14 @@ spec:
             - name: BAE_ASSET_IDM_URL
               value: {{ .Values.oauth.server | quote }}
             {{- end }}
+            {{- if .Values.bizEcosystemChargingBackend.token.enabled }}
+            - name: BAE_TOKEN_KEY
+              value: /business-ecosystem-charging-backend/key.pem
+            - name: BAE_TOKEN_CRT
+              value: /business-ecosystem-charging-backend/cert.pem
+            - name: BAE_EORI
+              value: {{ .Values.bizEcosystemChargingBackend.token.identifier | quote }}
+            {{- end }}
       {{- with .Values.bizEcosystemChargingBackend.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -199,4 +215,18 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- if .Values.bizEcosystemChargingBackend.token.enabled }}
+        - name: key-volume
+          configMap:
+            name: {{ include "bizEcosystemChargingBackend.fullname" . }}
+            items:
+              - key: key.pem
+                path: key.pem
+        - name: cert-volume
+          configMap:
+            name: {{ include "bizEcosystemChargingBackend.fullname" . }}
+            items:
+              - key: cert.pem
+                path: cert.pem
+      {{- end }}
 {{- end }}

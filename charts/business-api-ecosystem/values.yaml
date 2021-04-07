@@ -32,6 +32,8 @@ oauth:
   aggregatorrole: Aggregator
   # -- Role defined in the IDM client app for organization admins of the BAE 
   orgadminrole: orgAdmin
+  # -- IDP provider for passport strategy (fiware, keycloak, github, ...)
+  provider: fiware
   # -- Whether the used FIWARE IDM is version 6 or lower
   isLegacy: False
   
@@ -437,7 +439,16 @@ bizEcosystemChargingBackend:
   ## -- Authorize service path of the logic proxy
   authorizeServicePath: /authorizeService/apiKeys
 
-
+  ## -- Configuration of local key and certificate for validation and generation of tokens
+  token:
+    # -- Enable storage of local key and certificate
+    enabled: false
+    # -- String with private key in PEM format
+    key: ""
+    # -- String with certificate (chain) in PEM format
+    cert: ""
+    # -- Identifier (e.g. EORI) of local marketplace instance
+    identifier: ""
 
 ## -- Configuration for biz-ecosystem-logic-proxy component
 ##
@@ -545,7 +556,7 @@ bizEcosystemLogicProxy:
 
   ## -- openshift specific route definition. Will not work on plain k8s
   route:
-    ## -- should the deployment create openshift routes
+    # -- should the deployment create openshift routes
     enabled: false
     # -- annotations to be added to the route
     annotations: {}
@@ -555,16 +566,16 @@ bizEcosystemLogicProxy:
     tls: {}
     # termination: edge
 
-  ## -- port that the logic proxy container uses
+  # -- port that the logic proxy container uses
   port: 8004
 
   ## -- If provided, this URL specifies the actual URL that is used to access the BAE when the component is proxied (e.g Apache)
   # proxyHost: http://marketplace.fiware-proxy.org
 
-  ## -- Deployment in development or in production
+  # -- Deployment in development or in production
   nodeEnvironment: development
   
-  ## -- Execute the collect static command on startup
+  # -- Execute the collect static command on startup
   collectStaticCommand: "True"
   
   ## -- database configuration for Logic Proxy (MongoDB)
@@ -582,30 +593,49 @@ bizEcosystemLogicProxy:
 
   ## -- elasticsearch configuration
   elastic:
-    ## -- indexing engine of logic proxy
+    # -- indexing engine of logic proxy
     engine: elasticsearch
-    ## -- URL of elasticsearch service
+    # -- URL of elasticsearch service
     url: elasticsearch:9200
-    ## -- API version of elasticsearch
+    # -- API version of elasticsearch
     version: 7
 
   ## -- Custom theme configuration
   theme:
-    ## -- Enable theme
+    # -- Enable theme
     enabled: false
-    ## -- Name of the theme
+    # -- Name of the theme
     name: default
-    ## -- Size of PVC to be created
+    # -- Size of PVC to be created
     size: 4Gi
-    ## -- PVC Annotations
+    # -- PVC Annotations
     annotations: {}
-    ## Image which holds the theme files
+    # Image which holds the theme files
     image: my-theme-image:latest
-    ## -- specification of the image pull policy
+    # -- specification of the image pull policy
     imagePullPolicy: IfNotPresent
     ## Path to the source theme files inside the container
     #  Files will be copied to /themes/{{name}} with the PVC mounted at /themes
     sourcePath: /my-theme
 
-  ## -- Default market owner precentage for Revenue Sharing models
+  ## -- Configuration for external IDPs
+  externalIdp:
+    # -- Enable usage of external IDPs
+    enabled: false
+    # -- JSON string with external IDP configurations
+    # "[{name: 'NAME', server: 'URL', idpId: 'ID'}, ...]"
+    config: ""
+    
+  ## -- Configuration of local key and certificate for validation and generation of tokens
+  token:
+    # -- Enable storage of local key and certificate
+    enabled: false
+    # -- String with private key in PEM format
+    key: ""
+    # -- String with certificate (chain) in PEM format
+    cert: ""
+    # -- Identifier (e.g. EORI) of local marketplace instance
+    identifier: ""
+
+  # -- Default market owner precentage for Revenue Sharing models
   revenueModel: 30

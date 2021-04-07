@@ -77,10 +77,20 @@ spec:
             periodSeconds: {{ .Values.bizEcosystemLogicProxy.deployment.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.bizEcosystemLogicProxy.deployment.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.bizEcosystemLogicProxy.deployment.readinessProbe.timeoutSeconds }}
-          {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
+          {{- if or .Values.bizEcosystemLogicProxy.theme.enabled .Values.bizEcosystemLogicProxy.token.enabled }}
           volumeMounts:
+          {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
             - name: themes
               mountPath: /business-ecosystem-logic-proxy/themes
+          {{- end }}
+          {{- if .Values.bizEcosystemLogicProxy.token.enabled }}
+            - name: key-volume
+              mountPath: /business-ecosystem-logic-proxy/key.pem
+              subPath: key.pem
+            - name: cert-volume
+              mountPath: /business-ecosystem-logic-proxy/cert.pem
+              subPath: cert.pem
+          {{- end }}
           {{- end }}
           env:
             - name: NODE_ENV
@@ -127,6 +137,8 @@ spec:
               value: {{ .Values.oauth.customerrole | quote }}
             - name: BAE_LP_OAUTH2_ORG_ADMIN_ROLE
               value: {{ .Values.oauth.orgadminrole | quote }}
+            - name: BAE_LP_OAUTH2_PROVIDER
+              value: {{ .Values.oauth.provider | quote }}
             - name: BAE_LP_OAUTH2_IS_LEGACY
               value: {{ .Values.oauth.isLegacy | quote }}
             {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
@@ -179,6 +191,20 @@ spec:
               value: {{ .Values.bizEcosystemLogicProxy.elastic.url | quote }}
             - name: BAE_SERVICE_HOST
               value: {{ .Values.externalUrl | quote }}
+            {{- if .Values.bizEcosystemLogicProxy.externalIdp.enabled }}
+            - name: BAE_LP_EXT_LOGIN
+              value: "true"
+            - name: BAE_EXT_IDPS_CONF
+              value: {{ .Values.bizEcosystemLogicProxy.externalIdp.config | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.token.enabled }}
+            - name: BAE_TOKEN_KEY
+              value: /business-ecosystem-logic-proxy/key.pem
+            - name: BAE_TOKEN_CRT
+              value: /business-ecosystem-logic-proxy/cert.pem
+            - name: BAE_EORI
+              value: {{ .Values.bizEcosystemLogicProxy.token.identifier | quote }}
+            {{- end }}
       {{- with .Values.bizEcosystemLogicProxy.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -191,10 +217,26 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
+      {{- if or .Values.bizEcosystemLogicProxy.theme.enabled .Values.bizEcosystemLogicProxy.token.enabled }}
       volumes:
+      {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
         - name: themes
           persistentVolumeClaim:
             claimName: {{ include "bizEcosystemLogicProxy.fullname" . }}-themes
+      {{- end }}
+      {{- if .Values.bizEcosystemLogicProxy.token.enabled }}
+        - name: key-volume
+          configMap:
+            name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+            items:
+              - key: key.pem
+                path: key.pem
+        - name: cert-volume
+          configMap:
+            name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+            items:
+              - key: cert.pem
+                path: cert.pem
+      {{- end }}
       {{- end }}
 {{- end }}

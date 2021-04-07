@@ -2,7 +2,7 @@ apiVersion: v2
 name: business-api-ecosystem
 description: A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 icon: https://fiware.github.io/catalogue/img/fiware.png
-version: 0.0.6
+version: 0.0.7
 appVersion: 7.8.0
 home: https://business-api-ecosystem.readthedocs.io/en/latest/
 keywords:
