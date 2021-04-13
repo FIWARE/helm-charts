@@ -163,6 +163,29 @@ admin:
   password: admin
   # -- email address of the admin user
   email: admin@admin.org
+## Theme configuration for Keyrock
+theme:
+  ## -- Enable theme
+    enabled: false
+    ## -- Name of the theme
+    name: default
+    ## -- Size of PVCs to be created
+    size: 1Gi
+    ## -- PVC Annotations
+    annotations: {}
+    ## Image which holds the theme files
+    image: my-theme-image:latest
+    ## -- specification of the image pull policy
+    imagePullPolicy: IfNotPresent
+    ## Path to the source theme files inside the container
+    sourceTheme: /themes/my-theme
+    ## Path to the source image files inside the container
+    sourceImg: /img/my-theme
+    ## Mount path for the source theme files
+    mountTheme: /opt/fiware-idm/themes/my-theme
+    ## Mount path for the source image files
+    mountImg: /opt/fiware-idm/public/img/my-theme
+    
 # -- a list of additional env vars to be set, check the keyrock docu for all available options
 # ref: https://fiware-idm.readthedocs.io/en/latest/installation_and_administration_guide/environment_variables/index.html
 additonalEnvVars: []
