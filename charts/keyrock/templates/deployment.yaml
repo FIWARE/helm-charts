@@ -40,6 +40,10 @@ spec:
               mountPath: {{ .Values.theme.sourceTheme }}
             - name: themes-img
               mountPath: {{ .Values.theme.sourceImg }}
+            {{- if .Values.theme.sourceFavicon }}
+            - name: themes-favicon
+              mountPath: {{ .Values.theme.sourceFavicon }}
+            {{- end }}
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
@@ -71,6 +75,11 @@ spec:
               mountPath: {{ .Values.theme.mountTheme }}
             - name: themes-img
               mountPath: {{ .Values.theme.mountImg }}
+            {{- if .Values.theme.sourceFavicon }}
+            - name: themes-favicon
+              mountPath: {{ .Values.theme.mountFavicon }}
+              subPath: "favicon.ico"
+            {{- end }}
           {{- end }}
           env:
             - name: IDM_PORT
@@ -129,4 +138,9 @@ spec:
         - name: themes-img
           persistentVolumeClaim:
             claimName: {{ include "keyrock.fullname" . }}-themes-img
+        {{- if .Values.theme.sourceFavicon }}
+        - name: themes-favicon
+          persistentVolumeClaim:
+            claimName: {{ include "keyrock.fullname" . }}-themes-favicon
+        {{- end }}
       {{- end }}

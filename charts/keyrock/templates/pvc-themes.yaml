@@ -32,4 +32,23 @@ spec:
   resources:
     requests:
       storage: {{ .Values.theme.size | quote }}
+---
+{{- if .Values.theme.sourceFavicon }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "keyrock.fullname" . }}-themes-favicon
+  {{- with .Values.theme.annotations  }}
+  annotations:
+  {{ toYaml . | indent 4 }}
+  {{- end }}
+  labels:
+    {{- include "keyrock.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "1Mi"
+{{- end }}
 {{- end }}
