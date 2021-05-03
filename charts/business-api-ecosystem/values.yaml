@@ -443,8 +443,8 @@ bizEcosystemChargingBackend:
     enabled: false
     ## -- configuration of the image to be used
     image:
-      repository: wistefan/gcs-folder-backup
-      tag: latest
+      repository: fiware/copy-to-gcs
+      tag: 0.0.2
       pullPolicy: IfNotPresent
     ## -- prefix to be used for the backup files
     filePrefix: "charging"
