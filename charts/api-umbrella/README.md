@@ -1,6 +1,6 @@
 # api-umbrella
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: v0.15.1](https://img.shields.io/badge/AppVersion-v0.15.1-informational?style=flat-square)
+![Version: 0.0.4](https://img.shields.io/badge/Version-0.0.4-informational?style=flat-square) ![AppVersion: v0.15.1](https://img.shields.io/badge/AppVersion-v0.15.1-informational?style=flat-square)
 
 A Helm chart for running api-umbrella on kubernetes.
 
@@ -53,11 +53,11 @@ A Helm chart for running api-umbrella on kubernetes.
 | service.port | int | `80` | port to be used by the service |
 | service.type | string | `"ClusterIP"` | service type |
 | serviceAccount.create | bool | `false` | specifies if the account should be created, be aware that the chart needs to run as root and sets the corresponding security context |
-| umbrella.config | object | `{}` | configuration of the umbrella. See https://github.com/Profirator/api-umbrella/tree/master/config and https://api-umbrella.readthedocs.io/en/latest/ for more or use the out-commented part as a sane default |
+| umbrella.config | object | `{}` | Local authorisation registry Provide information about local authorisation registry -- JWS configuration Provide information for signing and validating JWT Identifier of local authority x5c public certificate chain (array of base64 encoded certificates)  - <CERT1>  - <CERT2>  - <ROOTCERT> Root CA certificate(s) (as PEM string) Private key (as PEM string) -- configuration of the umbrella. See https://github.com/Profirator/api-umbrella/tree/master/config and https://api-umbrella.readthedocs.io/en/latest/ for more or use the out-commented part as a sane default |
 | umbrella.mongodb.host | string | `"mongodb"` | host of the mongodb |
 | umbrella.mongodb.name | string | `"api_umbrella"` | name of the database, needs to exist on startup |
 | umbrella.mongodb.password | string | `"pass"` | password to authenticate with, if not set, we will create it |
-| umbrella.mongodb.port | int | `27071` | port of the mongodb |
+| umbrella.mongodb.port | int | `27017` | port of the mongodb |
 | umbrella.mongodb.username | string | `"umbrella"` | username to authenticate with. If the user does not exist, admin config is required and a user will be created |
 | umbrella.services | list | `["router","web"]` | list services that should be run by api-umbrella. See https://github.com/Profirator/api-umbrella/tree/master/config and https://api-umbrella.readthedocs.io/en/latest/ for more |
 | umbrella.webHost | string | `"umbrella.fiware.dev"` | configure the host of the frontend here |
