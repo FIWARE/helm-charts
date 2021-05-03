@@ -437,6 +437,24 @@ bizEcosystemChargingBackend:
   ## -- Authorize service path of the logic proxy
   authorizeServicePath: /authorizeService/apiKeys
 
+  ## -- Configuration for backing up the pvcs of the charging backend into a gcs-bucket
+  backup:
+    ## -- should the backup for file data be enabled
+    enabled: false
+    ## -- configuration of the image to be used
+    image:
+      repository: fiware/copy-to-gcs
+      tag: 0.0.2
+      pullPolicy: IfNotPresent
+    ## -- prefix to be used for the backup files
+    filePrefix: "charging"
+    ## -- name of the bucket to be used for backup
+    bucketName: "gs://my/bucket"
+    ## -- cron schedule for the backup to be executed
+    schedule: "* 1 *  *  *"
+    ## -- name of the secret containing the service account to be used for accessing the bucket. The account should be provided in json format and have write permission on the referenced schema
+    secretName: "gcs-secret"
+
 
 
 ## -- Configuration for biz-ecosystem-logic-proxy component
