@@ -50,7 +50,7 @@ spec:
             - name: GCS_BUCKET
               value: {{ .Values.bizEcosystemChargingBackend.backup.bucketName }}
             - name: BACKUP_SCHEDULE
-              value: {{ .Values.bizEcosystemChargingBackend.backup.schedule }}
+              value: {{ .Values.bizEcosystemChargingBackend.backup.schedule | quote }}
           volumeMounts:
             - name: plugins
               mountPath: /backup/plugins
@@ -60,7 +60,7 @@ spec:
               mountPath: /backup/assets
             - name: media-bills
               mountPath: /backup/bills
-            {{ - if .Values.bizEcosystemChargingBackend.backup.secretName }}
+            {{- if .Values.bizEcosystemChargingBackend.backup.secretName }}
             - name: gcs-secret
               mountPath: /gcs/credentials.json
             {{- end }}
