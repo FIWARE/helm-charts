@@ -191,6 +191,8 @@ spec:
               value: {{ .Values.bizEcosystemLogicProxy.elastic.url | quote }}
             - name: BAE_SERVICE_HOST
               value: {{ .Values.externalUrl | quote }}
+            - name: BAE_LP_OIDC_ENABLED
+              value: {{ .Values.oauth.oidc | quote }}
             {{- if .Values.bizEcosystemLogicProxy.externalIdp.enabled }}
             - name: BAE_LP_EXT_LOGIN
               value: "true"

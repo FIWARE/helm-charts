@@ -20,6 +20,8 @@ oauth:
   # -- Callback URL path of frontend logic proxy for receiving the access tokens
   # (callback URL would be e.g. externalUrl/auth/fiware/callback)
   callbackPath: /auth/fiware/callback
+  # -- Set to true if OpenID Connect protocol should be used
+  oidc: false
   # -- Granted role
   grantedrole: admin
   # -- Admin role
