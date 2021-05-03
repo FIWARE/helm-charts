@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![AppVersion: 7.8.0](https://img.shields.io/badge/AppVersion-7.8.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![AppVersion: 7.8.0](https://img.shields.io/badge/AppVersion-7.8.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -59,8 +59,8 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.backup.enabled | bool | `false` |  |
 | bizEcosystemChargingBackend.backup.filePrefix | string | `"charging"` |  |
 | bizEcosystemChargingBackend.backup.image.pullPolicy | string | `"IfNotPresent"` |  |
-| bizEcosystemChargingBackend.backup.image.repository | string | `"wistefan/gcs-folder-backup"` |  |
-| bizEcosystemChargingBackend.backup.image.tag | string | `"latest"` |  |
+| bizEcosystemChargingBackend.backup.image.repository | string | `"fiware/copy-to-gcs"` |  |
+| bizEcosystemChargingBackend.backup.image.tag | string | `"0.0.2"` |  |
 | bizEcosystemChargingBackend.backup.schedule | string | `"* 1 *  *  *"` |  |
 | bizEcosystemChargingBackend.backup.secretName | string | `"gcs-secret"` |  |
 | bizEcosystemChargingBackend.db.database | string | `"charging_db"` |  |
@@ -110,8 +110,12 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.serviceAccount.annotations | object | `{}` |  |
 | bizEcosystemChargingBackend.serviceAccount.create | bool | `false` |  |
 | bizEcosystemChargingBackend.serviceAccount.name | string | `"ssc"` |  |
+| bizEcosystemChargingBackend.token.cert | string | `""` | String with certificate (chain) in PEM format |
+| bizEcosystemChargingBackend.token.enabled | bool | `false` | Enable storage of local key and certificate |
+| bizEcosystemChargingBackend.token.identifier | string | `""` | Identifier (e.g. EORI) of local marketplace instance |
+| bizEcosystemChargingBackend.token.key | string | `""` | String with private key in PEM format |
 | bizEcosystemChargingBackend.verifyRequests | bool | `true` |  |
-| bizEcosystemLogicProxy.collectStaticCommand | string | `"True"` |  |
+| bizEcosystemLogicProxy.collectStaticCommand | string | `"True"` | Execute the collect static command on startup |
 | bizEcosystemLogicProxy.db.database | string | `"belp_db"` | Database name for connecting the database |
 | bizEcosystemLogicProxy.db.host | string | `"mongo"` | host of the database to be used |
 | bizEcosystemLogicProxy.db.password | string | `"pass"` | password for connecting the database |
@@ -136,10 +140,12 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.deployment.revisionHistoryLimit | int | `3` |  |
 | bizEcosystemLogicProxy.deployment.tolerations | list | `[]` |  |
 | bizEcosystemLogicProxy.deployment.updateStrategy.type | string | `"Recreate"` |  |
-| bizEcosystemLogicProxy.elastic.engine | string | `"elasticsearch"` |  |
-| bizEcosystemLogicProxy.elastic.url | string | `"elasticsearch:9200"` |  |
-| bizEcosystemLogicProxy.elastic.version | int | `7` |  |
+| bizEcosystemLogicProxy.elastic.engine | string | `"elasticsearch"` | indexing engine of logic proxy |
+| bizEcosystemLogicProxy.elastic.url | string | `"elasticsearch:9200"` | URL of elasticsearch service |
+| bizEcosystemLogicProxy.elastic.version | int | `7` | API version of elasticsearch |
 | bizEcosystemLogicProxy.enabled | bool | `true` |  |
+| bizEcosystemLogicProxy.externalIdp.config | string | `""` | JSON string with external IDP configurations "[{name: 'NAME', server: 'URL', idpId: 'ID'}, ...]" |
+| bizEcosystemLogicProxy.externalIdp.enabled | bool | `false` | Enable usage of external IDPs |
 | bizEcosystemLogicProxy.fullnameOverride | string | `""` |  |
 | bizEcosystemLogicProxy.ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | bizEcosystemLogicProxy.ingress.enabled | bool | `false` | should there be an ingress to connect the logic proxy with the public internet |
@@ -147,10 +153,10 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.ingress.tls | list | `[]` |  |
 | bizEcosystemLogicProxy.name | string | `"biz-ecosystem-logic-proxy"` |  |
 | bizEcosystemLogicProxy.nodeEnvironment | string | `"development"` |  |
-| bizEcosystemLogicProxy.port | int | `8004` |  |
-| bizEcosystemLogicProxy.revenueModel | int | `30` |  |
+| bizEcosystemLogicProxy.port | int | `8004` | port that the logic proxy container uses |
+| bizEcosystemLogicProxy.revenueModel | int | `30` | Default market owner precentage for Revenue Sharing models |
 | bizEcosystemLogicProxy.route.annotations | object | `{}` | annotations to be added to the route |
-| bizEcosystemLogicProxy.route.enabled | bool | `false` |  |
+| bizEcosystemLogicProxy.route.enabled | bool | `false` | should the deployment create openshift routes |
 | bizEcosystemLogicProxy.route.tls | object | `{}` | host to be used host: localhost -- tls configuration for the route |
 | bizEcosystemLogicProxy.securityContext | object | `{}` |  |
 | bizEcosystemLogicProxy.service.annotations | object | `{}` |  |
@@ -159,13 +165,17 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.serviceAccount.annotations | object | `{}` |  |
 | bizEcosystemLogicProxy.serviceAccount.create | bool | `false` |  |
 | bizEcosystemLogicProxy.serviceAccount.name | string | `"ssc"` |  |
-| bizEcosystemLogicProxy.theme.annotations | object | `{}` |  |
-| bizEcosystemLogicProxy.theme.enabled | bool | `false` |  |
+| bizEcosystemLogicProxy.theme.annotations | object | `{}` | PVC Annotations |
+| bizEcosystemLogicProxy.theme.enabled | bool | `false` | Enable theme |
 | bizEcosystemLogicProxy.theme.image | string | `"my-theme-image:latest"` |  |
-| bizEcosystemLogicProxy.theme.imagePullPolicy | string | `"IfNotPresent"` |  |
-| bizEcosystemLogicProxy.theme.name | string | `"default"` |  |
-| bizEcosystemLogicProxy.theme.size | string | `"4Gi"` |  |
+| bizEcosystemLogicProxy.theme.imagePullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
+| bizEcosystemLogicProxy.theme.name | string | `"default"` | Name of the theme |
+| bizEcosystemLogicProxy.theme.size | string | `"4Gi"` | Size of PVC to be created |
 | bizEcosystemLogicProxy.theme.sourcePath | string | `"/my-theme"` |  |
+| bizEcosystemLogicProxy.token.cert | string | `""` | String with certificate (chain) in PEM format |
+| bizEcosystemLogicProxy.token.enabled | bool | `false` | Enable storage of local key and certificate |
+| bizEcosystemLogicProxy.token.identifier | string | `""` | Identifier (e.g. EORI) of local marketplace instance |
+| bizEcosystemLogicProxy.token.key | string | `""` | String with private key in PEM format |
 | bizEcosystemRss.db.driver | string | `"com.mysql.jdbc.Driver"` |  |
 | bizEcosystemRss.db.host | string | `"mysql"` |  |
 | bizEcosystemRss.db.password | string | `"pass"` |  |
@@ -232,9 +242,11 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | oauth.customerrole | string | `"customer"` | Customer role |
 | oauth.grantedrole | string | `"admin"` | Granted role |
 | oauth.isLegacy | bool | `false` | Whether the used FIWARE IDM is version 6 or lower |
+| oauth.oidc | bool | `false` | Set to true if OpenID Connect protocol should be used |
 | oauth.orgadminrole | string | `"orgAdmin"` | Role defined in the IDM client app for organization admins of the BAE  |
+| oauth.provider | string | `"fiware"` | IDP provider for passport strategy (fiware, keycloak, github, ...) |
 | oauth.sellerrole | string | `"seller"` | Seller role |
 | oauth.server | string | `"http://accounts.fiware.org"` | External URL of the FIWARE IDM used for user authentication |
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.5.0](https://github.com/norwoodj/helm-docs/releases/v1.5.0)
+Autogenerated from chart metadata using [helm-docs v1.4.0](https://github.com/norwoodj/helm-docs/releases/v1.4.0)
