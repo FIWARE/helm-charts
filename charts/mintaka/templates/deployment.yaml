@@ -5,7 +5,9 @@ metadata:
   labels:
     {{ include "mintaka.labels" . | nindent 4 }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.deployment.replicaCount }}
+  {{- end }}
   revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
   strategy:
   {{- with .Values.deployment.updateStrategy }}
