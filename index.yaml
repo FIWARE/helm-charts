@@ -237,6 +237,27 @@ entries:
   iotagent-ul:
   - apiVersion: v1
     appVersion: 1.14.0
+    created: "2021-05-05T07:37:37.427372611Z"
+    description: A Helm chart for running the fiware iot agent for the ultralight
+      2.0 protocol on kubernetes.
+    digest: b139478cdfc0b9da80d38fedd70c998844b2c3257c8eac0db75b6e17c14040e7
+    home: https://fiware-iotagent-ul.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - iot-agent
+    - ultralight-protocol
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: iotagent-ul
+    sources:
+    - https://github.com/telefonicaid/iotagent-ul
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/iotagent-ul-0.0.3/iotagent-ul-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v1
+    appVersion: 1.14.0
     created: "2020-11-26T10:37:51.751076522Z"
     description: A Helm chart for running the fiware iot agent for the ultralight
       2.0 protocol on kubernetes.
@@ -280,6 +301,26 @@ entries:
   keyrock:
   - apiVersion: v1
     appVersion: 7.9.0
+    created: "2021-05-05T07:37:37.573527397Z"
+    description: A Helm chart for running the fiware idm keyrock on kubernetes.
+    digest: 2dba784891e75d5c2a74a3ed7a78590590845560562dc1376ad890503d02e738
+    home: https://fiware-idm.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - keyrock
+    - idm
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: keyrock
+    sources:
+    - https://github.com/ging/fiware-idm
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/keyrock-0.0.3/keyrock-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v1
+    appVersion: 7.9.0
     created: "2020-11-26T10:37:51.913371348Z"
     description: A Helm chart for running the fiware idm keyrock on kubernetes.
     digest: 105e6d348a868fd0c5a110fd23e3db875444aa93f2db057dc19d0ce432c9deb0
@@ -321,6 +362,26 @@ entries:
   mintaka:
   - apiVersion: v1
     appVersion: 0.0.5
+    created: "2021-05-05T07:37:37.759182612Z"
+    description: A Helm chart for running mintaka on kubernetes.
+    digest: e97d8848cf5ff344412ad64cee86636c42fecf0125254d35735fb385aab0ca81
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion
+    - orion-ld
+    - mintaka
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: mintaka
+    sources:
+    - https://github.com/fiware/mintaka
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/mintaka-0.0.3/mintaka-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v1
+    appVersion: 0.0.5
     created: "2021-03-24T10:43:02.78867142Z"
     description: A Helm chart for running mintaka on kubernetes.
     digest: 8ba26f0820dcd64fd34fc84ca301c2027305d8ada9d1f529751dc8072d15d57d
@@ -360,6 +421,27 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/mintaka-0.0.1/mintaka-0.0.1.tgz
     version: 0.0.1
   orion:
+  - apiVersion: v1
+    appVersion: 2.5.0
+    created: "2021-05-05T07:37:37.911001169Z"
+    description: A Helm chart for running the fiware orion broker on kubernetes.
+    digest: 0ec115e878c87c178bde9a68ad5352e6198863acb0062fe8efacfec47ccc74f8
+    home: https://fiware-orion.readthedocs.io/en/master/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion
+    - orion-ld
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: orion
+    sources:
+    - https://github.com/telefonicaid/fiware-orion
+    - https://github.com/FIWARE/context.Orion-LD
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/orion-0.0.9/orion-0.0.9.tgz
+    version: 0.0.9
   - apiVersion: v1
     appVersion: 2.5.0
     created: "2021-03-29T13:46:15.503276199Z"
