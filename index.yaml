@@ -82,6 +82,28 @@ entries:
   business-api-ecosystem:
   - apiVersion: v2
     appVersion: 7.8.0
+    created: "2021-05-05T13:04:49.645677678Z"
+    description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
+      Marketplace) on Kubernetes
+    digest: d220be755a93e470aed00d9ca8404755a4579b9730beec7ab24f0544c2a1dfd1
+    home: https://business-api-ecosystem.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - marketplace
+    - bae
+    - tmforum
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: business-api-ecosystem
+    sources:
+    - https://github.com/FIWARE-TMForum/Business-API-Ecosystem
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-0.1.2/business-api-ecosystem-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 7.8.0
     created: "2021-05-03T11:43:06.968590503Z"
     description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
       Marketplace) on Kubernetes
