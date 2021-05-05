@@ -296,6 +296,9 @@ spec:
             {{- end }}
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
+      {{- if .Values.deployment.sidecars }}
+        {{- toYaml .Values.deployment.sidecars | nindent 8 }}
+      {{- end }}
       {{- with .Values.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
