@@ -63,6 +63,7 @@ spec:
             {{- if .Values.bizEcosystemChargingBackend.backup.secretName }}
             - name: gcs-secret
               mountPath: /gcs/credentials.json
+              subPath: credentials.json
             {{- end }}
         {{- end }}
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemChargingBackend.name }}

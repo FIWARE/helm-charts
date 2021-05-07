@@ -459,7 +459,7 @@ bizEcosystemChargingBackend:
     ## -- configuration of the image to be used
     image:
       repository: fiware/copy-to-gcs
-      tag: 0.0.2
+      tag: 0.0.3
       pullPolicy: IfNotPresent
     ## -- prefix to be used for the backup files
     filePrefix: "charging"

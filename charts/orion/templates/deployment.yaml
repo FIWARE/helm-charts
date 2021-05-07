@@ -5,7 +5,9 @@ metadata:
   labels:
     {{ include "orion.labels" . | nindent 4 }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.deployment.replicaCount }}
+  {{- end }}
   revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
   strategy:
   {{- with .Values.deployment.updateStrategy }}
@@ -192,11 +194,11 @@ spec:
             {{- end }}
 
             # tenancy
-            {{- if .Values.broker.multiserviceEnabled -}}
+            {{- if .Values.broker.multiserviceEnabled }}
             - name: {{ .Values.broker.envPrefix }}MULTI_SERVICE
               value: {{ .Values.broker.multiserviceEnabled | upper }}
             {{- end }}
-            {{- if .Values.broker.multiserviceEnabled -}}
+            {{- if .Values.broker.multiserviceEnabled }}
             - name: {{ .Values.broker.envPrefix }}MONGO_AUTH_SOURCE
               value: admin
             {{- end }}
@@ -296,6 +298,9 @@ spec:
             {{- end }}
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
+      {{- if .Values.deployment.sidecars }}
+        {{- toYaml .Values.deployment.sidecars | nindent 8 }}
+      {{- end }}
       {{- with .Values.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
