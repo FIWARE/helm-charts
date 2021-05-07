@@ -194,11 +194,11 @@ spec:
             {{- end }}
 
             # tenancy
-            {{- if .Values.broker.multiserviceEnabled -}}
+            {{- if .Values.broker.multiserviceEnabled }}
             - name: {{ .Values.broker.envPrefix }}MULTI_SERVICE
               value: {{ .Values.broker.multiserviceEnabled | upper }}
             {{- end }}
-            {{- if .Values.broker.multiserviceEnabled -}}
+            {{- if .Values.broker.multiserviceEnabled }}
             - name: {{ .Values.broker.envPrefix }}MONGO_AUTH_SOURCE
               value: admin
             {{- end }}
