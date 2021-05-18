@@ -510,7 +510,7 @@ bizEcosystemLogicProxy:
       ## ref: https://hub.docker.com/r/fiware/biz-ecosystem-logic-proxy
       repository: fiware/biz-ecosystem-logic-proxy
       ## -- tag of the image to be used
-      tag: v7.8.0
+      tag: v7.8.1rc1
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
     ## -- additional labels for the deployment, if required  
