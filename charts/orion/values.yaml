@@ -85,6 +85,8 @@ deployment:
     timeoutSeconds: 30
   # -- additional sidepods for the deployment, if required
   sidecars: []
+  # -- additional volumes for the deployment, if required
+  volumes: []
 
 ## pod autoscaling configuration, use for automatic scaling of the broker pods
 autoscaling:

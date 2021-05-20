@@ -301,6 +301,10 @@ spec:
       {{- if .Values.deployment.sidecars }}
         {{- toYaml .Values.deployment.sidecars | nindent 8 }}
       {{- end }}
+      {{- if .Values.deployment.volumes }}
+      volumes:
+        {{- toYaml .Values.deployment.volumes | nindent 8 }}
+      {{- end }}
       {{- with .Values.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
