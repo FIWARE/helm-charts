@@ -40,6 +40,32 @@ spec:
         {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-customer" "path" "DSCustomerManagement" ) | nindent 8 }}
         {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-usage" "path" "DSUsageManagement" ) | nindent 8 }}
       containers:
+        {{- if .Values.bizEcosystemChargingBackend.backup.enabled }}
+        - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemChargingBackend.name }}-backup
+          imagePullPolicy: {{ .Values.bizEcosystemChargingBackend.backup.image.pullPolicy }}
+          image: "{{ .Values.bizEcosystemChargingBackend.backup.image.repository }}:{{ .Values.bizEcosystemChargingBackend.backup.image.tag }}"
+          env:
+            - name: BACKUP_FILE_PREFIX
+              value: {{ .Values.bizEcosystemChargingBackend.backup.filePrefix }}
+            - name: GCS_BUCKET
+              value: {{ .Values.bizEcosystemChargingBackend.backup.bucketName }}
+            - name: BACKUP_SCHEDULE
+              value: {{ .Values.bizEcosystemChargingBackend.backup.schedule | quote }}
+          volumeMounts:
+            - name: plugins
+              mountPath: /backup/plugins
+            - name: inst-plugins
+              mountPath: /backup/wstore
+            - name: media-assets
+              mountPath: /backup/assets
+            - name: media-bills
+              mountPath: /backup/bills
+            {{- if .Values.bizEcosystemChargingBackend.backup.secretName }}
+            - name: gcs-secret
+              mountPath: /gcs/credentials.json
+              subPath: credentials.json
+            {{- end }}
+        {{- end }}
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemChargingBackend.name }}
           imagePullPolicy: {{ .Values.bizEcosystemChargingBackend.deployment.image.pullPolicy }}
           image: "{{ .Values.bizEcosystemChargingBackend.deployment.image.repository }}:{{ .Values.bizEcosystemChargingBackend.deployment.image.tag }}"
@@ -76,6 +102,14 @@ spec:
               mountPath: /business-ecosystem-charging-backend/src/media/assets
             - name: media-bills
               mountPath: /business-ecosystem-charging-backend/src/media/bills
+            {{- if .Values.bizEcosystemChargingBackend.token.enabled }}
+            - name: key-volume
+              mountPath: /business-ecosystem-charging-backend/key.pem
+              subPath: key.pem
+            - name: cert-volume
+              mountPath: /business-ecosystem-charging-backend/cert.pem
+              subPath: cert.pem
+            {{- end }}
           env:
             - name: BAE_CB_PAYMENT_METHOD
               value: {{ .Values.bizEcosystemChargingBackend.payment.method | quote }}
@@ -158,6 +192,14 @@ spec:
             - name: BAE_ASSET_IDM_URL
               value: {{ .Values.oauth.server | quote }}
             {{- end }}
+            {{- if .Values.bizEcosystemChargingBackend.token.enabled }}
+            - name: BAE_TOKEN_KEY
+              value: /business-ecosystem-charging-backend/key.pem
+            - name: BAE_TOKEN_CRT
+              value: /business-ecosystem-charging-backend/cert.pem
+            - name: BAE_EORI
+              value: {{ .Values.bizEcosystemChargingBackend.token.identifier | quote }}
+            {{- end }}
       {{- with .Values.bizEcosystemChargingBackend.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -199,4 +241,23 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- if .Values.bizEcosystemChargingBackend.token.enabled }}
+        - name: key-volume
+          configMap:
+            name: {{ include "bizEcosystemChargingBackend.fullname" . }}
+            items:
+              - key: key.pem
+                path: key.pem
+        - name: cert-volume
+          configMap:
+            name: {{ include "bizEcosystemChargingBackend.fullname" . }}
+            items:
+              - key: cert.pem
+                path: cert.pem
+        {{- end }}
+        {{- if .Values.bizEcosystemChargingBackend.backup.secretName }}
+        - name: gcs-secret
+          secret:
+            secretName: {{ .Values.bizEcosystemChargingBackend.backup.secretName }}
+        {{- end }}
 {{- end }}

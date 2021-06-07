@@ -139,6 +139,30 @@ umbrella:
     # -- name of the database, needs to exist on startup
     name: api_umbrella
 
+  # -- Local authorisation registry
+  # Provide information about local authorisation registry
+  #authorisation_registry:
+    #host: https://my-registry.net
+    #token_endpoint: https://my-registry.net/connect/token
+    #delegation_endpoint: https://my-registry.net/delegation
+    #identifier: MY-AR-EORI
+
+  # -- JWS configuration
+  # Provide information for signing and validating JWT
+  #jws:
+    # Identifier of local authority
+    #identifier: MY-EORI
+    # x5c public certificate chain (array of base64 encoded certificates)
+    #x5c:
+    #  - <CERT1>
+    #  - <CERT2>
+    #  - <ROOTCERT>
+    # Root CA certificate(s) (as PEM string)
+    #root_ca: <ROOTCACHAIN>
+    # Private key (as PEM string)
+    #private_key: <PRIVATE-KEY>
+    
+  
   # -- configuration of the umbrella. See https://github.com/Profirator/api-umbrella/tree/master/config and
   # https://api-umbrella.readthedocs.io/en/latest/ for more or use the out-commented part as a sane default
   config: {}

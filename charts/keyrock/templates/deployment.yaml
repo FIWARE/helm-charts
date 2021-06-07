@@ -5,7 +5,9 @@ metadata:
   labels:
     {{ include "keyrock.labels" . | nindent 4 }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.deployment.replicaCount }}
+  {{- end }}
   revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
   strategy:
   {{- with .Values.deployment.updateStrategy }}
@@ -30,6 +32,21 @@ spec:
       {{- end }}
     spec: 
       serviceAccountName: {{ include "keyrock.serviceAccountName" . }}
+      {{- if .Values.theme.enabled }}
+      initContainers:
+        - name: {{ include "keyrock.fullname" . }}-theme-init
+          image: {{ .Values.theme.image }}
+          imagePullPolicy: {{ .Values.theme.imagePullPolicy }}
+          volumeMounts:
+            - name: themes-theme
+              mountPath: {{ .Values.theme.sourceTheme }}
+            - name: themes-img
+              mountPath: {{ .Values.theme.sourceImg }}
+            {{- if .Values.theme.sourceFavicon }}
+            - name: themes-favicon
+              mountPath: {{ .Values.theme.sourceFavicon }}
+            {{- end }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
@@ -54,6 +71,18 @@ spec:
             periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+          {{- if .Values.theme.enabled }}
+          volumeMounts:
+            - name: themes-theme
+              mountPath: {{ .Values.theme.mountTheme }}
+            - name: themes-img
+              mountPath: {{ .Values.theme.mountImg }}
+            {{- if .Values.theme.sourceFavicon }}
+            - name: themes-favicon
+              mountPath: {{ .Values.theme.mountFavicon }}
+              subPath: "favicon.ico"
+            {{- end }}
+          {{- end }}
           env:
             - name: IDM_PORT
               value: {{ .Values.port | quote }}
@@ -82,6 +111,10 @@ spec:
             #will be handled by the ingress
             - name: IDM_HTTPS_ENABLED
               value: "false"
+            {{- if .Values.theme.enabled }}
+            - name: IDM_THEME
+              value: {{ .Values.theme.name | quote }}
+            {{- end }}
             {{- with .Values.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -98,4 +131,18 @@ spec:
       {{- with .Values.deployment.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.theme.enabled }}
+      volumes:
+        - name: themes-theme
+          persistentVolumeClaim:
+            claimName: {{ include "keyrock.fullname" . }}-themes-theme
+        - name: themes-img
+          persistentVolumeClaim:
+            claimName: {{ include "keyrock.fullname" . }}-themes-img
+        {{- if .Values.theme.sourceFavicon }}
+        - name: themes-favicon
+          persistentVolumeClaim:
+            claimName: {{ include "keyrock.fullname" . }}-themes-favicon
+        {{- end }}
       {{- end }}

@@ -41,8 +41,8 @@ deployment:
   ## configuration of the image to be used
   image:
     # -- mintaka image name
-    # ref: https://hub.docker.com/r/wistefan/mintaka
-    repository: wistefan/mintaka
+    # ref: https://hub.docker.com/r/fiware/mintaka
+    repository: fiware/mintaka
     # -- tag of the image to be used
     tag: latest
     # -- specification of the image pull policy
@@ -69,6 +69,8 @@ deployment:
   # -- affinity template
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
+  # -- port to request health information at
+  healthPort: 9090
   ## liveness and readiness probes of the mintaka broker, they will be evaluated against the version endpoint
   # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   livenessProbe:
@@ -144,7 +146,7 @@ ingress:
         # - mintaka.fiware.org
 
 # -- port that the mintaka container uses
-port: 5000
+port: 8080
 # -- host where mintaka is available at
 host: http://localhost
 ## database configuration for mintaka
@@ -158,11 +160,18 @@ db:
   # -- name of the db to be used
   name: mintaka
 
+## configuration for prometheus montioring
+prometheus:
+  # -- should prometheus scrape be enabled
+  enabled: true
+  # -- path for prometheus scrape
+  path: /prometheus
+  # -- port prometheus scrape is available at
+  port: 9090
+
+
 # -- a list of additional env vars to be set, check the mintaka docu for all available options
-# ref: https://github.com/Trigyn-Technologies/Mintaka
 additonalEnvVars: []
-# - name: PYTHONUNBUFFERED
-#   value: "1"
 
 
 

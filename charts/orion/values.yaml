@@ -83,6 +83,8 @@ deployment:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 30
+  # -- additional sidepods for the deployment, if required
+  sidecars: []
 
 ## pod autoscaling configuration, use for automatic scaling of the broker pods
 autoscaling:
@@ -163,7 +165,7 @@ broker:
   # -- configuration of temporal entity representation
   troe:
     # -- should temporal representation of entities be enabled
-    enabled: true
+    enabled: false
     # -- host of the postgres to be used
     dbHost: postgres
     # -- port of the postgres to be used

@@ -45,6 +45,10 @@ After the repo is added all charts can be installed via:
 helm install <RELEASE_NAME> fiware/<CHART_NAME>
 ```
 
+## Configuration
+
+If you are searching for some configurations that can be used in a production environment, we recommend our [Loadtest Repository](https://github.com/FIWARE/orion-loadtest). It provides values for different sizes of environments and the configuration for [Orion-LD](https://github.com/FIWARE/context.Orion-LD) and [Mongo-DB](https://www.mongodb.com/).
+
 ---
 
 ## License
