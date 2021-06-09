@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![AppVersion: 7.8.0](https://img.shields.io/badge/AppVersion-7.8.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -60,7 +60,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.backup.filePrefix | string | `"charging"` |  |
 | bizEcosystemChargingBackend.backup.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemChargingBackend.backup.image.repository | string | `"fiware/copy-to-gcs"` |  |
-| bizEcosystemChargingBackend.backup.image.tag | string | `"0.0.2"` |  |
+| bizEcosystemChargingBackend.backup.image.tag | string | `"0.0.3"` |  |
 | bizEcosystemChargingBackend.backup.schedule | string | `"* 1 *  *  *"` |  |
 | bizEcosystemChargingBackend.backup.secretName | string | `"gcs-secret"` |  |
 | bizEcosystemChargingBackend.db.database | string | `"charging_db"` |  |
@@ -73,7 +73,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.deployment.affinity | object | `{}` |  |
 | bizEcosystemChargingBackend.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemChargingBackend.deployment.image.repository | string | `"fiware/biz-ecosystem-charging-backend"` |  |
-| bizEcosystemChargingBackend.deployment.image.tag | string | `"v7.8.0"` |  |
+| bizEcosystemChargingBackend.deployment.image.tag | string | `"v8.0.0"` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.initialDelaySeconds | int | `61` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.successThreshold | int | `1` |  |
@@ -126,7 +126,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.deployment.affinity | object | `{}` |  |
 | bizEcosystemLogicProxy.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemLogicProxy.deployment.image.repository | string | `"fiware/biz-ecosystem-logic-proxy"` |  |
-| bizEcosystemLogicProxy.deployment.image.tag | string | `"v7.8.0"` |  |
+| bizEcosystemLogicProxy.deployment.image.tag | string | `"v8.0.0"` |  |
 | bizEcosystemLogicProxy.deployment.livenessProbe.initialDelaySeconds | int | `61` |  |
 | bizEcosystemLogicProxy.deployment.livenessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemLogicProxy.deployment.livenessProbe.successThreshold | int | `1` |  |
@@ -144,7 +144,6 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.elastic.url | string | `"elasticsearch:9200"` | URL of elasticsearch service |
 | bizEcosystemLogicProxy.elastic.version | int | `7` | API version of elasticsearch |
 | bizEcosystemLogicProxy.enabled | bool | `true` |  |
-| bizEcosystemLogicProxy.externalIdp.config | string | `""` | JSON string with external IDP configurations "[{name: 'NAME', server: 'URL', idpId: 'ID'}, ...]" |
 | bizEcosystemLogicProxy.externalIdp.enabled | bool | `false` | Enable usage of external IDPs |
 | bizEcosystemLogicProxy.fullnameOverride | string | `""` |  |
 | bizEcosystemLogicProxy.ingress.annotations | object | `{}` | annotations to be added to the ingress |
@@ -187,7 +186,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemRss.deployment.affinity | object | `{}` |  |
 | bizEcosystemRss.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemRss.deployment.image.repository | string | `"fiware/biz-ecosystem-rss"` |  |
-| bizEcosystemRss.deployment.image.tag | string | `"v7.8.0"` |  |
+| bizEcosystemRss.deployment.image.tag | string | `"v8.0.0"` |  |
 | bizEcosystemRss.deployment.livenessProbe.initialDelaySeconds | int | `120` |  |
 | bizEcosystemRss.deployment.livenessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemRss.deployment.livenessProbe.successThreshold | int | `1` |  |

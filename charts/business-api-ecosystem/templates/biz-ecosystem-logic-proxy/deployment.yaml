@@ -196,8 +196,6 @@ spec:
             {{- if .Values.bizEcosystemLogicProxy.externalIdp.enabled }}
             - name: BAE_LP_EXT_LOGIN
               value: "true"
-            - name: BAE_EXT_IDPS_CONF
-              value: {{ .Values.bizEcosystemLogicProxy.externalIdp.config | quote }}
             {{- end }}
             {{- if .Values.bizEcosystemLogicProxy.token.enabled }}
             - name: BAE_TOKEN_KEY

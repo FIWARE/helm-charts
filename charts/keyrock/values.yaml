@@ -44,7 +44,7 @@ deployment:
     # ref: https://hub.docker.com/r/fiware/idm
     repository: fiware/idm
     # -- tag of the image to be used
-    tag: 7.9.0
+    tag: 8.0.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
