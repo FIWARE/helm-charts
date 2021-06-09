@@ -226,14 +226,14 @@ spec:
       {{- end }}
       {{- if .Values.bizEcosystemLogicProxy.token.enabled }}
         - name: key-volume
-          configMap:
-            name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+          secret:
+            secretName: {{ include "bizEcosystemLogicProxy.fullname" . }}-certs
             items:
               - key: key.pem
                 path: key.pem
         - name: cert-volume
-          configMap:
-            name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+          secret:
+            secretName: {{ include "bizEcosystemLogicProxy.fullname" . }}-certs
             items:
               - key: cert.pem
                 path: cert.pem

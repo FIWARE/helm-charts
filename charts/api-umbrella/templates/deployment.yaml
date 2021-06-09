@@ -69,11 +69,8 @@ spec:
                 path: api-umbrella.yml
         {{ if .Values.umbrella.jws.root_ca -}}
         - name: rootca-volume
-          configMap:
-            name: {{ include "api-umbrella.fullname" . }}-rootca
-            items:
-              - key: rootCA.pem
-                path: rootCA.pem
+          secret:
+            secretName: {{ include "api-umbrella.fullname" . }}-rootca
         {{- end }}
           
       {{- with .Values.deployment.nodeSelector }}

@@ -46,15 +46,3 @@ data:
     log:
       destination: console
 
-{{ if .Values.umbrella.jws.root_ca -}}
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "api-umbrella.fullname" . }}-rootca
-  labels:
-    {{- include "api-umbrella.labels" . | nindent 4 }}
-data:
-  rootCA.pem: |-
-    {{ .Values.umbrella.jws.root_ca | nindent 4 }}
-{{- end }}

@@ -243,14 +243,14 @@ spec:
           {{- end }}
         {{- if .Values.bizEcosystemChargingBackend.token.enabled }}
         - name: key-volume
-          configMap:
-            name: {{ include "bizEcosystemChargingBackend.fullname" . }}
+          secret:
+            secretName: {{ include "bizEcosystemChargingBackend.fullname" . }}-certs
             items:
               - key: key.pem
                 path: key.pem
         - name: cert-volume
-          configMap:
-            name: {{ include "bizEcosystemChargingBackend.fullname" . }}
+          secret:
+            secretName: {{ include "bizEcosystemChargingBackend.fullname" . }}-certs
             items:
               - key: cert.pem
                 path: cert.pem
