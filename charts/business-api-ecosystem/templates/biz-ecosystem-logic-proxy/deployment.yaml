@@ -197,6 +197,8 @@ spec:
             - name: BAE_LP_EXT_LOGIN
               value: "true"
             {{- end }}
+            - name: BAE_LP_PROPAGATE_TOKEN
+              value: {{ .Values.bizEcosystemLogicProxy.propagateToken | quote }}
             {{- if .Values.bizEcosystemLogicProxy.token.enabled }}
             - name: BAE_TOKEN_KEY
               value: /business-ecosystem-logic-proxy/key.pem

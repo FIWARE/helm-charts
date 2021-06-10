@@ -452,6 +452,9 @@ bizEcosystemChargingBackend:
     # -- Identifier (e.g. EORI) of local marketplace instance
     identifier: ""
 
+  # -- Sets wehther to expect the user access token in each request from the logic proxy
+  propagateToken: true
+  
   ## -- Configuration for backing up the pvcs of the charging backend into a gcs-bucket
   backup:
     ## -- should the backup for file data be enabled
@@ -654,6 +657,9 @@ bizEcosystemLogicProxy:
     cert: ""
     # -- Identifier (e.g. EORI) of local marketplace instance
     identifier: ""
+
+  # -- Sets wehther the logic proxy should propagate the user access token to the backend components
+  propagateToken: true
 
   # -- Default market owner precentage for Revenue Sharing models
   revenueModel: 30

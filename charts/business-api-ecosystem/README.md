@@ -103,6 +103,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.plugins.idmUser | string | `"admin"` |  |
 | bizEcosystemChargingBackend.plugins.size | string | `"4Gi"` |  |
 | bizEcosystemChargingBackend.port | int | `8006` |  |
+| bizEcosystemChargingBackend.propagateToken | bool | `true` | Sets wehther to expect the user access token in each request from the logic proxy |
 | bizEcosystemChargingBackend.securityContext | object | `{}` |  |
 | bizEcosystemChargingBackend.service.annotations | object | `{}` |  |
 | bizEcosystemChargingBackend.service.port | int | `8006` |  |
@@ -153,6 +154,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.name | string | `"biz-ecosystem-logic-proxy"` |  |
 | bizEcosystemLogicProxy.nodeEnvironment | string | `"development"` |  |
 | bizEcosystemLogicProxy.port | int | `8004` | port that the logic proxy container uses |
+| bizEcosystemLogicProxy.propagateToken | bool | `true` | Sets wehther the logic proxy should propagate the user access token to the backend components |
 | bizEcosystemLogicProxy.revenueModel | int | `30` | Default market owner precentage for Revenue Sharing models |
 | bizEcosystemLogicProxy.route.annotations | object | `{}` | annotations to be added to the route |
 | bizEcosystemLogicProxy.route.enabled | bool | `false` | should the deployment create openshift routes |

@@ -192,6 +192,8 @@ spec:
             - name: BAE_ASSET_IDM_URL
               value: {{ .Values.oauth.server | quote }}
             {{- end }}
+            - name: BAE_CB_PROPAGATE_TOKEN
+              value: {{ .Values.bizEcosystemChargingBackend.propagateToken | quote }}
             {{- if .Values.bizEcosystemChargingBackend.token.enabled }}
             - name: BAE_TOKEN_KEY
               value: /business-ecosystem-charging-backend/key.pem
