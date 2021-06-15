@@ -325,7 +325,11 @@ bizEcosystemChargingBackend:
     replicaCount: 1
     ## -- number of old replicas to be retained
     revisionHistoryLimit: 3
-    ## -- configuration of the update strategy
+    ## -- configuration of the update strategy with PVCs mounted for persistent plugins and/or media data
+    updateStrategyPVC:
+      ## -- type of the update
+      type: Recreate
+    ## -- configuration of the update strategy (default)
     updateStrategy:
       ## -- type of the update
       type: RollingUpdate
@@ -505,8 +509,8 @@ bizEcosystemLogicProxy:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   securityContext: {}
 
-  ## -- deployment specific configuration
-  deployment:
+  ## -- statefulset specific configuration
+  statefulset:
     ## -- initial number of target replications, can be different if autoscaling is enabled
     replicaCount: 1
     ## -- number of old replicas to be retained
@@ -514,13 +518,7 @@ bizEcosystemLogicProxy:
     ## -- configuration of the update strategy
     updateStrategy:
       ## -- type of the update
-      type: Recreate
-      ## -- new pods will be added gradually (not allowed with 'Recreate' strategy)
-      #rollingUpdate:
-        ## -- number of pods that can be created above the desired amount while updating
-      #  maxSurge: 1
-        ## -- number of pods that can be unavailable while updating 
-      #  maxUnavailable: 0
+      type: RollingUpdate
     ## -- configuration of the image to be used
     image:
       ## -- BAE Logic Proxy image name

@@ -95,7 +95,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- if .Values.bizEcosystemApis.fullnameOverride -}}
 {{- .Values.bizEcosystemApis.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- $name := default "" .Values.nameOverride -}}
 {{- if contains $name .Release.Name -}}
 {{- printf "%s-%s" .Release.Name .Values.bizEcosystemApis.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -113,7 +113,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- if .Values.bizEcosystemRss.fullnameOverride -}}
 {{- .Values.bizEcosystemRss.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- $name := default "" .Values.nameOverride -}}
 {{- if contains $name .Release.Name -}}
 {{- printf "%s-%s" .Release.Name .Values.bizEcosystemRss.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -131,7 +131,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- if .Values.bizEcosystemChargingBackend.fullnameOverride -}}
 {{- .Values.bizEcosystemChargingBackend.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- $name := default "" .Values.nameOverride -}}
 {{- if contains $name .Release.Name -}}
 {{- printf "%s-%s" .Release.Name .Values.bizEcosystemChargingBackend.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -149,7 +149,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- if .Values.bizEcosystemLogicProxy.fullnameOverride -}}
 {{- .Values.bizEcosystemLogicProxy.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- $name := default "" .Values.nameOverride -}}
 {{- if contains $name .Release.Name -}}
 {{- printf "%s-%s" .Release.Name .Values.bizEcosystemLogicProxy.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}

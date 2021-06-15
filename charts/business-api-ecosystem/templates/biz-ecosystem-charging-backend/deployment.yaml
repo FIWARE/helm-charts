@@ -9,8 +9,14 @@ spec:
   replicas: {{ .Values.bizEcosystemChargingBackend.deployment.replicaCount }}
   revisionHistoryLimit: {{ .Values.bizEcosystemChargingBackend.deployment.revisionHistoryLimit }}
   strategy:
+  {{- if or .Values.bizEcosystemChargingBackend.plugins.enabled .Values.bizEcosystemChargingBackend.media.enabled }}
+  {{- with .Values.bizEcosystemChargingBackend.deployment.updateStrategyPVC }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- else }}
   {{- with .Values.bizEcosystemChargingBackend.deployment.updateStrategy }}
   {{- toYaml . | nindent 4 }}
+  {{- end }}
   {{- end }}
   selector:
     matchLabels:

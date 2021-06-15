@@ -1,30 +1,33 @@
 {{- if .Values.bizEcosystemLogicProxy.enabled -}}
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "bizEcosystemLogicProxy.fullname" . }}
   labels:
     {{- include "bizEcosystemLogicProxy.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.bizEcosystemLogicProxy.deployment.replicaCount }}
-  revisionHistoryLimit: {{ .Values.bizEcosystemLogicProxy.deployment.revisionHistoryLimit }}
-  strategy:
-  {{- with .Values.bizEcosystemLogicProxy.deployment.updateStrategy }}
+  serviceName: {{ include "bizEcosystemLogicProxy.fullname" . }}
+  replicas: {{ .Values.bizEcosystemLogicProxy.statefulset.replicaCount }}
+  revisionHistoryLimit: {{ .Values.bizEcosystemLogicProxy.statefulset.revisionHistoryLimit }}
+  updateStrategy:
+  {{- with .Values.bizEcosystemLogicProxy.statefulset.updateStrategy }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
   selector:
     matchLabels:
+      app: {{ include "bizEcosystemLogicProxy.fullname" . }}
       {{- include "bizEcosystemLogicProxy.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
+        app: {{ include "bizEcosystemLogicProxy.fullname" . }}
         {{ include "bizEcosystemLogicProxy.labels" . | nindent 8 }}
-        {{- with .Values.bizEcosystemLogicProxy.deployment.additionalLabels }}
+        {{- with .Values.bizEcosystemLogicProxy.statefulset.additionalLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if .Values.bizEcosystemLogicProxy.deployment.additionalAnnotations -}}
+      {{- if .Values.bizEcosystemLogicProxy.statefulset.additionalAnnotations -}}
       annotations:
-        {{- with .Values.bizEcosystemLogicProxy.deployment.additionalAnnotations }}
+        {{- with .Values.bizEcosystemLogicProxy.statefulset.additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- end }}
@@ -51,8 +54,8 @@ spec:
         {{- end }}
       containers:
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemLogicProxy.name }}
-          imagePullPolicy: {{ .Values.bizEcosystemLogicProxy.deployment.image.pullPolicy }}
-          image: "{{ .Values.bizEcosystemLogicProxy.deployment.image.repository }}:{{ .Values.bizEcosystemLogicProxy.deployment.image.tag }}"
+          imagePullPolicy: {{ .Values.bizEcosystemLogicProxy.statefulset.image.pullPolicy }}
+          image: "{{ .Values.bizEcosystemLogicProxy.statefulset.image.repository }}:{{ .Values.bizEcosystemLogicProxy.statefulset.image.tag }}"
           ports:
             - name: http
               containerPort: {{ .Values.bizEcosystemLogicProxy.port}}
@@ -65,18 +68,18 @@ spec:
             httpGet:
               path: /version
               port: {{ .Values.bizEcosystemLogicProxy.port}}
-            initialDelaySeconds: {{ .Values.bizEcosystemLogicProxy.deployment.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.bizEcosystemLogicProxy.deployment.livenessProbe.periodSeconds }}
-            successThreshold: {{ .Values.bizEcosystemLogicProxy.deployment.livenessProbe.successThreshold }}
-            timeoutSeconds: {{ .Values.bizEcosystemLogicProxy.deployment.livenessProbe.timeoutSeconds }}
+            initialDelaySeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.bizEcosystemLogicProxy.statefulset.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
               path: /version
               port: {{ .Values.bizEcosystemLogicProxy.port}}
-            initialDelaySeconds: {{ .Values.bizEcosystemLogicProxy.deployment.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.bizEcosystemLogicProxy.deployment.readinessProbe.periodSeconds }}
-            successThreshold: {{ .Values.bizEcosystemLogicProxy.deployment.readinessProbe.successThreshold }}
-            timeoutSeconds: {{ .Values.bizEcosystemLogicProxy.deployment.readinessProbe.timeoutSeconds }}
+            initialDelaySeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.bizEcosystemLogicProxy.statefulset.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.readinessProbe.timeoutSeconds }}
           {{- if or .Values.bizEcosystemLogicProxy.theme.enabled .Values.bizEcosystemLogicProxy.token.enabled }}
           volumeMounts:
           {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
@@ -207,26 +210,20 @@ spec:
             - name: BAE_EORI
               value: {{ .Values.bizEcosystemLogicProxy.token.identifier | quote }}
             {{- end }}
-      {{- with .Values.bizEcosystemLogicProxy.deployment.nodeSelector }}
+      {{- with .Values.bizEcosystemLogicProxy.statefulset.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.bizEcosystemLogicProxy.deployment.affinity }}
+      {{- with .Values.bizEcosystemLogicProxy.statefulset.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.bizEcosystemLogicProxy.deployment.tolerations }}
+      {{- with .Values.bizEcosystemLogicProxy.statefulset.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if or .Values.bizEcosystemLogicProxy.theme.enabled .Values.bizEcosystemLogicProxy.token.enabled }}
-      volumes:
-      {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
-        - name: themes
-          persistentVolumeClaim:
-            claimName: {{ include "bizEcosystemLogicProxy.fullname" . }}-themes
-      {{- end }}
       {{- if .Values.bizEcosystemLogicProxy.token.enabled }}
+      volumes:
         - name: key-volume
           secret:
             secretName: {{ include "bizEcosystemLogicProxy.fullname" . }}-certs
@@ -240,5 +237,14 @@ spec:
               - key: cert.pem
                 path: cert.pem
       {{- end }}
-      {{- end }}
+  {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
+  volumeClaimTemplates:
+  - metadata:
+      name: themes
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: {{ .Values.bizEcosystemLogicProxy.theme.size | quote }}
+  {{- end }}
 {{- end }}
