@@ -1,33 +1,34 @@
-{{- if or (not .Values.useStatefulSet) .Values.autoscaling.enabled }}
+{{- if and .Values.useStatefulSet (not .Values.autoscaling.enabled) }}
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "keyrock.fullname" . }}
   labels:
     {{ include "keyrock.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.deployment.replicaCount }}
-  {{- end }}
-  revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
-  strategy:
-  {{- with .Values.deployment.updateStrategy }}
+  serviceName: {{ include "keyrock.fullname" . }}
+  replicas: {{ .Values.statefulset.replicaCount }}
+  revisionHistoryLimit: {{ .Values.statefulset.revisionHistoryLimit }}
+  updateStrategy:
+  {{- with .Values.statefulset.updateStrategy }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "keyrock.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+      app: {{ include "keyrock.fullname" . }}
   template:
     metadata:
       labels:
+        app: {{ include "keyrock.fullname" . }}
         {{ include "keyrock.labels" . | nindent 8 }}
-        {{- with .Values.deployment.additionalLabels }}
+        {{- with .Values.statefulset.additionalLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if .Values.deployment.additionalAnnotations -}}
+      {{- if .Values.statefulset.additionalAnnotations -}}
       annotations:
-        {{- with .Values.deployment.additionalAnnotations }}
+        {{- with .Values.statefulset.additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- end }}
@@ -50,8 +51,8 @@ spec:
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
-          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          imagePullPolicy: {{ .Values.statefulset.image.pullPolicy }}
+          image: "{{ .Values.statefulset.image.repository }}:{{ .Values.statefulset.image.tag }}"
           ports:
             - name: http
               containerPort: {{ .Values.port}}
@@ -60,18 +61,18 @@ spec:
             httpGet:
               path: /health
               port: http
-            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
-            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
-            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+            initialDelaySeconds: {{ .Values.statefulset.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.statefulset.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.statefulset.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.statefulset.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
               path: /health
               port: http
-            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
-            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
-            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+            initialDelaySeconds: {{ .Values.statefulset.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.statefulset.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.statefulset.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.statefulset.readinessProbe.timeoutSeconds }}
           {{- if .Values.theme.enabled }}
           volumeMounts:
             - name: themes-theme
@@ -120,31 +121,43 @@ spec:
             {{- toYaml . | nindent 12 }}
             {{- end }}
           resources:
-            {{- toYaml .Values.deployment.resources | nindent 12 }}
-      {{- with .Values.deployment.nodeSelector }}
+            {{- toYaml .Values.statefulset.resources | nindent 12 }}
+      {{- with .Values.statefulset.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.deployment.affinity }}
+      {{- with .Values.statefulset.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.deployment.tolerations }}
+      {{- with .Values.statefulset.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.theme.enabled }}
-      volumes:
-        - name: themes-theme
-          persistentVolumeClaim:
-            claimName: {{ include "keyrock.fullname" . }}-themes-theme
-        - name: themes-img
-          persistentVolumeClaim:
-            claimName: {{ include "keyrock.fullname" . }}-themes-img
-        {{- if .Values.theme.sourceFavicon }}
-        - name: themes-favicon
-          persistentVolumeClaim:
-            claimName: {{ include "keyrock.fullname" . }}-themes-favicon
-        {{- end }}
-      {{- end }}
+  {{- if .Values.theme.enabled }}
+  volumeClaimTemplates:
+  - metadata:
+      name: themes-theme
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: {{ .Values.theme.size | quote }}
+  - metadata:
+      name: themes-img
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: {{ .Values.theme.size | quote }}
+  {{- if .Values.theme.sourceFavicon }}
+  - metadata:
+      name: themes-favicon
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: {{ .Values.theme.size | quote }}
+  {{- end }}
+  {{- end }}
 {{- end }}

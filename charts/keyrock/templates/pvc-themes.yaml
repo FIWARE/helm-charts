@@ -1,4 +1,4 @@
-{{- if .Values.theme.enabled }}
+{{- if and .Values.theme.enabled (or (not .Values.useStatefulSet) (.Values.autoscaling.enabled)) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
