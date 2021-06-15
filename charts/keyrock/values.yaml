@@ -23,8 +23,6 @@ serviceAccount:
   create: false
 
 ## statefulset specific configuration
-# -- Enable usage of StatefulSet, otherwise use deployment
-useStatefulSet: true
 statefulset:
   # -- initial number of target replications, can be different if autoscaling is enabled
   replicaCount: 1
@@ -78,66 +76,6 @@ statefulset:
     successThreshold: 1
     timeoutSeconds: 30
 
-
-## deployment specific configuration
-deployment:
-  # -- initial number of target replications, can be different if autoscaling is enabled
-  replicaCount: 1
-  # -- number of old replicas to be retained
-  revisionHistoryLimit: 3
-  ## configuration of the keyrock update strategy
-  updateStrategy:
-    # -- type of the update
-    type: RollingUpdate
-    # -- new pods will be added gradually
-    rollingUpdate:
-      # -- number of pods that can be created above the desired amount while updating
-      maxSurge: 1
-      # -- number of pods that can be unavailable while updating
-      maxUnavailable: 0
-  ## configuration of the image to be used
-  image:
-    # -- keyrock image name
-    # ref: https://hub.docker.com/r/fiware/idm
-    repository: fiware/idm
-    # -- tag of the image to be used
-    tag: 8.0.0
-    # -- specification of the image pull policy
-    pullPolicy: IfNotPresent
-  # -- additional labels for the deployment, if required
-  additionalLabels: {}
-  # -- additional annotations for the deployment, if required
-  additionalAnnotations: {}
-  ## keyrock resource requests and limits, we leave the default empty to make that a concious choice by the user.
-  ## for the autoscaling to make sense, you should configure this.
-  # resources:
-    # limits:
-      # cpu: 100m
-      # memory: 128Mi
-    # requests:
-      # cpu: 100m
-      # memory: 128Mi
-  # -- selector template
-  # ref: https://kubernetes.io/docs/user-guide/node-selection/
-  nodeSelector: {}
-  # -- tolerations template
-  # ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  tolerations: []
-  # -- affinity template
-  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  affinity: {}
-  ## liveness and readiness probes of the keyrock broker, they will be evaluated against the version endpoint
-  # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  livenessProbe:
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 30
-  readinessProbe:
-    initialDelaySeconds: 31
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 30
 
 ## pod autoscaling configuration, use for automatic scaling of the broker pods
 autoscaling:
