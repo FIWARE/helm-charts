@@ -55,6 +55,11 @@ spec:
             - name: config-volume
               mountPath: /etc/api-umbrella/api-umbrella.yml
               subPath: api-umbrella.yml
+            {{ if .Values.umbrella.jws.root_ca -}}
+            - name: rootca-volume
+              mountPath: /app/rootCA.pem
+              subPath: rootCA.pem
+            {{- end }}
       volumes:
         - name: config-volume
           configMap:
@@ -62,6 +67,12 @@ spec:
             items:
               - key: api-umbrella.yml
                 path: api-umbrella.yml
+        {{ if .Values.umbrella.jws.root_ca -}}
+        - name: rootca-volume
+          secret:
+            secretName: {{ include "api-umbrella.fullname" . }}-rootca
+        {{- end }}
+          
       {{- with .Values.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

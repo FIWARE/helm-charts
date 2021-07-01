@@ -22,8 +22,8 @@ serviceAccount:
   # -- specifies if the account should be created
   create: false
 
-## deployment specific configuration
-deployment:
+## statefulset specific configuration
+statefulset:
   # -- initial number of target replications, can be different if autoscaling is enabled
   replicaCount: 1
   # -- number of old replicas to be retained
@@ -32,19 +32,13 @@ deployment:
   updateStrategy:
     # -- type of the update
     type: RollingUpdate
-    # -- new pods will be added gradually
-    rollingUpdate:
-      # -- number of pods that can be created above the desired amount while updating
-      maxSurge: 1
-      # -- number of pods that can be unavailable while updating
-      maxUnavailable: 0
   ## configuration of the image to be used
   image:
     # -- keyrock image name
     # ref: https://hub.docker.com/r/fiware/idm
     repository: fiware/idm
     # -- tag of the image to be used
-    tag: 7.9.0
+    tag: 8.0.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
@@ -81,6 +75,7 @@ deployment:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 30
+
 
 ## pod autoscaling configuration, use for automatic scaling of the broker pods
 autoscaling:
@@ -163,6 +158,33 @@ admin:
   password: admin
   # -- email address of the admin user
   email: admin@admin.org
+## Theme configuration for Keyrock
+theme:
+  ## -- Enable theme
+    enabled: false
+    ## -- Name of the theme
+    name: default
+    ## -- Size of PVCs to be created
+    size: 50Mi
+    ## -- PVC Annotations
+    annotations: {}
+    ## Image which holds the theme files
+    image: my-theme-image:latest
+    ## -- specification of the image pull policy
+    imagePullPolicy: IfNotPresent
+    ## Path to the source theme files inside the container
+    sourceTheme: /themes/my-theme
+    ## Path to the source image files inside the container
+    sourceImg: /img/my-theme
+    ## Optional: Path to the source favicon directory inside the container
+    #sourceFavicon: /favicon
+    ## Mount path for the source theme files
+    mountTheme: /opt/fiware-idm/themes/my-theme
+    ## Mount path for the source image files
+    mountImg: /opt/fiware-idm/public/img/my-theme
+    ## Mount path for the source favicon
+    mountFavicon: /opt/fiware-idm/public/favicon.ico
+    
 # -- a list of additional env vars to be set, check the keyrock docu for all available options
 # ref: https://fiware-idm.readthedocs.io/en/latest/installation_and_administration_guide/environment_variables/index.html
 additonalEnvVars: []
