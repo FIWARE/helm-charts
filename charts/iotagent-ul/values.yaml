@@ -128,7 +128,7 @@ ingress:
   # -- configuration for the south bound http ingress
   httpSouth:
     # -- should there be an ingress to connect iotagent with the public internet
-    enabled: true
+    enabled: false
     # -- annotations to be added to the ingress
     annotations: {}
       # kubernetes.io/ingress.class: "ambassador"
@@ -152,7 +152,7 @@ ingress:
   # -- configuration for the north bound http ingress
   httpNorth:
     # -- should there be an ingress to connect iotagent with the public internet
-    enabled: true
+    enabled: false
     # -- annotations to be added to the ingress
     annotations:
       # kubernetes.io/ingress.class: "ambassador"
