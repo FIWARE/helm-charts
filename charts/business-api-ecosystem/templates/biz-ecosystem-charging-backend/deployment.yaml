@@ -9,8 +9,14 @@ spec:
   replicas: {{ .Values.bizEcosystemChargingBackend.deployment.replicaCount }}
   revisionHistoryLimit: {{ .Values.bizEcosystemChargingBackend.deployment.revisionHistoryLimit }}
   strategy:
+  {{- if or .Values.bizEcosystemChargingBackend.plugins.enabled .Values.bizEcosystemChargingBackend.media.enabled }}
+  {{- with .Values.bizEcosystemChargingBackend.deployment.updateStrategyPVC }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- else }}
   {{- with .Values.bizEcosystemChargingBackend.deployment.updateStrategy }}
   {{- toYaml . | nindent 4 }}
+  {{- end }}
   {{- end }}
   selector:
     matchLabels:
@@ -102,6 +108,14 @@ spec:
               mountPath: /business-ecosystem-charging-backend/src/media/assets
             - name: media-bills
               mountPath: /business-ecosystem-charging-backend/src/media/bills
+            {{- if .Values.bizEcosystemChargingBackend.token.enabled }}
+            - name: key-volume
+              mountPath: /business-ecosystem-charging-backend/key.pem
+              subPath: key.pem
+            - name: cert-volume
+              mountPath: /business-ecosystem-charging-backend/cert.pem
+              subPath: cert.pem
+            {{- end }}
           env:
             - name: BAE_CB_PAYMENT_METHOD
               value: {{ .Values.bizEcosystemChargingBackend.payment.method | quote }}
@@ -184,6 +198,16 @@ spec:
             - name: BAE_ASSET_IDM_URL
               value: {{ .Values.oauth.server | quote }}
             {{- end }}
+            - name: BAE_CB_PROPAGATE_TOKEN
+              value: {{ .Values.bizEcosystemChargingBackend.propagateToken | quote }}
+            {{- if .Values.bizEcosystemChargingBackend.token.enabled }}
+            - name: BAE_TOKEN_KEY
+              value: /business-ecosystem-charging-backend/key.pem
+            - name: BAE_TOKEN_CRT
+              value: /business-ecosystem-charging-backend/cert.pem
+            - name: BAE_EORI
+              value: {{ .Values.bizEcosystemChargingBackend.token.identifier | quote }}
+            {{- end }}
       {{- with .Values.bizEcosystemChargingBackend.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -225,6 +249,20 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- if .Values.bizEcosystemChargingBackend.token.enabled }}
+        - name: key-volume
+          secret:
+            secretName: {{ include "bizEcosystemChargingBackend.fullname" . }}-certs
+            items:
+              - key: key.pem
+                path: key.pem
+        - name: cert-volume
+          secret:
+            secretName: {{ include "bizEcosystemChargingBackend.fullname" . }}-certs
+            items:
+              - key: cert.pem
+                path: cert.pem
+        {{- end }}
         {{- if .Values.bizEcosystemChargingBackend.backup.secretName }}
         - name: gcs-secret
           secret:
