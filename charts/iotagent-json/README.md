@@ -10,7 +10,7 @@ A Helm chart for running the fiware iot agent for the iotagent-json  on kubernet
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| wistefan | stefan.wiedemann@fiware.org |  |
+| Sunny Malik  | t_sunny.malik@india.nec.com |  |
 
 ## Source Code
 
