@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "iota-json.fullname" . }}
+  {{- if .Values.service.annotations }}
+  annotations:
+    {{ toYaml .Values.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{ include "iota-json.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: http-north
+      port: {{ .Values.service.httpNorthPort }}
+      protocol: TCP
+      targetPort: {{ .Values.deployment.httpNorthPort }}
+    {{- if .Values.service.httpSouthPort }}
+    - name: http-south
+      port: {{ .Values.service.httpSouthPort }}
+      protocol: TCP
+      targetPort: {{ .Values.deployment.httpSouthPort }}
+    {{- end }}
+    {{- if .Values.service.mqttPort }}
+    - name: mqtt
+      port: {{ .Values.service.mqttPort }}
+      protocol: TCP
+      targetPort: {{ .Values.deployment.mqttPort }}
+    {{- end }}
+    {{- if .Values.service.amqpPort }}
+    - name: amqp
+      port: {{ .Values.service.amqpPort }}
+      protocol: TCP
+      targetPort: {{ .Values.deployment.amqpPort }}
+    {{- end }}
+  selector:
+    app.kubernetes.io/name: {{ include "iota-json.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
