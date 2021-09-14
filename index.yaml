@@ -341,6 +341,26 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-0.0.1/business-api-ecosystem-0.0.1.tgz
     version: 0.0.1
+  iotagent-json:
+  - apiVersion: v1
+    appVersion: 1.14.0
+    created: "2021-09-14T07:12:20.935691501Z"
+    description: A Helm chart for running the fiware iotagent-json on kubernetes.
+    digest: f904659be45757d22b0d223ff4d4b63c223692607aa3e61e307270fec53af8ef
+    home: https://fiware-iotagent-json.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - iot-agent
+    maintainers:
+    - email: t_sunny.malik@india.nec.com
+      name: Sunny Malik
+    name: iotagent-json
+    sources:
+    - https://github.com/telefonicaid/iotagent-json
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/iotagent-json-0.0.1/iotagent-json-0.0.1.tgz
+    version: 0.0.1
   iotagent-ul:
   - apiVersion: v1
     appVersion: 1.14.0
