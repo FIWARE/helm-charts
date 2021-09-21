@@ -78,13 +78,13 @@ spec:
           livenessProbe:
             exec:
               command:
-                 - /bin/bash
-                 - -c
-                 - "echo /tmp/healthcheck? && true > /tmp/healthcheck"
-           initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
-           periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
-           successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
-           timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+                - /bin/bash
+                - -c
+                - "echo /tmp/healthcheck? && true > /tmp/healthcheck"
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
           {{ end }}
           env:
             # general
