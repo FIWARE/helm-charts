@@ -1,6 +1,6 @@
 # orion
 
-![Version: 0.0.8](https://img.shields.io/badge/Version-0.0.8-informational?style=flat-square) ![AppVersion: 2.5.0](https://img.shields.io/badge/AppVersion-2.5.0-informational?style=flat-square)
+![Version: 0.0.13](https://img.shields.io/badge/Version-0.0.13-informational?style=flat-square) ![AppVersion: 3.2.0](https://img.shields.io/badge/AppVersion-3.2.0-informational?style=flat-square)
 
 A Helm chart for running the fiware orion broker on kubernetes.
 
@@ -35,7 +35,7 @@ A Helm chart for running the fiware orion broker on kubernetes.
 | broker.metrics.enabled | string | `"false"` | enable or disable metrics gathering |
 | broker.noDevTrace | bool | `true` | should the extended development tracing be disabled? |
 | broker.port | int | `1026` | port that the broker is listening to |
-| broker.troe | object | `{"dbHost":"postgres","dbPassword":"password","dbPort":5432,"dbUser":"user","enabled":true}` | configuration of temporal entity representation |
+| broker.troe | object | `{"dbHost":"postgres","dbPassword":"password","dbPort":5432,"dbUser":"user","enabled":false}` | configuration of temporal entity representation |
 | broker.troe.dbHost | string | `"postgres"` | host of the postgres to be used |
 | broker.troe.dbPassword | string | `"password"` | password to authenticate with at postgres |
 | broker.troe.dbPort | int | `5432` | port of the postgres to be used |
@@ -58,11 +58,13 @@ A Helm chart for running the fiware orion broker on kubernetes.
 | deployment.readinessProbe.timeoutSeconds | int | `30` |  |
 | deployment.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
+| deployment.sidecars | list | `[]` | additional sidepods for the deployment, if required |
 | deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
 | deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
 | deployment.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
+| deployment.volumes | list | `[]` | additional volumes for the deployment, if required |
 | fullnameOverride | string | `""` | option to override the fullname config in the _helpers.tpl |
 | ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | ingress.enabled | bool | `false` | should there be an ingress to connect orion with the public internet |

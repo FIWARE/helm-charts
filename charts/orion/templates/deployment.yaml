@@ -39,6 +39,10 @@ spec:
           {{ if and (.Values.broker.noDevTrace) (eq .Values.deployment.image.repository "fiware/orion-ld") }}
           args: ["-lmtmp"]
           {{ end }}
+          # special handling for the health check of telefonica/orion
+          {{ if eq .Values.broker.envPrefix "ORION_" }}
+          command: ["/bin/bash", "-c", "/usr/bin/contextBroker -fg | sed '/SUMMARY/w /tmp/healthcheck'"]
+          {{ end }}
           ports:
             - name: http
               containerPort: {{ .Values.broker.port}}
@@ -47,13 +51,40 @@ spec:
           readinessProbe:
             tcpSocket:
               port: 1027
-            initialDelaySeconds: 5
-            periodSeconds: 10
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds}}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds}}
+            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
           livenessProbe:
             tcpSocket:
               port: 1027
-            initialDelaySeconds: 15
-            periodSeconds: 20
+            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+          {{ end }}
+          # special handling for the health check of telefonica/orion
+          {{ if eq .Values.broker.envPrefix "ORION_" }}
+          readinessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -c
+                - "echo /tmp/healthcheck? && true > /tmp/healthcheck"
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+          livenessProbe:
+            exec:
+              command:
+                 - /bin/bash
+                 - -c
+                 - "echo /tmp/healthcheck? && true > /tmp/healthcheck"
+           initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+           periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+           successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+           timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
           {{ end }}
           env:
             # general
@@ -247,7 +278,7 @@ spec:
             {{- end }}
             {{- if .Values.broker.logging.summaryPeriod }}
             - name: {{ .Values.broker.envPrefix }}LOG_SUMMARY_PERIOD
-              value: {{ .Values.broker.logging.summaryPeriod }}
+              value: {{ .Values.broker.logging.summaryPeriod  | quote }}
             {{- end }}
             {{- if .Values.broker.logging.relogAlarms }}
             - name: {{ .Values.broker.envPrefix }}RELOG_ALARMS
