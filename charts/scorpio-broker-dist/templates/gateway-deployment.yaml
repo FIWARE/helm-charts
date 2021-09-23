@@ -3,28 +3,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    service: {{ .Values.gateway.name }}
-  name: {{ .Values.gateway.name }}
-  namespace: {{.Values.namespace}}
+    service: {{ .Values.gateway.gatewayLabel }}
+  name: {{ include "gateway.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.gateway.replicas }}
   selector:
     matchLabels:
-      service: {{ .Values.gateway.name }}
+      app.kubernetes.io/name: {{ include "gateway.fullname" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+  {{- with .Values.gateway.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels:
-        service: {{ .Values.gateway.name }}
+        service: {{ include "gateway.fullname" . }}
     spec:
       containers:
       - image: {{ .Values.gateway.image.repository }}:{{ .Values.gateway.image.tag }}
         imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
-        name: {{ .Values.gateway.name }}
+        name: {{ include "gateway.fullname" . }}
         ports:
         - containerPort: 9090
           protocol: TCP
@@ -34,7 +34,7 @@ spec:
               command:
               - /bin/sh
               - -c
-              - curl -X PUT "http://eureka:8761/eureka/apps/GATEWAY/$HOSTNAME:gateway:9090/status?value=OUT_OF_SERVICE"
+              - curl -X PUT {{ .Values.gateway.eurekaAddress }}
         {{- if .Values.gateway.readinessProbe.enabled }}
         readinessProbe:
           exec:
@@ -46,14 +46,25 @@ spec:
           failureThreshold: {{ .Values.gateway.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.gateway.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.gateway.readinessProbe.periodSeconds }}
-          {{- end}}
+          {{- end }}
+        {{- if .Values.gateway.livenessProbe.enabled }}
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - curl --silent http://localhost:9090/actuator/health | grep --quiet -e
+              '^{\"status\"\:\"UP\".*}$'
+          failureThreshold: {{ .Values.gateway.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.gateway.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.gateway.livenessProbe.periodSeconds }}
+          {{- end }}    
         resources:
 {{ toYaml .Values.gateway.resources | indent 10 }}
       restartPolicy: {{ .Values.gateway.restartPolicy }}
       {{- if .Values.gateway.serviceAccount.enabled }}
       serviceAccountName: {{ .Values.gateway.serviceAccount.name }}
-      {{- end}}
+      {{- end }}
       securityContext: {{ .Values.gateway.securityContext | toYaml }}
       terminationGracePeriodSeconds: {{ .Values.gateway.terminationGracePeriodSeconds }}
-status: {}
 {{- end }}

@@ -1,17 +1,16 @@
-{{- if .Values.RegistryManager.enabled }}
+{{- if .Values.registryManager.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: {{ .Values.RegistryManager.name }}
-  name: {{ .Values.RegistryManager.name }}
-  namespace: {{.Values.namespace}}
+    service: {{ .Values.registryManager.registryLabel }}
+  name: {{ include "registry-manager.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 spec:
   ports:
   - name: "1030"
     port: 1030
     targetPort: 1030
   selector:
-    service: {{ .Values.RegistryManager.name }}
-status: {}
+    service: {{ include "registry-manager.fullname" . }}
 {{- end }}

@@ -1,15 +1,15 @@
-{{- if and .Values.SubscriptionManager.enabled .Values.SubscriptionManager.hpa.enabled }}
+{{- if and .Values.subscriptionManager.enabled .Values.subscriptionManager.hpa.enabled }}
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
- name: {{ .Values.SubscriptionManager.name }}-hpa
- namespace: {{.Values.namespace}}
+ name: {{ include "subscription-manager.fullname" . }}-hpa
+ namespace: {{ .Release.Namespace }}
 spec:
  scaleTargetRef:
    apiVersion: apps/v1
    kind: Deployment
-   name: {{ .Values.SubscriptionManager.name }}
- minReplicas: {{ .Values.SubscriptionManager.hpa.minReplicas }}
- maxReplicas: {{ .Values.SubscriptionManager.hpa.maxReplicas }}
- targetCPUUtilizationPercentage: {{ .Values.SubscriptionManager.hpa.targetCPUUtilizationPercentage }}
+   name: {{ include "subscription-manager.fullname" . }}
+ minReplicas: {{ .Values.subscriptionManager.hpa.minReplicas }}
+ maxReplicas: {{ .Values.subscriptionManager.hpa.maxReplicas }}
+ targetCPUUtilizationPercentage: {{ .Values.subscriptionManager.hpa.targetCPUUtilizationPercentage }}
 {{- end }}

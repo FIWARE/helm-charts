@@ -1,17 +1,16 @@
-{{- if .Values.EntityManager.enabled }}
+{{- if .Values.entityManager.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: {{ .Values.EntityManager.name }}
-  name: {{ .Values.EntityManager.name }}
-  namespace: {{.Values.namespace}}
+    service: {{ .Values.entityManager.entityLabel }}
+  name: {{ include "entity-manager.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 spec:
   ports:
   - name: "1025"
     port: 1025
     targetPort: 1025
   selector:
-    service: {{ .Values.EntityManager.name }}
-status: {}
+    service: {{ include "entity-manager.fullname" . }}
 {{- end }}

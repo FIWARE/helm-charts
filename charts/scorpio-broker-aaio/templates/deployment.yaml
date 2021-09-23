@@ -36,6 +36,13 @@ spec:
           ports:
             - containerPort: 9090
               protocol: TCP
+          env:
+            - name: POSTGRES_DB
+              value: {{ .Values.db.dbhost }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.db.password }}
+            - name: POSTGRES_USER
+              value: {{ .Values.db.user }}      
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

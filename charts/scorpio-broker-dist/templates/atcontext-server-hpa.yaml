@@ -1,15 +1,15 @@
-{{- if and .Values.AtContextServer.enabled .Values.AtContextServer.hpa.enabled }}
+{{- if and .Values.atContextServer.enabled .Values.atContextServer.hpa.enabled }}
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
- name: {{ .Values.AtContextServer.name }}-hpa
- namespace: {{.Values.namespace}}
+ name: {{  include "at-context-server.fullname" . }}-hpa
+ namespace: {{ .Release.Namespace }}
 spec:
  scaleTargetRef:
    apiVersion: apps/v1
    kind: Deployment
-   name: {{ .Values.AtContextServer.name }}
- minReplicas: {{ .Values.AtContextServer.hpa.minReplicas }}
- maxReplicas: {{ .Values.AtContextServer.hpa.maxReplicas }}
- targetCPUUtilizationPercentage: {{ .Values.AtContextServer.hpa.targetCPUUtilizationPercentage }}
+   name: {{ include "at-context-server.fullname" . }}
+ minReplicas: {{ .Values.atContextServer.hpa.minReplicas }}
+ maxReplicas: {{ .Values.atContextServer.hpa.maxReplicas }}
+ targetCPUUtilizationPercentage: {{ .Values.atContextServer.hpa.targetCPUUtilizationPercentage }}
 {{- end }}

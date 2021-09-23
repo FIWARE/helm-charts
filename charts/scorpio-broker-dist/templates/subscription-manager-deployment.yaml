@@ -1,30 +1,30 @@
-{{- if .Values.SubscriptionManager.enabled }}
+{{- if .Values.subscriptionManager.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    service: {{ .Values.SubscriptionManager.name }}
-  name: {{ .Values.SubscriptionManager.name }}
-  namespace: {{.Values.namespace}}
+    service: {{ .Values.subscriptionManager.subscriptionLabel }}
+  name: {{ include "subscription-manager.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 spec:
-  replicas: {{ .Values.SubscriptionManager.replicas }}
+  replicas: {{ .Values.subscriptionManager.replicas }}
   selector:
     matchLabels:
-      service: {{ .Values.SubscriptionManager.name }}
+      app.kubernetes.io/name: {{ include "subscription-manager.fullname" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+  {{- with .Values.subscriptionManager.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels:
-        service: {{ .Values.SubscriptionManager.name }}
+        service: {{ include "subscription-manager.fullname" . }}
     spec:
       containers:
-      - image: {{ .Values.SubscriptionManager.image.repository }}:{{ .Values.SubscriptionManager.image.tag }}
-        imagePullPolicy: {{ .Values.SubscriptionManager.image.pullPolicy }}
-        name: {{ .Values.SubscriptionManager.name }}
+      - image: {{ .Values.subscriptionManager.image.repository }}:{{ .Values.subscriptionManager.image.tag }}
+        imagePullPolicy: {{ .Values.subscriptionManager.image.pullPolicy }}
+        name: {{ include "subscription-manager.fullname" . }}
         ports:
         - containerPort: 2025
           protocol: TCP
@@ -34,8 +34,8 @@ spec:
               command:
               - /bin/sh
               - -c
-              - curl -X PUT "http://eureka:8761/eureka/apps/SUBSCRIPTION-MANAGER/$HOSTNAME:subscription-manager:2025/status?value=OUT_OF_SERVICE"
-        {{- if .Values.SubscriptionManager.readinessProbe.enabled }}
+              - curl -X PUT {{ .Values.subscriptionManager.eurekaAddress }}
+        {{- if .Values.subscriptionManager.readinessProbe.enabled }}
         readinessProbe:
           exec:
             command:
@@ -43,17 +43,28 @@ spec:
             - -c
             - curl --silent http://localhost:2025/actuator/health | grep --quiet -e
               '^{\"status\"\:\"UP\".*}$'
-          failureThreshold: {{ .Values.SubscriptionManager.readinessProbe.failureThreshold }}
-          initialDelaySeconds: {{ .Values.SubscriptionManager.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.SubscriptionManager.readinessProbe.periodSeconds }}
-          {{- end}}
+          failureThreshold: {{ .Values.subscriptionManager.readinessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.subscriptionManager.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.subscriptionManager.readinessProbe.periodSeconds }}
+          {{- end }}
+        {{- if .Values.subscriptionManager.livenessProbe.enabled }}  
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - curl --silent http://localhost:2025/actuator/health | grep --quiet -e
+              '^{\"status\"\:\"UP\".*}$'
+          failureThreshold: {{ .Values.subscriptionManager.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.subscriptionManager.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.subscriptionManager.livenessProbe.periodSeconds }}
+          {{- end }}  
         resources:
-{{ toYaml .Values.SubscriptionManager.resources | indent 10 }}
-      restartPolicy: {{ .Values.SubscriptionManager.restartPolicy }}
-      {{- if .Values.SubscriptionManager.serviceAccount.enabled }}
-      serviceAccountName: {{ .Values.SubscriptionManager.serviceAccount.name }}
-      {{- end}}
-      securityContext: {{ .Values.SubscriptionManager.securityContext | toYaml }}
-      terminationGracePeriodSeconds: {{ .Values.SubscriptionManager.terminationGracePeriodSeconds }}
-status: {}
+{{ toYaml .Values.subscriptionManager.resources | indent 10 }}
+      restartPolicy: {{ .Values.subscriptionManager.restartPolicy }}
+      {{- if .Values.subscriptionManager.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.subscriptionManager.serviceAccount.name }}
+      {{- end }}
+      securityContext: {{ .Values.subscriptionManager.securityContext | toYaml }}
+      terminationGracePeriodSeconds: {{ .Values.subscriptionManager.terminationGracePeriodSeconds }}
 {{- end }}

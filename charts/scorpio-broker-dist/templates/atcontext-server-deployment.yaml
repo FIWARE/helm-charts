@@ -1,41 +1,41 @@
-{{- if .Values.AtContextServer.enabled }}
+{{- if .Values.atContextServer.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    service: {{ .Values.AtContextServer.name }}
-  name: {{ .Values.AtContextServer.name }}
-  namespace: {{.Values.namespace}}
+    service: {{ .Values.atContextServer.contextLabel }}
+  name: {{ include "at-context-server.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 spec:
-  replicas: {{ .Values.AtContextServer.replicas }}
+  replicas: {{ .Values.atContextServer.replicas }}
   selector:
     matchLabels:
-      service: {{ .Values.AtContextServer.name }}
+      app.kubernetes.io/name: {{ include "at-context-server.fullname" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+  {{- with .Values.atContextServer.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels:
-        service: {{ .Values.AtContextServer.name }}
+        service: {{ include "at-context-server.fullname" . }}
     spec:
       containers:
-      - image: {{ .Values.AtContextServer.image.repository }}:{{ .Values.AtContextServer.image.tag }}
-        imagePullPolicy: {{ .Values.AtContextServer.image.pullPolicy }}
-        name: {{ .Values.AtContextServer.name }}
+      - image: {{ .Values.atContextServer.image.repository }}:{{ .Values.atContextServer.image.tag }}
+        imagePullPolicy: {{ .Values.atContextServer.image.pullPolicy }}
+        name: {{ include "at-context-server.fullname" . }}
         ports:
         - containerPort: 27015
           protocol: TCP
-        {{- if .Values.AtContextServer.readinessProbe.enabled }}
+        {{- if .Values.atContextServer.readinessProbe.enabled }}
         lifecycle:
            preStop:
             exec:
               command:
               - /bin/sh
               - -c
-              - curl -X PUT "http://eureka:8761/eureka/apps/ATCONTEXT-SERVER/$HOSTNAME:atcontext-server:27015/status?value=OUT_OF_SERVICE"
+              - curl -X PUT {{ .Values.atContextServer.eurekaAddress }}
         readinessProbe:
           exec:
             command:
@@ -43,17 +43,29 @@ spec:
             - -c
             - curl --silent http://localhost:27015/actuator/health | grep --quiet -e
               '^{\"status\"\:\"UP\".*}$'
-          failureThreshold: {{ .Values.AtContextServer.readinessProbe.failureThreshold }}
-          initialDelaySeconds: {{ .Values.AtContextServer.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.AtContextServer.readinessProbe.periodSeconds }}
+          failureThreshold: {{ .Values.atContextServer.readinessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.atContextServer.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.atContextServer.readinessProbe.periodSeconds }}
           {{- end}}
+        {{- if .Values.atContextServer.livenessProbe.enabled }}  
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - curl --silent http://localhost:27015/actuator/health | grep --quiet -e
+              '^{\"status\"\:\"UP\".*}$'
+          failureThreshold: {{ .Values.atContextServer.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.atContextServer.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.atContextServer.livenessProbe.periodSeconds }}
+          {{- end }}
+
         resources:
-{{ toYaml .Values.AtContextServer.resources | indent 10 }}
-      restartPolicy: {{ .Values.AtContextServer.restartPolicy }}
-      {{- if .Values.AtContextServer.serviceAccount.enabled }}
-      serviceAccountName: {{ .Values.AtContextServer.serviceAccount.name }}
-      {{- end}}
-      securityContext: {{ .Values.AtContextServer.securityContext | toYaml }}
-      terminationGracePeriodSeconds: {{ .Values.AtContextServer.terminationGracePeriodSeconds }}
-status: {}
+{{ toYaml .Values.atContextServer.resources | indent 10 }}
+      restartPolicy: {{ .Values.atContextServer.restartPolicy }}
+      {{- if .Values.atContextServer.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.atContextServer.serviceAccount.name }}
+      {{- end }}
+      securityContext: {{ .Values.atContextServer.securityContext | toYaml }}
+      terminationGracePeriodSeconds: {{ .Values.atContextServer.terminationGracePeriodSeconds }}
 {{- end }}

@@ -1,17 +1,16 @@
-{{- if .Values.SubscriptionManager.enabled }}
+{{- if .Values.subscriptionManager.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: {{ .Values.SubscriptionManager.name }}
-  name: {{ .Values.SubscriptionManager.name }}
-  namespace: {{.Values.namespace}}
+    service: {{ .Values.subscriptionManager.subscriptionLabel }}
+  name: {{ include "subscription-manager.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 spec:
   ports:
   - name: "2025"
     port: 2025
     targetPort: 2025
   selector:
-    service: {{ .Values.SubscriptionManager.name }}
-status: {}
+    service: {{ include "subscription-manager.fullname" . }}
 {{- end }}

@@ -1,18 +1,17 @@
-{{- if .Values.ConfigServer.enabled }}
+{{- if .Values.configServer.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: {{ .Values.ConfigServer.name }}
-  name: {{ .Values.ConfigServer.name }}
-  namespace: {{.Values.namespace}}
+    service: {{ .Values.configServer.configLabel }}
+  name: {{ include "config-server.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 spec:
   ports:
   - name: "8888"
     port: 8888
     targetPort: 8888
   selector:
-    service: {{ .Values.ConfigServer.name }}
-status: {}
+    service: {{ .Values.configServer.name }}
 {{- end }}
 

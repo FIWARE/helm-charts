@@ -5,24 +5,42 @@ eureka:
 ## Enable the eureka deployment & service
   enabled: true 
   name: eureka
+## Custom Label value  
+  eurekaLabel: eureka  
 ## Number of eureka instances to deploy
 ##
   replicas: 1
+
+  service:      
+  # -- service type
+    type: NodePort
+  # -- port to be used by the service
+    port: 8761
+  # -- port to be used by the service
+    nodePort: 30000
+
+
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 25%
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 25%
 ## Scorpio Broker eureka image version
 ## ref: https://hub.docker.com/r/scorpiobroker/scorpio
 ## Please use only latest version of docker images as few older images might not work with kubernetes. 
-##
-  image:
+  image:        
    repository: scorpiobroker/scorpio
-   tag: eureka-server_latest
-## Specify a imagePullPolicy
+   tag: eureka-server_1.16.0
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-##
+# -- specification of the image pull policy
    pullPolicy: Always
 
 ## eureka containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-##
   resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -43,6 +61,15 @@ eureka:
    initialDelaySeconds: 40
    failureThreshold: 6
    periodSeconds: 10
+
+## eureka containers'  liveness probes. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+  livenessProbe:
+   enabled: true
+   initialDelaySeconds: 40
+   failureThreshold: 6
+   periodSeconds: 10      
  
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -58,7 +85,7 @@ eureka:
    enabled: false
   ## Name of an already existing service account. Setting this value disables the automatic service account creation.
    name: ""
-
+## ref: https://pracucci.com/graceful-shutdown-of-kubernetes-pods.html
   terminationGracePeriodSeconds: 30
 
 ## Enable HPA for eureka
@@ -66,8 +93,11 @@ eureka:
 ##
   hpa:
    enabled: true
+   # --  minimum number of replicas to which the autoscaler can scale down
    minReplicas: 1
+   # -- maximum number of pods that can be set by the autoscaler
    maxReplicas: 5
+   # --  average CPU usage across all the pods exceeds 80%, HPA will spin up additional pods.
    targetCPUUtilizationPercentage: 80
 
 ################################### Gateway ##########################################################################
@@ -75,16 +105,27 @@ gateway:
 ## Enable the gateway deployment & service
   enabled: true 
   name: gateway
+## Custom label value
+  gatewayLabel: gateway  
 ## Number of gateway instances to deploy
 ##
   replicas: 1
+
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 25%
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 25%
 ## Scorpio Broker gateway image version
 ## ref: https://hub.docker.com/r/scorpiobroker/scorpio
-## Please use only latest version of docker images as few older images might not work with kubernetes. 
-##
-  image:
+## Please use only latest version of docker images as few older images might not work with kubernetes.
+  image:       
    repository: scorpiobroker/scorpio
-   tag: gateway_latest
+   tag: gateway_1.16.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
@@ -108,11 +149,21 @@ gateway:
 ## gateway containers'  readiness probes. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
+  eurekaAddress: http://eureka:8761/eureka/apps/GATEWAY/$HOSTNAME:gateway:9090/status?value=OUT_OF_SERVICE
   readinessProbe:
    enabled: true
    initialDelaySeconds: 40
    failureThreshold: 6
    periodSeconds: 10
+
+## gateway containers'  liveness probes. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+  livenessProbe:
+   enabled: true
+   initialDelaySeconds: 40
+   failureThreshold: 6
+   periodSeconds: 10      
  
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -136,25 +187,40 @@ gateway:
 ##
   hpa:
    enabled: true
+   # --  minimum number of replicas to which the autoscaler can scale down
    minReplicas: 1
+   # -- maximum number of pods that can be set by the autoscaler
    maxReplicas: 5
    targetCPUUtilizationPercentage: 80
 
 ################################### AtContextServer ##########################################################################
-AtContextServer:
+atContextServer:
 ## Enable the AtContextServer deployment & service
   enabled: true 
   name: at-context-server
+## Custom label value
+  contextLabel: at-context-server  
 ## Number of AtContextServer instances to deploy
-##
+#
   replicas: 1
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 25%
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 25%
 ## Scorpio Broker AtContextServer image version
 ## ref: https://hub.docker.com/r/scorpiobroker/scorpio
-## Please use only latest version of docker images as few older images might not work with kubernetes. 
-##
+## Please use only latest version of docker images as few older images might not work with kubernetes.
   image:
+   ## -- scorpiobroker image name
+   # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
-   tag: AtContextServer_latest
+   # -- tag of the image to be used
+   tag: AtContextServer_1.16.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
@@ -178,11 +244,21 @@ AtContextServer:
 ## AtContextServer containers'  readiness probes. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
+  eurekaAddress : http://eureka:8761/eureka/apps/ATCONTEXT-SERVER/$HOSTNAME:atcontext-server:27015/status?value=OUT_OF_SERVICE
   readinessProbe:
    enabled: true
    initialDelaySeconds: 40
    failureThreshold: 6
    periodSeconds: 10
+
+## AtContextServer containers'  liveness probes. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+  livenessProbe:
+   enabled: true
+   initialDelaySeconds: 40
+   failureThreshold: 6
+   periodSeconds: 10      
  
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -206,31 +282,49 @@ AtContextServer:
 ##
   hpa:
    enabled: true
+   # -- minimum number of replicas to which the autoscaler can scale down
    minReplicas: 1
+   # -- maximum number of pods that can be set by the autoscaler
    maxReplicas: 5
    targetCPUUtilizationPercentage: 80
    
 ################################### ConfigServer ##########################################################################
-ConfigServer:
-## Enable the ConfigServer deployment & service
+configServer:
+## Enable the configServer deployment & service
   enabled: true 
   name: config-server
-## Number of ConfigServer instances to deploy
+## Custom label value
+  configLabel: config-server
+  
+## Number of configServer instances to deploy
 ##
   replicas: 1
-## Scorpio Broker ConfigServer image version
+## Scorpio Broker configServer image version
 ## ref: https://hub.docker.com/r/scorpiobroker/scorpio
 ## Please use only latest version of docker images as few older images might not work with kubernetes. 
 ##
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 25%
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 25%
+  ## configuration of the image to be used
   image:
+   ## -- scorpiobroker image name
+   # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
-   tag: config-server_latest
+   # -- tag of the image to be used
+   tag: config-server_1.16.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
    pullPolicy: Always
 
-## ConfigServer containers' resource requests and limits
+## configServer containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
   resources: {}
@@ -245,14 +339,24 @@ ConfigServer:
   #   cpu: 250m
   #   memory: 256Mi
   
-## ConfigServer containers'  readiness probes. Evaluated as a template.
+## configServer containers'  readiness probes. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
+  eurekaAddress: http://eureka:8761/eureka/apps/CONFIGSERVER/$HOSTNAME:configserver:8888/status?value=OUT_OF_SERVICE
   readinessProbe:
    enabled: true
    initialDelaySeconds: 40
    failureThreshold: 6
    periodSeconds: 10
+
+## ConfigServer containers'  liveness probes. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+  livenessProbe:
+   enabled: true
+   initialDelaySeconds: 40
+   failureThreshold: 6
+   periodSeconds: 10      
  
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -276,31 +380,49 @@ ConfigServer:
 ##
   hpa:
    enabled: true
+   # -- minimum number of replicas to which the autoscaler can scale down
    minReplicas: 1
+   # -- maximum number of pods that can be set by the autoscaler
    maxReplicas: 5
    targetCPUUtilizationPercentage: 80
    
 ################################### EntityManager ##########################################################################
-EntityManager:
-## Enable the EntityManager deployment & service
+entityManager:
+## Enable the entityManager deployment & service
   enabled: true 
   name: entity-manager
-## Number of EntityManager instances to deploy
+## Custom label value
+  entityLabel: entity-manager
+  
+## Number of entityManager instances to deploy
 ##
   replicas: 1
-## Scorpio Broker EntityManager image version
+## Scorpio Broker entityManager image version
 ## ref: https://hub.docker.com/r/scorpiobroker/scorpio
 ## Please use only latest version of docker images as few older images might not work with kubernetes. 
 ##
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 25%
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 25%
+  ## configuration of the image to be used
   image:
+   ## -- scorpiobroker image name
+   # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
-   tag: EntityManager_latest
+   # -- tag of the image to be used
+   tag: EntityManager_1.16.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
    pullPolicy: Always
 
-## EntityManager containers' resource requests and limits
+## entityManager containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
   resources: {}
@@ -315,14 +437,24 @@ EntityManager:
   #   cpu: 250m
   #   memory: 256Mi
   
-## EntityManager containers'  readiness probes. Evaluated as a template.
+## entityManager containers'  readiness probes. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
+  eurekaAddress: http://eureka:8761/eureka/apps/ENTITY-MANAGER/$HOSTNAME:entity-manager:1025/status?value=OUT_OF_SERVICE
   readinessProbe:
    enabled: true
    initialDelaySeconds: 40
    failureThreshold: 6
    periodSeconds: 10
+
+## EntityManager containers'  liveness probes. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+  livenessProbe:
+   enabled: true
+   initialDelaySeconds: 40
+   failureThreshold: 6
+   periodSeconds: 10      
  
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -346,15 +478,20 @@ EntityManager:
 ##
   hpa:
    enabled: true
+   # -- minimum number of replicas to which the autoscaler can scale down
    minReplicas: 1
+   # -- maximum number of pods that can be set by the autoscaler
    maxReplicas: 5
    targetCPUUtilizationPercentage: 80
    
 ################################### HistoryManager ##########################################################################
-HistoryManager:
+historyManager:
 ## Enable the HistoryManager deployment & service
   enabled: true 
   name: history-manager
+## Custom label value
+  historyLabel: history-manager
+  
 ## Number of HistoryManager instances to deploy
 ##
   replicas: 1
@@ -362,9 +499,22 @@ HistoryManager:
 ## ref: https://hub.docker.com/r/scorpiobroker/scorpio
 ## Please use only latest version of docker images as few older images might not work with kubernetes. 
 ##
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 25%
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 25%
+  ## configuration of the image to be used
   image:
+   ## -- scorpiobroker image name
+   # ref: https://hub.docker.com/r/scorpiobroker/scorpio        
    repository: scorpiobroker/scorpio
-   tag: HistoryManager_latest
+   # -- tag of the image to be used
+   tag: HistoryManager_1.16.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
@@ -388,11 +538,21 @@ HistoryManager:
 ## HistoryManager containers'  readiness probes. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
+  eurekaAddress: http://eureka:8761/eureka/apps/HISTORY-MANAGER/$HOSTNAME:history-manager:1040/status?value=OUT_OF_SERVICE
   readinessProbe:
    enabled: true
    initialDelaySeconds: 40
    failureThreshold: 6
    periodSeconds: 10
+
+## HistoryManager containers'  liveness probes. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+  livenessProbe:
+   enabled: true
+   initialDelaySeconds: 40
+   failureThreshold: 6
+   periodSeconds: 10      
  
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -416,15 +576,20 @@ HistoryManager:
 ##
   hpa:
    enabled: true
+   # -- minimum number of replicas to which the autoscaler can scale down
    minReplicas: 1
+   # -- maximum number of pods that can be set by the autoscaler
    maxReplicas: 5
    targetCPUUtilizationPercentage: 80
 
 ################################### QueryManager ##########################################################################
-QueryManager:
+queryManager:
 ## Enable the QueryManager deployment & service
   enabled: true 
   name: query-manager
+## Custom label value
+  queryLabel: query-manager
+  
 ## Number of QueryManager instances to deploy
 ##
   replicas: 1
@@ -432,9 +597,22 @@ QueryManager:
 ## ref: https://hub.docker.com/r/scorpiobroker/scorpio
 ## Please use only latest version of docker images as few older images might not work with kubernetes. 
 ##
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 25%
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 25%
+  ## configuration of the image to be used
   image:
+   ## -- scorpiobroker image name
+   # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
-   tag: QueryManager_latest
+   # -- tag of the image to be used
+   tag: QueryManager_1.16.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
@@ -458,11 +636,21 @@ QueryManager:
 ## QueryManager containers'  readiness probes. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
+  eurekaAddress: http://eureka:8761/eureka/apps/QUERY-MANAGER/$HOSTNAME:query-manager:1026/status?value=OUT_OF_SERVICE
   readinessProbe:
    enabled: true
    initialDelaySeconds: 40
    failureThreshold: 6
    periodSeconds: 10
+
+## QueryManager containers'  liveness probes. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+  livenessProbe:
+   enabled: true
+   initialDelaySeconds: 40
+   failureThreshold: 6
+   periodSeconds: 10      
  
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -486,15 +674,20 @@ QueryManager:
 ##
   hpa:
    enabled: true
+   # -- minimum number of replicas to which the autoscaler can scale down
    minReplicas: 1
+   # -- maximum number of pods that can be set by the autoscaler
    maxReplicas: 5
    targetCPUUtilizationPercentage: 80
    
 ################################### RegistryManager ##########################################################################
-RegistryManager:
+registryManager:
 ## Enable the RegistryManager deployment & service
   enabled: true 
   name: registry-manager
+## Custom label value
+  registryLabel: registry-manager
+  
 ## Number of RegistryManager instances to deploy
 ##
   replicas: 1
@@ -502,9 +695,22 @@ RegistryManager:
 ## ref: https://hub.docker.com/r/scorpiobroker/scorpio
 ## Please use only latest version of docker images as few older images might not work with kubernetes. 
 ##
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 25%
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 25%
+  ## configuration of the image to be used
   image:
+   ## -- scorpiobroker image name
+   # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
-   tag: RegistryManager_latest
+   # -- tag of the image to be used
+   tag: RegistryManager_1.16.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
@@ -528,14 +734,24 @@ RegistryManager:
 ## RegistryManager containers'  readiness probes. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
+  eurekaAddress: http://eureka:8761/eureka/apps/C-SOURCES/$HOSTNAME:c-sources:1030/status?value=OUT_OF_SERVICE
   readinessProbe:
    enabled: true
    initialDelaySeconds: 40
    failureThreshold: 6
    periodSeconds: 10
+
+## RegistryManager containers'  liveness probes. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+  livenessProbe:
+   enabled: true
+   initialDelaySeconds: 40
+   failureThreshold: 6
+   periodSeconds: 10      
  
 ## Pod Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## ref: https://kuberne\tes.io/docs/tasks/configure-pod-container/security-context/
 ##
   securityContext: {}
   
@@ -556,15 +772,20 @@ RegistryManager:
 ##
   hpa:
    enabled: true
+   # -- minimum number of replicas to which the autoscaler can scale down
    minReplicas: 1
+   # -- maximum number of pods that can be set by the autoscaler
    maxReplicas: 5
    targetCPUUtilizationPercentage: 80
 
 ################################### StorageManager ##########################################################################
-StorageManager:
+storageManager:
 ## Enable the StorageManager deployment & service
   enabled: true 
   name: storage-manager
+## Custom label value
+  storageLabel: storage-manager
+  
 ## Number of StorageManager instances to deploy
 ##
   replicas: 1
@@ -572,9 +793,22 @@ StorageManager:
 ## ref: https://hub.docker.com/r/scorpiobroker/scorpio
 ## Please use only latest version of docker images as few older images might not work with kubernetes. 
 ##
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 25%
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 25%
+  ## configuration of the image to be used
   image:
+   ## -- scorpiobroker image name
+   # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
-   tag: StorageManager_latest
+   # -- tag of the image to be used
+   tag: StorageManager_1.16.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
@@ -598,11 +832,21 @@ StorageManager:
 ## StorageManager containers'  readiness probes. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
+  eurekaAddress: http://eureka:8761/eureka/apps/STORAGE-MANAGER/$HOSTNAME:storage-manager:1029/status?value=OUT_OF_SERVICE
   readinessProbe:
    enabled: true
    initialDelaySeconds: 40
    failureThreshold: 6
    periodSeconds: 10
+
+## StorageManager containers'  liveness probes. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+  livenessProbe:
+   enabled: true
+   initialDelaySeconds: 40
+   failureThreshold: 6
+   periodSeconds: 10      
  
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -626,16 +870,21 @@ StorageManager:
 ##
   hpa:
    enabled: true
+   # -- minimum number of replicas to which the autoscaler can scale down
    minReplicas: 1
+   # -- maximum number of pods that can be set by the autoscaler
    maxReplicas: 5
    targetCPUUtilizationPercentage: 80
    
 
 ################################### SubscriptionManager ##########################################################################
-SubscriptionManager:
+subscriptionManager:
 ## Enable the SubscriptionManager deployment & service
   enabled: true 
   name: subscription-manager
+## Custom label value
+  subscriptionLabel: subscription-manager
+  
 ## Number of SubscriptionManager instances to deploy
 ##
   replicas: 1
@@ -643,9 +892,22 @@ SubscriptionManager:
 ## ref: https://hub.docker.com/r/scorpiobroker/scorpio
 ## Please use only latest version of docker images as few older images might not work with kubernetes. 
 ##
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 25%
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 25%
+  ## configuration of the image to be used
   image:
+   ## -- scorpiobroker image name
+   # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
-   tag: SubscriptionManager_latest
+   # -- tag of the image to be used
+   tag: SubscriptionManager_1.16.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
@@ -669,12 +931,22 @@ SubscriptionManager:
 ## SubscriptionManager containers'  readiness probes. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
+  eurekaAddress: http://eureka:8761/eureka/apps/SUBSCRIPTION-MANAGER/$HOSTNAME:subscription-manager:2025/status?value=OUT_OF_SERVICE
   readinessProbe:
    enabled: true
    initialDelaySeconds: 40
    failureThreshold: 6
    periodSeconds: 10
  
+## SubscriptionManager containers'  liveness probes. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+  livenessProbe:
+   enabled: true
+   initialDelaySeconds: 40
+   failureThreshold: 6
+   periodSeconds: 10   
+    
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
@@ -697,6 +969,8 @@ SubscriptionManager:
 ##
   hpa:
    enabled: true
+   # -- minimum number of replicas to which the autoscaler can scale down
    minReplicas: 1
+   # -- maximum number of pods that can be set by the autoscaler
    maxReplicas: 5
    targetCPUUtilizationPercentage: 80

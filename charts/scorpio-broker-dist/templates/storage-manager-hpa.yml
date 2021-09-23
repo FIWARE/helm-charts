@@ -1,15 +1,15 @@
-{{- if and .Values.StorageManager.enabled .Values.StorageManager.hpa.enabled }}
+{{- if and .Values.storageManager.enabled .Values.storageManager.hpa.enabled }}
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
- name: {{ .Values.StorageManager.name }}-hpa
- namespace: {{.Values.namespace}}
+ name: {{ include "storage-manager.fullname" . }}-hpa
+ namespace: {{ .Release.Namespace }}
 spec:
  scaleTargetRef:
    apiVersion: apps/v1
    kind: Deployment
-   name: {{ .Values.StorageManager.name }}
- minReplicas: {{ .Values.StorageManager.hpa.minReplicas }}
- maxReplicas: {{ .Values.StorageManager.hpa.maxReplicas }}
- targetCPUUtilizationPercentage: {{ .Values.StorageManager.hpa.targetCPUUtilizationPercentage }}
+   name: {{ include "storage-manager.fullname" . }}
+ minReplicas: {{ .Values.storageManager.hpa.minReplicas }}
+ maxReplicas: {{ .Values.storageManager.hpa.maxReplicas }}
+ targetCPUUtilizationPercentage: {{ .Values.storageManager.hpa.targetCPUUtilizationPercentage }}
 {{- end }}
