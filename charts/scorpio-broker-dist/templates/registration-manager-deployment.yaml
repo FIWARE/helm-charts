@@ -23,6 +23,11 @@ spec:
     spec:
       containers:
       - image: {{ .Values.registryManager.image.repository }}:{{ .Values.registryManager.image.tag }}
+        {{- if .Values.springArgs.overrideSpringArgs }}
+        env:
+          - name: spring_args
+            value: {{ .Values.springArgs.value }}
+        {{- end }}
         imagePullPolicy: {{ .Values.registryManager.image.pullPolicy }}
         name: {{ include "registry-manager.fullname" . }}
         ports:

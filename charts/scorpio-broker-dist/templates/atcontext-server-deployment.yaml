@@ -23,6 +23,11 @@ spec:
     spec:
       containers:
       - image: {{ .Values.atContextServer.image.repository }}:{{ .Values.atContextServer.image.tag }}
+        {{- if .Values.springArgs.overrideSpringArgs }}
+        env:
+          - name: spring_args
+            value: {{ .Values.springArgs.value }}
+        {{- end }}
         imagePullPolicy: {{ .Values.atContextServer.image.pullPolicy }}
         name: {{ include "at-context-server.fullname" . }}
         ports:

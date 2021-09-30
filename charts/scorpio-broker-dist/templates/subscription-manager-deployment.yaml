@@ -23,6 +23,11 @@ spec:
     spec:
       containers:
       - image: {{ .Values.subscriptionManager.image.repository }}:{{ .Values.subscriptionManager.image.tag }}
+        {{- if .Values.springArgs.overrideSpringArgs }}
+        env:
+          - name: spring_args
+            value: {{ .Values.springArgs.value }}
+        {{- end }}
         imagePullPolicy: {{ .Values.subscriptionManager.image.pullPolicy }}
         name: {{ include "subscription-manager.fullname" . }}
         ports:
