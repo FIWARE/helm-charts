@@ -1,6 +1,6 @@
 # keyrock
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -31,28 +31,6 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | db.host | string | `"mysql"` | host of the database to be used |
 | db.password | string | `"pass"` | password for connecting the database |
 | db.user | string | `"root"` | user for connecting the database |
-| deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
-| deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
-| deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-| deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| deployment.image.repository | string | `"fiware/idm"` | keyrock image name ref: https://hub.docker.com/r/fiware/idm |
-| deployment.image.tag | string | `"8.0.0"` | tag of the image to be used |
-| deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
-| deployment.livenessProbe.periodSeconds | int | `10` |  |
-| deployment.livenessProbe.successThreshold | int | `1` |  |
-| deployment.livenessProbe.timeoutSeconds | int | `30` |  |
-| deployment.nodeSelector | object | `{}` |  |
-| deployment.readinessProbe.initialDelaySeconds | int | `31` |  |
-| deployment.readinessProbe.periodSeconds | int | `10` |  |
-| deployment.readinessProbe.successThreshold | int | `1` |  |
-| deployment.readinessProbe.timeoutSeconds | int | `30` |  |
-| deployment.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
-| deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
-| deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
-| deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
-| deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
-| deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
-| deployment.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | fullnameOverride | string | `""` | option to override the fullname config in the _helpers.tpl |
 | host | string | `"http://localhost"` | host where keyrock is available at |
 | ingress.annotations | object | `{}` | annotations to be added to the ingress |
@@ -69,11 +47,31 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | service.type | string | `"ClusterIP"` | service type |
 | serviceAccount | object | `{"create":false}` | if a keyrock specific service account should be used, it can be configured here ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | serviceAccount.create | bool | `false` | specifies if the account should be created |
+| statefulset.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
+| statefulset.additionalLabels | object | `{}` | additional labels for the deployment, if required |
+| statefulset.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| statefulset.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
+| statefulset.image.repository | string | `"fiware/idm"` | keyrock image name ref: https://hub.docker.com/r/fiware/idm |
+| statefulset.image.tag | string | `"8.0.0"` | tag of the image to be used |
+| statefulset.livenessProbe.initialDelaySeconds | int | `30` |  |
+| statefulset.livenessProbe.periodSeconds | int | `10` |  |
+| statefulset.livenessProbe.successThreshold | int | `1` |  |
+| statefulset.livenessProbe.timeoutSeconds | int | `30` |  |
+| statefulset.nodeSelector | object | `{}` |  |
+| statefulset.readinessProbe.initialDelaySeconds | int | `31` |  |
+| statefulset.readinessProbe.periodSeconds | int | `10` |  |
+| statefulset.readinessProbe.successThreshold | int | `1` |  |
+| statefulset.readinessProbe.timeoutSeconds | int | `30` |  |
+| statefulset.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
+| statefulset.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
+| statefulset.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| statefulset.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | theme.annotations | object | `{}` |  |
 | theme.enabled | bool | `false` |  |
 | theme.image | string | `"my-theme-image:latest"` |  |
 | theme.imagePullPolicy | string | `"IfNotPresent"` |  |
 | theme.mountFavicon | string | `"/opt/fiware-idm/public/favicon.ico"` |  |
+| theme.mountFonts | string | `"/opt/fiware-idm/public/fonts/my-fonts"` |  |
 | theme.mountImg | string | `"/opt/fiware-idm/public/img/my-theme"` |  |
 | theme.mountTheme | string | `"/opt/fiware-idm/themes/my-theme"` |  |
 | theme.name | string | `"default"` |  |
