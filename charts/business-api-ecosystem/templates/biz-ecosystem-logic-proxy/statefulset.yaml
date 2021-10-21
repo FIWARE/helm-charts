@@ -140,6 +140,10 @@ spec:
               value: {{ .Values.oauth.customerrole | quote }}
             - name: BAE_LP_OAUTH2_ORG_ADMIN_ROLE
               value: {{ .Values.oauth.orgadminrole | quote }}
+            {{- if .Values.oauth.defaultRole }}
+            - name: BAE_LP_OAUTH2_DEFAULT_ROLE
+              value: {{ .Values.oauth.defaultRole | quote }}
+            {{- end }}
             - name: BAE_LP_OAUTH2_PROVIDER
               value: {{ .Values.oauth.provider | quote }}
             - name: BAE_LP_OAUTH2_IS_LEGACY

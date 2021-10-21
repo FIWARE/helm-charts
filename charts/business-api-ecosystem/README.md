@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -89,6 +89,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` |  |
 | bizEcosystemChargingBackend.deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` |  |
 | bizEcosystemChargingBackend.deployment.updateStrategy.type | string | `"RollingUpdate"` |  |
+| bizEcosystemChargingBackend.deployment.updateStrategyPVC.type | string | `"Recreate"` |  |
 | bizEcosystemChargingBackend.email.mail | string | `"charging@email.com"` |  |
 | bizEcosystemChargingBackend.enabled | bool | `true` |  |
 | bizEcosystemChargingBackend.fullnameOverride | string | `""` |  |
@@ -122,25 +123,6 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.db.password | string | `"pass"` | password for connecting the database |
 | bizEcosystemLogicProxy.db.port | int | `27017` | port of the database to be used |
 | bizEcosystemLogicProxy.db.user | string | `"root"` | username for connecting the database |
-| bizEcosystemLogicProxy.deployment.additionalAnnotations | object | `{}` |  |
-| bizEcosystemLogicProxy.deployment.additionalLabels | object | `{}` |  |
-| bizEcosystemLogicProxy.deployment.affinity | object | `{}` |  |
-| bizEcosystemLogicProxy.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
-| bizEcosystemLogicProxy.deployment.image.repository | string | `"fiware/biz-ecosystem-logic-proxy"` |  |
-| bizEcosystemLogicProxy.deployment.image.tag | string | `"v8.0.0"` |  |
-| bizEcosystemLogicProxy.deployment.livenessProbe.initialDelaySeconds | int | `61` |  |
-| bizEcosystemLogicProxy.deployment.livenessProbe.periodSeconds | int | `30` |  |
-| bizEcosystemLogicProxy.deployment.livenessProbe.successThreshold | int | `1` |  |
-| bizEcosystemLogicProxy.deployment.livenessProbe.timeoutSeconds | int | `30` |  |
-| bizEcosystemLogicProxy.deployment.nodeSelector | object | `{}` |  |
-| bizEcosystemLogicProxy.deployment.readinessProbe.initialDelaySeconds | int | `60` |  |
-| bizEcosystemLogicProxy.deployment.readinessProbe.periodSeconds | int | `30` |  |
-| bizEcosystemLogicProxy.deployment.readinessProbe.successThreshold | int | `1` |  |
-| bizEcosystemLogicProxy.deployment.readinessProbe.timeoutSeconds | int | `30` |  |
-| bizEcosystemLogicProxy.deployment.replicaCount | int | `1` |  |
-| bizEcosystemLogicProxy.deployment.revisionHistoryLimit | int | `3` |  |
-| bizEcosystemLogicProxy.deployment.tolerations | list | `[]` |  |
-| bizEcosystemLogicProxy.deployment.updateStrategy.type | string | `"Recreate"` |  |
 | bizEcosystemLogicProxy.elastic.engine | string | `"elasticsearch"` | indexing engine of logic proxy |
 | bizEcosystemLogicProxy.elastic.url | string | `"elasticsearch:9200"` | URL of elasticsearch service |
 | bizEcosystemLogicProxy.elastic.version | int | `7` | API version of elasticsearch |
@@ -166,6 +148,25 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.serviceAccount.annotations | object | `{}` |  |
 | bizEcosystemLogicProxy.serviceAccount.create | bool | `false` |  |
 | bizEcosystemLogicProxy.serviceAccount.name | string | `"ssc"` |  |
+| bizEcosystemLogicProxy.statefulset.additionalAnnotations | object | `{}` |  |
+| bizEcosystemLogicProxy.statefulset.additionalLabels | object | `{}` |  |
+| bizEcosystemLogicProxy.statefulset.affinity | object | `{}` |  |
+| bizEcosystemLogicProxy.statefulset.image.pullPolicy | string | `"IfNotPresent"` |  |
+| bizEcosystemLogicProxy.statefulset.image.repository | string | `"fiware/biz-ecosystem-logic-proxy"` |  |
+| bizEcosystemLogicProxy.statefulset.image.tag | string | `"v8.0.0"` |  |
+| bizEcosystemLogicProxy.statefulset.livenessProbe.initialDelaySeconds | int | `61` |  |
+| bizEcosystemLogicProxy.statefulset.livenessProbe.periodSeconds | int | `30` |  |
+| bizEcosystemLogicProxy.statefulset.livenessProbe.successThreshold | int | `1` |  |
+| bizEcosystemLogicProxy.statefulset.livenessProbe.timeoutSeconds | int | `30` |  |
+| bizEcosystemLogicProxy.statefulset.nodeSelector | object | `{}` |  |
+| bizEcosystemLogicProxy.statefulset.readinessProbe.initialDelaySeconds | int | `60` |  |
+| bizEcosystemLogicProxy.statefulset.readinessProbe.periodSeconds | int | `30` |  |
+| bizEcosystemLogicProxy.statefulset.readinessProbe.successThreshold | int | `1` |  |
+| bizEcosystemLogicProxy.statefulset.readinessProbe.timeoutSeconds | int | `30` |  |
+| bizEcosystemLogicProxy.statefulset.replicaCount | int | `1` |  |
+| bizEcosystemLogicProxy.statefulset.revisionHistoryLimit | int | `3` |  |
+| bizEcosystemLogicProxy.statefulset.tolerations | list | `[]` |  |
+| bizEcosystemLogicProxy.statefulset.updateStrategy.type | string | `"RollingUpdate"` |  |
 | bizEcosystemLogicProxy.theme.annotations | object | `{}` | PVC Annotations |
 | bizEcosystemLogicProxy.theme.enabled | bool | `false` | Enable theme |
 | bizEcosystemLogicProxy.theme.image | string | `"my-theme-image:latest"` |  |
@@ -245,7 +246,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | oauth.isLegacy | bool | `false` | Whether the used FIWARE IDM is version 6 or lower |
 | oauth.oidc | bool | `false` | Set to true if OpenID Connect protocol should be used |
 | oauth.orgadminrole | string | `"orgAdmin"` | Role defined in the IDM client app for organization admins of the BAE  |
-| oauth.provider | string | `"fiware"` | IDP provider for passport strategy (fiware, keycloak, github, ...) |
+| oauth.provider | string | `"fiware"` | Default role: Role to be used if no role is assigned to user (optional) -- IDP provider for passport strategy (fiware, keycloak, github, ...) |
 | oauth.sellerrole | string | `"seller"` | Seller role |
 | oauth.server | string | `"http://accounts.fiware.org"` | External URL of the FIWARE IDM used for user authentication |
 
