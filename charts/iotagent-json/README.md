@@ -2,7 +2,7 @@
 
 ![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
 
-A Helm chart for running the fiware iot agent for the iotagent-json  on kubernetes.
+A Helm chart for running the fiware iotagent-json on kubernetes.
 
 **Homepage:** <https://fiware-iotagent-json.readthedocs.io/en/latest/>
 
@@ -10,7 +10,7 @@ A Helm chart for running the fiware iot agent for the iotagent-json  on kubernet
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Sunny Malik  | t_sunny.malik@india.nec.com |  |
+| Sunny Malik | t_sunny.malik@india.nec.com |  |
 
 ## Source Code
 
@@ -28,7 +28,7 @@ A Helm chart for running the fiware iot agent for the iotagent-json  on kubernet
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | deployment.amqpPort | int | `5672` | port to be used by the service for amqp communication |
-| deployment.httpNorthPort | int | `4061` | port to be used by the service for northBound communication |
+| deployment.httpNorthPort | int | `4041` | port to be used by the service for northBound communication |
 | deployment.httpSouthPort | int | `7896` | port to be used by the service for southBound communication |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"fiware/iotagent-json"` | iotagent image name ref: https://hub.docker.com/r/fiware/iotagent-json/ |
@@ -58,16 +58,16 @@ A Helm chart for running the fiware iot agent for the iotagent-json  on kubernet
 | ingress.amqp | object | `{"annotations":{},"enabled":false,"hosts":[],"tls":[]}` | configuration for the amqp ingress |
 | ingress.amqp.annotations | object | `{}` | annotations to be added to the ingress |
 | ingress.amqp.enabled | bool | `false` | should there be an ingress to connect iotagent with the public internet |
-| ingress.httpNorth | object | `{"annotations":null,"enabled":true,"hosts":null,"tls":[]}` | configuration for the north bound http ingress |
+| ingress.httpNorth | object | `{"annotations":null,"enabled":false,"hosts":null,"tls":[]}` | configuration for the north bound http ingress |
 | ingress.httpNorth.annotations | string | `nil` | annotations to be added to the ingress |
-| ingress.httpNorth.enabled | bool | `true` | should there be an ingress to connect iotagent with the public internet |
-| ingress.httpSouth | object | `{"annotations":{},"enabled":true,"hosts":[],"tls":[]}` | configuration for the south bound http ingress |
+| ingress.httpNorth.enabled | bool | `false` | should there be an ingress to connect iotagent with the public internet |
+| ingress.httpSouth | object | `{"annotations":{},"enabled":false,"hosts":[],"tls":[]}` | configuration for the south bound http ingress |
 | ingress.httpSouth.annotations | object | `{}` | annotations to be added to the ingress |
-| ingress.httpSouth.enabled | bool | `true` | should there be an ingress to connect iotagent with the public internet |
+| ingress.httpSouth.enabled | bool | `false` | should there be an ingress to connect iotagent with the public internet |
 | ingress.mqtt | object | `{"annotations":{},"enabled":false,"hosts":[],"tls":[]}` | configuration for the mqtt ingress |
 | ingress.mqtt.annotations | object | `{}` | annotations to be added to the ingress |
 | ingress.mqtt.enabled | bool | `false` | should there be an ingress to connect iotagent with the public internet |
-| iota.configRetrieval | bool | `false` | indicating whether the incoming notifications to the IoTAgent should be processed using the bidirectionality plugin from the latest versions of the library or the JSON-specific configuration retrieval mechanism. |
+| iota.configRetrieval | bool | `false` | indicating whether the incoming notifications to the IoTAgent should be processed using the bidirectionality plugin from the latest versions of the library or the UL-specific configuration retrieval mechanism. |
 | iota.contextBroker | object | `{"host":"orion","port":1026}` | contextbroker to be used with the agent |
 | iota.contextBroker.host | string | `"orion"` | host of the broker |
 | iota.contextBroker.port | int | `1026` | port of the broker |

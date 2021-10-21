@@ -1,6 +1,6 @@
 # iotagent-ul
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
+![Version: 0.0.4](https://img.shields.io/badge/Version-0.0.4-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
 
 A Helm chart for running the fiware iot agent for the ultralight 2.0 protocol on kubernetes.
 
@@ -58,12 +58,12 @@ A Helm chart for running the fiware iot agent for the ultralight 2.0 protocol on
 | ingress.amqp | object | `{"annotations":{},"enabled":false,"hosts":[],"tls":[]}` | configuration for the amqp ingress |
 | ingress.amqp.annotations | object | `{}` | annotations to be added to the ingress |
 | ingress.amqp.enabled | bool | `false` | should there be an ingress to connect iotagent with the public internet |
-| ingress.httpNorth | object | `{"annotations":null,"enabled":true,"hosts":null,"tls":[]}` | configuration for the north bound http ingress |
+| ingress.httpNorth | object | `{"annotations":null,"enabled":false,"hosts":null,"tls":[]}` | configuration for the north bound http ingress |
 | ingress.httpNorth.annotations | string | `nil` | annotations to be added to the ingress |
-| ingress.httpNorth.enabled | bool | `true` | should there be an ingress to connect iotagent with the public internet |
-| ingress.httpSouth | object | `{"annotations":{},"enabled":true,"hosts":[],"tls":[]}` | configuration for the south bound http ingress |
+| ingress.httpNorth.enabled | bool | `false` | should there be an ingress to connect iotagent with the public internet |
+| ingress.httpSouth | object | `{"annotations":{},"enabled":false,"hosts":[],"tls":[]}` | configuration for the south bound http ingress |
 | ingress.httpSouth.annotations | object | `{}` | annotations to be added to the ingress |
-| ingress.httpSouth.enabled | bool | `true` | should there be an ingress to connect iotagent with the public internet |
+| ingress.httpSouth.enabled | bool | `false` | should there be an ingress to connect iotagent with the public internet |
 | ingress.mqtt | object | `{"annotations":{},"enabled":false,"hosts":[],"tls":[]}` | configuration for the mqtt ingress |
 | ingress.mqtt.annotations | object | `{}` | annotations to be added to the ingress |
 | ingress.mqtt.enabled | bool | `false` | should there be an ingress to connect iotagent with the public internet |
