@@ -34,8 +34,6 @@ oauth:
   aggregatorrole: Aggregator
   # -- Role defined in the IDM client app for organization admins of the BAE 
   orgadminrole: orgAdmin
-  # -- Default role: Role to be used if no role is assigned to user (optional)
-  #defaultRole: seller
   # -- IDP provider for passport strategy (fiware, keycloak, github, ...)
   provider: fiware
   # -- Whether the used FIWARE IDM is version 6 or lower
