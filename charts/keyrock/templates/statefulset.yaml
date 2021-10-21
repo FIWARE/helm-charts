@@ -45,6 +45,10 @@ spec:
               mountPath: {{ .Values.theme.sourceTheme }}
             - name: themes-img
               mountPath: {{ .Values.theme.sourceImg }}
+            {{- if .Values.theme.sourceFonts }}
+            - name: themes-fonts
+              mountPath: {{ .Values.theme.sourceFonts }}
+            {{- end }}
             {{- if .Values.theme.sourceFavicon }}
             - name: themes-favicon
               mountPath: {{ .Values.theme.sourceFavicon }}
@@ -80,6 +84,10 @@ spec:
               mountPath: {{ .Values.theme.mountTheme }}
             - name: themes-img
               mountPath: {{ .Values.theme.mountImg }}
+            {{- if .Values.theme.sourceFonts }}
+            - name: themes-fonts
+              mountPath: {{ .Values.theme.mountFonts }}
+            {{- end }}
             {{- if .Values.theme.sourceFavicon }}
             - name: themes-favicon
               mountPath: {{ .Values.theme.mountFavicon }}
@@ -151,6 +159,15 @@ spec:
       resources:
         requests:
           storage: {{ .Values.theme.size | quote }}
+  {{- if .Values.theme.sourceFonts }}
+  - metadata:
+      name: themes-fonts
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: {{ .Values.theme.size | quote }}
+  {{- end }}
   {{- if .Values.theme.sourceFavicon }}
   - metadata:
       name: themes-favicon

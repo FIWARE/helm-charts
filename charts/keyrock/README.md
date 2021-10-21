@@ -1,6 +1,6 @@
 # keyrock
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -71,6 +71,7 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | theme.image | string | `"my-theme-image:latest"` |  |
 | theme.imagePullPolicy | string | `"IfNotPresent"` |  |
 | theme.mountFavicon | string | `"/opt/fiware-idm/public/favicon.ico"` |  |
+| theme.mountFonts | string | `"/opt/fiware-idm/public/fonts/my-fonts"` |  |
 | theme.mountImg | string | `"/opt/fiware-idm/public/img/my-theme"` |  |
 | theme.mountTheme | string | `"/opt/fiware-idm/themes/my-theme"` |  |
 | theme.name | string | `"default"` |  |
