@@ -246,7 +246,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | oauth.isLegacy | bool | `false` | Whether the used FIWARE IDM is version 6 or lower |
 | oauth.oidc | bool | `false` | Set to true if OpenID Connect protocol should be used |
 | oauth.orgadminrole | string | `"orgAdmin"` | Role defined in the IDM client app for organization admins of the BAE  |
-| oauth.provider | string | `"fiware"` | Default role: Role to be used if no role is assigned to user (optional) -- IDP provider for passport strategy (fiware, keycloak, github, ...) |
+| oauth.provider | string | `"fiware"` |  |
 | oauth.sellerrole | string | `"seller"` | Seller role |
 | oauth.server | string | `"http://accounts.fiware.org"` | External URL of the FIWARE IDM used for user authentication |
 
