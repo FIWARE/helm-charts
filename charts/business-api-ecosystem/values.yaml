@@ -38,8 +38,10 @@ oauth:
   provider: fiware
   # -- Whether the used FIWARE IDM is version 6 or lower
   isLegacy: False
-  
+  # Default role: Role to be used if no role is assigned to user (optional)
+  #defaultRole: seller
 
+  
 ## -- External URL used to access the BAE frontend (logic proxy)
 ## Should match the host of the Ingress or Route of the Logic Proxy
 ##
