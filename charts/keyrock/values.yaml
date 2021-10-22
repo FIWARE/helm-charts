@@ -176,12 +176,16 @@ theme:
     sourceTheme: /themes/my-theme
     ## Path to the source image files inside the container
     sourceImg: /img/my-theme
+    ## Optional: Path to the source fonts files inside the container
+    #sourceFonts: /fonts/my-fonts
     ## Optional: Path to the source favicon directory inside the container
     #sourceFavicon: /favicon
     ## Mount path for the source theme files
     mountTheme: /opt/fiware-idm/themes/my-theme
     ## Mount path for the source image files
     mountImg: /opt/fiware-idm/public/img/my-theme
+    ## Mount path for the source fonts files
+    mountFonts: /opt/fiware-idm/public/fonts/my-fonts
     ## Mount path for the source favicon
     mountFavicon: /opt/fiware-idm/public/favicon.ico
     
