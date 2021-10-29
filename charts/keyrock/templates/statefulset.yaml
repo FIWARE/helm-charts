@@ -93,6 +93,10 @@ spec:
               mountPath: {{ .Values.theme.mountFavicon }}
               subPath: "favicon.ico"
             {{- end }}
+            {{- if .Values.certs.pvc.enabled }}
+            - name: certs
+              mountPath: /opt/fiware-idm/certs
+            {{- end }}
           {{- end }}
           env:
             - name: IDM_PORT
@@ -122,6 +126,8 @@ spec:
             #will be handled by the ingress
             - name: IDM_HTTPS_ENABLED
               value: "false"
+            - name: IDM_OIDC_JWT_ALGORITHM
+              value: {{ .Values.certs.oidcJwtAlgorithm | quote }}
             {{- if .Values.theme.enabled }}
             - name: IDM_THEME
               value: {{ .Values.theme.name | quote }}
@@ -142,6 +148,12 @@ spec:
       {{- with .Values.statefulset.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.certs.pvc.enabled }}
+      volumes:
+        - name: certs
+          persistentVolumeClaim:
+            claimName: {{ include "keyrock.fullname" . }}-certs
       {{- end }}
   {{- if .Values.theme.enabled }}
   volumeClaimTemplates:
