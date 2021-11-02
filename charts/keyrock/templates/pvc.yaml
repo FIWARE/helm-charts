@@ -1,0 +1,18 @@
+{{- if .Values.certs.pvc.enabled }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "keyrock.fullname" . }}-certs
+  {{- with .Values.certs.pvc.annotations  }}
+  annotations:
+  {{ toYaml . | indent 4 }}
+  {{- end }}
+  labels:
+    {{- include "keyrock.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.certs.pvc.size | quote }}
+{{- end }}
