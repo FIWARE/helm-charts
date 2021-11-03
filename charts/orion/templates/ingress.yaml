@@ -1,7 +1,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "orion.fullname" . -}}
 {{- $servicePort := .Values.service.port -}}
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "orion.fullname" . }}
@@ -31,9 +31,12 @@ spec:
         paths:
         {{- range .paths }}
         - path: {{ . }}
+          pathType: Prefix
           backend:
-            serviceName: {{ $fullName }}
-            servicePort: {{ $servicePort }}
+            service:
+              name: {{ $fullName }}
+              port:
+                number: {{ $servicePort }}
         {{- end }}
   {{- end }}
 {{- end }}
