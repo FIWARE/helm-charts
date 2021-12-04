@@ -2,24 +2,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    service: {{ .Values.eureka.eurekaLabel }}
   name: {{ include "eureka.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  labels:
+    {{ include "eureka.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.eureka.replicas }}
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "eureka.fullname" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
   {{- with .Values.eureka.updateStrategy }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  selector:
+    matchLabels:
+      {{- include "eureka.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        service: {{ include "eureka.fullname" . }}
+        {{ include "eureka.labels" . | nindent 8 }}
+        {{- with .Values.eureka.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.eureka.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.eureka.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
     spec:
       containers:
       - image: {{ .Values.eureka.image.repository }}:{{ .Values.eureka.image.tag }}
@@ -33,30 +40,23 @@ spec:
         ports:
         - containerPort: 8761
           protocol: TCP
-        {{- if .Values.eureka.readinessProbe.enabled }}
+       
         readinessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:8761/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 8761
           failureThreshold: {{ .Values.eureka.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.eureka.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.eureka.readinessProbe.periodSeconds }}
-          {{- end }}
-        {{- if .Values.eureka.livenessProbe.enabled }}
+          
         livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:8761/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 8761
           failureThreshold: {{ .Values.eureka.livenessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.eureka.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.eureka.livenessProbe.periodSeconds }}
-          {{- end }}   
+           
         resources:
 {{ toYaml .Values.eureka.resources | indent 10 }}
       restartPolicy: {{ .Values.eureka.restartPolicy }}
@@ -66,3 +66,4 @@ spec:
       securityContext: {{ .Values.eureka.securityContext | toYaml }}
       terminationGracePeriodSeconds: {{ .Values.eureka.terminationGracePeriodSeconds }}
 {{- end }}
+

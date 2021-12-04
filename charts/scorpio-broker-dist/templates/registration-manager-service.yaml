@@ -2,15 +2,14 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: {{ include "registryManager.fullname" . }}
   labels:
-    service: {{ .Values.registryManager.registryLabel }}
-  name: {{ include "registry-manager.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+    {{ include "registryManager.labels" . | nindent 4 }}
 spec:
   ports:
   - name: "1030"
     port: 1030
     targetPort: 1030
   selector:
-    service: {{ include "registry-manager.fullname" . }}
+    {{ include "registryManager.matchLabels" . | nindent 4 }}
 {{- end }}

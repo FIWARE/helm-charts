@@ -2,24 +2,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ include "entityManager.fullname" . }}
   labels:
-    service: {{ .Values.entityManager.entityLabel }}
-  name: {{ include "entity-manager.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+    {{- include "entityManager.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.entityManager.replicas }}
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "entity-manager.fullname" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
   {{- with .Values.entityManager.updateStrategy }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+
+  selector:
+    matchLabels:
+      {{- include "entityManager.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        service: {{ include "entity-manager.fullname" . }}
+        {{ include "entityManager.labels" . | nindent 8 }}
+        {{- with .Values.entityManager.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.entityManager.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.entityManager.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
     spec:
       containers:
       - image: {{ .Values.entityManager.image.repository }}:{{ .Values.entityManager.image.tag }}
@@ -29,7 +37,7 @@ spec:
             value: {{ .Values.springArgs.value }}
         {{- end }}
         imagePullPolicy: {{ .Values.entityManager.image.pullPolicy }}
-        name: {{ include "entity-manager.fullname" . }}
+        name: {{ include "entityManager.fullname" . }}
         ports:
         - containerPort: 1025
           protocol: TCP
@@ -39,31 +47,25 @@ spec:
               command:
               - /bin/sh
               - -c
-              - curl -X PUT {{ .Values.entityManager.eurekaAddress }}
-        {{- if .Values.entityManager.readinessProbe.enabled }}
+              - curl -X PUT "http://{{ .Values.eureka.hostname }}:{{ .Values.eureka.port }}/eureka/apps/ENTITY-MANAGER/$HOSTNAME:entity-manager:1025/status?value=OUT_OF_SERVICE"
+     
         readinessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:1025/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 1025
           failureThreshold: {{ .Values.entityManager.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.entityManager.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.entityManager.readinessProbe.periodSeconds }}
-          {{- end }}
-        {{- if .Values.entityManager.livenessProbe.enabled }}
+          
+        
         livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:1025/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 1025
           failureThreshold: {{ .Values.entityManager.livenessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.entityManager.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.entityManager.livenessProbe.periodSeconds }}
-          {{- end }}   
+             
         resources:
 {{ toYaml .Values.entityManager.resources | indent 10 }}
       restartPolicy: {{ .Values.entityManager.restartPolicy }}
@@ -73,3 +75,4 @@ spec:
       securityContext: {{ .Values.entityManager.securityContext | toYaml }}
       terminationGracePeriodSeconds: {{ .Values.entityManager.terminationGracePeriodSeconds }}
 {{- end }}
+

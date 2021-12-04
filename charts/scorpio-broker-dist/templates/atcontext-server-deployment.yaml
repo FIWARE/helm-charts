@@ -2,24 +2,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ include "atContextServer.fullname" . }}
   labels:
-    service: {{ .Values.atContextServer.contextLabel }}
-  name: {{ include "at-context-server.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+    {{- include "atContextServer.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.atContextServer.replicas }}
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "at-context-server.fullname" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
   {{- with .Values.atContextServer.updateStrategy }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  selector:
+    matchLabels:
+      {{- include "atContextServer.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        service: {{ include "at-context-server.fullname" . }}
+        {{ include "atContextServer.labels" . | nindent 8 }}
+        {{- with .Values.atContextServer.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.atContextServer.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.atContextServer.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
     spec:
       containers:
       - image: {{ .Values.atContextServer.image.repository }}:{{ .Values.atContextServer.image.tag }}
@@ -29,41 +36,35 @@ spec:
             value: {{ .Values.springArgs.value }}
         {{- end }}
         imagePullPolicy: {{ .Values.atContextServer.image.pullPolicy }}
-        name: {{ include "at-context-server.fullname" . }}
+        name: {{ include "atContextServer.fullname" . }}
         ports:
         - containerPort: 27015
           protocol: TCP
-        {{- if .Values.atContextServer.readinessProbe.enabled }}
+        
         lifecycle:
            preStop:
             exec:
               command:
               - /bin/sh
               - -c
-              - curl -X PUT {{ .Values.atContextServer.eurekaAddress }}
+              - curl -X PUT "http://{{ .Values.eureka.hostname }}:{{ .Values.eureka.port }}/eureka/apps/ATCONTEXT-SERVER/$HOSTNAME:atcontext-server:27015/status?value=OUT_OF_SERVICE"
         readinessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:27015/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
-          failureThreshold: {{ .Values.atContextServer.readinessProbe.failureThreshold }}
+          httpGet:
+            path: /actuator/health
+            port: 27015
           initialDelaySeconds: {{ .Values.atContextServer.readinessProbe.initialDelaySeconds }}
+          failureThreshold: {{ .Values.atContextServer.readinessProbe.failureThreshold }}
           periodSeconds: {{ .Values.atContextServer.readinessProbe.periodSeconds }}
-          {{- end}}
-        {{- if .Values.atContextServer.livenessProbe.enabled }}  
+         
+      
         livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:27015/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
-          failureThreshold: {{ .Values.atContextServer.livenessProbe.failureThreshold }}
+          httpGet:
+            path: /actuator/health
+            port: 27015
           initialDelaySeconds: {{ .Values.atContextServer.livenessProbe.initialDelaySeconds }}
+          failureThreshold: {{ .Values.atContextServer.readinessProbe.failureThreshold }}
           periodSeconds: {{ .Values.atContextServer.livenessProbe.periodSeconds }}
-          {{- end }}
+          
 
         resources:
 {{ toYaml .Values.atContextServer.resources | indent 10 }}
@@ -74,3 +75,4 @@ spec:
       securityContext: {{ .Values.atContextServer.securityContext | toYaml }}
       terminationGracePeriodSeconds: {{ .Values.atContextServer.terminationGracePeriodSeconds }}
 {{- end }}
+

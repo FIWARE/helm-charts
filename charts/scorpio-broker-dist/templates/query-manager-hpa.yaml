@@ -2,13 +2,12 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
- name: {{ include "query-manager.fullname" . }}-hpa
- namespace: {{ .Release.Namespace }}
+ name: {{ include "queryManager.fullname" . }}-hpa
 spec:
  scaleTargetRef:
    apiVersion: apps/v1
    kind: Deployment
-   name: {{ include "query-manager.fullname" . }}
+   name: {{ include "queryManager.fullname" . }}
  minReplicas: {{ .Values.queryManager.hpa.minReplicas }}
  maxReplicas: {{ .Values.queryManager.hpa.maxReplicas }}
  targetCPUUtilizationPercentage: {{ .Values.queryManager.hpa.targetCPUUtilizationPercentage }}

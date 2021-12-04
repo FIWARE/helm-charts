@@ -2,13 +2,12 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
- name: {{ include "history-manager.fullname" . }}-hpa
- namespace: {{ .Release.Namespace }}
+ name: {{ include "historyManager.fullname" . }}-hpa
 spec:
  scaleTargetRef:
    apiVersion: apps/v1
    kind: Deployment
-   name: {{ include "history-manager.fullname" . }}
+   name: {{ include "historyManager.fullname" . }}
  minReplicas: {{ .Values.historyManager.hpa.minReplicas }}
  maxReplicas: {{ .Values.historyManager.hpa.maxReplicas }}
  targetCPUUtilizationPercentage: {{ .Values.historyManager.hpa.targetCPUUtilizationPercentage }}

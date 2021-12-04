@@ -2,24 +2,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ include "subscriptionManager.fullname" . }}
   labels:
-    service: {{ .Values.subscriptionManager.subscriptionLabel }}
-  name: {{ include "subscription-manager.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+    {{ include "subscriptionManager.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.subscriptionManager.replicas }}
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "subscription-manager.fullname" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
   {{- with .Values.subscriptionManager.updateStrategy }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  selector:
+    matchLabels:
+      {{- include "subscriptionManager.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        service: {{ include "subscription-manager.fullname" . }}
+        {{ include "subscriptionManager.labels" . | nindent 8 }}
+        {{- with .Values.subscriptionManager.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.subscriptionManager.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.subscriptionManager.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
     spec:
       containers:
       - image: {{ .Values.subscriptionManager.image.repository }}:{{ .Values.subscriptionManager.image.tag }}
@@ -29,7 +36,7 @@ spec:
             value: {{ .Values.springArgs.value }}
         {{- end }}
         imagePullPolicy: {{ .Values.subscriptionManager.image.pullPolicy }}
-        name: {{ include "subscription-manager.fullname" . }}
+        name: {{ include "subscriptionManager.fullname" . }}
         ports:
         - containerPort: 2025
           protocol: TCP
@@ -39,31 +46,25 @@ spec:
               command:
               - /bin/sh
               - -c
-              - curl -X PUT {{ .Values.subscriptionManager.eurekaAddress }}
-        {{- if .Values.subscriptionManager.readinessProbe.enabled }}
+              - curl -X PUT "http://{{ .Values.eureka.hostname }}:{{ .Values.eureka.port }}/eureka/apps/SUBSCRIPTION-MANAGER/$HOSTNAME:subscription-manager:2025/status?value=OUT_OF_SERVICE"
+        
         readinessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:2025/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 2025
           failureThreshold: {{ .Values.subscriptionManager.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.subscriptionManager.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.subscriptionManager.readinessProbe.periodSeconds }}
-          {{- end }}
-        {{- if .Values.subscriptionManager.livenessProbe.enabled }}  
+         
+          
         livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:2025/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 2025
           failureThreshold: {{ .Values.subscriptionManager.livenessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.subscriptionManager.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.subscriptionManager.livenessProbe.periodSeconds }}
-          {{- end }}  
+            
         resources:
 {{ toYaml .Values.subscriptionManager.resources | indent 10 }}
       restartPolicy: {{ .Values.subscriptionManager.restartPolicy }}
@@ -73,3 +74,4 @@ spec:
       securityContext: {{ .Values.subscriptionManager.securityContext | toYaml }}
       terminationGracePeriodSeconds: {{ .Values.subscriptionManager.terminationGracePeriodSeconds }}
 {{- end }}
+

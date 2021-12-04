@@ -2,15 +2,14 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: {{ include "storageManager.fullname" . }}
   labels:
-    service: {{ .Values.storageManager.storageLabel }}
-  name: {{ include "storage-manager.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+    {{ include "storageManager.labels" . | nindent 4 }}
 spec:
   ports:
   - name: "1029"
     port: 1029
     targetPort: 1029
   selector:
-    service: {{ include "storage-manager.fullname" . }}
+    {{ include "storageManager.matchLabels" . | nindent 4 }}
 {{- end }}

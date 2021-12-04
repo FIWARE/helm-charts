@@ -2,13 +2,12 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
- name: {{ include "entity-manager.fullname" . }}-hpa
- namespace: {{ .Release.Namespace }}
+ name: {{ include "entityManager.fullname" . }}-hpa
 spec:
  scaleTargetRef:
    apiVersion: apps/v1
    kind: Deployment
-   name: {{ include "entity-manager.fullname" . }}
+   name: {{ include "entityManager.fullname" . }}
  minReplicas: {{ .Values.entityManager.hpa.minReplicas }}
  maxReplicas: {{ .Values.entityManager.hpa.maxReplicas }}
  targetCPUUtilizationPercentage: {{ .Values.entityManager.hpa.targetCPUUtilizationPercentage }}

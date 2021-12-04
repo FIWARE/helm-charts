@@ -2,24 +2,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ include "historyManager.fullname" . }}
   labels:
-    service: {{ .Values.historyManager.historyLabel }}
-  name: {{ include "history-manager.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+    {{ include "historyManager.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.historyManager.replicas }}
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "history-manager.fullname" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
   {{- with .Values.historyManager.updateStrategy }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  selector:
+    matchLabels:
+      {{- include "historyManager.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        service: {{ include "history-manager.fullname" . }}
+        {{ include "historyManager.labels" . | nindent 8 }}
+        {{- with .Values.historyManager.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.historyManager.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.historyManager.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
     spec:
       containers:
       - image: {{ .Values.historyManager.image.repository }}:{{ .Values.historyManager.image.tag }}
@@ -29,7 +36,7 @@ spec:
             value: {{ .Values.springArgs.value }}
         {{- end }}
         imagePullPolicy: {{ .Values.historyManager.image.pullPolicy }}
-        name: {{ include "history-manager.fullname" . }}
+        name: {{ include "historyManager.fullname" . }}
         ports:
         - containerPort: 1040
           protocol: TCP
@@ -39,31 +46,25 @@ spec:
               command:
               - /bin/sh
               - -c
-              - curl -X PUT {{ .Values.historyManager.eurekaAddress }}
-        {{- if .Values.historyManager.readinessProbe.enabled }}
+              - curl -X PUT "http://{{ .Values.eureka.hostname }}:{{ .Values.eureka.port }}/eureka/apps/HISTORY-MANAGER/$HOSTNAME:history-manager:1040/status?value=OUT_OF_SERVICE"
+        
         readinessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:1040/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 1040
           failureThreshold: {{ .Values.historyManager.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.historyManager.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.historyManager.readinessProbe.periodSeconds }}
-          {{- end }}
-        {{- if .Values.historyManager.livenessProbe.enabled }}
+          
+        
         livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:1040/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 1040
           failureThreshold: {{ .Values.historyManager.livenessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.historyManager.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.historyManager.livenessProbe.periodSeconds }}
-          {{- end }}  
+          
         resources:
 {{ toYaml .Values.historyManager.resources | indent 10 }}
       restartPolicy: {{ .Values.historyManager.restartPolicy }}
@@ -73,3 +74,4 @@ spec:
       securityContext: {{ .Values.historyManager.securityContext | toYaml }}
       terminationGracePeriodSeconds: {{ .Values.historyManager.terminationGracePeriodSeconds }}
 {{- end }}
+

@@ -2,24 +2,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ include "configServer.fullname" . }}
   labels:
-    service: {{ .Values.configServer.configLabel }}
-  name: {{ include "config-server.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+    {{- include "configServer.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.configServer.replicas }}
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "config-server.fullname" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
   {{- with .Values.configServer.updateStrategy }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  selector:
+    matchLabels:
+      {{- include "configServer.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        service: {{ include "config-server.fullname" . }}
+        {{ include "configServer.labels" . | nindent 8 }}
+        {{- with .Values.configServer.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.configServer.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.configServer.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
     spec:
       containers:
       - image: {{ .Values.configServer.image.repository }}:{{ .Values.configServer.image.tag }}
@@ -29,7 +36,7 @@ spec:
             value: {{ .Values.springArgs.value }}
         {{- end }}
         imagePullPolicy: {{ .Values.configServer.image.pullPolicy }}
-        name: {{ include "config-server.fullname" . }}
+        name: {{ include "configServer.fullname" . }}
         ports:
         - containerPort: 8888
           protocol: TCP
@@ -39,31 +46,24 @@ spec:
               command:
               - /bin/sh
               - -c
-              - curl -X PUT {{ .Values.configServer.eurekaAddress }}
-        {{- if .Values.configServer.readinessProbe.enabled }}
+              - curl -X PUT "http://{{ .Values.eureka.hostname }}:{{ .Values.eureka.port }}eureka/apps/CONFIGSERVER/$HOSTNAME:configserver:8888/status?value=OUT_OF_SERVICE"
+        
         readinessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:8888/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 8888
           failureThreshold: {{ .Values.configServer.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.configServer.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.configServer.readinessProbe.periodSeconds }}
-          {{- end }}
-        {{- if .Values.configServer.livenessProbe.enabled }}  
+          
         livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:8888/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 8888
           failureThreshold: {{ .Values.configServer.livenessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.configServer.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.configServer.livenessProbe.periodSeconds }}
-          {{- end }}   
+         
         resources:
 {{ toYaml .Values.configServer.resources | indent 10 }}
       restartPolicy: {{ .Values.configServer.restartPolicy }}
@@ -73,3 +73,4 @@ spec:
       securityContext: {{ .Values.configServer.securityContext | toYaml }}
       terminationGracePeriodSeconds: {{ .Values.configServer.terminationGracePeriodSeconds }}
 {{- end }}
+

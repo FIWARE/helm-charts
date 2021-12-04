@@ -2,24 +2,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ include "queryManager.fullname" . }}
   labels:
-    service: {{ .Values.queryManager.queryLabel }}
-  name: {{ include "query-manager.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+    {{ include "queryManager.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.queryManager.replicas }}
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "query-manager.fullname" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
   {{- with .Values.queryManager.updateStrategy }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  selector:
+    matchLabels:
+      {{- include "queryManager.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        service: {{ include "query-manager.fullname" . }}
+        {{ include "queryManager.labels" . | nindent 8 }}
+        {{- with .Values.queryManager.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.queryManager.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.queryManager.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
     spec:
       containers:
       - image: {{ .Values.queryManager.image.repository }}:{{ .Values.queryManager.image.tag }}
@@ -29,7 +36,7 @@ spec:
             value: {{ .Values.springArgs.value }}
         {{- end }}
         imagePullPolicy: {{ .Values.queryManager.image.pullPolicy }}
-        name: {{ include "query-manager.fullname" . }}
+        name: {{ include "queryManager.fullname" . }}
         ports:
         - containerPort: 1026
           protocol: TCP
@@ -39,31 +46,25 @@ spec:
               command:
               - /bin/sh
               - -c
-              - curl -X PUT {{ .Values.queryManager.eurekaAddress }}
-        {{- if .Values.queryManager.readinessProbe.enabled }}
+              - curl -X PUT "http://{{ .Values.eureka.hostname }}:{{ .Values.eureka.port }}/eureka/apps/QUERY-MANAGER/$HOSTNAME:query-manager:1026/status?value=OUT_OF_SERVICE"
+        
         readinessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:1026/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 1026
           failureThreshold: {{ .Values.queryManager.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.queryManager.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.queryManager.readinessProbe.periodSeconds }}
-          {{- end }}
-        {{- if .Values.queryManager.livenessProbe.enabled }}
+          
+        
         livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:1026/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 1026
           failureThreshold: {{ .Values.queryManager.livenessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.queryManager.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.queryManager.livenessProbe.periodSeconds }}
-          {{- end }}  
+          
         resources:
 {{ toYaml .Values.queryManager.resources | indent 10 }}
       restartPolicy: {{ .Values.queryManager.restartPolicy }}
@@ -73,3 +74,4 @@ spec:
       securityContext: {{ .Values.queryManager.securityContext | toYaml }}
       terminationGracePeriodSeconds: {{ .Values.queryManager.terminationGracePeriodSeconds }}
 {{- end }}
+

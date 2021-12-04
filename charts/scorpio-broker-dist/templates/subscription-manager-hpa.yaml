@@ -2,13 +2,12 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
- name: {{ include "subscription-manager.fullname" . }}-hpa
- namespace: {{ .Release.Namespace }}
+ name: {{ include "subscriptionManager.fullname" . }}-hpa
 spec:
  scaleTargetRef:
    apiVersion: apps/v1
    kind: Deployment
-   name: {{ include "subscription-manager.fullname" . }}
+   name: {{ include "subscriptionManager.fullname" . }}
  minReplicas: {{ .Values.subscriptionManager.hpa.minReplicas }}
  maxReplicas: {{ .Values.subscriptionManager.hpa.maxReplicas }}
  targetCPUUtilizationPercentage: {{ .Values.subscriptionManager.hpa.targetCPUUtilizationPercentage }}

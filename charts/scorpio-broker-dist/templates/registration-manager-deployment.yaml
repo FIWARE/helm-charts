@@ -2,24 +2,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ include "registryManager.fullname" . }}
   labels:
-    service: {{ .Values.registryManager.registryLabel }}
-  name: {{ include "registry-manager.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+    {{ include "registryManager.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.registryManager.replicas }}
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "registry-manager.fullname" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
   {{- with .Values.registryManager.updateStrategy }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  selector:
+    matchLabels:
+      {{- include "registryManager.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        service: {{ include "registry-manager.fullname" . }}
+        {{ include "registryManager.labels" . | nindent 8 }}
+        {{- with .Values.registryManager.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.registryManager.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.registryManager.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
     spec:
       containers:
       - image: {{ .Values.registryManager.image.repository }}:{{ .Values.registryManager.image.tag }}
@@ -29,7 +36,7 @@ spec:
             value: {{ .Values.springArgs.value }}
         {{- end }}
         imagePullPolicy: {{ .Values.registryManager.image.pullPolicy }}
-        name: {{ include "registry-manager.fullname" . }}
+        name: {{ include "registryManager.fullname" . }}
         ports:
         - containerPort: 1030
           protocol: TCP
@@ -39,31 +46,25 @@ spec:
               command:
               - /bin/sh
               - -c
-              - curl -X PUT {{ .Values.registryManager.eurekaAddress }}
-        {{- if .Values.registryManager.readinessProbe.enabled }}
+              - curl -X PUT "http://{{ .Values.eureka.hostname }}:{{ .Values.eureka.port }}/eureka/apps/C-SOURCES/$HOSTNAME:c-sources:1030/status?value=OUT_OF_SERVICE"
+        
         readinessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:1030/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 1030
           failureThreshold: {{ .Values.registryManager.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.registryManager.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.registryManager.readinessProbe.periodSeconds }}
-          {{- end }}
-        {{- if .Values.registryManager.livenessProbe.enabled }}
+          
+        
         livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:1030/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 1030
           failureThreshold: {{ .Values.registryManager.livenessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.registryManager.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.registryManager.livenessProbe.periodSeconds }}
-          {{- end }}  
+            
         resources:
 {{ toYaml .Values.registryManager.resources | indent 10 }}
       restartPolicy: {{ .Values.registryManager.restartPolicy }}
@@ -73,3 +74,4 @@ spec:
       securityContext: {{ .Values.registryManager.securityContext | toYaml }}
       terminationGracePeriodSeconds: {{ .Values.registryManager.terminationGracePeriodSeconds }}
 {{- end }}
+

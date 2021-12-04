@@ -2,16 +2,15 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: {{ include "configServer.fullname" . }}
   labels:
-    service: {{ .Values.configServer.configLabel }}
-  name: {{ include "config-server.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+    {{- include "configServer.labels" . | nindent 4 }}
 spec:
   ports:
   - name: "8888"
     port: 8888
     targetPort: 8888
   selector:
-    service: {{ .Values.configServer.name }}
+    {{- include "configServer.matchLabels" . | nindent 4 }}
 {{- end }}
 

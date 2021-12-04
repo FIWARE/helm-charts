@@ -2,24 +2,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    service: {{ .Values.gateway.gatewayLabel }}
   name: {{ include "gateway.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  labels:
+    {{ include "gateway.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.gateway.replicas }}
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "gateway.fullname" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
   {{- with .Values.gateway.updateStrategy }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  selector:
+    matchLabels:
+      {{- include "gateway.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        service: {{ include "gateway.fullname" . }}
+        {{ include "gateway.labels" . | nindent 8 }}
+        {{- with .Values.gateway.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.gateway.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.gateway.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
     spec:
       containers:
       - image: {{ .Values.gateway.image.repository }}:{{ .Values.gateway.image.tag }}
@@ -39,31 +46,25 @@ spec:
               command:
               - /bin/sh
               - -c
-              - curl -X PUT {{ .Values.gateway.eurekaAddress }}
-        {{- if .Values.gateway.readinessProbe.enabled }}
+              - curl -X PUT "http://{{ .Values.eureka.hostname }}:{{ .Values.eureka.port }}/eureka/apps/GATEWAY/$HOSTNAME:gateway:9090/status?value=OUT_OF_SERVICE"
+        
         readinessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:9090/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 9090
           failureThreshold: {{ .Values.gateway.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.gateway.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.gateway.readinessProbe.periodSeconds }}
-          {{- end }}
-        {{- if .Values.gateway.livenessProbe.enabled }}
+          
+        
         livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:9090/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 9090
           failureThreshold: {{ .Values.gateway.livenessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.gateway.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.gateway.livenessProbe.periodSeconds }}
-          {{- end }}    
+              
         resources:
 {{ toYaml .Values.gateway.resources | indent 10 }}
       restartPolicy: {{ .Values.gateway.restartPolicy }}
@@ -73,3 +74,4 @@ spec:
       securityContext: {{ .Values.gateway.securityContext | toYaml }}
       terminationGracePeriodSeconds: {{ .Values.gateway.terminationGracePeriodSeconds }}
 {{- end }}
+

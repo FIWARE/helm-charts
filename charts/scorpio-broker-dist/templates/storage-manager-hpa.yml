@@ -2,13 +2,12 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
- name: {{ include "storage-manager.fullname" . }}-hpa
- namespace: {{ .Release.Namespace }}
+ name: {{ include "storageManager.fullname" . }}-hpa
 spec:
  scaleTargetRef:
    apiVersion: apps/v1
    kind: Deployment
-   name: {{ include "storage-manager.fullname" . }}
+   name: {{ include "storageManager.fullname" . }}
  minReplicas: {{ .Values.storageManager.hpa.minReplicas }}
  maxReplicas: {{ .Values.storageManager.hpa.maxReplicas }}
  targetCPUUtilizationPercentage: {{ .Values.storageManager.hpa.targetCPUUtilizationPercentage }}

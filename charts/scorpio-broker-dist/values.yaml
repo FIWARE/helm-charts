@@ -1,6 +1,3 @@
-## namespace for deployment
-namespace: scorpio-broker
-
 ################################### SpringArgs #######################################################################
 springArgs:
   overrideSpringArgs: false
@@ -11,11 +8,12 @@ eureka:
 ## Enable the eureka deployment & service
   enabled: true 
   name: eureka
-## Custom Label value  
-  eurekaLabel: eureka  
 ## Number of eureka instances to deploy
 ##
   replicas: 1
+
+  hostname: eureka
+  port: 8761
 
   service:      
   # -- service type
@@ -40,10 +38,24 @@ eureka:
 ## Please use only latest version of docker images as few older images might not work with kubernetes. 
   image:        
    repository: scorpiobroker/scorpio
-   tag: eureka-server_1.16.0
+   tag: eureka-server_1.1.0
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 # -- specification of the image pull policy
    pullPolicy: Always
+
+  ## -- additional labels for the deployment, if required
+  additionalLabels: {}
+  ## -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  ## -- selector template
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  ## -- tolerations template
+  ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  ## -- affinity template
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
 
 ## eureka containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -58,25 +70,23 @@ eureka:
   # requests: 
   #   cpu: 250m
   #   memory: 256Mi
-  
-## eureka containers'  readiness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-  readinessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10
-
-## eureka containers'  liveness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-  livenessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10      
  
+   ## containers'  readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  readinessProbe:
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
+  ## containers'  liveness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
@@ -109,10 +119,14 @@ eureka:
 ################################### Gateway ##########################################################################
 gateway:
 ## Enable the gateway deployment & service
-  enabled: true 
+  enabled: true
   name: gateway
-## Custom label value
-  gatewayLabel: gateway  
+  ## Type of kubernetes service to deploy. (ClusterIP/NodePort)
+  service:
+    type: NodePort
+    port: 9090
+    ## Provide nodePort if serviceType=NodePort
+    nodePort: 30001
 ## Number of gateway instances to deploy
 ##
   replicas: 1
@@ -131,11 +145,25 @@ gateway:
 ## Please use only latest version of docker images as few older images might not work with kubernetes.
   image:       
    repository: scorpiobroker/scorpio
-   tag: gateway_1.16.0
+   tag: gateway_1.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
    pullPolicy: Always
+
+  ## -- additional labels for the deployment, if required
+  additionalLabels: {}
+  ## -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  ## -- selector template
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  ## -- tolerations template
+  ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  ## -- affinity template
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
 
 ## gateway containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -150,27 +178,24 @@ gateway:
   #   memory: 1Gi
   # requests: 
   #   cpu: 250m
-  #   memory: 256Mi
-  
-## gateway containers'  readiness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-  eurekaAddress: http://eureka:8761/eureka/apps/GATEWAY/$HOSTNAME:gateway:9090/status?value=OUT_OF_SERVICE
-  readinessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10
-
-## gateway containers'  liveness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-  livenessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10      
+  #   memory: 256M
  
+   ## containers'  readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  readinessProbe:
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
+  ## containers'  liveness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
@@ -204,8 +229,6 @@ atContextServer:
 ## Enable the AtContextServer deployment & service
   enabled: true 
   name: at-context-server
-## Custom label value
-  contextLabel: at-context-server  
 ## Number of AtContextServer instances to deploy
 #
   replicas: 1
@@ -226,11 +249,25 @@ atContextServer:
    # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: AtContextServer_1.16.0
+   tag: AtContextServer_1.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
    pullPolicy: Always
+
+  ## -- additional labels for the deployment, if required
+  additionalLabels: {}
+  ## -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  ## -- selector template
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  ## -- tolerations template
+  ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  ## -- affinity template
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
 
 ## AtContextServer containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -246,25 +283,23 @@ atContextServer:
   # requests: 
   #   cpu: 250m
   #   memory: 256Mi
-  
-## AtContextServer containers'  readiness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-  eurekaAddress : http://eureka:8761/eureka/apps/ATCONTEXT-SERVER/$HOSTNAME:atcontext-server:27015/status?value=OUT_OF_SERVICE
-  readinessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10
 
-## AtContextServer containers'  liveness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
+   ## containers'  readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  readinessProbe:
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
+  ## containers'  liveness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   livenessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10      
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
  
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -299,8 +334,6 @@ configServer:
 ## Enable the configServer deployment & service
   enabled: true 
   name: config-server
-## Custom label value
-  configLabel: config-server
   
 ## Number of configServer instances to deploy
 ##
@@ -324,11 +357,25 @@ configServer:
    # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: config-server_1.16.0
+   tag: config-server_1.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
    pullPolicy: Always
+
+  ## -- additional labels for the deployment, if required
+  additionalLabels: {}
+  ## -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  ## -- selector template
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  ## -- tolerations template
+  ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  ## -- affinity template
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
 
 ## configServer containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -344,25 +391,24 @@ configServer:
   # requests: 
   #   cpu: 250m
   #   memory: 256Mi
-  
-## configServer containers'  readiness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-  eurekaAddress: http://eureka:8761/eureka/apps/CONFIGSERVER/$HOSTNAME:configserver:8888/status?value=OUT_OF_SERVICE
-  readinessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10
 
-## ConfigServer containers'  liveness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
+
+   ## containers'  readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  readinessProbe:
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
+  ## containers'  liveness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   livenessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10      
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
  
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -397,8 +443,6 @@ entityManager:
 ## Enable the entityManager deployment & service
   enabled: true 
   name: entity-manager
-## Custom label value
-  entityLabel: entity-manager
   
 ## Number of entityManager instances to deploy
 ##
@@ -422,11 +466,25 @@ entityManager:
    # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: EntityManager_1.16.0
+   tag: EntityManager_1.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
    pullPolicy: Always
+
+  ## -- additional labels for the deployment, if required
+  additionalLabels: {}
+  ## -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  ## -- selector template
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  ## -- tolerations template
+  ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  ## -- affinity template
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
 
 ## entityManager containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -442,25 +500,23 @@ entityManager:
   # requests: 
   #   cpu: 250m
   #   memory: 256Mi
-  
-## entityManager containers'  readiness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-  eurekaAddress: http://eureka:8761/eureka/apps/ENTITY-MANAGER/$HOSTNAME:entity-manager:1025/status?value=OUT_OF_SERVICE
-  readinessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10
 
-## EntityManager containers'  liveness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
+   ## containers'  readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  readinessProbe:
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
+  ## containers'  liveness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   livenessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10      
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+ 
  
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -495,8 +551,6 @@ historyManager:
 ## Enable the HistoryManager deployment & service
   enabled: true 
   name: history-manager
-## Custom label value
-  historyLabel: history-manager
   
 ## Number of HistoryManager instances to deploy
 ##
@@ -520,11 +574,25 @@ historyManager:
    # ref: https://hub.docker.com/r/scorpiobroker/scorpio        
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: HistoryManager_1.16.0
+   tag: HistoryManager_1.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
    pullPolicy: Always
+
+  ## -- additional labels for the deployment, if required
+  additionalLabels: {}
+  ## -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  ## -- selector template
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  ## -- tolerations template
+  ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  ## -- affinity template
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
 
 ## HistoryManager containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -540,25 +608,23 @@ historyManager:
   # requests: 
   #   cpu: 250m
   #   memory: 256Mi
-  
-## HistoryManager containers'  readiness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-  eurekaAddress: http://eureka:8761/eureka/apps/HISTORY-MANAGER/$HOSTNAME:history-manager:1040/status?value=OUT_OF_SERVICE
+ 
+   ## containers'  readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   readinessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
 
-## HistoryManager containers'  liveness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
+  ## containers'  liveness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   livenessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10      
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
  
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -593,8 +659,6 @@ queryManager:
 ## Enable the QueryManager deployment & service
   enabled: true 
   name: query-manager
-## Custom label value
-  queryLabel: query-manager
   
 ## Number of QueryManager instances to deploy
 ##
@@ -618,11 +682,25 @@ queryManager:
    # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: QueryManager_1.16.0
+   tag: QueryManager_1.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
    pullPolicy: Always
+
+  ## -- additional labels for the deployment, if required
+  additionalLabels: {}
+  ## -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  ## -- selector template
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  ## -- tolerations template
+  ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  ## -- affinity template
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
 
 ## QueryManager containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -638,25 +716,24 @@ queryManager:
   # requests: 
   #   cpu: 250m
   #   memory: 256Mi
-  
-## QueryManager containers'  readiness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-  eurekaAddress: http://eureka:8761/eureka/apps/QUERY-MANAGER/$HOSTNAME:query-manager:1026/status?value=OUT_OF_SERVICE
-  readinessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10
 
-## QueryManager containers'  liveness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
+
+   ## containers'  readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  readinessProbe:
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
+  ## containers'  liveness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   livenessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10      
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
  
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -691,8 +768,6 @@ registryManager:
 ## Enable the RegistryManager deployment & service
   enabled: true 
   name: registry-manager
-## Custom label value
-  registryLabel: registry-manager
   
 ## Number of RegistryManager instances to deploy
 ##
@@ -716,11 +791,25 @@ registryManager:
    # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: RegistryManager_1.16.0
+   tag: RegistryManager_1.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
    pullPolicy: Always
+
+  ## -- additional labels for the deployment, if required
+  additionalLabels: {}
+  ## -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  ## -- selector template
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  ## -- tolerations template
+  ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  ## -- affinity template
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
 
 ## RegistryManager containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -736,25 +825,24 @@ registryManager:
   # requests: 
   #   cpu: 250m
   #   memory: 256Mi
-  
-## RegistryManager containers'  readiness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-  eurekaAddress: http://eureka:8761/eureka/apps/C-SOURCES/$HOSTNAME:c-sources:1030/status?value=OUT_OF_SERVICE
-  readinessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10
 
-## RegistryManager containers'  liveness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
+  
+   ## containers'  readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  readinessProbe:
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
+  ## containers'  liveness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   livenessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10      
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
  
 ## Pod Security Context
 ## ref: https://kuberne\tes.io/docs/tasks/configure-pod-container/security-context/
@@ -789,8 +877,6 @@ storageManager:
 ## Enable the StorageManager deployment & service
   enabled: true 
   name: storage-manager
-## Custom label value
-  storageLabel: storage-manager
   
 ## Number of StorageManager instances to deploy
 ##
@@ -814,11 +900,25 @@ storageManager:
    # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: StorageManager_1.16.0
+   tag: StorageManager_1.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
    pullPolicy: Always
+
+  ## -- additional labels for the deployment, if required
+  additionalLabels: {}
+  ## -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  ## -- selector template
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  ## -- tolerations template
+  ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  ## -- affinity template
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
 
 ## StorageManager containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -834,26 +934,24 @@ storageManager:
   # requests: 
   #   cpu: 250m
   #   memory: 256Mi
-  
-## StorageManager containers'  readiness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-  eurekaAddress: http://eureka:8761/eureka/apps/STORAGE-MANAGER/$HOSTNAME:storage-manager:1029/status?value=OUT_OF_SERVICE
-  readinessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10
 
-## StorageManager containers'  liveness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-  livenessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10      
  
+   ## containers'  readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  readinessProbe:
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
+  ## containers'  liveness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
@@ -888,8 +986,6 @@ subscriptionManager:
 ## Enable the SubscriptionManager deployment & service
   enabled: true 
   name: subscription-manager
-## Custom label value
-  subscriptionLabel: subscription-manager
   
 ## Number of SubscriptionManager instances to deploy
 ##
@@ -913,11 +1009,25 @@ subscriptionManager:
    # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: SubscriptionManager_1.16.0
+   tag: SubscriptionManager_1.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
    pullPolicy: Always
+
+  ## -- additional labels for the deployment, if required
+  additionalLabels: {}
+  ## -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  ## -- selector template
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  ## -- tolerations template
+  ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  ## -- affinity template
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
 
 ## SubscriptionManager containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -934,24 +1044,24 @@ subscriptionManager:
   #   cpu: 250m
   #   memory: 256Mi
   
-## SubscriptionManager containers'  readiness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
-  eurekaAddress: http://eureka:8761/eureka/apps/SUBSCRIPTION-MANAGER/$HOSTNAME:subscription-manager:2025/status?value=OUT_OF_SERVICE
+  ## containers'  readiness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   readinessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10
- 
-## SubscriptionManager containers'  liveness probes. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-##
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
+  ## containers'  liveness probes. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
   livenessProbe:
-   enabled: true
-   initialDelaySeconds: 40
-   failureThreshold: 6
-   periodSeconds: 10   
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
+  
+  
     
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -980,3 +1090,4 @@ subscriptionManager:
    # -- maximum number of pods that can be set by the autoscaler
    maxReplicas: 5
    targetCPUUtilizationPercentage: 80
+      

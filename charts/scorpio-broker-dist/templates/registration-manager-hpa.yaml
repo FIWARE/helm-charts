@@ -2,13 +2,12 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
- name: {{ include "registry-manager.fullname" . }}-hpa
- namespace: {{ .Release.Namespace }}
+ name: {{ include "registryManager.fullname" . }}-hpa
 spec:
  scaleTargetRef:
    apiVersion: apps/v1
    kind: Deployment
-   name: {{ include "registry-manager.fullname" . }}
+   name: {{ include "registryManager.fullname" . }}
  minReplicas: {{ .Values.registryManager.hpa.minReplicas }}
  maxReplicas: {{ .Values.registryManager.hpa.maxReplicas }}
  targetCPUUtilizationPercentage: {{ .Values.registryManager.hpa.targetCPUUtilizationPercentage }}

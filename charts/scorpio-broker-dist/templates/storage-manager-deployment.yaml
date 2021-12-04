@@ -2,24 +2,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ include "storageManager.fullname" . }}
   labels:
-    service: {{ .Values.storageManager.storageLabel }}
-  name: {{ include "storage-manager.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+    {{ include "storageManager.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.storageManager.replicas }}
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "storage-manager.fullname" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
   {{- with .Values.storageManager.updateStrategy }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
+  selector:
+    matchLabels:
+      {{- include "storageManager.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        service: {{ include "storage-manager.fullname" . }}
+        {{ include "storageManager.labels" . | nindent 8 }}
+        {{- with .Values.storageManager.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.storageManager.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.storageManager.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
     spec:
       containers:
       - image: {{ .Values.storageManager.image.repository }}:{{ .Values.storageManager.image.tag }}
@@ -29,7 +36,7 @@ spec:
             value: {{ .Values.springArgs.value }}
         {{- end }}
         imagePullPolicy: {{ .Values.storageManager.image.pullPolicy }}
-        name: {{ include "storage-manager.fullname" . }}
+        name: {{ include "storageManager.fullname" . }}
         ports:
         - containerPort: 1029
           protocol: TCP
@@ -39,31 +46,25 @@ spec:
               command:
               - /bin/sh
               - -c
-              - curl -X PUT {{ .Values.storageManager.eurekaAddress }}
-        {{- if .Values.storageManager.readinessProbe.enabled }}
+              - curl -X PUT "http://{{ .Values.eureka.hostname }}:{{ .Values.eureka.port }}/eureka/apps/STORAGE-MANAGER/$HOSTNAME:storage-manager:1029/status?value=OUT_OF_SERVICE"
+      
         readinessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:1029/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 1029
           failureThreshold: {{ .Values.storageManager.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.storageManager.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.storageManager.readinessProbe.periodSeconds }}
-          {{- end }}
-        {{- if .Values.storageManager.livenessProbe.enabled }}
+          
+        
         livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - curl --silent http://localhost:1029/actuator/health | grep --quiet -e
-              '^{\"status\"\:\"UP\".*}$'
+          httpGet:
+            path: /actuator/health
+            port: 1029
           failureThreshold: {{ .Values.storageManager.livenessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.storageManager.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.storageManager.livenessProbe.periodSeconds }}
-          {{- end }}  
+            
         resources:
 {{ toYaml .Values.storageManager.resources | indent 10 }}
       restartPolicy: {{ .Values.storageManager.restartPolicy }}
@@ -73,3 +74,4 @@ spec:
       securityContext: {{ .Values.storageManager.securityContext | toYaml }}
       terminationGracePeriodSeconds: {{ .Values.storageManager.terminationGracePeriodSeconds }}
 {{- end }}
+
