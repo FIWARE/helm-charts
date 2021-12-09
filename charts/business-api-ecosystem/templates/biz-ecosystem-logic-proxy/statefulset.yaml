@@ -202,6 +202,8 @@ spec:
               value: {{ .Values.oauth.oidc | quote }}
             - name: BAE_LP_EXT_LOGIN
               value: {{ .Values.bizEcosystemLogicProxy.externalIdp.enabled | quote }}
+            - name: BAE_LP_SHOW_LOCAL_LOGIN
+              value: {{ .Values.bizEcosystemLogicProxy.externalIdp.showLocalLogin | quote }}
             - name: BAE_LP_PROPAGATE_TOKEN
               value: {{ .Values.bizEcosystemLogicProxy.propagateToken | quote }}
             {{- if .Values.bizEcosystemLogicProxy.token.enabled }}

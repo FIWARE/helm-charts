@@ -646,6 +646,8 @@ bizEcosystemLogicProxy:
   externalIdp:
     # -- Enable usage of external IDPs
     enabled: false
+    # -- Show login button for local IDP on login modal dialog with list of external IDPs
+    showLocalLogin: false
     
   ## -- Configuration of local key and certificate for validation and generation of tokens
   token:

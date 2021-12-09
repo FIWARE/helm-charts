@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.2.4](https://img.shields.io/badge/Version-0.2.4-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.2.5](https://img.shields.io/badge/Version-0.2.5-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -128,6 +128,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.elastic.version | int | `7` | API version of elasticsearch |
 | bizEcosystemLogicProxy.enabled | bool | `true` |  |
 | bizEcosystemLogicProxy.externalIdp.enabled | bool | `false` | Enable usage of external IDPs |
+| bizEcosystemLogicProxy.externalIdp.showLocalLogin | bool | `false` | Show login button for local IDP on login modal dialog with list of external IDPs |
 | bizEcosystemLogicProxy.fullnameOverride | string | `""` |  |
 | bizEcosystemLogicProxy.ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | bizEcosystemLogicProxy.ingress.enabled | bool | `false` | should there be an ingress to connect the logic proxy with the public internet |
