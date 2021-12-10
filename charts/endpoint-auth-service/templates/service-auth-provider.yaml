@@ -1,0 +1,22 @@
+{{- range .Values.auth-provider }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+  {{- if .annotations }}
+  annotations:
+    {{ toYaml .annotations | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .type }}
+  ports:
+    - port: {{ .port }}
+      targetPort: {{ .port }}
+      protocol: TCP
+      name: http
+  {{- if .selector }}
+  selector:
+    app.kubernetes.io/name: {{ .selector.name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  {{- end }}
+{{- end }}

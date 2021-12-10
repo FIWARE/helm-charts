@@ -1,0 +1,26 @@
+{{- if .Values.config-service.route.enabled -}}
+{{- $fullName := include "config-service.fullname" . -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "config-service.fullname" . }}
+  labels:
+    {{ include "config-service.labels" . | nindent 4 }}
+  {{- if .Values.config-service.route.annotations }}
+  annotations:
+    {{- with .Values.config-service.route.annotations }}
+      {{- toYaml . | nindent 4 }}
+      {{- end }}
+  {{- end }}
+spec:
+  host: {{ .Values.config-service.route.host}}
+  to:
+    kind: Service
+    name: {{ $fullName }}
+  {{- if .Values.config-service.route.tls }}
+  tls:
+  {{- with .Values.config-service.route.tls }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,19 @@
+{{- if .Values.config-service.autoscaling.enabled -}}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "config-service.fullname" . }}
+  labels:
+    {{ include "config-service.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "config-service.fullname" . }}
+  minReplicas: {{ .Values.config-service.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.config-service.autoscaling.maxReplicas }}
+{{- with .Values.config-service.autoscaling.metrics }}
+  metrics: 
+    {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- end }}

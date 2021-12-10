@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "config-service.fullname" . }}
+  labels:
+    {{ include "config-service.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.config-service.autoscaling.enabled }}
+  replicas: {{ .Values.config-service.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.config-service.revisionHistoryLimit }}
+  strategy:
+  {{- with .Values.config-service.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "config-service.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{ include "config-service.labels" . | nindent 8 }}
+        {{- with .Values.config-service.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.config-service.additionalAnnotations -}}
+      annotations:
+        prometheus.io/scrape: {{ .Values.config-service.prometheus.enabled | quote }}
+        prometheus.io/path: {{ .Values.config-service.prometheus.path }}
+        prometheus.io/port: { { .Values.config-service.prometheus.port } }
+        {{- with .Values.config-service.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec: 
+      serviceAccountName: {{ include "config-service.serviceAccountName" . }}
+      containers:
+        - name: config-service
+          imagePullPolicy: {{ .Values.config-service.image.pullPolicy }}
+          image: "{{ .Values.config-service.image.repository }}:{{ .Values.config-service.image.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.config-service.port}}
+              protocol: TCP
+            - name: http-health
+              containerPort: {{ .Values.config-service.healthPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http-health
+            initialDelaySeconds: {{ .Values.config-service.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.config-service.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.config-service.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.config-service.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http-health
+            initialDelaySeconds: {{ .Values.config-service.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.config-service.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.config-service.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.config-service.readinessProbe.timeoutSeconds }}
+          env:
+            - name: ENDPOINTS_ALL_PORT
+              value: {{ .Values.config-service.healthPort | quote }}
+            - name: DATASOURCES_DEFAULT_URL
+              value: {{ .Values.config-service.db.url }}
+            - name: DATASOURCES_DEFAULT_USERNAME
+              value: {{ .Values.config-service.db.user | quote }}
+            - name: DATASOURCES_DEFAULT_PASSWORD
+              valueFrom:
+                 secretKeyRef:
+                   name: {{ include "config-service.fullname" . }}
+                   key: dbPassword
+            - name: PROXY_LISTENER_YAML_PATH
+              value: /proxy-config/listener.yaml
+            - name: PROXY_CLUSTER_YAML_PATH
+              value: /proxy-config/cluster.yaml
+            {{- with .Values.config-service.additionalEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.config-service.resources | nindent 12 }}
+      {{- .Values.config-service.configmap-updater.enabled  -}}
+        volumeMounts:
+          - name: proxy-config
+            mountPath: /proxy-config
+      - name: configmap-updater
+        imagePullPolicy: {{ .Values.config-service.configmap-updater.image.pullPolicy }}
+        image: "{{ .Values.config-service.configmap-updater.image.repository }}:{{ .Values.config-service.configmap-updater.image.tag }}"
+        env:
+        - name: PROXY_CONFIG_FOLDER
+          value: /proxy-config
+        - name: PROXY_CONFIG_MAP
+          value: {{ include "endpoint-auth-service.fullname" . }}
+        - name: PROXY_CONFIG_MAP_NAMESPACE
+          value: {{ .Release.Namespace }}
+        volumeMounts:
+          - name: proxy-config
+            mountPath: /proxy-config
+      volumes:
+        - name: proxy-config
+          emptyDir: {}
+      {{- end }}
+      {{- with .Values.config-service.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.config-service.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.config-service.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
