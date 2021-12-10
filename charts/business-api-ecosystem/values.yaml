@@ -663,5 +663,8 @@ bizEcosystemLogicProxy:
   # -- Sets wehther the logic proxy should propagate the user access token to the backend components
   propagateToken: true
 
+  # -- Allow to use organisations from local IDP as participants when creating or acquiring offerings
+  allowLocalEORI: false
+
   # -- Default market owner precentage for Revenue Sharing models
   revenueModel: 30

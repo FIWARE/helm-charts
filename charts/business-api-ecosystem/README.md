@@ -117,6 +117,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.token.identifier | string | `""` | Identifier (e.g. EORI) of local marketplace instance |
 | bizEcosystemChargingBackend.token.key | string | `""` | String with private key in PEM format |
 | bizEcosystemChargingBackend.verifyRequests | bool | `true` |  |
+| bizEcosystemLogicProxy.allowLocalEORI | bool | `false` | Allow to use organisations from local IDP as participants when creating or acquiring offerings |
 | bizEcosystemLogicProxy.collectStaticCommand | string | `"True"` | Execute the collect static command on startup |
 | bizEcosystemLogicProxy.db.database | string | `"belp_db"` | Database name for connecting the database |
 | bizEcosystemLogicProxy.db.host | string | `"mongo"` | host of the database to be used |
