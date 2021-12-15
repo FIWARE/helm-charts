@@ -1,0 +1,20 @@
+{{- if .Values.sidecarInjector.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "sidecarInjector.fullname" . }}
+  {{- if .Values.sidecarInjector.service.annotations }}
+  annotations:
+    {{ toYaml .Values.sidecarInjector.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{ include "sidecarInjector.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.sidecarInjector.service.type }}
+  ports:
+    - port: {{ .Values.sidecarInjector.service.port }}
+      targetPort: {{ .Values.sidecarInjector.port }}
+  selector:
+    app.kubernetes.io/name: {{ include "sidecarInjector.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

@@ -1,7 +1,7 @@
 {{- if .Values.ishare.enabled }}
-{{- if .Values.ishare.persistence }}
-kind: PersistentVolumeClaim
+{{- if .Values.ishare.storage.enabled }}
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
   name: {{ include "ishare.fullname" . }}
   {{- with .Values.ishare.annotations  }}
@@ -16,3 +16,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.ishare.storage.size | quote }}
+{{- end }}
+{{- end }}

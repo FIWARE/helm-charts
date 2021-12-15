@@ -1,0 +1,22 @@
+{{- if .Values.sidecarInjector.enabled -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "sidecarInjector.name" . }}-certificate
+  labels:
+    {{ include "sidecarInjector.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "sidecarInjector.name" . }}-certificate
+  commonName: {{ include "sidecarInjector.fullname" . }}.{{ .Release.Namespace }}.svc
+  dnsNames:
+    - {{ include "sidecarInjector.fullname" . }}.{{ .Release.Namespace }}.svc
+    - localhost
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+    - client auth
+  issuerRef:
+    name: {{ include "sidecarInjector.name" . }}-ca-issuer
+    kind: ClusterIssuer
+{{- end }}

@@ -1,0 +1,65 @@
+{{- if .Values.sidecarInjector.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "sidecarInjector.fullname" . }}
+  labels:
+    {{ .Values.sidecarInjector.labelNamespace }}: {{ include "sidecarInjector.name" . }}
+    {{ include "sidecarInjector.labels" . | nindent 4 }}
+data:
+  envoy-sidecar: |
+    {{- if .Values.sidecarInjector.overrideSidecarconfig }}
+      {{ toYaml .Values.sidecarInjector.overrideSidecarconfig | nindent 6 }}
+    {{- else }}
+    name: envoy-sidecar
+    volumes:
+      - name: envoy-configmap
+        configMap:
+          name: {{ include "endpointAuthService.fullname" . }}
+      - name: envoy-config-folder
+        emptyDir: {}
+    initContainers:
+      - name: init-iptables
+        imagePullPolicy: {{ .Values.sidecar.initIptables.pullPolicy }}
+        image: "{{ .Values.sidecar.initIptables.repository }}:{{ .Values.sidecar.initIptables.tag }}"
+        securityContext:
+          privileged: true
+        env:
+          - name: ENVOY_USER_ID
+            value: "{{ .Values.sidecar.userId }}"
+          - name: ENVOY_PORT
+            value: "{{ .Values.sidecar.port }}"
+      - name: init-config
+        imagePullPolicy: {{ .Values.sidecar.initConfig.pullPolicy }}
+        image: "{{ .Values.sidecar.initConfig.repository }}:{{ .Values.sidecar.initConfig.tag }}"
+        env:
+          - name: RUN_AS_INIT
+            value: "true"
+        volumeMounts:
+          - name: envoy-configmap
+            mountPath: /configmap-folder/
+          - name: envoy-config-folder
+            mountPath: /proxy-config/
+    containers:
+      - name: envoy-sidecar
+        imagePullPolicy: {{ .Values.sidecar.image.pullPolicy }}
+        image: "{{ .Values.sidecar.image.repository }}:{{ .Values.sidecar.image.tag }}"
+        args: [ "-l {{ .Values.sidecar.logLevel }}", "-c /etc/envoy/envoy.yaml" ]
+        securityContext:
+          runAsUser: {{ .Values.sidecar.userId }}
+        volumeMounts:
+          - name: envoy-config-folder
+            mountPath: /etc/envoy/
+      - name: update-config
+        imagePullPolicy: {{ .Values.sidecar.updateConfig.pullPolicy }}
+        image: "{{ .Values.sidecar.updateConfig.repository }}:{{ .Values.sidecar.updateConfig.tag }}"
+        env:
+          - name: RUN_AS_INIT
+            value: "false"
+        volumeMounts:
+          - name: envoy-configmap
+            mountPath: /configmap-folder/
+          - name: envoy-config-folder
+            mountPath: /proxy-config/
+  {{- end }}
+{{- end }}

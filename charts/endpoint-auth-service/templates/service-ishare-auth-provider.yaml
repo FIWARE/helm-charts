@@ -1,0 +1,22 @@
+{{- if .Values.ishare.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ishare.fullname" . }}
+  {{- if .Values.ishare.service.annotations }}
+  annotations:
+    {{ toYaml .Values.ishare.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{ include "ishare.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.ishare.service.type }}
+  ports:
+    - port: {{ .Values.ishare.service.port }}
+      targetPort: {{ .Values.ishare.port }}
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "ishare.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

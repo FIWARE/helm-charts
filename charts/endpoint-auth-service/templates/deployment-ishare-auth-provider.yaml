@@ -6,7 +6,7 @@ metadata:
   labels:
     {{ include "ishare.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.ishare..autoscaling.enabled }}
+  {{- if not .Values.ishare.autoscaling.enabled }}
   replicas: {{ .Values.ishare.replicaCount }}
   {{- end }}
   revisionHistoryLimit: {{ .Values.ishare.revisionHistoryLimit }}
@@ -45,18 +45,20 @@ spec:
             - name: SERVER_PORT
               value: {{ .Values.ishare.port | quote }}
             - name: CONFIGURATION_SERVICE_URL
-              value: {{ include "config-service.fullname" . }}:{{ .Values.config-service.service.port }}
+              value: http://{{ include "configService.fullname" . }}:{{ .Values.configService.service.port }}
             {{- with .Values.ishare.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+          {{- with .Values.ishare.resources }}
           resources:
             {{- toYaml .Values.ishare.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: ishare-credentials
               mountPath: /certs
       volumes:
         - name: ishare-credentials
-          {{- .Values.ishare.persistence -}}
+          {{- if .Values.ishare.storage.enabled }}
           persistentVolumeClaim:
             claimName: {{ include "ishare.fullname" . }}
           {{- else }}
@@ -74,4 +76,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-{{- end }}
+  {{- end }}

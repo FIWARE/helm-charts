@@ -1,0 +1,98 @@
+{{- if .Values.sidecarInjector.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sidecarInjector.fullname" . }}
+  labels:
+    {{ include "sidecarInjector.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.sidecarInjector.replicaCount }}
+  revisionHistoryLimit: {{ .Values.sidecarInjector.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "sidecarInjector.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{ include "sidecarInjector.labels" . | nindent 8 }}
+          {{- with .Values.sidecarInjector.additionalLabels }}
+          {{- toYaml . | nindent 8 }}
+          {{- end }}
+      {{- if .Values.sidecarInjector.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.sidecarInjector.additionalAnnotations }}
+          {{- toYaml . | nindent 8 }}
+          {{- end }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "sidecarInjector.serviceAccountName" . }}
+      containers:
+        - name: sidecar-injector
+          image: "{{ .Values.sidecarInjector.image.repository }}:{{ .Values.sidecarInjector.image.tag }}"
+          imagePullPolicy: {{ .Values.sidecarInjector.image.pullPolicy }}
+          env:
+            - name: TLS_CERT_FILE
+              value:  /webhook/certs/tls.crt
+            - name: TLS_KEY_FILE
+              value:  /webhook/certs/tls.key
+            - name: ANNOTATION_NAMESPACE
+              value: {{ .Values.sidecarInjector.annotationNamespace }}
+            - name: CONFIGMAP_NAMESPACE
+              value: {{ .Release.Namespace }}
+            - name: CONFIGMAP_LABELS
+              value: "{{ .Values.sidecarInjector.labelNamespace }}={{ include "sidecarInjector.name" . }}"
+            - name: TLS_PORT
+              value: "{{ .Values.sidecarInjector.port }}"
+            - name: LIFECYCLE_PORT
+              value: "{{ .Values.sidecarInjector.healthPort }}"
+            - name: LOG_LEVEL
+              value: "{{ .Values.sidecarInjector.logLevel }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.sidecarInjector.port }}
+              protocol: TCP
+            - name: http-health
+              containerPort: {{ .Values.sidecarInjector.healthPort }}
+              protocol: TCP
+          volumeMounts:
+            - name: webhook-certs
+              mountPath: /webhook/certs
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http-health
+            initialDelaySeconds: {{ .Values.sidecarInjector.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.sidecarInjector.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.sidecarInjector.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.sidecarInjector.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http-health
+            initialDelaySeconds: {{ .Values.sidecarInjector.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.sidecarInjector.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.sidecarInjector.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.sidecarInjector.readinessProbe.timeoutSeconds }}
+          {{- with .Values.sidecarInjector.resources }}
+          resources:
+            {{- toYaml .Values.sidecarInjector.resources | nindent 12 }}
+          {{- end }}
+      {{- with .Values.sidecarInjector.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.sidecarInjector.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.sidecarInjector.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: webhook-certs
+          secret:
+            secretName: {{ include "sidecarInjector.name" . }}-certificate
+  {{- end }}

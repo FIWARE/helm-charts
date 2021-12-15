@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "endpoint-auth-service.fullname" . }}
+  name: {{ include "endpointAuthService.fullname" . }}
   labels:
-    {{- include "endpoint-auth-service.labels" . | nindent 4 }}
+    {{- include "endpointAuthService.labels" . | nindent 4 }}
 data:
   listener.yaml: |
     resources:
@@ -12,7 +12,7 @@ data:
         address:
           socket_address:
             address: 0.0.0.0
-            port_value: {{ .Values.envoy.port }}
+            port_value: {{ .Values.sidecar.port }}
         traffic_direction: OUTBOUND
         listener_filters:
         - name: envoy.filters.listener.tls_inspector
@@ -85,8 +85,8 @@ data:
                 address:
                   socket_address:
                     protocol: TCP
-                    address: {{ .Values.auth-provider.address }}
-                    port_value: {{ .Values.auth-provider.port }}
+                    address: {{ .Values.authProvider.address }}
+                    port_value: {{ .Values.authProvider.port }}
   envoy.yaml: |
     node:
       cluster: passthrough

@@ -1,118 +1,124 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "config-service.fullname" . }}
+  name: {{ include "configService.fullname" . }}
   labels:
-    {{ include "config-service.labels" . | nindent 4 }}
+    {{ include "configService.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.config-service.autoscaling.enabled }}
-  replicas: {{ .Values.config-service.replicaCount }}
+  {{- if not .Values.configService.autoscaling.enabled }}
+  replicas: {{ .Values.configService.replicaCount }}
   {{- end }}
-  revisionHistoryLimit: {{ .Values.config-service.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.configService.revisionHistoryLimit }}
   strategy:
-  {{- with .Values.config-service.updateStrategy }}
+  {{- with .Values.configService.updateStrategy }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "config-service.name" . }}
+      app.kubernetes.io/name: {{ include "configService.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        {{ include "config-service.labels" . | nindent 8 }}
-        {{- with .Values.config-service.additionalLabels }}
+        {{ include "configService.labels" . | nindent 8 }}
+        {{- with .Values.configService.additionalLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if .Values.config-service.additionalAnnotations -}}
+      {{- if .Values.configService.additionalAnnotations -}}
       annotations:
-        prometheus.io/scrape: {{ .Values.config-service.prometheus.enabled | quote }}
-        prometheus.io/path: {{ .Values.config-service.prometheus.path }}
-        prometheus.io/port: { { .Values.config-service.prometheus.port } }
-        {{- with .Values.config-service.additionalAnnotations }}
+        prometheus.io/scrape: {{ .Values.configService.prometheus.enabled | quote }}
+        prometheus.io/path: {{ .Values.configService.prometheus.path }}
+        prometheus.io/port: { { .Values.configService.prometheus.port } }
+        {{- with .Values.configService.additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- end }}
     spec: 
-      serviceAccountName: {{ include "config-service.serviceAccountName" . }}
+      serviceAccountName: {{ include "configService.serviceAccountName" . }}
       containers:
         - name: config-service
-          imagePullPolicy: {{ .Values.config-service.image.pullPolicy }}
-          image: "{{ .Values.config-service.image.repository }}:{{ .Values.config-service.image.tag }}"
+          imagePullPolicy: {{ .Values.configService.image.pullPolicy }}
+          image: "{{ .Values.configService.image.repository }}:{{ .Values.configService.image.tag }}"
           ports:
             - name: http
-              containerPort: {{ .Values.config-service.port}}
+              containerPort: {{ .Values.configService.port}}
               protocol: TCP
             - name: http-health
-              containerPort: {{ .Values.config-service.healthPort }}
+              containerPort: {{ .Values.configService.healthPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /health
               port: http-health
-            initialDelaySeconds: {{ .Values.config-service.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.config-service.livenessProbe.periodSeconds }}
-            successThreshold: {{ .Values.config-service.livenessProbe.successThreshold }}
-            timeoutSeconds: {{ .Values.config-service.livenessProbe.timeoutSeconds }}
+            initialDelaySeconds: {{ .Values.configService.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.configService.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.configService.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.configService.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
               path: /health
               port: http-health
-            initialDelaySeconds: {{ .Values.config-service.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.config-service.readinessProbe.periodSeconds }}
-            successThreshold: {{ .Values.config-service.readinessProbe.successThreshold }}
-            timeoutSeconds: {{ .Values.config-service.readinessProbe.timeoutSeconds }}
+            initialDelaySeconds: {{ .Values.configService.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.configService.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.configService.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.configService.readinessProbe.timeoutSeconds }}
           env:
             - name: ENDPOINTS_ALL_PORT
-              value: {{ .Values.config-service.healthPort | quote }}
+              value: {{ .Values.configService.healthPort | quote }}
             - name: DATASOURCES_DEFAULT_URL
-              value: {{ .Values.config-service.db.url }}
+              value: "{{ .Values.configService.db.url }}"
             - name: DATASOURCES_DEFAULT_USERNAME
-              value: {{ .Values.config-service.db.user | quote }}
+              value: {{ .Values.configService.db.user | quote }}
             - name: DATASOURCES_DEFAULT_PASSWORD
               valueFrom:
                  secretKeyRef:
-                   name: {{ include "config-service.fullname" . }}
+                   name: {{ include "configService.fullname" . }}
                    key: dbPassword
             - name: PROXY_LISTENER_YAML_PATH
               value: /proxy-config/listener.yaml
             - name: PROXY_CLUSTER_YAML_PATH
               value: /proxy-config/cluster.yaml
-            {{- with .Values.config-service.additionalEnvVars }}
+            - name: PROXY_EXTERNAL_AUTH_ADDRESS
+              value: {{ include "ishare.fullname" . }}
+            - name: PROXY_EXTERNAL_AUTH_PORT
+              value: "{{ .Values.ishare.service.port }}"
+            {{- with .Values.configService.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+          {{- with .Values.configService.resources }}
           resources:
-            {{- toYaml .Values.config-service.resources | nindent 12 }}
-      {{- .Values.config-service.configmap-updater.enabled  -}}
-        volumeMounts:
-          - name: proxy-config
-            mountPath: /proxy-config
-      - name: configmap-updater
-        imagePullPolicy: {{ .Values.config-service.configmap-updater.image.pullPolicy }}
-        image: "{{ .Values.config-service.configmap-updater.image.repository }}:{{ .Values.config-service.configmap-updater.image.tag }}"
-        env:
-        - name: PROXY_CONFIG_FOLDER
-          value: /proxy-config
-        - name: PROXY_CONFIG_MAP
-          value: {{ include "endpoint-auth-service.fullname" . }}
-        - name: PROXY_CONFIG_MAP_NAMESPACE
-          value: {{ .Release.Namespace }}
-        volumeMounts:
-          - name: proxy-config
-            mountPath: /proxy-config
+            {{- toYaml .Values.configService.resources | nindent 12 }}
+          {{- end }}
+      {{- if .Values.configService.configmapUpdater.enabled  }}
+          volumeMounts:
+            - name: proxy-config
+              mountPath: /proxy-config
+        - name: configmap-updater
+          imagePullPolicy: {{ .Values.configService.configmapUpdater.image.pullPolicy }}
+          image: "{{ .Values.configService.configmapUpdater.image.repository }}:{{ .Values.configService.configmapUpdater.image.tag }}"
+          env:
+          - name: PROXY_CONFIG_FOLDER
+            value: /proxy-config
+          - name: PROXY_CONFIG_MAP
+            value: {{ include "endpointAuthService.fullname" . }}
+          - name: PROXY_CONFIG_MAP_NAMESPACE
+            value: {{ .Release.Namespace }}
+          volumeMounts:
+            - name: proxy-config
+              mountPath: /proxy-config
       volumes:
         - name: proxy-config
           emptyDir: {}
       {{- end }}
-      {{- with .Values.config-service.nodeSelector }}
+      {{- with .Values.configService.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.config-service.affinity }}
+      {{- with .Values.configService.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.config-service.tolerations }}
+      {{- with .Values.configService.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

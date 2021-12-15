@@ -1,22 +1,20 @@
-{{- range .hosts }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "config-service.fullname" . }}
-  {{- if .Values.config-service.service.annotations }}
+  name: {{ include "configService.fullname" . }}
+  {{- if .Values.configService.service.annotations }}
   annotations:
-    {{ toYaml .Values.config-service.service.annotations | nindent 4 }}
+    {{ toYaml .Values.configService.service.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{ include "config-service.labels" . | nindent 4 }}
+    {{ include "configService.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.config-service.service.type }}
+  type: {{ .Values.configService.service.type }}
   ports:
-    - port: {{ .Values.config-service.service.port }}
-      targetPort: {{ .Values.config-service.port }}
+    - port: {{ .Values.configService.service.port }}
+      targetPort: {{ .Values.configService.port }}
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "config-service.name" . }}
+    app.kubernetes.io/name: {{ include "configService.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
