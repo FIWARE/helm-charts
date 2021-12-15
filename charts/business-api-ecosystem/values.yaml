@@ -646,6 +646,8 @@ bizEcosystemLogicProxy:
   externalIdp:
     # -- Enable usage of external IDPs
     enabled: false
+    # -- Show login button for local IDP on login modal dialog with list of external IDPs
+    showLocalLogin: false
     
   ## -- Configuration of local key and certificate for validation and generation of tokens
   token:
@@ -660,6 +662,9 @@ bizEcosystemLogicProxy:
 
   # -- Sets wehther the logic proxy should propagate the user access token to the backend components
   propagateToken: true
+
+  # -- Allow to use organisations from local IDP as participants when creating or acquiring offerings
+  allowLocalEORI: false
 
   # -- Default market owner precentage for Revenue Sharing models
   revenueModel: 30
