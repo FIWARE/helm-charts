@@ -299,9 +299,6 @@ sidecarInjector:
   # -- namespace of the label to find the configmap to inject.
   labelNamespace: sidecar.k8s.fiware.org
 
-  # -- trigger to be set for the pod that should get injected
-  annotationTrigger: inject
-
   ## restriction the namespaces to apply injection
   restrictNamespace:
     # -- should the injector be restricted to labeld namespaces?
@@ -322,9 +319,6 @@ sidecarInjector:
 
   # -- log level of the injector
   logLevel: 2
-
-  # -- namespace where cert-manager is installed. the secret needs to be deployed to that namespace.
-  certManagerNamespace: cert-manager-namespace
 
   ## configuration for the k8s service to access configService
   service:

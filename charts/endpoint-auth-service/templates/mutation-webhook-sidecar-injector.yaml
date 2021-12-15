@@ -5,8 +5,6 @@ metadata:
   name: {{ include "sidecarInjector.fullname" . }}
   labels:
     {{ include "sidecarInjector.labels" . | nindent 4 }}
-  annotations:
-    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "sidecarInjector.name" . }}-certificate
 webhooks:
   - name: {{ include "sidecarInjector.name" . }}.sfdc.internal
     {{- if .Values.sidecarInjector.restrictNamespace.enabled }}
@@ -21,8 +19,7 @@ webhooks:
         name: {{ include "sidecarInjector.fullname" . }}
         namespace: {{ .Release.Namespace }}
         path: /mutate
-#    admissionReviewVersions: ["v1", "v1beta1"]
-#    sideEffects: None
+      caBundle: {{ .Values.sidecarInjector.cert | b64enc | replace "\n" "" }}
     rules:
       - apiGroups: [""]
         apiVersions: ["v1"]
