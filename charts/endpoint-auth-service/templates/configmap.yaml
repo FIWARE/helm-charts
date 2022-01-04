@@ -15,63 +15,49 @@ data:
             port_value: {{ .Values.sidecar.port }}
         traffic_direction: OUTBOUND
         listener_filters:
-        - name: envoy.filters.listener.tls_inspector
-        - name: envoy.filters.listener.original_dst  
+          - name: envoy.filters.listener.tls_inspector
+          - name: envoy.filters.listener.original_dst
         filter_chains:
-        - name: https_chain
-          filter_chain_match: 
-            transport_protocol: tls
-          filters:
-          - name: envoy.filters.network.tcp_proxy
-            typed_config:
-              "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
-              cluster: passthrough-https
-              stat_prefix: https_passthrough
-        - name: http_chain
-          filters:
-          - name: envoy.filters.network.http_connection_manager
-            typed_config:
-              "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
-              stat_prefix: ingress_http
-              codec_type: AUTO
-              route_config:
-                name: local_route
-                virtual_hosts:
-                - name: allow_any
-                  domains:
-                  - "*"
-                  routes:
-                  - match: 
-                      prefix: "/"
-                    route: 
-                      cluster: passthrough
-                    typed_per_filter_config:
-                      envoy.filters.http.lua:
-                        "@type": type.googleapis.com/envoy.extensions.filters.http.lua.v3.LuaPerRoute
-                        disabled: true
-              http_filters:
-              - name: envoy.filters.http.lua
+          - name: https_chain
+            filter_chain_match:
+              transport_protocol: tls
+            filters:
+              - name: envoy.filters.network.tcp_proxy
                 typed_config:
-                  "@type": type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
-                  inline_code: |
-                    function envoy_on_request(request_handle)
-                     -- required default handler, does nothing
-                    end
-              - name: envoy.filters.http.router
+                  "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
+                  cluster: passthrough-https
+                  stat_prefix: https_passthrough
+          - name: http_chain
+            filters:
+              - name: envoy.filters.network.http_connection_manager
+                typed_config:
+                  "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                  stat_prefix: ingress_http
+                  codec_type: AUTO
+                  route_config:
+                    name: local_route
+                    virtual_hosts:
+                      - name: allow_any
+                        domains:
+                          - "*"
+                        routes:
+                          - match:
+                              prefix: "/"
+                            route:
+                              cluster: passthrough
+                  http_filters:
+                    - name: envoy.filters.http.router
   cluster.yaml: |
     resources:
-      - "@type": type.googleapis.com/envoy.config.cluster.v3.Cluster
-        name: passthrough
-        type: ORIGINAL_DST
-        connectTimeout: 10s
-        lbPolicy: CLUSTER_PROVIDED
-        original_dst_lb_config:
-          use_http_header: true
       - "@type": type.googleapis.com/envoy.config.cluster.v3.Cluster
         name: passthrough-https
         type: ORIGINAL_DST
         connectTimeout: 10s
         lbPolicy: CLUSTER_PROVIDED
+        transport_socket:
+          name: envoy.transport_sockets.tls
+          typed_config:
+            "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
       - "@type": type.googleapis.com/envoy.config.cluster.v3.Cluster
         name: ext-authz
         type: STRICT_DNS
@@ -80,13 +66,20 @@ data:
         load_assignment:
           cluster_name: ext-authz
           endpoints:
-          - lb_endpoints:
-            - endpoint:
-                address:
-                  socket_address:
-                    protocol: TCP
-                    address: {{ .Values.authProvider.address }}
-                    port_value: {{ .Values.authProvider.port }}
+            - lb_endpoints:
+                - endpoint:
+                    address:
+                      socket_address:
+                        protocol: TCP
+                        address: {{ .Values.authProvider.address }}
+                        port_value: {{ .Values.authProvider.port }}
+      - "@type": type.googleapis.com/envoy.config.cluster.v3.Cluster
+        name: passthrough
+        type: ORIGINAL_DST
+        lbPolicy: CLUSTER_PROVIDED
+        connectTimeout: 10s
+        original_dst_lb_config:
+          use_http_header: true
   envoy.yaml: |
     node:
       cluster: passthrough

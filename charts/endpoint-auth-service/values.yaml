@@ -270,7 +270,7 @@ sidecarInjector:
 
   ## configuration of the image to be used
   image:
-    # -- endpoint-configuration-service image name
+    # -- sidecar-injector image name
     # ref: https://hub.docker.com/r/mayankkr/sidecarinjector
     repository: tumblr/k8s-sidecar-injector
     # -- tag of the image to be used
