@@ -1,0 +1,28 @@
+{{- if .Values.sidecarInjector.enabled -}}
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ include "sidecarInjector.fullname" . }}
+  labels:
+    {{ include "sidecarInjector.labels" . | nindent 4 }}
+webhooks:
+  - name: {{ include "sidecarInjector.name" . }}.sfdc.internal
+    {{- if .Values.sidecarInjector.restrictNamespace.enabled }}
+    namespaceSelector:
+      matchExpressions:
+        - key: {{ .Values.sidecarInjector.restrictNamespace.label }}
+          operator: In
+          values: [ "{{ .Values.sidecarInjector.restrictNamespace.value }}" ]
+    {{- end }}
+    clientConfig:
+      service:
+        name: {{ include "sidecarInjector.fullname" . }}
+        namespace: {{ .Release.Namespace }}
+        path: /mutate
+      caBundle: {{ .Values.sidecarInjector.cert | b64enc | replace "\n" "" }}
+    rules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE"]
+        resources: ["pods"]
+{{- end }}

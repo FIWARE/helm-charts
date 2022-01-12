@@ -1,0 +1,19 @@
+{{- if .Values.ishare.autoscaling.enabled -}}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "ishare.fullname" . }}
+  labels:
+    {{ include "ishare.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "ishare.fullname" . }}
+  minReplicas: {{ .Values.ishare.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.ishare.autoscaling.maxReplicas }}
+{{- with .Values.ishare.autoscaling.metrics }}
+  metrics: 
+    {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- end }}

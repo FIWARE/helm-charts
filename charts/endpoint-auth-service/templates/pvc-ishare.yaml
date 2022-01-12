@@ -1,0 +1,20 @@
+{{- if .Values.ishare.enabled }}
+{{- if .Values.ishare.storage.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "ishare.fullname" . }}
+  {{- with .Values.ishare.annotations  }}
+  annotations:
+  {{ toYaml . | indent 4 }}
+  {{- end }}
+  labels:
+    {{- include "ishare.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.ishare.storage.size | quote }}
+{{- end }}
+{{- end }}

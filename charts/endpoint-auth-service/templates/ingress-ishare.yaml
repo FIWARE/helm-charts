@@ -1,0 +1,42 @@
+{{- if .Values.ishare.ingress.enabled -}}
+{{- $fullName := include "ishare.fullname" . -}}
+{{- $servicePort := .Values.ishare.service.port -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "ishare.fullname" . }}
+  labels:
+    {{ include "ishare.labels" . | nindent 4 }}
+  {{- if .Values.ishare.ingress.annotations }}
+  annotations:
+    {{- with .Values.ishare.ingress.annotations }}
+      {{- toYaml . | nindent 4 }}
+      {{- end }}
+  {{- end }}
+spec:
+  {{- if .Values.ishare.ingress.tls }}
+  tls:
+    {{- range .Values.ishare.ingress.tls }}
+    - hosts:
+      {{- range .hosts }}
+        - {{ . | quote }}
+      {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+  {{- range .Values.ishare.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+        {{- range .paths }}
+        - path: {{ . }}
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ $fullName }}
+              port:
+                number: {{ $servicePort }}
+        {{- end }}
+  {{- end }}
+{{- end }}

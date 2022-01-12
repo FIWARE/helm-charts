@@ -1,0 +1,79 @@
+{{- if .Values.ishare.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ishare.fullname" . }}
+  labels:
+    {{ include "ishare.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.ishare.autoscaling.enabled }}
+  replicas: {{ .Values.ishare.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.ishare.revisionHistoryLimit }}
+  strategy:
+  {{- with .Values.ishare.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "ishare.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{ include "ishare.labels" . | nindent 8 }}
+        {{- with .Values.ishare.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.ishare.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.ishare.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec: 
+      serviceAccountName: {{ include "ishare.serviceAccountName" . }}
+      containers:
+        - name: ishare-auth-provider
+          imagePullPolicy: {{ .Values.ishare.image.pullPolicy }}
+          image: "{{ .Values.ishare.image.repository }}:{{ .Values.ishare.image.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.ishare.port}}
+              protocol: TCP
+          env:
+            - name: SERVER_PORT
+              value: {{ .Values.ishare.port | quote }}
+            - name: CONFIGURATION_SERVICE_URL
+              value: http://{{ include "configService.fullname" . }}:{{ .Values.configService.service.port }}
+            {{- with .Values.ishare.additionalEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- with .Values.ishare.resources }}
+          resources:
+            {{- toYaml .Values.ishare.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: ishare-credentials
+              mountPath: /certs
+      volumes:
+        - name: ishare-credentials
+          {{- if .Values.ishare.storage.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "ishare.fullname" . }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+      {{- with .Values.ishare.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.ishare.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.ishare.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  {{- end }}

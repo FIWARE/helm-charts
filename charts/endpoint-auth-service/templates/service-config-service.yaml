@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "configService.fullname" . }}
+  {{- if .Values.configService.service.annotations }}
+  annotations:
+    {{ toYaml .Values.configService.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{ include "configService.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.configService.service.type }}
+  ports:
+    - port: {{ .Values.configService.service.port }}
+      targetPort: {{ .Values.configService.port }}
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "configService.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
