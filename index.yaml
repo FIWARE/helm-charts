@@ -446,6 +446,27 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-0.0.1/business-api-ecosystem-0.0.1.tgz
     version: 0.0.1
+  endpoint-auth-service:
+  - apiVersion: v1
+    appVersion: 0.0.6
+    created: "2022-01-12T16:25:07.828421695Z"
+    description: A Helm chart for running the endpoint-auth-service on kubernetes.
+    digest: 9553d735007c721126ca35acdd3b5ea7de45be21d9dc7e6bb1c5ede35b6c72e3
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - auth
+    - ishare
+    - envoy
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: endpoint-auth-service
+    sources:
+    - https://github.com/FIWARE/endpoint-auth-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/endpoint-auth-service-0.0.1/endpoint-auth-service-0.0.1.tgz
+    version: 0.0.1
   iotagent-json:
   - apiVersion: v1
     appVersion: 1.14.0
