@@ -1,6 +1,6 @@
 # endpoint-auth-service
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 A Helm chart for running the endpoint-auth-service on kubernetes.
 
 ## Maintainers
@@ -104,16 +104,16 @@ for that.
 | configService.autoscaling.minReplicas | int | `1` | minimum number of running pods |
 | configService.configmapUpdater.enabled | bool | `true` | should the updater be deployed? |
 | configService.configmapUpdater.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| configService.configmapUpdater.image.repository | string | `"quay.io/wi_stefan/envoy-configmap-updater"` | configmap updater image name ref: https://quay.io/repository/wi_stefan/envoy-configmap-updater |
-| configService.configmapUpdater.image.tag | string | `"0.0.6"` | tag of the image to be used |
+| configService.configmapUpdater.image.repository | string | `"quay.io/fiware/envoy-configmap-updater"` | configmap updater image name ref: https://quay.io/repository/fiware/envoy-configmap-updater |
+| configService.configmapUpdater.image.tag | string | `"0.1.0"` | tag of the image to be used |
 | configService.db.password | string | `"pass"` | password for connecting the database |
 | configService.db.url | string | `"jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"` | host of the database to be used - be aware, defaults to an in-memory db |
 | configService.db.user | string | `"ecs"` | user for connecting the database |
 | configService.fullnameOverride | string | `""` | option to override the fullname config in the _helpers.tpl |
 | configService.healthPort | int | `9090` | port to request health information at |
 | configService.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| configService.image.repository | string | `"quay.io/wi_stefan/endpoint-configuration-service"` | endpoint-configuration-service image name ref: https://quay.io/repository/wi_stefan/endpoint-configuration-service |
-| configService.image.tag | string | `"0.0.6"` | tag of the image to be used |
+| configService.image.repository | string | `"quay.io/fiware/endpoint-configuration-service"` | endpoint-configuration-service image name ref: https://quay.io/repository/fiware/endpoint-configuration-service |
+| configService.image.tag | string | `"0.1.0"` | tag of the image to be used |
 | configService.ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | configService.ingress.enabled | bool | `false` | should there be an ingress to connect configService with the public internet |
 | configService.ingress.hosts | list | `[]` |  |
@@ -122,6 +122,14 @@ for that.
 | configService.livenessProbe.periodSeconds | int | `10` |  |
 | configService.livenessProbe.successThreshold | int | `1` |  |
 | configService.livenessProbe.timeoutSeconds | int | `30` |  |
+| configService.meshExtension.authProviderName | string | `"outbound|80||ext-authz"` |  |
+| configService.meshExtension.enabled | bool | `false` |  |
+| configService.meshExtension.workloadSelector.name | string | `"app"` |  |
+| configService.meshExtension.workloadSelector.value | string | `"app"` |  |
+| configService.meshExtensionUpdater.enabled | bool | `false` |  |
+| configService.meshExtensionUpdater.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
+| configService.meshExtensionUpdater.image.repository | string | `"quay.io/fiware/mesh-extension-updater"` | image name ref: https://quay.io/repository/fiware/mesh-extension-updater |
+| configService.meshExtensionUpdater.image.tag | string | `"0.1.0"` | tag of the image to be used |
 | configService.nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | configService.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | configService.port | int | `8080` | port that the endpoint-configuration-service container uses |
@@ -159,8 +167,8 @@ for that.
 | ishare.enabled | bool | `true` | should the ishare-auth-provider be enabled? |
 | ishare.fullnameOverride | string | `""` | option to override the fullname config in the _helpers.tpl |
 | ishare.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| ishare.image.repository | string | `"quay.io/wi_stefan/ishare-auth-provider"` | endpoint-configuration-service image name ref: https://quay.io/repository/wi_stefan/ishare-auth-provider |
-| ishare.image.tag | string | `"0.0.6"` | tag of the image to be used |
+| ishare.image.repository | string | `"quay.io/fiware/ishare-auth-provider"` | endpoint-configuration-service image name ref: https://quay.io/repository/fiware/ishare-auth-provider |
+| ishare.image.tag | string | `"0.1.0"` | tag of the image to be used |
 | ishare.ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | ishare.ingress.enabled | bool | `false` | should there be an ingress to connect ishare with the public internet |
 | ishare.ingress.hosts | list | `[]` |  |
@@ -179,6 +187,11 @@ for that.
 | ishare.service.type | string | `"ClusterIP"` | service type |
 | ishare.serviceAccount | object | `{"create":false}` | if a ishare specific service account should be used, it can be configured here ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | ishare.serviceAccount.create | bool | `false` | specifies if the account should be created |
+| ishare.serviceEntry.address | string | `"ishare-authprovider"` |  |
+| ishare.serviceEntry.enabled | bool | `false` |  |
+| ishare.serviceEntry.host | string | `"ext-authz"` |  |
+| ishare.serviceEntry.providerPort | int | `8080` |  |
+| ishare.serviceEntry.servicePort | int | `80` |  |
 | ishare.storage.enabled | bool | `true` | should the config be persisted inside a pvc |
 | ishare.storage.size | string | `"8G"` | how big should the pvc be |
 | ishare.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
@@ -188,19 +201,19 @@ for that.
 | ishare.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | sidecar.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| sidecar.image.repository | string | `"quay.io/wi_stefan/envoy"` | envoy image name ref: https://quay.io/repository/wi_stefan/envoy |
-| sidecar.image.tag | string | `"0.0.6"` | tag of the image to be used |
+| sidecar.image.repository | string | `"quay.io/fiware/envoy"` | envoy image name ref: https://quay.io/repository/fiware/envoy |
+| sidecar.image.tag | string | `"0.1.0"` | tag of the image to be used |
 | sidecar.initConfig.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| sidecar.initConfig.repository | string | `"quay.io/wi_stefan/envoy-resource-updater"` | image name ref: https://quay.io/repository/wi_stefan/envoy-resource-updater |
-| sidecar.initConfig.tag | string | `"0.0.6"` | tag of the image to be used |
+| sidecar.initConfig.repository | string | `"quay.io/fiware/envoy-resource-updater"` | image name ref: https://quay.io/repository/fiware/envoy-resource-updater |
+| sidecar.initConfig.tag | string | `"0.1.0"` | tag of the image to be used |
 | sidecar.initIptables.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| sidecar.initIptables.repository | string | `"quay.io/wi_stefan/init-iptables"` | image name ref: https://quay.io/repository/wi_stefan/init-iptables |
-| sidecar.initIptables.tag | string | `"0.0.6"` | tag of the image to be used |
+| sidecar.initIptables.repository | string | `"quay.io/fiware/init-iptables"` | image name ref: https://quay.io/repository/fiware/init-iptables |
+| sidecar.initIptables.tag | string | `"0.1.0"` | tag of the image to be used |
 | sidecar.logLevel | string | `"trace"` |  |
 | sidecar.port | int | `15001` |  |
 | sidecar.updateConfig.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| sidecar.updateConfig.repository | string | `"quay.io/wi_stefan/envoy-resource-updater"` | image name ref: https://quay.io/repository/wi_stefan/envoy-resource-updater |
-| sidecar.updateConfig.tag | string | `"0.0.6"` | tag of the image to be used |
+| sidecar.updateConfig.repository | string | `"quay.io/fiware/envoy-resource-updater"` | image name ref: https://quay.io/repository/fiware/envoy-resource-updater |
+| sidecar.updateConfig.tag | string | `"0.1.0"` | tag of the image to be used |
 | sidecar.userId | int | `1337` |  |
 | sidecarInjector.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | sidecarInjector.additionalLabels | object | `{}` | additional labels for the deployment, if required |
@@ -211,7 +224,7 @@ for that.
 | sidecarInjector.fullnameOverride | string | `""` | option to override the fullname config in the _helpers.tpl |
 | sidecarInjector.healthPort | int | `9000` | port that the health check is available at |
 | sidecarInjector.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| sidecarInjector.image.repository | string | `"tumblr/k8s-sidecar-injector"` | endpoint-configuration-service image name ref: https://hub.docker.com/r/mayankkr/sidecarinjector |
+| sidecarInjector.image.repository | string | `"tumblr/k8s-sidecar-injector"` | sidecar-injector image name ref: https://hub.docker.com/r/mayankkr/sidecarinjector |
 | sidecarInjector.image.tag | string | `"release-v0.5.0"` | tag of the image to be used |
 | sidecarInjector.key | string | `"-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----\n"` | key to be used by the injector service |
 | sidecarInjector.labelNamespace | string | `"sidecar.k8s.fiware.org"` | namespace of the label to find the configmap to inject. |

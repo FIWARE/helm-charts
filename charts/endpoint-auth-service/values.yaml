@@ -51,7 +51,7 @@ configService:
     # ref: https://quay.io/repository/fiware/endpoint-configuration-service
     repository: quay.io/fiware/endpoint-configuration-service
     # -- tag of the image to be used
-    tag: 0.0.6
+    tag: 0.1.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
 
@@ -190,7 +190,36 @@ configService:
       # ref: https://quay.io/repository/fiware/envoy-configmap-updater
       repository: quay.io/fiware/envoy-configmap-updater
       # -- tag of the image to be used
-      tag: 0.0.6
+      tag: 0.1.0
+      # -- specification of the image pull policy
+      pullPolicy: IfNotPresent
+
+  ## configuration for integrating the service into the openshift service mesh
+  meshExtension:
+    ## -- should the generation of meshExtensions be enabled?
+    enabled: false
+    ## -- name of the auth-provider inside the service-mesh
+    authProviderName: "outbound|80||ext-authz"
+    ## select the workload to apply the extension to
+    workloadSelector:
+      ## -- name of the selector label
+      name: app
+      ## -- value of the selector label
+      value: app
+    # additional annotations, labels and configuration for the extension can be set via configService.additonalEnvVars.
+    # see the documentation of the endpoint-configuration-service for details
+
+  ## configuration for the automatic deployment of mesh extensions
+  meshExtensionUpdater:
+    ## -- should the automatic update be enabled
+    enabled: false
+    ## image to be used for mesh-extension-updater
+    image:
+      # -- image name
+      # ref: https://quay.io/repository/fiware/mesh-extension-updater
+      repository: quay.io/fiware/mesh-extension-updater
+      # -- tag of the image to be used
+      tag: 0.1.0
       # -- specification of the image pull policy
       pullPolicy: IfNotPresent
 
@@ -212,7 +241,7 @@ sidecar:
     # ref: https://quay.io/repository/fiware/envoy
     repository: quay.io/fiware/envoy
     # -- tag of the image to be used
-    tag: 0.0.6
+    tag: 0.1.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
 
@@ -222,7 +251,7 @@ sidecar:
     # ref: https://quay.io/repository/fiware/init-iptables
     repository: quay.io/fiware/init-iptables
     # -- tag of the image to be used
-    tag: 0.0.6
+    tag: 0.1.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
 
@@ -232,7 +261,7 @@ sidecar:
     # ref: https://quay.io/repository/fiware/envoy-resource-updater
     repository: quay.io/fiware/envoy-resource-updater
     # -- tag of the image to be used
-    tag: 0.0.6
+    tag: 0.1.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
 
@@ -242,7 +271,7 @@ sidecar:
     # ref: https://quay.io/repository/fiware/envoy-resource-updater
     repository: quay.io/fiware/envoy-resource-updater
     # -- tag of the image to be used
-    tag: 0.0.6
+    tag: 0.1.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
 
@@ -395,7 +424,7 @@ ishare:
     # ref: https://quay.io/repository/fiware/ishare-auth-provider
     repository: quay.io/fiware/ishare-auth-provider
     # -- tag of the image to be used
-    tag: 0.0.6
+    tag: 0.1.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
 
@@ -498,6 +527,20 @@ ishare:
     port: 8080
     # -- addtional annotations, if required
     annotations: {}
+
+  ## configuration for an Openshift ServiceMesh Entry. Only required when Openshift Service Mesh is used and the provider is not
+  ## automatically included into the mesh
+  serviceEntry:
+    ## -- should the entry be created?
+    enabled: false
+    ## -- host name to be used by the mesh
+    host: ext-authz
+    ## -- port to access the service at
+    servicePort: 80
+    ## -- Address to the service. This could either be a kubernetes service or an external address. See the ossm documentation for details.
+    address: ishare-authprovider
+    ## -- port to access the auth-provider at
+    providerPort: 8080
 
   storage:
     # -- should the config be persisted inside a pvc
