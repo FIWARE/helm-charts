@@ -24,7 +24,7 @@ spec:
         {{- with .Values.deployment.additionalLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if .Values.deployment.additionalAnnotations -}}
+      {{ if .Values.deployment.additionalAnnotations -}}
       annotations:
         {{- with .Values.deployment.additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
