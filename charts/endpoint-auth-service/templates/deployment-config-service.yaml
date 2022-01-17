@@ -82,6 +82,26 @@ spec:
               value: {{ include "ishare.fullname" . }}
             - name: PROXY_EXTERNAL_AUTH_PORT
               value: "{{ .Values.ishare.service.port }}"
+            {{ - if .Values.configService.meshExtension.enabled }}
+            - name: MESH_EXTENSION_ENABLED
+              value: "true"
+            - name: MESH_EXTENSION_MESH_EXTENSION_YAML_PATH
+              value: /mesh-config/service-mesh-extension.yaml
+            - name: MESH_EXTENSION_AUTH_PROVIDER_NAME
+              value: {{ .Values.configService.meshExtension.authProviderName }}
+            - name: MESH_EXTENSION_WORKLOAD_SELECTOR_NAME
+              value: {{ .Values.configService.meshExtension.workloadSelector.name }}
+            - name: MESH_EXTENSION_WORKLOAD_SELECTOR_VALUE
+              value: {{ .Values.configService.meshExtension.workloadSelector.value }}
+            - name: MESH_EXTENSION_EXTENSION_NAME
+              value: {{ include "configService.name" . }}-sme
+            - name: MESH_EXTENSION_EXTENSION_NAMESPACE
+              {{- if .Values.configService.meshExtension.namespace }}
+              value: {{ .Values.configService.meshExtension.namespace }}
+              {{- else }}
+              value: {{ .Release.Namespace }}
+              {{- end }}
+            {{- end }}
             {{- with .Values.configService.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -89,10 +109,29 @@ spec:
           resources:
             {{- toYaml .Values.configService.resources | nindent 12 }}
           {{- end }}
-      {{- if .Values.configService.configmapUpdater.enabled  }}
           volumeMounts:
+      {{- if .Values.configService.configmapUpdater.enabled  }}
             - name: proxy-config
               mountPath: /proxy-config
+      {{- end }}
+      {{- if .Values.configService.meshExtensionUpdater.enabled }}
+            - name: mesh-config
+              mountPath: /mesh-config
+      {{- end }}
+      {{- if .Values.configService.meshExtensionUpdater.enabled }}
+      - name: mesh-extension-updater
+          imagePullPolicy: {{ .Values.configService.meshExtensionUpdater.image.pullPolicy }}
+          image: "{{ .Values.configService.meshExtensionUpdater.image.repository }}:{{ .Values.configService.meshExtensionUpdater.image.tag }}"
+          env:
+            - name: MESH_CONFIG_FOLDER
+              value: /mesh-config
+            - name: MESH_EXTENSION_FILE_NAME
+              value: service-mesh-extension.yaml
+          volumeMounts:
+            - name: mesh-config
+              mountPath: /mesh-config
+      {{- end }}
+      {{- if .Values.configService.configmapUpdater.enabled  }}
         - name: configmap-updater
           imagePullPolicy: {{ .Values.configService.configmapUpdater.image.pullPolicy }}
           image: "{{ .Values.configService.configmapUpdater.image.repository }}:{{ .Values.configService.configmapUpdater.image.tag }}"
@@ -106,10 +145,12 @@ spec:
           volumeMounts:
             - name: proxy-config
               mountPath: /proxy-config
+      {{- end }}
       volumes:
         - name: proxy-config
           emptyDir: {}
-      {{- end }}
+        - name: mesh-config
+          emptyDir: {}
       {{- with .Values.configService.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

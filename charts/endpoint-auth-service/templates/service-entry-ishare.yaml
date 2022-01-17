@@ -1,0 +1,27 @@
+{{- if .Values.ishare.serviceEntry.enabled -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: {{ include "ishare.fullname" . }}
+  labels:
+    {{ include "ishare.labels" . | nindent 4 }}
+  {{- if .Values.ishare.ingress.annotations }}
+  annotations:
+    {{- with .Values.ishare.ingress.annotations }}
+      {{- toYaml . | nindent 4 }}
+      {{- end }}
+  {{- end }}
+spec:
+  hosts:
+    - {{ .Values.ishare.serviceEntry.host }}
+  ports:
+    - number: {{ .Values.ishare.serviceEntry.servicePort }}
+      name: http
+      protocol: HTTP
+  location: MESH_EXTERNAL
+  resolution: DNS
+  endpoints:
+    - address: {{ .Values.ishare.serviceEntry.address }}
+      ports:
+        http: {{ .Values.ishare.serviceEntry.providerPort }}
+{{- end }}

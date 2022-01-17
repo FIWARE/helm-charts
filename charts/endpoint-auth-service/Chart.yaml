@@ -1,7 +1,7 @@
 apiVersion: v1
 name: endpoint-auth-service
-version: 0.0.1
-appVersion: 0.0.6
+version: 0.0.2
+appVersion: 0.1.0
 description: A Helm chart for running the endpoint-auth-service on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
 keywords:
@@ -9,6 +9,8 @@ keywords:
 - auth
 - ishare
 - envoy
+- openshift
+- openshift service mesh
 sources:
 - https://github.com/FIWARE/endpoint-auth-service
 maintainers:
