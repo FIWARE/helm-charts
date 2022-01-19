@@ -1,6 +1,6 @@
 # orion
 
-![Version: 0.0.17](https://img.shields.io/badge/Version-0.0.17-informational?style=flat-square) ![AppVersion: 3.2.0](https://img.shields.io/badge/AppVersion-3.2.0-informational?style=flat-square)
+![Version: 0.0.18](https://img.shields.io/badge/Version-0.0.18-informational?style=flat-square) ![AppVersion: 1.0.1](https://img.shields.io/badge/AppVersion-1.0.1-informational?style=flat-square)
 
 A Helm chart for running the fiware orion broker on kubernetes.
 
@@ -45,8 +45,8 @@ A Helm chart for running the fiware orion broker on kubernetes.
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| deployment.image.repository | string | `"fiware/orion-ld"` | orion image name ref: https://hub.docker.com/r/fiware/orion-ld |
-| deployment.image.tag | string | `"latest"` |  |
+| deployment.image.repository | string | `"quay.io/fiware/orion-ld"` | orion image name ref: https://hub.docker.com/r/fiware/orion/ ref: https://quay.io/repository/fiware/orion-ld |
+| deployment.image.tag | string | `"1.0.1"` |  |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
