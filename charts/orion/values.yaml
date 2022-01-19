@@ -41,12 +41,12 @@ deployment:
   ## configuration of the image to be used
   image:
     # -- orion image name
-    #ref: https://hub.docker.com/r/fiware/orion/
-    # ref: https://hub.docker.com/r/fiware/orion-ld
-    repository: fiware/orion-ld
+    # ref: https://hub.docker.com/r/fiware/orion/
+    # ref: https://quay.io/repository/fiware/orion-ld
+    repository: quay.io/fiware/orion-ld
     #repository: fiware/orion
     # -- tag of the image to be used
-    tag: latest
+    tag: 1.0.1
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
