@@ -82,7 +82,7 @@ spec:
               value: {{ include "ishare.fullname" . }}
             - name: PROXY_EXTERNAL_AUTH_PORT
               value: "{{ .Values.ishare.service.port }}"
-            {{ - if .Values.configService.meshExtension.enabled }}
+            {{- if .Values.configService.meshExtension.enabled }}
             - name: MESH_EXTENSION_ENABLED
               value: "true"
             - name: MESH_EXTENSION_MESH_EXTENSION_YAML_PATH

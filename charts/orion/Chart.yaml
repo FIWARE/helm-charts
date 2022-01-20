@@ -1,5 +1,5 @@
 apiVersion: v2
-name: orion-ld
+name: orion
 version: 1.0.1
 appVersion: 1.0.1
 kubeVersion: '>= 1.19'
@@ -9,6 +9,7 @@ icon: https://fiware.github.io/catalogue/img/fiware.png
 keywords:
 - fiware
 - orion-ld
+- orion
 sources:
 - https://github.com/FIWARE/context.Orion-LD
 maintainers:
