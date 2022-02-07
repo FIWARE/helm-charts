@@ -243,21 +243,33 @@ spec:
             - name: {{ .Values.broker.envPrefix }}DISABLE_METRICS
               value: "FALSE"
             {{- end }}
-            {{ if .Values.broker.metrics.statCountersEnabled  }}
+            {{ if .Values.broker.metrics.statCountersEnabled }}
             - name: {{ .Values.broker.envPrefix }}STAT_COUNTERS
-              value: {{ .Values.broker.metrics.statCountersEnabled | upper }}
+              value: "TRUE"
+            {{ else }}
+            - name: {{ .Values.broker.envPrefix }}STAT_COUNTERS
+              value: "FALSE"
             {{ end }}
             {{ if .Values.broker.metrics.statSemWaitEnabled }}
             - name: {{ .Values.broker.envPrefix }}STAT_SEM_WAIT
-              value: {{ .Values.broker.metrics.statSemWaitEnabled | upper }}
+              value: "TRUE"
+            {{ else }}
+            - name: {{ .Values.broker.envPrefix }}STAT_SEM_WAIT
+              value: "FALSE"
             {{- end }}
             {{ if .Values.broker.metrics.statTimingEnabled }}
             - name: {{ .Values.broker.envPrefix }}STAT_TIMING
-              value: {{ .Values.broker.metrics.statTimingEnabled | upper }}
+              value: "TRUE"
+            {{ else }}
+            - name: {{ .Values.broker.envPrefix }}STAT_TIMING
+              value: "FALSE"            
             {{- end }}
             {{ if .Values.broker.metrics.statNotifQueueEnabled }}
             - name: {{ .Values.broker.envPrefix }}STAT_NOTIF_QUEUE
-              value: {{ .Values.broker.metrics.statNotifQueueEnabled | upper }}
+              value: "TRUE"
+            {{ else }}
+            - name: {{ .Values.broker.envPrefix }}STAT_NOTIF_QUEUE
+              value: "FALSE"               
             {{- end }}
             {{- end }}
 
@@ -348,3 +360,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      
