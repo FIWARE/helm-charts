@@ -158,6 +158,10 @@ admin:
   password: admin
   # -- email address of the admin user
   email: admin@admin.org
+
+# -- use an already existing secret, if provided the other secrets are ignored. Expected keys are dbPassword and adminPassword
+# existingSecret:
+
 ## Certificates configuration
 certs:
   # -- Algorithm to firm ID tokens for OIDC
