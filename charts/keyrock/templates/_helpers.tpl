@@ -54,3 +54,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+{{- define "keyrock.secretName" -}}
+    {{- if .Values.existingSecret -}}
+        {{- printf "%s" (tpl .Values.existingSecret $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "keyrock.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
