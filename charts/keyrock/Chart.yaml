@@ -1,7 +1,7 @@
 apiVersion: v1
 name: keyrock
-version: 0.2.0
-appVersion: 8.0.0
+version: 0.2.1
+appVersion: 8.1.0
 home: https://fiware-idm.readthedocs.io/en/latest/
 description: A Helm chart for running the fiware idm keyrock on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
