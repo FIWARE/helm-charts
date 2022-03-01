@@ -3,6 +3,25 @@ entries:
   api-umbrella:
   - apiVersion: v1
     appVersion: v0.15.5
+    created: "2022-03-01T11:40:14.884678023Z"
+    description: A Helm chart for running api-umbrella on kubernetes.
+    digest: fd52d2f6b0b7b5467a43fa5084cb706df2a863b2165aefd0b427b5e38149c610
+    home: https://api-umbrella.readthedocs.io/en/latest/index.html
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - api-umbrella
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: api-umbrella
+    sources:
+    - https://github.com/NREL/api-umbrella
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/api-umbrella-0.0.6/api-umbrella-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v1
+    appVersion: v0.15.5
     created: "2021-11-03T14:41:53.121275132Z"
     description: A Helm chart for running api-umbrella on kubernetes.
     digest: 8753c89945bf57376ba4fe6cd3c9a7762c70f8f517eb121dff6103d1cc98160a
@@ -447,6 +466,28 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-0.0.1/business-api-ecosystem-0.0.1.tgz
     version: 0.0.1
   endpoint-auth-service:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2022-03-01T11:40:15.055322229Z"
+    description: A Helm chart for running the endpoint-auth-service on kubernetes.
+    digest: 68016655a6fe4989c4315379e7b5e7e0692b0a5a721ce4eccef047e017951c0c
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - auth
+    - ishare
+    - envoy
+    - openshift
+    - openshift service mesh
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: endpoint-auth-service
+    sources:
+    - https://github.com/FIWARE/endpoint-auth-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/endpoint-auth-service-0.0.3/endpoint-auth-service-0.0.3.tgz
+    version: 0.0.3
   - apiVersion: v1
     appVersion: 0.1.0
     created: "2022-01-17T10:36:11.206620315Z"
@@ -907,6 +948,29 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/mintaka-0.0.1/mintaka-0.0.1.tgz
     version: 0.0.1
   orion:
+  - annotations:
+      charts.openshift.io/name: orion-ld
+    apiVersion: v2
+    appVersion: 1.0.1
+    created: "2022-03-01T11:40:15.224738922Z"
+    description: A Helm chart for running the fiware orion-ld context broker on kubernetes.
+    digest: 61a20e90958dd95413b2ff72172fe3bc4bf5f4737aed65f9cc58e50bef61e7ac
+    home: https://github.com/FIWARE/context.Orion-LD
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion-ld
+    - orion
+    kubeVersion: '>= 1.19'
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: orion
+    sources:
+    - https://github.com/FIWARE/context.Orion-LD
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/orion-1.0.1/orion-1.0.1.tgz
+    version: 1.0.1
   - apiVersion: v1
     appVersion: 1.0.1
     created: "2022-02-07T12:38:26.866079031Z"
