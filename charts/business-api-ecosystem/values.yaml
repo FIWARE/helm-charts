@@ -147,7 +147,7 @@ bizEcosystemApis:
       ## ref: https://hub.docker.com/r/fiware/biz-ecosystem-apis
       repository: fiware/biz-ecosystem-apis
       ## -- tag of the image to be used
-      tag: v7.6.0
+      tag: v8.0.0
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
     ## -- additional labels for the deployment, if required  
