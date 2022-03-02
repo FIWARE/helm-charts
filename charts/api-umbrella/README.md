@@ -1,6 +1,6 @@
 # api-umbrella
 
-![Version: 0.0.4](https://img.shields.io/badge/Version-0.0.4-informational?style=flat-square) ![AppVersion: v0.15.5](https://img.shields.io/badge/AppVersion-v0.15.5-informational?style=flat-square)
+![Version: 0.0.7](https://img.shields.io/badge/Version-0.0.7-informational?style=flat-square) ![AppVersion: v0.17.0](https://img.shields.io/badge/AppVersion-v0.17.0-informational?style=flat-square)
 
 A Helm chart for running api-umbrella on kubernetes.
 
@@ -23,9 +23,9 @@ A Helm chart for running api-umbrella on kubernetes.
 | deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-| deployment.image | object | `{"pullPolicy":"IfNotPresent","repository":"fiware/api-umbrella","tag":"0.15.5"}` | configuration of the image to be used |
+| deployment.image | object | `{"pullPolicy":"IfNotPresent","repository":"fiware/api-umbrella","tag":"0.17.0"}` | configuration of the image to be used |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| deployment.image.tag | string | `"0.15.5"` | tag of the image to be used |
+| deployment.image.tag | string | `"0.17.0"` | tag of the image to be used |
 | deployment.livenessProbe | object | `{"initialDelaySeconds":30,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":30}` | liveness and readiness probes of the orion broker, they will be evaluated against the version endpoint ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes |
 | deployment.nodeSelector | object | `{}` |  |
 | deployment.readinessProbe.initialDelaySeconds | int | `30` |  |
