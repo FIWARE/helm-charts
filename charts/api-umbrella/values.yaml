@@ -43,7 +43,7 @@ deployment:
     ## api-umbrella image name
     repository: fiware/api-umbrella
     # -- tag of the image to be used
-    tag: 0.17.0
+    tag: 0.18.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
@@ -140,24 +140,37 @@ umbrella:
     name: api_umbrella
 
   # -- Local authorisation registry
-  # Provide information about local authorisation registry
+  # Provide information about local authorisation registry when iSHARE-compliant authorization modes are used
   #authorisation_registry:
     #host: https://my-registry.net
     #token_endpoint: https://my-registry.net/connect/token
     #delegation_endpoint: https://my-registry.net/delegation
-    #identifier: MY-AR-EORI
+    #identifier: <AR_EORI>
+
+  # -- iSHARE Satellite
+  # Config for satellite - required if no root CA is provided in jws config
+  #satellite:
+     # Host
+     #host: <SATELLITE_HOST>
+     # Endpoint for /token requests (full URL)
+     #token_endpoint: <SATELLITE_HOST/token>
+     # Endpoint for /trusted_list requests to fetch trusted root CAs (full URL)
+     #trusted_list_endpoint: <SATELLITE_HOST/trusted_list>
+     # EORI of satellite
+     #identifier: <SATELLITE_EORI>
+
 
   # -- JWS configuration
-  # Provide information for signing and validating JWT
+  # Provide information for signing and validating JWT when iSHARE-compliant authorization modes are used
   #jws:
     # Identifier of local authority
-    #identifier: MY-EORI
+    #identifier: <LOCAL_EORI>
     # x5c public certificate chain (array of base64 encoded certificates)
     #x5c:
     #  - <CERT1>
     #  - <CERT2>
     #  - <ROOTCERT>
-    # Root CA certificate(s) (as PEM string)
+    # Root CA certificate(s) (as PEM string) - required if no satellite information is provided, otherwise should not be set
     #root_ca: <ROOTCACHAIN>
     # Private key (as PEM string)
     #private_key: <PRIVATE-KEY>
