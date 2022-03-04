@@ -31,6 +31,14 @@ data:
       identifier: {{ .Values.umbrella.authorisation_registry.identifier | quote }}
     {{- end }}
 
+    {{ if .Values.umbrella.satellite -}}
+    satellite:
+      host: {{ .Values.umbrella.satellite.host | quote }}
+      token_endpoint: {{ .Values.umbrella.satellite.token_endpoint | quote }}
+      trusted_list_endpoint: {{ .Values.umbrella.satellite.trusted_list_endpoint | quote }}
+      identifier: {{ .Values.umbrella.satellite.identifier | quote }}
+    {{- end }}
+
     {{ if .Values.umbrella.jws -}}
     jws:
       identifier: {{ .Values.umbrella.jws.identifier | quote }}
