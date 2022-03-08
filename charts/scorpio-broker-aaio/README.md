@@ -1,6 +1,6 @@
 # scorpio-broker-aaio
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.0](https://img.shields.io/badge/AppVersion-2.1.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes in which all the microservices are deployed under a single container and thus less effective for production environment but serves well in testing and dev environment.
 
@@ -20,7 +20,7 @@ A Helm chart for Kubernetes in which all the microservices are deployed under a 
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | image.repository | string | `"scorpiobroker/scorpio"` | scorpiobroker image name |
-| image.tag | string | `"scorpio-aaio_latest"` | tag of the image to be used |
+| image.tag | string | `"scorpio-aaio_2.1.0"` | tag of the image to be used |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | ingress.enabled | bool | `false` | should there be an ingress to connect scorpio with the public internet       |

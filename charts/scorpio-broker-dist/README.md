@@ -1,6 +1,6 @@
 # scorpioBroker
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.0](https://img.shields.io/badge/AppVersion-2.1.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes in which every microservices has its own container and hence have reserved resources for it and virtually isolated from others and best for production.
 
@@ -10,14 +10,13 @@ A Helm chart for Kubernetes in which every microservices has its own container a
 |-----|------|---------|-------------|
 | atContextServer.contextLabel | string | `"at-context-server"` |  |
 | atContextServer.enabled | bool | `true` |  |
-| atContextServer.eurekaAddress | string | `"http://eureka:8761/eureka/apps/ATCONTEXT-SERVER/$HOSTNAME:atcontext-server:27015/status?value=OUT_OF_SERVICE"` |  |
 | atContextServer.hpa.enabled | bool | `true` |  |
 | atContextServer.hpa.maxReplicas | int | `5` | maximum number of pods that can be set by the autoscaler |
 | atContextServer.hpa.minReplicas | int | `1` | minimum number of replicas to which the autoscaler can scale down |
 | atContextServer.hpa.targetCPUUtilizationPercentage | int | `80` |  |
 | atContextServer.image.pullPolicy | string | `"Always"` |  |
 | atContextServer.image.repository | string | `"scorpiobroker/scorpio"` |  |
-| atContextServer.image.tag | string | `"AtContextServer_1.16.0"` | tag of the image to be used |
+| atContextServer.image.tag | string | `"AtContextServer_2.1.0"` | tag of the image to be used |
 | atContextServer.livenessProbe.enabled | bool | `true` |  |
 | atContextServer.livenessProbe.failureThreshold | int | `6` |  |
 | atContextServer.livenessProbe.initialDelaySeconds | int | `40` |  |
@@ -40,14 +39,13 @@ A Helm chart for Kubernetes in which every microservices has its own container a
 | atContextServer.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | configServer.configLabel | string | `"config-server"` |  |
 | configServer.enabled | bool | `true` |  |
-| configServer.eurekaAddress | string | `"http://eureka:8761/eureka/apps/CONFIGSERVER/$HOSTNAME:configserver:8888/status?value=OUT_OF_SERVICE"` |  |
 | configServer.hpa.enabled | bool | `true` |  |
 | configServer.hpa.maxReplicas | int | `5` | maximum number of pods that can be set by the autoscaler |
 | configServer.hpa.minReplicas | int | `1` | minimum number of replicas to which the autoscaler can scale down |
 | configServer.hpa.targetCPUUtilizationPercentage | int | `80` |  |
 | configServer.image.pullPolicy | string | `"Always"` |  |
 | configServer.image.repository | string | `"scorpiobroker/scorpio"` |  |
-| configServer.image.tag | string | `"config-server_1.16.0"` | tag of the image to be used |
+| configServer.image.tag | string | `"config-server_1.1.0"` | tag of the image to be used |
 | configServer.livenessProbe.enabled | bool | `true` |  |
 | configServer.livenessProbe.failureThreshold | int | `6` |  |
 | configServer.livenessProbe.initialDelaySeconds | int | `40` |  |
@@ -70,14 +68,13 @@ A Helm chart for Kubernetes in which every microservices has its own container a
 | configServer.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | entityManager.enabled | bool | `true` |  |
 | entityManager.entityLabel | string | `"entity-manager"` |  |
-| entityManager.eurekaAddress | string | `"http://eureka:8761/eureka/apps/ENTITY-MANAGER/$HOSTNAME:entity-manager:1025/status?value=OUT_OF_SERVICE"` |  |
 | entityManager.hpa.enabled | bool | `true` |  |
 | entityManager.hpa.maxReplicas | int | `5` | maximum number of pods that can be set by the autoscaler |
 | entityManager.hpa.minReplicas | int | `1` | minimum number of replicas to which the autoscaler can scale down |
 | entityManager.hpa.targetCPUUtilizationPercentage | int | `80` |  |
 | entityManager.image.pullPolicy | string | `"Always"` |  |
 | entityManager.image.repository | string | `"scorpiobroker/scorpio"` |  |
-| entityManager.image.tag | string | `"EntityManager_1.16.0"` | tag of the image to be used |
+| entityManager.image.tag | string | `"EntityManager_2.1.0"` | tag of the image to be used |
 | entityManager.livenessProbe.enabled | bool | `true` |  |
 | entityManager.livenessProbe.failureThreshold | int | `6` |  |
 | entityManager.livenessProbe.initialDelaySeconds | int | `40` |  |
@@ -106,7 +103,7 @@ A Helm chart for Kubernetes in which every microservices has its own container a
 | eureka.hpa.targetCPUUtilizationPercentage | int | `80` | average CPU usage across all the pods exceeds 80%, HPA will spin up additional pods. |
 | eureka.image.pullPolicy | string | `"Always"` | specification of the image pull policy |
 | eureka.image.repository | string | `"scorpiobroker/scorpio"` |  |
-| eureka.image.tag | string | `"eureka-server_1.16.0"` |  |
+| eureka.image.tag | string | `"eureka-server_2.1.0"` |  |
 | eureka.livenessProbe.enabled | bool | `true` |  |
 | eureka.livenessProbe.failureThreshold | int | `6` |  |
 | eureka.livenessProbe.initialDelaySeconds | int | `40` |  |
@@ -131,7 +128,6 @@ A Helm chart for Kubernetes in which every microservices has its own container a
 | eureka.updateStrategy.rollingUpdate.maxUnavailable | string | `"25%"` | number of pods that can be unavailable while updating |
 | eureka.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | gateway.enabled | bool | `true` |  |
-| gateway.eurekaAddress | string | `"http://eureka:8761/eureka/apps/GATEWAY/$HOSTNAME:gateway:9090/status?value=OUT_OF_SERVICE"` |  |
 | gateway.gatewayLabel | string | `"gateway"` |  |
 | gateway.hpa.enabled | bool | `true` |  |
 | gateway.hpa.maxReplicas | int | `5` | maximum number of pods that can be set by the autoscaler |
@@ -139,7 +135,7 @@ A Helm chart for Kubernetes in which every microservices has its own container a
 | gateway.hpa.targetCPUUtilizationPercentage | int | `80` |  |
 | gateway.image.pullPolicy | string | `"Always"` |  |
 | gateway.image.repository | string | `"scorpiobroker/scorpio"` |  |
-| gateway.image.tag | string | `"gateway_1.16.0"` |  |
+| gateway.image.tag | string | `"gateway_2.1.0"` |  |
 | gateway.livenessProbe.enabled | bool | `true` |  |
 | gateway.livenessProbe.failureThreshold | int | `6` |  |
 | gateway.livenessProbe.initialDelaySeconds | int | `40` |  |
@@ -161,7 +157,6 @@ A Helm chart for Kubernetes in which every microservices has its own container a
 | gateway.updateStrategy.rollingUpdate.maxUnavailable | string | `"25%"` | number of pods that can be unavailable while updating |
 | gateway.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | historyManager.enabled | bool | `true` |  |
-| historyManager.eurekaAddress | string | `"http://eureka:8761/eureka/apps/HISTORY-MANAGER/$HOSTNAME:history-manager:1040/status?value=OUT_OF_SERVICE"` |  |
 | historyManager.historyLabel | string | `"history-manager"` |  |
 | historyManager.hpa.enabled | bool | `true` |  |
 | historyManager.hpa.maxReplicas | int | `5` | maximum number of pods that can be set by the autoscaler |
@@ -169,7 +164,7 @@ A Helm chart for Kubernetes in which every microservices has its own container a
 | historyManager.hpa.targetCPUUtilizationPercentage | int | `80` |  |
 | historyManager.image.pullPolicy | string | `"Always"` |  |
 | historyManager.image.repository | string | `"scorpiobroker/scorpio"` |  |
-| historyManager.image.tag | string | `"HistoryManager_1.16.0"` | tag of the image to be used |
+| historyManager.image.tag | string | `"HistoryManager_2.1.0"` | tag of the image to be used |
 | historyManager.livenessProbe.enabled | bool | `true` |  |
 | historyManager.livenessProbe.failureThreshold | int | `6` |  |
 | historyManager.livenessProbe.initialDelaySeconds | int | `40` |  |
@@ -192,14 +187,13 @@ A Helm chart for Kubernetes in which every microservices has its own container a
 | historyManager.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | namespace | string | `"scorpio-broker"` |  |
 | queryManager.enabled | bool | `true` |  |
-| queryManager.eurekaAddress | string | `"http://eureka:8761/eureka/apps/QUERY-MANAGER/$HOSTNAME:query-manager:1026/status?value=OUT_OF_SERVICE"` |  |
 | queryManager.hpa.enabled | bool | `true` |  |
 | queryManager.hpa.maxReplicas | int | `5` | maximum number of pods that can be set by the autoscaler |
 | queryManager.hpa.minReplicas | int | `1` | minimum number of replicas to which the autoscaler can scale down |
 | queryManager.hpa.targetCPUUtilizationPercentage | int | `80` |  |
 | queryManager.image.pullPolicy | string | `"Always"` |  |
 | queryManager.image.repository | string | `"scorpiobroker/scorpio"` |  |
-| queryManager.image.tag | string | `"QueryManager_1.16.0"` | tag of the image to be used |
+| queryManager.image.tag | string | `"QueryManager_2.1.0"` | tag of the image to be used |
 | queryManager.livenessProbe.enabled | bool | `true` |  |
 | queryManager.livenessProbe.failureThreshold | int | `6` |  |
 | queryManager.livenessProbe.initialDelaySeconds | int | `40` |  |
@@ -222,14 +216,13 @@ A Helm chart for Kubernetes in which every microservices has its own container a
 | queryManager.updateStrategy.rollingUpdate.maxUnavailable | string | `"25%"` | number of pods that can be unavailable while updating |
 | queryManager.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | registryManager.enabled | bool | `true` |  |
-| registryManager.eurekaAddress | string | `"http://eureka:8761/eureka/apps/C-SOURCES/$HOSTNAME:c-sources:1030/status?value=OUT_OF_SERVICE"` |  |
 | registryManager.hpa.enabled | bool | `true` |  |
 | registryManager.hpa.maxReplicas | int | `5` | maximum number of pods that can be set by the autoscaler |
 | registryManager.hpa.minReplicas | int | `1` | minimum number of replicas to which the autoscaler can scale down |
 | registryManager.hpa.targetCPUUtilizationPercentage | int | `80` |  |
 | registryManager.image.pullPolicy | string | `"Always"` |  |
 | registryManager.image.repository | string | `"scorpiobroker/scorpio"` |  |
-| registryManager.image.tag | string | `"RegistryManager_1.16.0"` | tag of the image to be used |
+| registryManager.image.tag | string | `"RegistryManager_2.1.0"` | tag of the image to be used |
 | registryManager.livenessProbe.enabled | bool | `true` |  |
 | registryManager.livenessProbe.failureThreshold | int | `6` |  |
 | registryManager.livenessProbe.initialDelaySeconds | int | `40` |  |
@@ -251,45 +244,42 @@ A Helm chart for Kubernetes in which every microservices has its own container a
 | registryManager.updateStrategy.rollingUpdate.maxSurge | string | `"25%"` | number of pods that can be created above the desired amount while updating |
 | registryManager.updateStrategy.rollingUpdate.maxUnavailable | string | `"25%"` | number of pods that can be unavailable while updating |
 | registryManager.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
-| storageManager.enabled | bool | `true` |  |
-| storageManager.eurekaAddress | string | `"http://eureka:8761/eureka/apps/STORAGE-MANAGER/$HOSTNAME:storage-manager:1029/status?value=OUT_OF_SERVICE"` |  |
-| storageManager.hpa.enabled | bool | `true` |  |
-| storageManager.hpa.maxReplicas | int | `5` | maximum number of pods that can be set by the autoscaler |
-| storageManager.hpa.minReplicas | int | `1` | minimum number of replicas to which the autoscaler can scale down |
-| storageManager.hpa.targetCPUUtilizationPercentage | int | `80` |  |
-| storageManager.image.pullPolicy | string | `"Always"` |  |
-| storageManager.image.repository | string | `"scorpiobroker/scorpio"` |  |
-| storageManager.image.tag | string | `"StorageManager_1.16.0"` | tag of the image to be used |
-| storageManager.livenessProbe.enabled | bool | `true` |  |
-| storageManager.livenessProbe.failureThreshold | int | `6` |  |
-| storageManager.livenessProbe.initialDelaySeconds | int | `40` |  |
-| storageManager.livenessProbe.periodSeconds | int | `10` |  |
-| storageManager.name | string | `"storage-manager"` |  |
-| storageManager.readinessProbe.enabled | bool | `true` |  |
-| storageManager.readinessProbe.failureThreshold | int | `6` |  |
-| storageManager.readinessProbe.initialDelaySeconds | int | `40` |  |
-| storageManager.readinessProbe.periodSeconds | int | `10` |  |
-| storageManager.replicas | int | `1` |  |
-| storageManager.resources | object | `{}` |  |
-| storageManager.restartPolicy | string | `"Always"` |  |
-| storageManager.securityContext | object | `{}` |  |
-| storageManager.serviceAccount.enabled | bool | `false` |  |
-| storageManager.serviceAccount.name | string | `""` |  |
-| storageManager.storageLabel | string | `"storage-manager"` |  |
-| storageManager.terminationGracePeriodSeconds | int | `30` |  |
-| storageManager.updateStrategy.rollingUpdate | object | `{"maxSurge":"25%","maxUnavailable":"25%"}` | new pods will be added gradually |
-| storageManager.updateStrategy.rollingUpdate.maxSurge | string | `"25%"` | number of pods that can be created above the desired amount while updating |
-| storageManager.updateStrategy.rollingUpdate.maxUnavailable | string | `"25%"` | number of pods that can be unavailable while updating |
-| storageManager.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
+| registrySubscriptionManager.enabled | bool | `true` |  |
+| registrySubscriptionManager.hpa.enabled | bool | `true` |  |
+| registrySubscriptionManager.hpa.maxReplicas | int | `5` | maximum number of pods that can be set by the autoscaler |
+| registrySubscriptionManager.hpa.minReplicas | int | `1` | minimum number of replicas to which the autoscaler can scale down |
+| registrySubscriptionManager.hpa.targetCPUUtilizationPercentage | int | `80` |  |
+| registrySubscriptionManager.image.pullPolicy | string | `"Always"` |  |
+| registrySubscriptionManager.image.repository | string | `"scorpiobroker/scorpio"` |  |
+| registrySubscriptionManager.image.tag | string | `"RegistrySubscriptionManager_2.1.0"` | tag of the image to be used |
+| registrySubscriptionManager.livenessProbe.enabled | bool | `true` |  |
+| registrySubscriptionManager.livenessProbe.failureThreshold | int | `6` |  |
+| registrySubscriptionManager.livenessProbe.initialDelaySeconds | int | `40` |  |
+| registrySubscriptionManager.livenessProbe.periodSeconds | int | `10` |  |
+| registrySubscriptionManager.name | string | `"registry-subscription-manager"` |  |
+| registrySubscriptionManager.readinessProbe.enabled | bool | `true` |  |
+| registrySubscriptionManager.readinessProbe.failureThreshold | int | `6` |  |
+| registrySubscriptionManager.readinessProbe.initialDelaySeconds | int | `40` |  |
+| registrySubscriptionManager.readinessProbe.periodSeconds | int | `10` |  |
+| registrySubscriptionManager.registryLabel | string | `"registry-subscription-manager"` |  |
+| registrySubscriptionManager.replicas | int | `1` |  |
+| registrySubscriptionManager.resources | object | `{}` |  |
+| registrySubscriptionManager.restartPolicy | string | `"Always"` |  |
+| registrySubscriptionManager.securityContext | object | `{}` |  |
+| registrySubscriptionManager.serviceAccount.enabled | bool | `false` |  |
+| registrySubscriptionManager.serviceAccount.name | string | `""` |  |
+| registrySubscriptionManager.terminationGracePeriodSeconds | int | `30` |  |
+| registrySubscriptionManager.updateStrategy.rollingUpdate | object | `{"maxSurge":"25%","maxUnavailable":"25%"}` | new pods will be added gradually |
+| registrySubscriptionManager.updateStrategy.rollingUpdate.maxUnavailable | string | `"25%"` | number of pods that can be unavailable while updating |
+| registrySubscriptionManager.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | subscriptionManager.enabled | bool | `true` |  |
-| subscriptionManager.eurekaAddress | string | `"http://eureka:8761/eureka/apps/SUBSCRIPTION-MANAGER/$HOSTNAME:subscription-manager:2025/status?value=OUT_OF_SERVICE"` |  |
 | subscriptionManager.hpa.enabled | bool | `true` |  |
 | subscriptionManager.hpa.maxReplicas | int | `5` | maximum number of pods that can be set by the autoscaler |
 | subscriptionManager.hpa.minReplicas | int | `1` | minimum number of replicas to which the autoscaler can scale down |
 | subscriptionManager.hpa.targetCPUUtilizationPercentage | int | `80` |  |
 | subscriptionManager.image.pullPolicy | string | `"Always"` |  |
 | subscriptionManager.image.repository | string | `"scorpiobroker/scorpio"` |  |
-| subscriptionManager.image.tag | string | `"SubscriptionManager_1.16.0"` | tag of the image to be used |
+| subscriptionManager.image.tag | string | `"SubscriptionManager_2.1.0"` | tag of the image to be used |
 | subscriptionManager.livenessProbe.enabled | bool | `true` |  |
 | subscriptionManager.livenessProbe.failureThreshold | int | `6` |  |
 | subscriptionManager.livenessProbe.initialDelaySeconds | int | `40` |  |

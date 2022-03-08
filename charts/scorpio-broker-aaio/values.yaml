@@ -13,7 +13,7 @@ image:
   # -- specification of the image pull policy
   pullPolicy: IfNotPresent
   # -- tag of the image to be used
-  tag: scorpio-aaio_1.1.0
+  tag: scorpio-aaio_2.1.0
 
 imagePullSecrets: []
 nameOverride: ""

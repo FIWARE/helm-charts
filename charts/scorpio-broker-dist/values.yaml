@@ -12,7 +12,7 @@ eureka:
 ##
   replicas: 1
 
-  hostname: eureka
+  hostname: localhost
   port: 8761
 
   service:      
@@ -38,7 +38,7 @@ eureka:
 ## Please use only latest version of docker images as few older images might not work with kubernetes. 
   image:        
    repository: scorpiobroker/scorpio
-   tag: eureka-server_1.1.0
+   tag: eureka-server_2.1.0
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 # -- specification of the image pull policy
    pullPolicy: Always
@@ -145,7 +145,7 @@ gateway:
 ## Please use only latest version of docker images as few older images might not work with kubernetes.
   image:       
    repository: scorpiobroker/scorpio
-   tag: gateway_1.1.0
+   tag: gateway_2.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
@@ -249,7 +249,7 @@ atContextServer:
    # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: AtContextServer_1.1.0
+   tag: AtContextServer_2.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
@@ -466,7 +466,7 @@ entityManager:
    # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: EntityManager_1.1.0
+   tag: EntityManager_2.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
@@ -574,7 +574,7 @@ historyManager:
    # ref: https://hub.docker.com/r/scorpiobroker/scorpio        
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: HistoryManager_1.1.0
+   tag: HistoryManager_2.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
@@ -682,7 +682,7 @@ queryManager:
    # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: QueryManager_1.1.0
+   tag: QueryManager_2.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
@@ -791,7 +791,7 @@ registryManager:
    # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: RegistryManager_1.1.0
+   tag: RegistryManager_2.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
@@ -872,18 +872,18 @@ registryManager:
    maxReplicas: 5
    targetCPUUtilizationPercentage: 80
 
-################################### StorageManager ##########################################################################
-storageManager:
-## Enable the StorageManager deployment & service
-  enabled: true 
-  name: storage-manager
-  
-## Number of StorageManager instances to deploy
+################################### RegistrySubscriptionManager ##########################################################################
+registrySubscriptionManager:
+## Enable the RegistrySubscriptionManager deployment & service
+  enabled: true
+  name: registry-subscription-manager
+
+## Number of RegistrySubscriptionManager instances to deploy
 ##
   replicas: 1
-## Scorpio Broker StorageManager image version
+## Scorpio Broker RegistrySubscriptionManager image version
 ## ref: https://hub.docker.com/r/scorpiobroker/scorpio
-## Please use only latest version of docker images as few older images might not work with kubernetes. 
+## Please use only latest version of docker images as few older images might not work with kubernetes.
 ##
   updateStrategy:
     # -- type of the update
@@ -897,10 +897,10 @@ storageManager:
   ## configuration of the image to be used
   image:
    ## -- scorpiobroker image name
-   # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
+   # ref: https://hub.docker.com/r/scorpiobroker/scorpio
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: StorageManager_1.1.0
+   tag: RegistrySubscriptionManager_2.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##
@@ -920,7 +920,7 @@ storageManager:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
 
-## StorageManager containers' resource requests and limits
+## RegistrySubscriptionManager containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ##
   resources: {}
@@ -928,14 +928,14 @@ storageManager:
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to use HPA or specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits: 
+  # limits:
   #   cpu: 250m
   #   memory: 1Gi
-  # requests: 
+  # requests:
   #   cpu: 250m
   #   memory: 256Mi
 
- 
+
    ## containers'  readiness probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -952,11 +952,12 @@ storageManager:
     failureThreshold: 6
     periodSeconds: 10
 
+
 ## Pod Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## ref: https://kuberne\tes.io/docs/tasks/configure-pod-container/security-context/
 ##
   securityContext: {}
-  
+
 ## Pod restart policy
   restartPolicy: Always
 
@@ -969,7 +970,7 @@ storageManager:
 
   terminationGracePeriodSeconds: 30
 
-## Enable HPA for StorageManager
+## Enable HPA for RegistrySubscriptionManager
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 ##
   hpa:
@@ -979,7 +980,6 @@ storageManager:
    # -- maximum number of pods that can be set by the autoscaler
    maxReplicas: 5
    targetCPUUtilizationPercentage: 80
-   
 
 ################################### SubscriptionManager ##########################################################################
 subscriptionManager:
@@ -1009,7 +1009,7 @@ subscriptionManager:
    # ref: https://hub.docker.com/r/scorpiobroker/scorpio       
    repository: scorpiobroker/scorpio
    # -- tag of the image to be used
-   tag: SubscriptionManager_1.1.0
+   tag: SubscriptionManager_2.1.0
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 ##

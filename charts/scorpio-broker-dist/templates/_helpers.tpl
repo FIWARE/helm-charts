@@ -136,15 +136,15 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 
-{{- define "storageManager.fullname" -}}
-{{- if .Values.storageManager.fullnameOverride }}
-{{- .Values.storageManager.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- define "registrySubscriptionManager.fullname" -}}
+{{- if .Values.registrySubscriptionManager.fullnameOverride }}
+{{- .Values.registrySubscriptionManager.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
 {{- $name := default .Chart.Name .Values.nameOverride }}
 {{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.storageManager.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Release.Name .Values.registrySubscriptionManager.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.storageManager.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-%s" .Release.Name $name .Values.registrySubscriptionManager.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -235,7 +235,6 @@ component: {{ .Values.entityManager.name | quote }}
 {{ include "scorpio-broker-dist.common.matchLabels" . }}
 {{- end -}}
 
-
 {{- define "historyManager.labels" -}}
 {{ include "historyManager.matchLabels" . }}
 {{ include "scorpio-broker-dist.common.metaLabels" . }}
@@ -267,13 +266,14 @@ component: {{ .Values.registryManager.name | quote }}
 {{ include "scorpio-broker-dist.common.matchLabels" . }}
 {{- end -}}
 
-{{- define "storageManager.labels" -}}
-{{ include "storageManager.matchLabels" . }}
+{{- define "registrySubscriptionManager.labels" -}}
+{{ include "registrySubscriptionManager.matchLabels" . }}
 {{ include "scorpio-broker-dist.common.metaLabels" . }}
 {{- end -}}
 
-{{- define "storageManager.matchLabels" -}}
-component: {{ .Values.storageManager.name | quote }}
+
+{{- define "registrySubscriptionManager.matchLabels" -}}
+component: {{ .Values.registrySubscriptionManager.name | quote }}
 {{ include "scorpio-broker-dist.common.matchLabels" . }}
 {{- end -}}
 

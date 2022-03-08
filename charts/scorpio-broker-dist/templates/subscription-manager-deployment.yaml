@@ -38,7 +38,7 @@ spec:
         imagePullPolicy: {{ .Values.subscriptionManager.image.pullPolicy }}
         name: {{ include "subscriptionManager.fullname" . }}
         ports:
-        - containerPort: 2025
+        - containerPort: 2026
           protocol: TCP
         lifecycle:
            preStop:
@@ -46,12 +46,12 @@ spec:
               command:
               - /bin/sh
               - -c
-              - curl -X PUT "http://{{ .Values.eureka.hostname }}:{{ .Values.eureka.port }}/eureka/apps/SUBSCRIPTION-MANAGER/$HOSTNAME:subscription-manager:2025/status?value=OUT_OF_SERVICE"
+              - curl -X PUT "http://{{ .Values.eureka.hostname }}:{{ .Values.eureka.port }}/eureka/apps/SUBSCRIPTION-MANAGER/$HOSTNAME:subscription-manager:2026/status?value=OUT_OF_SERVICE"
         
         readinessProbe:
           httpGet:
             path: /actuator/health
-            port: 2025
+            port: 2026
           failureThreshold: {{ .Values.subscriptionManager.readinessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.subscriptionManager.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.subscriptionManager.readinessProbe.periodSeconds }}
@@ -60,7 +60,7 @@ spec:
         livenessProbe:
           httpGet:
             path: /actuator/health
-            port: 2025
+            port: 2026
           failureThreshold: {{ .Values.subscriptionManager.livenessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.subscriptionManager.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.subscriptionManager.livenessProbe.periodSeconds }}
