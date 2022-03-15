@@ -78,12 +78,14 @@ spec:
             periodSeconds: {{ .Values.statefulset.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.statefulset.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.statefulset.readinessProbe.timeoutSeconds }}
-          {{- if .Values.theme.enabled }}
+          {{- if or (.Values.theme.enabled) (.Values.certs.pvc.enabled) }}
           volumeMounts:
+            {{- if .Values.theme.enabled }}
             - name: themes-theme
               mountPath: {{ .Values.theme.mountTheme }}
             - name: themes-img
               mountPath: {{ .Values.theme.mountImg }}
+            {{- end }}
             {{- if .Values.theme.sourceFonts }}
             - name: themes-fonts
               mountPath: {{ .Values.theme.mountFonts }}
