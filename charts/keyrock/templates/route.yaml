@@ -13,7 +13,11 @@ metadata:
       {{- end }}
   {{- end }}
 spec:
-  host: {{ .Values.route.host}}
+  {{- if .Values.route.host }}
+  host: {{ .Values.route.host }}
+  {{- end }}
+  port:
+    targetPort: {{ .Values.port }}
   to:
     kind: Service
     name: {{ $fullName }}
