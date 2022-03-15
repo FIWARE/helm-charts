@@ -738,6 +738,28 @@ entries:
   keyrock:
   - apiVersion: v1
     appVersion: 8.1.0
+    created: "2022-03-15T07:35:21.918811327Z"
+    description: A Helm chart for running the fiware idm keyrock on kubernetes.
+    digest: 30569bffe60b44ab260ff5d0ae75e5f3617c2c24a654da0a28fe3c3e16a87e7c
+    home: https://fiware-idm.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - keyrock
+    - idm
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: keyrock
+    sources:
+    - https://github.com/ging/fiware-idm
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/keyrock-0.2.2/keyrock-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v1
+    appVersion: 8.1.0
     created: "2022-03-01T11:02:10.989019467Z"
     description: A Helm chart for running the fiware idm keyrock on kubernetes.
     digest: 120f819ba0affe1e2b09246261f5e1a07e489736ba9abb10f614a3a9f56cfbc3
@@ -1409,4 +1431,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/orion-0.0.1/orion-0.0.1.tgz
     version: 0.0.1
-generated: "2022-03-04T14:22:57.797871266Z"
+generated: "2022-03-15T07:35:21.919050227Z"
