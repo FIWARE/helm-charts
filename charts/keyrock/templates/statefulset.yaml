@@ -152,7 +152,7 @@ spec:
             - name: IDM_PR_TOKEN_ENDPOINT
               value: {{ .Values.satellite.tokenEndpoint | quote }}
             - name: IDM_PR_PARTIES_ENDPOINT
-              value: {{ .Values.satellite.delegationEndpoint | quote }}
+              value: {{ .Values.satellite.partiesEndpoint | quote }}
             {{- end }}
             {{- if .Values.token.enabled }}
             - name: IDM_PR_CLIENT_ID
