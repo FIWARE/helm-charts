@@ -454,7 +454,7 @@ bizEcosystemChargingBackend:
       # port: 587
 
   # -- Maximum asset upload size (in MB)
-  maxUploadSize: 52428800
+  maxUploadSize: 428800
     
   # -- Whether or not the BAE validates SSL certificates on requests to external components
   verifyRequests: True
