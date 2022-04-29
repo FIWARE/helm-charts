@@ -204,6 +204,43 @@ theme:
     mountFonts: /opt/fiware-idm/public/fonts/my-fonts
     # -- Mount path for the source favicon
     mountFavicon: /opt/fiware-idm/public/favicon.ico
+
+## Configuration of Authorisation Registry (AR)
+authorisationRegistry:
+  # -- Enable usage of authorisation registry
+  enabled: false
+  # -- Identifier (EORI) of AR
+  identifier: ""
+  # -- URL of AR
+  url: "https://my-ar.com"
+  # -- Token endpoint of AR
+  tokenEndpoint: "https://my-ar.com/connect/token"
+  # -- Delegation endpoint of AR
+  delegationEndpoint: "https://my-ar.com/delegation"
+
+## Configuration of iSHARE Satellite
+satellite:
+  # -- Enable usage of satellite
+  enabled: false
+  # -- Identifier (EORI) of satellite
+  identifier: ""
+  # -- URL of satellite
+  url: "https://my-satellite.com"
+  # -- Token endpoint of satellite
+  tokenEndpoint: "https://my-satellite.com/connect/token"
+  # -- Parties endpoint of satellite
+  partiesEndpoint: "https://my-satellite.com/parties"
+
+## -- Configuration of local key and certificate for validation and generation of tokens
+token:
+  # -- Enable storage of local key and certificate
+  enabled: false
+  # -- String with private key in PEM format
+  key: ""
+  # -- String with certificate (chain) in PEM format
+  cert: ""
+  # -- Identifier (EORI) of local organisation
+  identifier: ""
     
 # -- a list of additional env vars to be set, check the keyrock docu for all available options
 # ref: https://fiware-idm.readthedocs.io/en/latest/installation_and_administration_guide/environment_variables/index.html

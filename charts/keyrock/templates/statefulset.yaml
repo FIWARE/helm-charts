@@ -134,6 +134,40 @@ spec:
             - name: IDM_THEME
               value: {{ .Values.theme.name | quote }}
             {{- end }}
+            {{- if .Values.authorisationRegistry.enabled }}
+            - name: IDM_AR_ID
+              value: {{ .Values.authorisationRegistry.identifier | quote }}
+            - name: IDM_AR_URL
+              value: {{ .Values.authorisationRegistry.url | quote }}
+            - name: IDM_AR_TOKEN_ENDPOINT
+              value: {{ .Values.authorisationRegistry.tokenEndpoint | quote }}
+            - name: IDM_AR_DELEGATION_ENDPOINT
+              value: {{ .Values.authorisationRegistry.delegationEndpoint | quote }}
+            {{- end }}
+            {{- if .Values.satellite.enabled }}
+            - name: IDM_PR_ID
+              value: {{ .Values.satellite.identifier | quote }}
+            - name: IDM_PR_URL
+              value: {{ .Values.satellite.url | quote }}
+            - name: IDM_PR_TOKEN_ENDPOINT
+              value: {{ .Values.satellite.tokenEndpoint | quote }}
+            - name: IDM_PR_PARTIES_ENDPOINT
+              value: {{ .Values.satellite.delegationEndpoint | quote }}
+            {{- end }}
+            {{- if .Values.token.enabled }}
+            - name: IDM_PR_CLIENT_ID
+              value: {{ .Values.token.identifier | quote }}
+            - name: IDM_PR_CLIENT_KEY
+              valueFrom:
+                 secretKeyRef:
+                   name: {{ include "keyrock.certSecretName" . }}
+                   key: key
+            - name: IDM_PR_CLIENT_CRT
+              valueFrom:
+                 secretKeyRef:
+                   name: {{ include "keyrock.certSecretName" . }}
+                   key: cert
+            {{- end }}
             {{- with .Values.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
