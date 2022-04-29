@@ -100,6 +100,9 @@ bizEcosystemApis:
   ## -- If false, will not be installed
   enabled: true
 
+  ## -- Configure existing secret to be used for DB password
+  # existingSecret: apis-secret
+
   ## -- Component name
   name: biz-ecosystem-apis
 
@@ -193,6 +196,9 @@ bizEcosystemApis:
 bizEcosystemRss:
   ## -- If false, will not be installed
   enabled: true
+
+  ## -- Configure existing secret to be used for DB password
+  # existingSecret: rss-secret
 
   ## -- Component name
   name: biz-ecosystem-rss
@@ -295,6 +301,12 @@ bizEcosystemRss:
 bizEcosystemChargingBackend:
   ## -- If false, will not be installed
   enabled: true
+
+  ## -- Configure existing secret to be used for: DB password, SMTP password, Plugins IDM Password, PayPal client secret
+  # existingSecret: cb-secret
+
+  ## -- Configure existing secret to be used for: (iSHARE) token key and certificates
+  # existingCertSecret: cb-cert-secret
 
   ## -- Component name
   name: biz-ecosystem-charging-backend
@@ -441,10 +453,13 @@ bizEcosystemChargingBackend:
       ## -- SMTP server port
       # port: 587
 
-  ## -- Whether or not the BAE validates SSL certificates on requests to external components
+  # -- Maximum asset upload size (in MB)
+  maxUploadSize: 52428800
+    
+  # -- Whether or not the BAE validates SSL certificates on requests to external components
   verifyRequests: True
 
-  ## -- Authorize service path of the logic proxy
+  # -- Authorize service path of the logic proxy
   authorizeServicePath: /authorizeService/apiKeys
 
   ## -- Configuration of local key and certificate for validation and generation of tokens
@@ -458,7 +473,7 @@ bizEcosystemChargingBackend:
     # -- Identifier (e.g. EORI) of local marketplace instance
     identifier: ""
 
-  # -- Sets wehther to expect the user access token in each request from the logic proxy
+  # -- Sets whether to expect the user access token in each request from the logic proxy
   propagateToken: true
   
   ## -- Configuration for backing up the pvcs of the charging backend into a gcs-bucket
@@ -485,6 +500,12 @@ bizEcosystemChargingBackend:
 bizEcosystemLogicProxy:
   ## -- If false, will not be installed
   enabled: true
+
+  ## -- Configure existing secret to be used for: DB password, OAuth2 Client Secret
+  # existingSecret: lp-secret
+
+  ## -- Configure existing secret to be used for: (iSHARE) token key and certificates
+  # existingCertSecret: lp-cert-secret
 
   ## -- Component name
   name: biz-ecosystem-logic-proxy
@@ -660,7 +681,7 @@ bizEcosystemLogicProxy:
     # -- Identifier (e.g. EORI) of local marketplace instance
     identifier: ""
 
-  # -- Sets wehther the logic proxy should propagate the user access token to the backend components
+  # -- Sets whether the logic proxy should propagate the user access token to the backend components
   propagateToken: true
 
   # -- Allow to use organisations from local IDP as participants when creating or acquiring offerings

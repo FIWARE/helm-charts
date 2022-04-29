@@ -119,7 +119,7 @@ spec:
             - name: BAE_LP_MONGO_PASS
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+                  name: {{ include "bizEcosystemLogicProxy.secretName" . }}
                   key: dbPassword
             - name: BAE_LP_OAUTH2_SERVER
               value: {{ .Values.oauth.server | quote }}
@@ -128,7 +128,7 @@ spec:
             - name: BAE_LP_OAUTH2_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+                  name: {{ include "bizEcosystemLogicProxy.secretName" . }}
                   key: oauthClientSecret
             - name: BAE_LP_OAUTH2_CALLBACK
               value: {{ .Values.externalUrl }}{{ .Values.oauth.callbackPath }}
@@ -232,13 +232,13 @@ spec:
       volumes:
         - name: key-volume
           secret:
-            secretName: {{ include "bizEcosystemLogicProxy.fullname" . }}-certs
+            secretName: {{ include "bizEcosystemLogicProxy.certSecretName" . }}
             items:
               - key: key.pem
                 path: key.pem
         - name: cert-volume
           secret:
-            secretName: {{ include "bizEcosystemLogicProxy.fullname" . }}-certs
+            secretName: {{ include "bizEcosystemLogicProxy.certSecretName" . }}
             items:
               - key: cert.pem
                 path: cert.pem

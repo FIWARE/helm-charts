@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.2.5](https://img.shields.io/badge/Version-0.2.5-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -27,7 +27,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemApis.deployment.affinity | object | `{}` |  |
 | bizEcosystemApis.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemApis.deployment.image.repository | string | `"fiware/biz-ecosystem-apis"` |  |
-| bizEcosystemApis.deployment.image.tag | string | `"v7.6.0"` |  |
+| bizEcosystemApis.deployment.image.tag | string | `"v8.0.0"` |  |
 | bizEcosystemApis.deployment.livenessProbe.initialDelaySeconds | int | `120` |  |
 | bizEcosystemApis.deployment.livenessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemApis.deployment.livenessProbe.successThreshold | int | `1` |  |
@@ -54,7 +54,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemApis.serviceAccount.annotations | object | `{}` |  |
 | bizEcosystemApis.serviceAccount.create | bool | `false` |  |
 | bizEcosystemApis.serviceAccount.name | string | `"ssc"` |  |
-| bizEcosystemChargingBackend.authorizeServicePath | string | `"/authorizeService/apiKeys"` |  |
+| bizEcosystemChargingBackend.authorizeServicePath | string | `"/authorizeService/apiKeys"` | Authorize service path of the logic proxy |
 | bizEcosystemChargingBackend.backup.bucketName | string | `"gs://my/bucket"` |  |
 | bizEcosystemChargingBackend.backup.enabled | bool | `false` |  |
 | bizEcosystemChargingBackend.backup.filePrefix | string | `"charging"` |  |
@@ -93,6 +93,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.email.mail | string | `"charging@email.com"` |  |
 | bizEcosystemChargingBackend.enabled | bool | `true` |  |
 | bizEcosystemChargingBackend.fullnameOverride | string | `""` |  |
+| bizEcosystemChargingBackend.maxUploadSize | int | `52428800` | Maximum asset upload size (in MB) |
 | bizEcosystemChargingBackend.media.annotations | object | `{}` |  |
 | bizEcosystemChargingBackend.media.enabled | bool | `true` |  |
 | bizEcosystemChargingBackend.media.size | string | `"8Gi"` |  |
@@ -104,7 +105,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.plugins.idmUser | string | `"admin"` |  |
 | bizEcosystemChargingBackend.plugins.size | string | `"4Gi"` |  |
 | bizEcosystemChargingBackend.port | int | `8006` |  |
-| bizEcosystemChargingBackend.propagateToken | bool | `true` | Sets wehther to expect the user access token in each request from the logic proxy |
+| bizEcosystemChargingBackend.propagateToken | bool | `true` | Sets whether to expect the user access token in each request from the logic proxy |
 | bizEcosystemChargingBackend.securityContext | object | `{}` |  |
 | bizEcosystemChargingBackend.service.annotations | object | `{}` |  |
 | bizEcosystemChargingBackend.service.port | int | `8006` |  |
@@ -116,7 +117,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.token.enabled | bool | `false` | Enable storage of local key and certificate |
 | bizEcosystemChargingBackend.token.identifier | string | `""` | Identifier (e.g. EORI) of local marketplace instance |
 | bizEcosystemChargingBackend.token.key | string | `""` | String with private key in PEM format |
-| bizEcosystemChargingBackend.verifyRequests | bool | `true` |  |
+| bizEcosystemChargingBackend.verifyRequests | bool | `true` | Whether or not the BAE validates SSL certificates on requests to external components |
 | bizEcosystemLogicProxy.allowLocalEORI | bool | `false` | Allow to use organisations from local IDP as participants when creating or acquiring offerings |
 | bizEcosystemLogicProxy.collectStaticCommand | string | `"True"` | Execute the collect static command on startup |
 | bizEcosystemLogicProxy.db.database | string | `"belp_db"` | Database name for connecting the database |
@@ -138,7 +139,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.name | string | `"biz-ecosystem-logic-proxy"` |  |
 | bizEcosystemLogicProxy.nodeEnvironment | string | `"development"` |  |
 | bizEcosystemLogicProxy.port | int | `8004` | port that the logic proxy container uses |
-| bizEcosystemLogicProxy.propagateToken | bool | `true` | Sets wehther the logic proxy should propagate the user access token to the backend components |
+| bizEcosystemLogicProxy.propagateToken | bool | `true` | Sets whether the logic proxy should propagate the user access token to the backend components |
 | bizEcosystemLogicProxy.revenueModel | int | `30` | Default market owner precentage for Revenue Sharing models |
 | bizEcosystemLogicProxy.route.annotations | object | `{}` | annotations to be added to the route |
 | bizEcosystemLogicProxy.route.enabled | bool | `false` | should the deployment create openshift routes |

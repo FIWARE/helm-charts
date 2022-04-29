@@ -125,7 +125,7 @@ spec:
             - name: BAE_CB_PAYPAL_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "bizEcosystemChargingBackend.fullname" . }}
+                  name: {{ include "bizEcosystemChargingBackend.secretName" . }}
                   key: paypalClientSecret
             {{- end }}
             - name: BAE_CB_MONGO_SERVER
@@ -139,7 +139,7 @@ spec:
             - name: BAE_CB_MONGO_PASS
               valueFrom:
                 secretKeyRef:
-                   name: {{ include "bizEcosystemChargingBackend.fullname" . }}
+                   name: {{ include "bizEcosystemChargingBackend.secretName" . }}
                    key: dbPassword
             - name: BAE_LP_OAUTH2_ADMIN_ROLE
               value: {{ .Values.oauth.adminrole | quote }}
@@ -158,7 +158,7 @@ spec:
             - name: BAE_CB_EMAIL_PASS
               valueFrom:
                 secretKeyRef:
-                   name: {{ include "bizEcosystemChargingBackend.fullname" . }}
+                   name: {{ include "bizEcosystemChargingBackend.secretName" . }}
                    key: smtpPassword
             {{- end }}
             {{- if .Values.bizEcosystemChargingBackend.email.smtp.server }}
@@ -176,6 +176,8 @@ spec:
               value: {{ .Values.externalUrl | quote }}
             - name: BAE_CB_LOCAL_SITE
               value: http://{{ include "bizEcosystemChargingBackend.fullhostname" . }}
+            - name: BAE_CB_MAX_UPLOAD_SIZE
+              value: {{ .Values.bizEcosystemChargingBackend.maxUploadSize | quote }}
             - name: BAE_CB_CATALOG
               value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductCatalog
             - name: BAE_CB_INVENTORY
@@ -194,7 +196,10 @@ spec:
             - name: BAE_ASSET_IDM_USER
               value: {{ .Values.bizEcosystemChargingBackend.plugins.idmUser | quote }}
             - name: BAE_ASSET_IDM_PASSWORD
-              value: {{ .Values.bizEcosystemChargingBackend.plugins.idmPassword | quote }}
+              valueFrom:
+                secretKeyRef:
+                   name: {{ include "bizEcosystemChargingBackend.secretName" . }}
+                   key: pluginsIdmPassword
             - name: BAE_ASSET_IDM_URL
               value: {{ .Values.oauth.server | quote }}
             {{- end }}
@@ -252,13 +257,13 @@ spec:
         {{- if .Values.bizEcosystemChargingBackend.token.enabled }}
         - name: key-volume
           secret:
-            secretName: {{ include "bizEcosystemChargingBackend.fullname" . }}-certs
+            secretName: {{ include "bizEcosystemChargingBackend.certSecretName" . }}
             items:
               - key: key.pem
                 path: key.pem
         - name: cert-volume
           secret:
-            secretName: {{ include "bizEcosystemChargingBackend.fullname" . }}-certs
+            secretName: {{ include "bizEcosystemChargingBackend.certSecretName" . }}
             items:
               - key: cert.pem
                 path: cert.pem
