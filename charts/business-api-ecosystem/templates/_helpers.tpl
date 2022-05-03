@@ -338,3 +338,63 @@ Template for Charging Backend initContainer check
     'while ! wget "http://{{ include "bizEcosystemChargingBackend.fullhostname" .ctx }}/{{ .path }}"; do echo "Waiting for APIs"; ((i++)) && ((i=={{ .ctx.Values.initContainer.apis.maxRetries }})) && break; sleep {{ .ctx.Values.initContainer.apis.sleepInterval }}; done;']
 {{- end }}
 
+{{/*
+RSS secrets
+*/}}
+{{- define "bizEcosystemRss.secretName" -}}
+    {{- if .Values.bizEcosystemRss.existingSecret -}}
+        {{- printf "%s" (tpl .Values.bizEcosystemRss.existingSecret $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "bizEcosystemRss.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Logic proxy secrets
+*/}}
+{{- define "bizEcosystemLogicProxy.secretName" -}}
+    {{- if .Values.bizEcosystemLogicProxy.existingSecret -}}
+        {{- printf "%s" (tpl .Values.bizEcosystemLogicProxy.existingSecret $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "bizEcosystemLogicProxy.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "bizEcosystemLogicProxy.certSecretName" -}}
+    {{- if .Values.bizEcosystemLogicProxy.existingCertSecret -}}
+        {{- printf "%s" (tpl .Values.bizEcosystemLogicProxy.existingCertSecret $) -}}
+    {{- else -}}
+        {{- printf "%s-certs" (include "bizEcosystemLogicProxy.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Charging backend secrets
+*/}}
+{{- define "bizEcosystemChargingBackend.secretName" -}}
+    {{- if .Values.bizEcosystemChargingBackend.existingSecret -}}
+        {{- printf "%s" (tpl .Values.bizEcosystemChargingBackend.existingSecret $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "bizEcosystemChargingBackend.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "bizEcosystemChargingBackend.certSecretName" -}}
+    {{- if .Values.bizEcosystemChargingBackend.existingCertSecret -}}
+        {{- printf "%s" (tpl .Values.bizEcosystemChargingBackend.existingCertSecret $) -}}
+    {{- else -}}
+        {{- printf "%s-certs" (include "bizEcosystemChargingBackend.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+API secret
+*/}}
+{{- define "bizEcosystemApis.secretName" -}}
+    {{- if .Values.bizEcosystemApis.existingSecret -}}
+        {{- printf "%s" (tpl .Values.bizEcosystemApis.existingSecret $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "bizEcosystemApis.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
