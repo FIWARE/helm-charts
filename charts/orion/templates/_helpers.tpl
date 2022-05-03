@@ -43,6 +43,17 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+orion secrets
+*/}}
+{{- define "orion.secretName" -}}
+    {{- if .Values.broker.db.existingSecret -}}
+        {{- printf "%s" (tpl .Values.broker.db.existingSecret $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "orion.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
 Common labels
 */}}
 {{- define "orion.labels" -}}
