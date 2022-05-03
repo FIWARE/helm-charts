@@ -62,3 +62,11 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
         {{- printf "%s" (include "keyrock.fullname" .) -}}
     {{- end -}}
 {{- end -}}
+
+{{- define "keyrock.certSecretName" -}}
+    {{- if .Values.existingCertSecret -}}
+        {{- printf "%s" (tpl .Values.existingCertSecret $) -}}
+    {{- else -}}
+        {{- printf "%s-certs" (include "keyrock.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
