@@ -176,6 +176,8 @@ spec:
               value: {{ .Values.externalUrl | quote }}
             - name: BAE_CB_LOCAL_SITE
               value: http://{{ include "bizEcosystemChargingBackend.fullhostname" . }}
+            - name: LOGLEVEL
+              value: {{ .Values.bizEcosystemChargingBackend.loglevel | quote }}  
             - name: BAE_CB_MAX_UPLOAD_SIZE
               value: {{ .Values.bizEcosystemChargingBackend.maxUploadSize | quote }}
             - name: BAE_CB_CATALOG
