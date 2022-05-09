@@ -230,7 +230,7 @@ spec:
             # tenancy
             {{- if .Values.broker.multiserviceEnabled }}
             - name: {{ .Values.broker.envPrefix }}MULTI_SERVICE
-              value: {{ .Values.broker.multiserviceEnabled | upper }}
+              value: {{ .Values.broker.multiserviceEnabled | quote | upper }}
             {{- end }}
             {{- if .Values.broker.multiserviceEnabled }}
             - name: {{ .Values.broker.envPrefix }}MONGO_AUTH_SOURCE
