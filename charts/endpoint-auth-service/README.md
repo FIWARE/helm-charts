@@ -1,13 +1,13 @@
 # endpoint-auth-service
 
-![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.0.3](https://img.shields.io/badge/Version-0.0.3-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 A Helm chart for running the endpoint-auth-service on kubernetes.
 
 ## Maintainers
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| wistefan | stefan.wiedemann@fiware.org |  |
+| wistefan | <stefan.wiedemann@fiware.org> |  |
 
 ## Additional Information
 
@@ -98,7 +98,7 @@ for that.
 | configService.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | configService.additonalEnvVars | list | `[]` | a list of additional env vars to be set, check the endpoint-configuration-service documentation for all available options |
 | configService.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-| configService.autoscaling.enabled | bool | `false` | should autoscaling be enabled for configService |
+| configService.autoscaling.enabled | bool | `false` |  |
 | configService.autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | configService.autoscaling.metrics | list | `[]` | metrics to react on |
 | configService.autoscaling.minReplicas | int | `1` | minimum number of running pods |
@@ -116,8 +116,8 @@ for that.
 | configService.image.tag | string | `"0.1.0"` | tag of the image to be used |
 | configService.ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | configService.ingress.enabled | bool | `false` | should there be an ingress to connect configService with the public internet |
-| configService.ingress.hosts | list | `[]` |  |
-| configService.ingress.tls | list | `[]` |  |
+| configService.ingress.hosts | list | `[]` | all hosts to be provided |
+| configService.ingress.tls | list | `[]` | configure the ingress' tls |
 | configService.livenessProbe.initialDelaySeconds | int | `30` |  |
 | configService.livenessProbe.periodSeconds | int | `10` |  |
 | configService.livenessProbe.successThreshold | int | `1` |  |
@@ -145,7 +145,7 @@ for that.
 | configService.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | configService.route.annotations | object | `{}` | annotations to be added to the route |
 | configService.route.enabled | bool | `false` |  |
-| configService.route.tls | object | `{}` | host to be used host: localhost -- tls configuration for the route |
+| configService.route.tls | object | `{}` | tls configuration for the route |
 | configService.service.annotations | object | `{}` | addtional annotations, if required |
 | configService.service.port | int | `8080` | port to be used by the service |
 | configService.service.type | string | `"ClusterIP"` | service type |
@@ -160,7 +160,7 @@ for that.
 | ishare.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | ishare.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | ishare.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-| ishare.autoscaling.enabled | bool | `false` | should autoscaling be enabled for ishare |
+| ishare.autoscaling.enabled | bool | `false` |  |
 | ishare.autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | ishare.autoscaling.metrics | list | `[]` | metrics to react on |
 | ishare.autoscaling.minReplicas | int | `1` | minimum number of running pods |
@@ -171,8 +171,8 @@ for that.
 | ishare.image.tag | string | `"0.1.0"` | tag of the image to be used |
 | ishare.ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | ishare.ingress.enabled | bool | `false` | should there be an ingress to connect ishare with the public internet |
-| ishare.ingress.hosts | list | `[]` |  |
-| ishare.ingress.tls | list | `[]` |  |
+| ishare.ingress.hosts | list | `[]` | all hosts to be provided |
+| ishare.ingress.tls | list | `[]` | configure the ingress' tls |
 | ishare.nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | ishare.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | ishare.port | int | `8080` | port that the ishare authprovider container uses |
@@ -181,7 +181,7 @@ for that.
 | ishare.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | ishare.route.annotations | object | `{}` | annotations to be added to the route |
 | ishare.route.enabled | bool | `false` |  |
-| ishare.route.tls | object | `{}` | host to be used host: localhost -- tls configuration for the route |
+| ishare.route.tls | object | `{}` | tls configuration for the route |
 | ishare.service.annotations | object | `{}` | addtional annotations, if required |
 | ishare.service.port | int | `8080` | port to be used by the service |
 | ishare.service.type | string | `"ClusterIP"` | service type |
@@ -254,4 +254,4 @@ for that.
 | sidecarInjector.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.5.0](https://github.com/norwoodj/helm-docs/releases/v1.5.0)
+Autogenerated from chart metadata using [helm-docs v1.9.1](https://github.com/norwoodj/helm-docs/releases/v1.9.1)
