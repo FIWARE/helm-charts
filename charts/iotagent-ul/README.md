@@ -1,6 +1,6 @@
 # iotagent-ul
 
-![Version: 0.0.5](https://img.shields.io/badge/Version-0.0.5-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
+![Version: 0.0.6](https://img.shields.io/badge/Version-0.0.6-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
 
 A Helm chart for running the fiware iot agent for the ultralight 2.0 protocol on kubernetes.
 
@@ -10,7 +10,7 @@ A Helm chart for running the fiware iot agent for the ultralight 2.0 protocol on
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| wistefan | stefan.wiedemann@fiware.org |  |
+| wistefan | <stefan.wiedemann@fiware.org> |  |
 
 ## Source Code
 
@@ -38,7 +38,7 @@ A Helm chart for running the fiware iot agent for the ultralight 2.0 protocol on
 | deployment.livenessProbe.successThreshold | int | `1` |  |
 | deployment.livenessProbe.timeoutSeconds | int | `30` |  |
 | deployment.mqttPort | int | `1883` | port to be used by the service for mqtt communication |
-| deployment.nodeSelector | object | `{}` |  |
+| deployment.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | deployment.readinessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.readinessProbe.periodSeconds | int | `10` |  |
 | deployment.readinessProbe.successThreshold | int | `1` |  |
@@ -58,15 +58,22 @@ A Helm chart for running the fiware iot agent for the ultralight 2.0 protocol on
 | ingress.amqp | object | `{"annotations":{},"enabled":false,"hosts":[],"tls":[]}` | configuration for the amqp ingress |
 | ingress.amqp.annotations | object | `{}` | annotations to be added to the ingress |
 | ingress.amqp.enabled | bool | `false` | should there be an ingress to connect iotagent with the public internet |
-| ingress.httpNorth | object | `{"annotations":null,"enabled":true,"hosts":null,"tls":[]}` | configuration for the north bound http ingress |
+| ingress.amqp.hosts | list | `[]` | all hosts to be provided |
+| ingress.amqp.tls | list | `[]` | configure the ingress' tls |
+| ingress.httpNorth | object | `{"annotations":null,"enabled":false,"hosts":null,"tls":[]}` | configuration for the north bound http ingress |
 | ingress.httpNorth.annotations | string | `nil` | annotations to be added to the ingress |
-| ingress.httpNorth.enabled | bool | `true` | should there be an ingress to connect iotagent with the public internet |
-| ingress.httpSouth | object | `{"annotations":{},"enabled":true,"hosts":[],"tls":[]}` | configuration for the south bound http ingress |
+| ingress.httpNorth.enabled | bool | `false` | should there be an ingress to connect iotagent with the public internet |
+| ingress.httpNorth.hosts | string | `nil` | all hosts to be provided |
+| ingress.httpNorth.tls | list | `[]` | configure the ingress' tls |
+| ingress.httpSouth | object | `{"annotations":{},"enabled":false,"hosts":[],"tls":[]}` | configuration for the south bound http ingress |
 | ingress.httpSouth.annotations | object | `{}` | annotations to be added to the ingress |
-| ingress.httpSouth.enabled | bool | `true` | should there be an ingress to connect iotagent with the public internet |
+| ingress.httpSouth.enabled | bool | `false` | should there be an ingress to connect iotagent with the public internet |
+| ingress.httpSouth.tls | list | `[]` | configure the ingress' tls |
 | ingress.mqtt | object | `{"annotations":{},"enabled":false,"hosts":[],"tls":[]}` | configuration for the mqtt ingress |
 | ingress.mqtt.annotations | object | `{}` | annotations to be added to the ingress |
 | ingress.mqtt.enabled | bool | `false` | should there be an ingress to connect iotagent with the public internet |
+| ingress.mqtt.hosts | list | `[]` | all hosts to be provided |
+| ingress.mqtt.tls | list | `[]` | configure the ingress' tls |
 | iota.configRetrieval | bool | `false` | indicating whether the incoming notifications to the IoTAgent should be processed using the bidirectionality plugin from the latest versions of the library or the UL-specific configuration retrieval mechanism. |
 | iota.contextBroker | object | `{"host":"orion","port":1026}` | contextbroker to be used with the agent |
 | iota.contextBroker.host | string | `"orion"` | host of the broker |
@@ -78,7 +85,7 @@ A Helm chart for running the fiware iot agent for the ultralight 2.0 protocol on
 | iota.explicitAttributes | bool | `false` | whether the incoming measures to the IoTAgent should be processed as per the "attributes" field. |
 | iota.logLevel | string | `"DEBUG"` | Configures the log level. Appropriate values are: FATAL, ERROR, INFO, WARN and DEBUG. |
 | iota.providerUrl | string | `"http://localhost:4061"` | URL Where the IoT Agent Will listen for incoming updateContext and queryContext requests |
-| iota.service | string | `"howtoService"` |  |
+| iota.service | string | `"howtoService"` | Default service, for IoT Agent installations that won't require preregistration |
 | iota.subservice | string | `"/howto"` | Default subservice, for IoT Agent installations that won't require preregistration. |
 | iota.timestamp | bool | `true` | should a timestamp be added to every entity, metadata and attributecreated |
 | nameOverride | string | `""` |  |
@@ -91,4 +98,4 @@ A Helm chart for running the fiware iot agent for the ultralight 2.0 protocol on
 | serviceAccount.create | bool | `false` | specifies if the account should be created |
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.4.0](https://github.com/norwoodj/helm-docs/releases/v1.4.0)
+Autogenerated from chart metadata using [helm-docs v1.9.1](https://github.com/norwoodj/helm-docs/releases/v1.9.1)
