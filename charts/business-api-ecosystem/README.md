@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -10,7 +10,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| dwendland | dennis.wendland@fiware.org |  |
+| dwendland | <dennis.wendland@fiware.org> |  |
 
 ## Source Code
 
@@ -93,18 +93,19 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.email.mail | string | `"charging@email.com"` |  |
 | bizEcosystemChargingBackend.enabled | bool | `true` |  |
 | bizEcosystemChargingBackend.fullnameOverride | string | `""` |  |
-| bizEcosystemChargingBackend.maxUploadSize | int | `52428800` | Maximum asset upload size (in MB) |
-| bizEcosystemChargingBackend.media.annotations | object | `{}` |  |
-| bizEcosystemChargingBackend.media.enabled | bool | `true` |  |
-| bizEcosystemChargingBackend.media.size | string | `"8Gi"` |  |
+| bizEcosystemChargingBackend.loglevel | string | `"info"` | Loglevel |
+| bizEcosystemChargingBackend.maxUploadSize | int | `428800` | Maximum asset upload size (in MB) |
+| bizEcosystemChargingBackend.media.annotations | object | `{}` | Annotations |
+| bizEcosystemChargingBackend.media.enabled | bool | `true` | Enable the PVC for media storage |
+| bizEcosystemChargingBackend.media.size | string | `"8Gi"` | Size of the PVC |
 | bizEcosystemChargingBackend.name | string | `"biz-ecosystem-charging-backend"` |  |
-| bizEcosystemChargingBackend.payment.method | string | `"None"` |  |
+| bizEcosystemChargingBackend.payment.method | string | `"None"` | method: paypal or None (testing mode payment disconected) |
 | bizEcosystemChargingBackend.plugins.annotations | object | `{}` |  |
 | bizEcosystemChargingBackend.plugins.enabled | bool | `false` |  |
 | bizEcosystemChargingBackend.plugins.idmPassword | string | `"admin-password"` |  |
 | bizEcosystemChargingBackend.plugins.idmUser | string | `"admin"` |  |
 | bizEcosystemChargingBackend.plugins.size | string | `"4Gi"` |  |
-| bizEcosystemChargingBackend.port | int | `8006` |  |
+| bizEcosystemChargingBackend.port | int | `8006` | port that the charging backend container uses |
 | bizEcosystemChargingBackend.propagateToken | bool | `true` | Sets whether to expect the user access token in each request from the logic proxy |
 | bizEcosystemChargingBackend.securityContext | object | `{}` |  |
 | bizEcosystemChargingBackend.service.annotations | object | `{}` |  |
@@ -134,16 +135,16 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.fullnameOverride | string | `""` |  |
 | bizEcosystemLogicProxy.ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | bizEcosystemLogicProxy.ingress.enabled | bool | `false` | should there be an ingress to connect the logic proxy with the public internet |
-| bizEcosystemLogicProxy.ingress.hosts | list | `[]` |  |
-| bizEcosystemLogicProxy.ingress.tls | list | `[]` |  |
+| bizEcosystemLogicProxy.ingress.hosts | list | `[]` | all hosts to be provided |
+| bizEcosystemLogicProxy.ingress.tls | list | `[]` | configure the ingress' tls |
 | bizEcosystemLogicProxy.name | string | `"biz-ecosystem-logic-proxy"` |  |
-| bizEcosystemLogicProxy.nodeEnvironment | string | `"development"` |  |
+| bizEcosystemLogicProxy.nodeEnvironment | string | `"development"` | Deployment in development or in production |
 | bizEcosystemLogicProxy.port | int | `8004` | port that the logic proxy container uses |
 | bizEcosystemLogicProxy.propagateToken | bool | `true` | Sets whether the logic proxy should propagate the user access token to the backend components |
 | bizEcosystemLogicProxy.revenueModel | int | `30` | Default market owner precentage for Revenue Sharing models |
 | bizEcosystemLogicProxy.route.annotations | object | `{}` | annotations to be added to the route |
 | bizEcosystemLogicProxy.route.enabled | bool | `false` | should the deployment create openshift routes |
-| bizEcosystemLogicProxy.route.tls | object | `{}` | host to be used host: localhost -- tls configuration for the route |
+| bizEcosystemLogicProxy.route.tls | object | `{}` | tls configuration for the route |
 | bizEcosystemLogicProxy.securityContext | object | `{}` |  |
 | bizEcosystemLogicProxy.service.annotations | object | `{}` |  |
 | bizEcosystemLogicProxy.service.port | int | `8004` |  |
@@ -254,4 +255,4 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | oauth.server | string | `"http://accounts.fiware.org"` | External URL of the FIWARE IDM used for user authentication |
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.4.0](https://github.com/norwoodj/helm-docs/releases/v1.4.0)
+Autogenerated from chart metadata using [helm-docs v1.9.1](https://github.com/norwoodj/helm-docs/releases/v1.9.1)

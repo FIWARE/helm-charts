@@ -403,19 +403,22 @@ bizEcosystemChargingBackend:
 
   ## -- PVC configuration for charging backend media directories (/assets and /bills)
   media:
-    ## -- Enable the PVC for media storage
+    # -- Enable the PVC for media storage
     enabled: true
-    ## -- Size of the PVC
+    # -- Size of the PVC
     size: 8Gi
-    ## -- Annotations
+    # -- Annotations
     annotations: {}
     
-  ## -- port that the charging backend container uses
+  # -- port that the charging backend container uses
   port: 8006
+
+  # -- Loglevel
+  loglevel: info
 
   ## -- payment configuration
   payment:
-    ## -- method: paypal or None (testing mode payment disconected)
+    # -- method: paypal or None (testing mode payment disconected)
     method: None
 
   ## -- Paypal Oauth2 configuration
