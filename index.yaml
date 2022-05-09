@@ -3,6 +3,25 @@ entries:
   api-umbrella:
   - apiVersion: v1
     appVersion: v0.18.0
+    created: "2022-05-09T08:02:38.237280703Z"
+    description: A Helm chart for running api-umbrella on kubernetes.
+    digest: b029b0108995fbeb477589c779c4541a73b3dda8702c26668edc8938eea8d9d9
+    home: https://api-umbrella.readthedocs.io/en/latest/index.html
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - api-umbrella
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: api-umbrella
+    sources:
+    - https://github.com/NREL/api-umbrella
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/api-umbrella-0.0.9/api-umbrella-0.0.9.tgz
+    version: 0.0.9
+  - apiVersion: v1
+    appVersion: v0.18.0
     created: "2022-03-04T14:22:57.797358866Z"
     description: A Helm chart for running api-umbrella on kubernetes.
     digest: 9f171bdf951d163dd23aefb9206e9c08fab8f9ab37d49637e48aec893b207187
@@ -154,6 +173,26 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/api-umbrella-0.0.1/api-umbrella-0.0.1.tgz
     version: 0.0.1
   bae-activation-service:
+  - apiVersion: v1
+    appVersion: 0.0.3
+    created: "2022-05-09T08:02:38.414247241Z"
+    description: A Helm chart for running the fiware BAE activation service PoC on
+      kubernetes.
+    digest: cc7ddcd71c06c8ba677d34dad68923ba07292fac0bf67885e1500103efcfc2b2
+    home: https://github.com/FIWARE-AI-Marketplace/bae-activation-service
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - bae
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: bae-activation-service
+    sources:
+    - https://github.com/FIWARE-AI-Marketplace/bae-activation-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/bae-activation-service-0.0.3/bae-activation-service-0.0.3.tgz
+    version: 0.0.3
   - apiVersion: v1
     appVersion: 0.0.3
     created: "2021-10-22T07:27:20.769063328Z"
@@ -572,6 +611,28 @@ entries:
   endpoint-auth-service:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2022-05-09T08:02:38.588031439Z"
+    description: A Helm chart for running the endpoint-auth-service on kubernetes.
+    digest: 5617b83ebdfcdecc64d8bf77a35d05be016aa4ee9e38f2adba90196082a0f1bd
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - auth
+    - ishare
+    - envoy
+    - openshift
+    - openshift service mesh
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: endpoint-auth-service
+    sources:
+    - https://github.com/FIWARE/endpoint-auth-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/endpoint-auth-service-0.0.4/endpoint-auth-service-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2022-03-01T11:40:15.055322229Z"
     description: A Helm chart for running the endpoint-auth-service on kubernetes.
     digest: 68016655a6fe4989c4315379e7b5e7e0692b0a5a721ce4eccef047e017951c0c
@@ -637,6 +698,25 @@ entries:
   iotagent-json:
   - apiVersion: v1
     appVersion: 1.14.0
+    created: "2022-05-09T08:02:38.756437669Z"
+    description: A Helm chart for running the fiware iotagent-json on kubernetes.
+    digest: f8e8b77fd9469b58bda20cdbbf33a52971213d3277f2339c2982f1f21dbff34a
+    home: https://fiware-iotagent-json.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - iot-agent
+    maintainers:
+    - email: t_sunny.malik@india.nec.com
+      name: Sunny Malik
+    name: iotagent-json
+    sources:
+    - https://github.com/telefonicaid/iotagent-json
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/iotagent-json-0.0.3/iotagent-json-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v1
+    appVersion: 1.14.0
     created: "2021-10-22T07:27:21.093532409Z"
     description: A Helm chart for running the fiware iotagent-json on kubernetes.
     digest: a80cd0db23377434618330713d12791e9449de75cfec8ea79fe629a13eaf7df7
@@ -674,6 +754,27 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/iotagent-json-0.0.1/iotagent-json-0.0.1.tgz
     version: 0.0.1
   iotagent-ul:
+  - apiVersion: v1
+    appVersion: 1.14.0
+    created: "2022-05-09T08:02:38.957043206Z"
+    description: A Helm chart for running the fiware iot agent for the ultralight
+      2.0 protocol on kubernetes.
+    digest: b35f4371e19972a160f0f140c98fa9653604ec2fbc1aa0285999efa693ee8fe8
+    home: https://fiware-iotagent-ul.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - iot-agent
+    - ultralight-protocol
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: iotagent-ul
+    sources:
+    - https://github.com/telefonicaid/iotagent-ul
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/iotagent-ul-0.0.6/iotagent-ul-0.0.6.tgz
+    version: 0.0.6
   - apiVersion: v1
     appVersion: 1.14.0
     created: "2021-10-22T07:27:21.257429266Z"
@@ -780,6 +881,28 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/iotagent-ul-0.0.1/iotagent-ul-0.0.1.tgz
     version: 0.0.1
   keyrock:
+  - apiVersion: v1
+    appVersion: 8.1.0
+    created: "2022-05-09T08:02:39.135202459Z"
+    description: A Helm chart for running the fiware idm keyrock on kubernetes.
+    digest: e34f1f266eaac81f58b63c49ef075aba73d1973b3078d102ea1b9495e134e2ec
+    home: https://fiware-idm.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - keyrock
+    - idm
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: keyrock
+    sources:
+    - https://github.com/ging/fiware-idm
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/keyrock-0.3.1/keyrock-0.3.1.tgz
+    version: 0.3.1
   - apiVersion: v1
     appVersion: 8.1.0
     created: "2022-05-03T11:32:03.015498986Z"
@@ -1057,6 +1180,26 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/keyrock-0.0.1/keyrock-0.0.1.tgz
     version: 0.0.1
   mintaka:
+  - apiVersion: v1
+    appVersion: 0.0.5
+    created: "2022-05-09T08:02:39.343142288Z"
+    description: A Helm chart for running mintaka on kubernetes.
+    digest: 2826125dfe76edc657fc295472f8b6ab8f90150401b1641d9e70404ba5158996
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion
+    - orion-ld
+    - mintaka
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: mintaka
+    sources:
+    - https://github.com/fiware/mintaka
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/mintaka-0.0.5/mintaka-0.0.5.tgz
+    version: 0.0.5
   - apiVersion: v1
     appVersion: 0.0.5
     created: "2021-05-05T07:37:37.759182612Z"
@@ -1588,4 +1731,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/orion-0.0.1/orion-0.0.1.tgz
     version: 0.0.1
-generated: "2022-05-09T06:43:30.922342343Z"
+generated: "2022-05-09T08:02:39.343523793Z"
