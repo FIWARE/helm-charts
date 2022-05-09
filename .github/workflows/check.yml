@@ -39,8 +39,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
 
       - name: generate docs
         run:
@@ -54,5 +52,3 @@ jobs:
 
       - name: Push changes
         uses: ad-m/github-push-action@master
-        with:
-          branch: ${{ github.ref }}
