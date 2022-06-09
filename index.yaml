@@ -1731,4 +1731,30 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/orion-0.0.1/orion-0.0.1.tgz
     version: 0.0.1
-generated: "2022-05-09T08:02:39.343523793Z"
+  scorpio-broker-aaio:
+  - apiVersion: v2
+    appVersion: 2.1.0
+    created: "2022-06-09T09:43:46.900216687Z"
+    description: A Helm chart for Kubernetes in which all the microservices are deployed
+      under a single container and thus less effective for production environment
+      but serves well in testing and dev environment.
+    digest: d91f796faecbaa552afdba14c2125ffb22bfeba1f54eec28dfcec2d78707a37b
+    name: scorpio-broker-aaio
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/scorpio-broker-aaio-0.1.2/scorpio-broker-aaio-0.1.2.tgz
+    version: 0.1.2
+  scorpiobroker:
+  - apiVersion: v2
+    appVersion: 2.1.0
+    created: "2022-06-09T09:43:47.049125785Z"
+    description: A Helm chart for Kubernetes in which every microservices has its
+      own container and hence have reserved resources for it and virtually isolated
+      from others and best for production.
+    digest: a45819c249c950a751f5de62ac1d81db778cb3d25bffd14f266fd90e31d45948
+    name: scorpiobroker
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
+    version: 0.1.2
+generated: "2022-06-09T09:43:47.04946709Z"
