@@ -1,0 +1,16 @@
+{{- if .Values.queryManager.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "queryManager.fullname" . }}
+  labels:
+    {{ include "queryManager.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - name: "1026"
+    port: 1026
+    targetPort: 1026
+  selector:
+    {{ include "queryManager.matchLabels" . | nindent 4 }}
+{{- end }}

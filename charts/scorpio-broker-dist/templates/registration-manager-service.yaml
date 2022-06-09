@@ -1,0 +1,15 @@
+{{- if .Values.registryManager.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "registryManager.fullname" . }}
+  labels:
+    {{ include "registryManager.labels" . | nindent 4 }}
+spec:
+  ports:
+  - name: "1030"
+    port: 1030
+    targetPort: 1030
+  selector:
+    {{ include "registryManager.matchLabels" . | nindent 4 }}
+{{- end }}

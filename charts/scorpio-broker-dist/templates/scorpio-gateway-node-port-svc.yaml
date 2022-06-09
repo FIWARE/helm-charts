@@ -1,0 +1,21 @@
+{{- if .Values.gateway.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{ include "gateway.labels" . | nindent 4 }}
+  name: scorpio-gateway-service
+spec:
+  type: {{ .Values.gateway.service.type }}
+  ports:
+  - port: {{ .Values.gateway.service.port }}
+    targetPort: {{ .Values.gateway.service.port }}
+    {{- if and (eq .Values.gateway.service.type "NodePort") .Values.gateway.service.nodePort }}
+    nodePort: {{ .Values.gateway.service.nodePort }}
+    {{- else if eq .Values.gateway.service.type "ClusterIP" }}
+    nodePort: null
+    {{- end }}
+  selector:
+    {{ include "gateway.matchLabels" . | nindent 4 }}
+{{- end }}
+

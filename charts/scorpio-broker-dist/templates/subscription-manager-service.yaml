@@ -1,0 +1,15 @@
+{{- if .Values.subscriptionManager.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "subscriptionManager.fullname" . }}
+  labels:
+    {{ include "subscriptionManager.labels" . | nindent 4 }}
+spec:
+  ports:
+  - name: "2026"
+    port: 2026
+    targetPort: 2026
+  selector:
+    {{ include "subscriptionManager.matchLabels" . | nindent 4 }}
+{{- end }}

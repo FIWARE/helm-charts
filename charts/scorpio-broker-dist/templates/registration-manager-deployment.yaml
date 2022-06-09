@@ -1,0 +1,77 @@
+{{- if .Values.registryManager.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "registryManager.fullname" . }}
+  labels:
+    {{ include "registryManager.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.registryManager.replicas }}
+  strategy:
+  {{- with .Values.registryManager.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "registryManager.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{ include "registryManager.labels" . | nindent 8 }}
+        {{- with .Values.registryManager.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.registryManager.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.registryManager.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      containers:
+      - image: {{ .Values.registryManager.image.repository }}:{{ .Values.registryManager.image.tag }}
+        {{- if .Values.springArgs.overrideSpringArgs }}
+        env:
+          - name: spring_args
+            value: {{ .Values.springArgs.value }}
+        {{- end }}
+        imagePullPolicy: {{ .Values.registryManager.image.pullPolicy }}
+        name: {{ include "registryManager.fullname" . }}
+        ports:
+        - containerPort: 1030
+          protocol: TCP
+        lifecycle:
+           preStop:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - curl -X PUT "http://{{ .Values.eureka.hostname }}:{{ .Values.eureka.port }}/eureka/apps/REGISTRY-MANAGER/$HOSTNAME:registry-manager:1030/status?value=OUT_OF_SERVICE"
+        
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 1030
+          failureThreshold: {{ .Values.registryManager.readinessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.registryManager.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.registryManager.readinessProbe.periodSeconds }}
+          
+        
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 1030
+          failureThreshold: {{ .Values.registryManager.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.registryManager.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.registryManager.livenessProbe.periodSeconds }}
+            
+        resources:
+{{ toYaml .Values.registryManager.resources | indent 10 }}
+      restartPolicy: {{ .Values.registryManager.restartPolicy }}
+      {{- if .Values.registryManager.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.registryManager.serviceAccount.name }}
+      {{- end }}
+      securityContext: {{ .Values.registryManager.securityContext | toYaml }}
+      terminationGracePeriodSeconds: {{ .Values.registryManager.terminationGracePeriodSeconds }}
+{{- end }}
+

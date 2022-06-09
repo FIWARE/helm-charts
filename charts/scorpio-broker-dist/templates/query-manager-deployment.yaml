@@ -1,0 +1,77 @@
+{{- if .Values.queryManager.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "queryManager.fullname" . }}
+  labels:
+    {{ include "queryManager.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.queryManager.replicas }}
+  strategy:
+  {{- with .Values.queryManager.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "queryManager.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{ include "queryManager.labels" . | nindent 8 }}
+        {{- with .Values.queryManager.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.queryManager.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.queryManager.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      containers:
+      - image: {{ .Values.queryManager.image.repository }}:{{ .Values.queryManager.image.tag }}
+        {{- if .Values.springArgs.overrideSpringArgs }}
+        env:
+          - name: spring_args
+            value: {{ .Values.springArgs.value }}
+        {{- end }}
+        imagePullPolicy: {{ .Values.queryManager.image.pullPolicy }}
+        name: {{ include "queryManager.fullname" . }}
+        ports:
+        - containerPort: 1026
+          protocol: TCP
+        lifecycle:
+           preStop:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - curl -X PUT "http://{{ .Values.eureka.hostname }}:{{ .Values.eureka.port }}/eureka/apps/QUERY-MANAGER/$HOSTNAME:query-manager:1026/status?value=OUT_OF_SERVICE"
+        
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 1026
+          failureThreshold: {{ .Values.queryManager.readinessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.queryManager.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.queryManager.readinessProbe.periodSeconds }}
+          
+        
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 1026
+          failureThreshold: {{ .Values.queryManager.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.queryManager.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.queryManager.livenessProbe.periodSeconds }}
+          
+        resources:
+{{ toYaml .Values.queryManager.resources | indent 10 }}
+      restartPolicy: {{ .Values.queryManager.restartPolicy }}
+      {{- if .Values.queryManager.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.queryManager.serviceAccount.name }}
+      {{- end }}
+      securityContext: {{ .Values.queryManager.securityContext | toYaml }}
+      terminationGracePeriodSeconds: {{ .Values.queryManager.terminationGracePeriodSeconds }}
+{{- end }}
+
