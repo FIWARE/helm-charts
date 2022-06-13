@@ -8,6 +8,9 @@ metadata:
     {{ include "keyrock.labels" . | nindent 4 }}
   {{- if .Values.route.annotations }}
   annotations:
+    {{- if .Values.route.certificate }}
+    cert-utils-operator.redhat-cop.io/certs-from-secret: {{ include "keyrock.fullname" . }}-tls-sec
+    {{- end }}
     {{- with .Values.route.annotations }}
       {{- toYaml . | nindent 4 }}
       {{- end }}

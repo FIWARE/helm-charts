@@ -1,0 +1,21 @@
+{{- if .Values.openshift }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include ""business-api-ecosystem.name" . }}-scc
+  labels:
+    app: {{ include "business-api-ecosystem.name" . }}
+    chart: {{ include "business-api-ecosystem.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+rules:
+- apiGroups:
+  - security.openshift.io
+  resourceNames:
+  - anyuid
+  - privileged
+  resources:
+  - securitycontextconstraints
+  verbs:
+  - use
+{{- end }}  

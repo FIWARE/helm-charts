@@ -1,0 +1,15 @@
+{{- if .Values.route.certificate -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "keyrock.fullname" . }}
+  labels:
+    {{ include "keyrock.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "keyrock.fullname" . }}-tls-sec
+  issuerRef:
+    {{- toYaml .Values.route.certificate.issuer | nindent 4 }}
+  commonName: {{ .Values.route.host }}
+  dnsNames:
+    - {{ .Values.route.host }}
+{{- end -}}
