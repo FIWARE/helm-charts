@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ include ""business-api-ecosystem.name" . }}-scc
+  name: {{ include "business-api-ecosystem.name" . }}-scc
   labels:
     app: {{ include "business-api-ecosystem.name" . }}
     chart: {{ include "business-api-ecosystem.chart" . }}
