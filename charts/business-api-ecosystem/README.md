@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -143,6 +143,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.propagateToken | bool | `true` | Sets whether the logic proxy should propagate the user access token to the backend components |
 | bizEcosystemLogicProxy.revenueModel | int | `30` | Default market owner precentage for Revenue Sharing models |
 | bizEcosystemLogicProxy.route.annotations | object | `{}` | annotations to be added to the route |
+| bizEcosystemLogicProxy.route.certificate | object | `{}` | see: https://github.com/FIWARE-Ops/fiware-gitops/blob/master/doc/ROUTES.md |
 | bizEcosystemLogicProxy.route.enabled | bool | `false` | should the deployment create openshift routes |
 | bizEcosystemLogicProxy.route.tls | object | `{}` | tls configuration for the route |
 | bizEcosystemLogicProxy.securityContext | object | `{}` |  |
