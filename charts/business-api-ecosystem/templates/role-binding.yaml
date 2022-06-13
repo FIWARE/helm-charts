@@ -1,0 +1,19 @@
+{{- if .Values.openshift -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "business-api-ecosystem.name" . }}-rb
+  labels:
+    app: {{ include "business-api-ecosystem.name" . }}
+    chart: {{ include "business-api-ecosystem.chart" . }}
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "business-api-ecosystem.name" . }}-sa
+    namespace: {{ .Release.Namespace | quote }}
+roleRef:
+  kind: Role
+  name: {{ include "business-api-ecosystem.name" . }}-bae-scc-anyuid
+  apiGroup: rbac.authorization.k8s.io
+{{- end -}}

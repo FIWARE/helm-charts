@@ -1,6 +1,6 @@
 # keyrock
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![AppVersion: 8.1.0](https://img.shields.io/badge/AppVersion-8.1.0-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![AppVersion: 8.1.0](https://img.shields.io/badge/AppVersion-8.1.0-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -51,6 +51,7 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | port | int | `8080` | port that the keyrock container uses |
 | route.annotations | object | `{}` | annotations to be added to the route |
+| route.certificate | object | `{}` | see: https://github.com/FIWARE-Ops/fiware-gitops/blob/master/doc/ROUTES.md |
 | route.enabled | bool | `false` |  |
 | route.tls | object | `{}` | tls configuration for the route |
 | satellite.enabled | bool | `false` | Enable usage of satellite |

@@ -613,6 +613,13 @@ bizEcosystemLogicProxy:
     # -- tls configuration for the route
     tls: {}
     # termination: edge
+    # -- configuration for certificate generation.
+    # -- see: https://github.com/FIWARE-Ops/fiware-gitops/blob/master/doc/ROUTES.md
+    certificate: {}
+    #   issuer:
+    #     kind: ClusterIssuer
+    #     name: letsencrypt-aws-prod
+
 
   # -- port that the logic proxy container uses
   port: 8004

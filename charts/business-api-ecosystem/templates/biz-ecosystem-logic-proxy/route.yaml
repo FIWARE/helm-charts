@@ -8,6 +8,9 @@ metadata:
     {{ include "bizEcosystemLogicProxy.labels" . | nindent 4 }}
   {{- if .Values.bizEcosystemLogicProxy.route.annotations }}
   annotations:
+    {{- if .Values.bizEcosystemLogicProxy.route.certificate }}
+      cert-utils-operator.redhat-cop.io/certs-from-secret: {{ include "bizEcosystemLogicProxy.fullname" . }}-tls-sec
+    {{- end }}
     {{- with .Values.bizEcosystemLogicProxy.route.annotations }}
       {{- toYaml . | nindent 4 }}
       {{- end }}
