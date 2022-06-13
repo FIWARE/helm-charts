@@ -14,6 +14,6 @@ subjects:
     namespace: {{ .Release.Namespace | quote }}
 roleRef:
   kind: Role
-  name: {{ include "business-api-ecosystem.name" . }}-bae-scc-anyuid
+  name: {{ include "business-api-ecosystem.name" . }}-scc
   apiGroup: rbac.authorization.k8s.io
 {{- end -}}
