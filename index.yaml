@@ -236,6 +236,28 @@ entries:
   business-api-ecosystem:
   - apiVersion: v2
     appVersion: 8.0.0
+    created: "2022-06-13T11:09:58.577924355Z"
+    description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
+      Marketplace) on Kubernetes
+    digest: 53a1e12584b337f69b86d5e2ac898390f40f70ebe859c8abb85db59ecbb65499
+    home: https://business-api-ecosystem.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - marketplace
+    - bae
+    - tmforum
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: business-api-ecosystem
+    sources:
+    - https://github.com/FIWARE-TMForum/Business-API-Ecosystem
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-0.4.0/business-api-ecosystem-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
+    appVersion: 8.0.0
     created: "2022-05-09T06:23:40.942852559Z"
     description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
       Marketplace) on Kubernetes
@@ -881,6 +903,28 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/iotagent-ul-0.0.1/iotagent-ul-0.0.1.tgz
     version: 0.0.1
   keyrock:
+  - apiVersion: v1
+    appVersion: 8.1.0
+    created: "2022-06-13T11:09:58.826139835Z"
+    description: A Helm chart for running the fiware idm keyrock on kubernetes.
+    digest: 4faf4853b39b316df5b9f4f044a4402c8dd6170448e81dfd1985bc7dbbfed0ab
+    home: https://fiware-idm.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - keyrock
+    - idm
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: keyrock
+    sources:
+    - https://github.com/ging/fiware-idm
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/keyrock-0.4.0/keyrock-0.4.0.tgz
+    version: 0.4.0
   - apiVersion: v1
     appVersion: 8.1.0
     created: "2022-05-09T08:02:39.135202459Z"
@@ -1757,4 +1801,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
-generated: "2022-06-09T09:43:47.04946709Z"
+generated: "2022-06-13T11:09:58.826518867Z"
