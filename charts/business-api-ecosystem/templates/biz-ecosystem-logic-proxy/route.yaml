@@ -6,7 +6,7 @@ metadata:
   name: {{ include "bizEcosystemLogicProxy.fullname" . }}
   labels:
     {{ include "bizEcosystemLogicProxy.labels" . | nindent 4 }}
-  {{- if .Values.bizEcosystemLogicProxy.route.annotations }}
+  {{- if or .Values.bizEcosystemLogicProxy.route.annotations .Values.bizEcosystemLogicProxy.route.certificate }}
   annotations:
     {{- if .Values.bizEcosystemLogicProxy.route.certificate }}
       cert-utils-operator.redhat-cop.io/certs-from-secret: {{ include "bizEcosystemLogicProxy.fullname" . }}-tls-sec

@@ -6,7 +6,7 @@ metadata:
   name: {{ include "keyrock.fullname" . }}
   labels:
     {{ include "keyrock.labels" . | nindent 4 }}
-  {{- if .Values.route.annotations }}
+  {{- if or .Values.route.annotations .Values.route.certificate }}
   annotations:
     {{- if .Values.route.certificate }}
     cert-utils-operator.redhat-cop.io/certs-from-secret: {{ include "keyrock.fullname" . }}-tls-sec
