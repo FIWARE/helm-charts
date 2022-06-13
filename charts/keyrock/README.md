@@ -1,6 +1,6 @@
 # keyrock
 
-![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![AppVersion: 8.1.0](https://img.shields.io/badge/AppVersion-8.1.0-informational?style=flat-square)
+![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![AppVersion: 8.1.0](https://img.shields.io/badge/AppVersion-8.1.0-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -42,6 +42,7 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | db.host | string | `"mysql"` | host of the database to be used |
 | db.password | string | `"pass"` | password for connecting the database |
 | db.user | string | `"root"` | user for connecting the database |
+| extraEnvVarsSecret | string | `""` | Name of existing Secret containing extra env vars (in case of sensitive data) |
 | fullnameOverride | string | `""` | option to override the fullname config in the _helpers.tpl |
 | host | string | `"http://localhost"` | host where keyrock is available at |
 | ingress.annotations | object | `{}` | annotations to be added to the ingress |

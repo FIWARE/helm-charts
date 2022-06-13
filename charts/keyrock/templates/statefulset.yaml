@@ -171,6 +171,11 @@ spec:
             {{- with .Values.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            envFrom:
+              - secretRef:
+                  name: {{ .Values.extraEnvVarsSecret . | quote }}
+              {{- end }}
           resources:
             {{- toYaml .Values.statefulset.resources | nindent 12 }}
       {{- with .Values.statefulset.nodeSelector }}
