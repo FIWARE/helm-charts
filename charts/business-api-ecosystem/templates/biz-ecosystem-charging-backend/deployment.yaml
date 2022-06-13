@@ -39,7 +39,7 @@ spec:
       serviceAccountName: {{ include "business-api-ecosystem.name" . }}-sa
       {{- else -}}
       serviceAccountName: {{ include "bizEcosystemChargingBackend.serviceAccountName" . }}
-      {{- end -}}
+      {{- end }}
       initContainers:
         {{- include "business-api-ecosystem.initContainer.mongodb" ( dict "ctx" . "name" .Values.bizEcosystemChargingBackend.name "host" .Values.bizEcosystemChargingBackend.db.host ) | nindent 8 }}
         {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-inventory" "path" "DSProductInventory" ) | nindent 8 }}
