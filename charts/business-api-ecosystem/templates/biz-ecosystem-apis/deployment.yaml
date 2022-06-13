@@ -30,9 +30,9 @@ spec:
       {{- end }}
     spec:
       {{- if .Values.openshift }}
-        serviceAccountName: {{ include "business-api-ecosystem.name" . }}-sa
+      serviceAccountName: {{ include "business-api-ecosystem.name" . }}-sa
       {{- else -}}
-        serviceAccountName: {{ include "bizEcosystemApis.serviceAccountName" . }}
+      serviceAccountName: {{ include "bizEcosystemApis.serviceAccountName" . }}
       {{- end -}}
       initContainers:
         {{- include "business-api-ecosystem.initContainer.mysql" ( dict "ctx" . "name" "{{ include \"bizEcosystemApis.fullname\" . }}" "host" .Values.bizEcosystemApis.db.host ) | nindent 8 }}          
