@@ -255,4 +255,6 @@ additonalEnvVars: []
 #   value: MyKeyrock
 
 
+# -- Name of existing Secret containing extra env vars (in case of sensitive data)
+extraEnvVarsSecret: ""
 
