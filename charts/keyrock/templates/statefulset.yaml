@@ -174,7 +174,7 @@ spec:
             {{- if .Values.extraEnvVarsSecret }}
             envFrom:
               - secretRef:
-                  name: {{ .Values.extraEnvVarsSecret . | quote }}
+                  name: {{ tpl .Values.extraEnvVarsSecret . | quote }}
               {{- end }}
           resources:
             {{- toYaml .Values.statefulset.resources | nindent 12 }}
