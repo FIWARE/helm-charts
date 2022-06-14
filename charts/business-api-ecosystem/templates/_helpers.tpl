@@ -309,7 +309,7 @@ Template for MySQL initContainer check
 
 */}}
 {{- define "business-api-ecosystem.initContainer.mongodb" }}
-- name: {{ .ctx.Release.Name }}-{{ tpl .name .ctx }}-{{ .ctx.Values.initContainer.mongodb.name }}
+- name: {{ tpl .name .ctx }}-{{ .ctx.Values.initContainer.mongodb.name }}
   image: '{{ .ctx.Values.initContainer.mongodb.image }}:{{ .ctx.Values.initContainer.mongodb.imageTag }}'
   imagePullPolicy: {{ .ctx.Values.initContainer.mongodb.imagePullPolicy | quote }}
   command: ['sh', '-c',
