@@ -1,6 +1,6 @@
 # keyrock
 
-![Version: 0.4.4](https://img.shields.io/badge/Version-0.4.4-informational?style=flat-square) ![AppVersion: 8.1.0](https://img.shields.io/badge/AppVersion-8.1.0-informational?style=flat-square)
+![Version: 0.4.5](https://img.shields.io/badge/Version-0.4.5-informational?style=flat-square) ![AppVersion: 8.1.0](https://img.shields.io/badge/AppVersion-8.1.0-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -91,6 +91,7 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | theme.mountFavicon | string | `"/opt/fiware-idm/public/favicon.ico"` | Mount path for the source favicon |
 | theme.mountFonts | string | `"/opt/fiware-idm/public/fonts/my-fonts"` | Mount path for the source fonts files |
 | theme.mountImg | string | `"/opt/fiware-idm/public/img/my-theme"` | Mount path for the source image files |
+| theme.mountJavascript | string | `"/opt/fiware-idm/public/javascripts/my-theme"` | Mount path for the source javascript files |
 | theme.mountTheme | string | `"/opt/fiware-idm/themes/my-theme"` | Mount path for the source theme files |
 | theme.name | string | `"default"` | Name of the theme |
 | theme.size | string | `"50Mi"` | Size of PVCs to be created |
