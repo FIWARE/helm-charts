@@ -121,6 +121,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.verifyRequests | bool | `true` | Whether or not the BAE validates SSL certificates on requests to external components |
 | bizEcosystemLogicProxy.allowLocalEORI | bool | `false` | Allow to use organisations from local IDP as participants when creating or acquiring offerings |
 | bizEcosystemLogicProxy.collectStaticCommand | string | `"True"` | Execute the collect static command on startup |
+| bizEcosystemLogicProxy.command | object | `{}` | in case the startup command should be alterd |
 | bizEcosystemLogicProxy.db.database | string | `"belp_db"` | Database name for connecting the database |
 | bizEcosystemLogicProxy.db.host | string | `"mongo"` | host of the database to be used |
 | bizEcosystemLogicProxy.db.password | string | `"pass"` | password for connecting the database |
