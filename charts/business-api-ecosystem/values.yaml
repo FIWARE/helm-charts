@@ -706,3 +706,5 @@ bizEcosystemLogicProxy:
   extraContainerVolumes: {}
   # -- additional volumes to be mounted by the container
   extraVolumeMounts: {}
+  # -- in case the startup command should be alterd
+  command: {}
