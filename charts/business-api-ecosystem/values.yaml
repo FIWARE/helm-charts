@@ -699,3 +699,12 @@ bizEcosystemLogicProxy:
 
   # -- Default market owner precentage for Revenue Sharing models
   revenueModel: 30
+
+  # -- additional init-containers to be added for the belp
+  extraInitContainers: {}
+  # -- additional volumes to be added for the container
+  extraContainerVolumes: {}
+  # -- additional volumes to be mounted by the container
+  extraVolumeMounts: {}
+  # -- in case the startup command should be alterd
+  command: {}

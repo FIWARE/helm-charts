@@ -38,6 +38,9 @@ spec:
       serviceAccountName: {{ include "bizEcosystemLogicProxy.serviceAccountName" . }}
       {{- end }}
       initContainers:
+        {{- if .Values.bizEcosystemLogicProxy.extraInitContainers }}
+        {{ toYaml .Value.bizEcosystemLogicProxy.extraInitContainers | nindent 8 }}
+        {{- end }}
         {{- include "business-api-ecosystem.initContainer.mongodb" ( dict "ctx" . "name" .Values.bizEcosystemLogicProxy.name "host" .Values.bizEcosystemLogicProxy.db.host ) | nindent 8 }}
         {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-inventory" "path" "DSProductInventory" ) | nindent 8 }}
         {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-catalog" "path" "DSProductCatalog" ) | nindent 8 }}
@@ -60,6 +63,12 @@ spec:
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemLogicProxy.name }}
           imagePullPolicy: {{ .Values.bizEcosystemLogicProxy.statefulset.image.pullPolicy }}
           image: "{{ .Values.bizEcosystemLogicProxy.statefulset.image.repository }}:{{ .Values.bizEcosystemLogicProxy.statefulset.image.tag }}"
+          {{- if .Values.bizEcosystemLogicProxy.command }}
+          command:
+          {{- range .Values.bizEcosystemLogicProxy.command } }
+            - {{ . }}
+          {{- end }}
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.bizEcosystemLogicProxy.port}}
@@ -86,6 +95,9 @@ spec:
             timeoutSeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.readinessProbe.timeoutSeconds }}
           {{- if or .Values.bizEcosystemLogicProxy.theme.enabled .Values.bizEcosystemLogicProxy.token.enabled }}
           volumeMounts:
+          {{- if .Values.bizEcosystemLogicProxy.extraVolumeMounts }}
+          {{ toYaml .Values.bizEcosystemLogicProxy.extraVolumeMounts | nindent 12 }}
+          {{- end }}
           {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
             - name: themes
               mountPath: /business-ecosystem-logic-proxy/themes
@@ -232,8 +244,12 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.bizEcosystemLogicProxy.token.enabled }}
+      {{- if or .Values.bizEcosystemLogicProxy.token.enabled .Values.bizEcosystemLogicProxy.extraContainerVolumes }}
       volumes:
+      {{- if .Values.bizEcosystemLogicProxy.extraContainerVolumes }}
+      {{ toYaml .Values.bizEcosystemLogicProxy.extraContainerVolumes | nindent 8 }}
+      {{- end }}
+      {{- if .Values.bizEcosystemLogicProxy.token.enabled }}
         - name: key-volume
           secret:
             secretName: {{ include "bizEcosystemLogicProxy.certSecretName" . }}
@@ -246,6 +262,7 @@ spec:
             items:
               - key: cert.pem
                 path: cert.pem
+      {{- end }}
       {{- end }}
   {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
   volumeClaimTemplates:
