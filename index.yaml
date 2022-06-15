@@ -1059,6 +1059,28 @@ entries:
   keyrock:
   - apiVersion: v1
     appVersion: 8.1.0
+    created: "2022-06-15T13:40:49.797895706Z"
+    description: A Helm chart for running the fiware idm keyrock on kubernetes.
+    digest: 145f606fa62608d1c8591402eced4ad517ef607bff51e4fa6e5c4aa1095cf3c7
+    home: https://fiware-idm.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - keyrock
+    - idm
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: keyrock
+    sources:
+    - https://github.com/ging/fiware-idm
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/keyrock-0.4.5/keyrock-0.4.5.tgz
+    version: 0.4.5
+  - apiVersion: v1
+    appVersion: 8.1.0
     created: "2022-06-14T09:49:06.985813185Z"
     description: A Helm chart for running the fiware idm keyrock on kubernetes.
     digest: 46de60feaa0fb5a6a577db04dfd421db21c5721236c5bd64022a5efc7d6e8840
@@ -2043,4 +2065,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
-generated: "2022-06-15T12:50:32.402120692Z"
+generated: "2022-06-15T13:40:49.798286007Z"
