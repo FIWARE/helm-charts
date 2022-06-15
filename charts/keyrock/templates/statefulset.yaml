@@ -45,6 +45,10 @@ spec:
               mountPath: {{ .Values.theme.sourceTheme }}
             - name: themes-img
               mountPath: {{ .Values.theme.sourceImg }}
+            {{- if .Values.theme.sourceJavascript }}
+            - name: themes-javascript
+              mountPath: {{ .Values.theme.sourceJavascript }}
+            {{- end }}
             {{- if .Values.theme.sourceFonts }}
             - name: themes-fonts
               mountPath: {{ .Values.theme.sourceFonts }}
@@ -85,6 +89,10 @@ spec:
               mountPath: {{ .Values.theme.mountTheme }}
             - name: themes-img
               mountPath: {{ .Values.theme.mountImg }}
+            {{- end }}
+            {{- if .Values.theme.sourceJavascript }}
+            - name: themes-javascript
+              mountPath: {{ .Values.theme.mountJavascript }}
             {{- end }}
             {{- if .Values.theme.sourceFonts }}
             - name: themes-fonts
@@ -212,6 +220,15 @@ spec:
       resources:
         requests:
           storage: {{ .Values.theme.size | quote }}
+  {{- if .Values.theme.sourceJavascript }}
+  - metadata:
+      name: themes-javascript
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: {{ .Values.theme.size | quote }}
+  {{- end }}
   {{- if .Values.theme.sourceFonts }}
   - metadata:
       name: themes-fonts

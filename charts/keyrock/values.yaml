@@ -198,6 +198,8 @@ theme:
     sourceTheme: /themes/my-theme
     # -- Path to the source image files inside the container
     sourceImg: /img/my-theme
+    ## Optional: Path to the source javascript files inside the container
+    #sourceJavascript: /javascripts/my-theme
     ## Optional: Path to the source fonts files inside the container
     #sourceFonts: /fonts/my-fonts
     ## Optional: Path to the source favicon directory inside the container
@@ -206,6 +208,8 @@ theme:
     mountTheme: /opt/fiware-idm/themes/my-theme
     # -- Mount path for the source image files
     mountImg: /opt/fiware-idm/public/img/my-theme
+    # -- Mount path for the source javascript files
+    mountJavascript: /opt/fiware-idm/public/javascripts/my-theme
     # -- Mount path for the source fonts files
     mountFonts: /opt/fiware-idm/public/fonts/my-fonts
     # -- Mount path for the source favicon
