@@ -65,7 +65,7 @@ spec:
           image: "{{ .Values.bizEcosystemLogicProxy.statefulset.image.repository }}:{{ .Values.bizEcosystemLogicProxy.statefulset.image.tag }}"
           {{- if .Values.bizEcosystemLogicProxy.command }}
           command:
-          {{- range .Values.bizEcosystemLogicProxy.command } }
+          {{- range .Values.bizEcosystemLogicProxy.command }}
             - {{ . }}
           {{- end }}
           {{- end }}
