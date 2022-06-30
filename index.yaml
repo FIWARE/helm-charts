@@ -175,6 +175,26 @@ entries:
   bae-activation-service:
   - apiVersion: v1
     appVersion: 0.0.3
+    created: "2022-06-30T11:30:22.47851941Z"
+    description: A Helm chart for running the fiware BAE activation service PoC on
+      kubernetes.
+    digest: eb8d1cfa9af6a54c9a3b479d51eca5185921da9395ce8c7a9e8cf07fa7940697
+    home: https://github.com/FIWARE-AI-Marketplace/bae-activation-service
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - bae
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: bae-activation-service
+    sources:
+    - https://github.com/FIWARE-AI-Marketplace/bae-activation-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/bae-activation-service-0.0.5/bae-activation-service-0.0.5.tgz
+    version: 0.0.5
+  - apiVersion: v1
+    appVersion: 0.0.3
     created: "2022-06-30T09:20:16.233086215Z"
     description: A Helm chart for running the fiware BAE activation service PoC on
       kubernetes.
@@ -2107,4 +2127,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
-generated: "2022-06-30T09:20:16.233596122Z"
+generated: "2022-06-30T11:30:22.478902222Z"
