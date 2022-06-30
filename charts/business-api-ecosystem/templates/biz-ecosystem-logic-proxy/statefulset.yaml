@@ -34,7 +34,7 @@ spec:
     spec:
       {{- if .Values.openshift }}
       serviceAccountName: {{ include "business-api-ecosystem.name" . }}-sa
-      {{- else -}}
+      {{- else }}
       serviceAccountName: {{ include "bizEcosystemLogicProxy.serviceAccountName" . }}
       {{- end }}
       initContainers:
