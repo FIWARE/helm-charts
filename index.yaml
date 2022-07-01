@@ -3,6 +3,25 @@ entries:
   api-umbrella:
   - apiVersion: v1
     appVersion: v0.18.0
+    created: "2022-07-01T07:29:31.755532733Z"
+    description: A Helm chart for running api-umbrella on kubernetes.
+    digest: 75b6da7cbd08eb60e5a4eda22fc1124c77dc1db8873b4204f4dd0c51f17561f9
+    home: https://api-umbrella.readthedocs.io/en/latest/index.html
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - api-umbrella
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: api-umbrella
+    sources:
+    - https://github.com/NREL/api-umbrella
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/api-umbrella-0.0.14/api-umbrella-0.0.14.tgz
+    version: 0.0.14
+  - apiVersion: v1
+    appVersion: v0.18.0
     created: "2022-05-09T08:02:38.237280703Z"
     description: A Helm chart for running api-umbrella on kubernetes.
     digest: b029b0108995fbeb477589c779c4541a73b3dda8702c26668edc8938eea8d9d9
@@ -175,6 +194,26 @@ entries:
   bae-activation-service:
   - apiVersion: v1
     appVersion: 0.0.3
+    created: "2022-07-01T07:29:32.001012758Z"
+    description: A Helm chart for running the fiware BAE activation service PoC on
+      kubernetes.
+    digest: e9f3106681620c2337dcced5088372d304f2062d1b2e542ea39eabd681c3be12
+    home: https://github.com/FIWARE-AI-Marketplace/bae-activation-service
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - bae
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: bae-activation-service
+    sources:
+    - https://github.com/FIWARE-AI-Marketplace/bae-activation-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/bae-activation-service-0.0.7/bae-activation-service-0.0.7.tgz
+    version: 0.0.7
+  - apiVersion: v1
+    appVersion: 0.0.3
     created: "2022-06-30T11:50:19.864188863Z"
     description: A Helm chart for running the fiware BAE activation service PoC on
       kubernetes.
@@ -294,6 +333,28 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/bae-activation-service-0.0.1/bae-activation-service-0.0.1.tgz
     version: 0.0.1
   business-api-ecosystem:
+  - apiVersion: v2
+    appVersion: 8.0.0
+    created: "2022-07-01T07:29:32.286384215Z"
+    description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
+      Marketplace) on Kubernetes
+    digest: 279a0f787280964283c52dd8490b5e9a2dcbfce08b93d06e2773193843ca49d2
+    home: https://business-api-ecosystem.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - marketplace
+    - bae
+    - tmforum
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: business-api-ecosystem
+    sources:
+    - https://github.com/FIWARE-TMForum/Business-API-Ecosystem
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-0.4.13/business-api-ecosystem-0.4.13.tgz
+    version: 0.4.13
   - apiVersion: v2
     appVersion: 8.0.0
     created: "2022-06-30T11:51:19.97472289Z"
@@ -2191,4 +2252,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
-generated: "2022-06-30T11:51:19.975362002Z"
+generated: "2022-07-01T07:29:32.287064619Z"
