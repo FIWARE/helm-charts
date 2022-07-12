@@ -500,7 +500,7 @@ ishare:
   ## openshift specific route definition. Will not work on plain k8s
   route:
     ## -- should the deployment create openshift routes
-    enabled: true
+    enabled: false
     # -- annotations to be added to the route
     annotations: {}
     # -- host to be used
