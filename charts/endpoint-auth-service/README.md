@@ -1,13 +1,7 @@
-# endpoint-auth-service
+# eas
 
-![Version: 0.0.4](https://img.shields.io/badge/Version-0.0.4-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
-A Helm chart for running the endpoint-auth-service on kubernetes.
-
-## Maintainers
-
-| Name | Email | Url |
-| ---- | ------ | --- |
-| wistefan | <stefan.wiedemann@fiware.org> |  |
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+Chart holder for argo-cd
 
 ## Additional Information
 
@@ -84,10 +78,6 @@ for now only workarounds might be a possibility.
 A potential workaround might be to setup the iptables, so that the traffic from the sidecar proxy does not directly get returned, but instead is also redirected to the mesh-proxy. Check the [init-iptables container](https://github.com/FIWARE/endpoint-auth-service/tree/initial-dev/src/iptables-init)
 for that.
 
-## Source Code
-
-* <https://github.com/FIWARE/endpoint-auth-service>
-
 ## Values
 
 | Key | Type | Default | Description |
@@ -144,7 +134,7 @@ for that.
 | configService.resources | object | `{}` |  |
 | configService.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | configService.route.annotations | object | `{}` | annotations to be added to the route |
-| configService.route.enabled | bool | `false` |  |
+| configService.route.enabled | bool | `true` |  |
 | configService.route.tls | object | `{}` | tls configuration for the route |
 | configService.service.annotations | object | `{}` | addtional annotations, if required |
 | configService.service.port | int | `8080` | port to be used by the service |
@@ -180,7 +170,7 @@ for that.
 | ishare.resources | object | `{}` |  |
 | ishare.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | ishare.route.annotations | object | `{}` | annotations to be added to the route |
-| ishare.route.enabled | bool | `false` |  |
+| ishare.route.enabled | bool | `true` |  |
 | ishare.route.tls | object | `{}` | tls configuration for the route |
 | ishare.service.annotations | object | `{}` | addtional annotations, if required |
 | ishare.service.port | int | `8080` | port to be used by the service |
@@ -219,14 +209,20 @@ for that.
 | sidecarInjector.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | sidecarInjector.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | sidecarInjector.annotationNamespace | string | `"sidecar.k8s.fiware.org"` | namespace of the annotation to be applied to the pod that should get injected. |
-| sidecarInjector.cert | string | `"-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----\n"` | certificate to be used by the injector service in pem format |
+| sidecarInjector.certificate | object | `{"cert":"-----BEGIN CERTIFICATE-----\n  ---\n-----END CERTIFICATE-----\n","issuer":{"group":"cert-manager.io","kind":"ClusterIssuer","name":"self-signed"},"key":"-----BEGIN PRIVATE KEY-----\n  ---\n-----END PRIVATE KEY-----\n","type":"cert-manager"}` | configuration for the sidecar injection certificate |
+| sidecarInjector.certificate.cert | string | `"-----BEGIN CERTIFICATE-----\n  ---\n-----END CERTIFICATE-----\n"` | certificate to be used by the injector service in pem format, be aware that it has to provide SAN |
+| sidecarInjector.certificate.issuer | object | `{"group":"cert-manager.io","kind":"ClusterIssuer","name":"self-signed"}` | issuer config, in case cert-manager is used |
+| sidecarInjector.certificate.issuer.group | string | `"cert-manager.io"` | group of the issuer |
+| sidecarInjector.certificate.issuer.kind | string | `"ClusterIssuer"` | kind of the issuer |
+| sidecarInjector.certificate.issuer.name | string | `"self-signed"` | name of the issuer |
+| sidecarInjector.certificate.key | string | `"-----BEGIN PRIVATE KEY-----\n  ---\n-----END PRIVATE KEY-----\n"` | key to be used by the injector service |
+| sidecarInjector.certificate.type | string | `"cert-manager"` | type of certificate to use, currently supported: cert-manager and inline |
 | sidecarInjector.enabled | bool | `true` |  |
-| sidecarInjector.fullnameOverride | string | `""` | option to override the fullname config in the _helpers.tpl |
+| sidecarInjector.fullnameOverride | string | `"eas-sidecar-injector"` | option to override the fullname config in the _helpers.tpl |
 | sidecarInjector.healthPort | int | `9000` | port that the health check is available at |
 | sidecarInjector.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| sidecarInjector.image.repository | string | `"tumblr/k8s-sidecar-injector"` | sidecar-injector image name ref: https://hub.docker.com/r/mayankkr/sidecarinjector |
-| sidecarInjector.image.tag | string | `"release-v0.5.0"` | tag of the image to be used |
-| sidecarInjector.key | string | `"-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----\n"` | key to be used by the injector service |
+| sidecarInjector.image.repository | string | `"expediagroup/kubernetes-sidecar-injector"` | sidecar-injector image name ref: https://hub.docker.com/r/mayankkr/sidecarinjector |
+| sidecarInjector.image.tag | string | `"1.0.1"` | tag of the image to be used |
 | sidecarInjector.labelNamespace | string | `"sidecar.k8s.fiware.org"` | namespace of the label to find the configmap to inject. |
 | sidecarInjector.livenessProbe.initialDelaySeconds | int | `30` |  |
 | sidecarInjector.livenessProbe.periodSeconds | int | `10` |  |
@@ -249,8 +245,8 @@ for that.
 | sidecarInjector.service.annotations | object | `{}` | addtional annotations, if required |
 | sidecarInjector.service.port | int | `443` | port to be used by the service |
 | sidecarInjector.service.type | string | `"ClusterIP"` | service type |
-| sidecarInjector.serviceAccount | object | `{"create":false}` | if a sidecarInjector specific service account should be used, it can be configured here ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
-| sidecarInjector.serviceAccount.create | bool | `false` | specifies if the account should be created |
+| sidecarInjector.serviceAccount | object | `{"create":true}` | if a sidecarInjector specific service account should be used, it can be configured here ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
+| sidecarInjector.serviceAccount.create | bool | `true` | specifies if the account should be created |
 | sidecarInjector.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 
 ----------------------------------------------
