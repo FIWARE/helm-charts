@@ -150,7 +150,7 @@ for that.
 | configService.resources | object | `{}` |  |
 | configService.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | configService.route.annotations | object | `{}` | annotations to be added to the route |
-| configService.route.enabled | bool | `true` |  |
+| configService.route.enabled | bool | `false` |  |
 | configService.route.tls | object | `{}` | tls configuration for the route |
 | configService.service.annotations | object | `{}` | addtional annotations, if required |
 | configService.service.port | int | `8080` | port to be used by the service |
@@ -186,7 +186,7 @@ for that.
 | ishare.resources | object | `{}` |  |
 | ishare.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | ishare.route.annotations | object | `{}` | annotations to be added to the route |
-| ishare.route.enabled | bool | `true` |  |
+| ishare.route.enabled | bool | `false` |  |
 | ishare.route.tls | object | `{}` | tls configuration for the route |
 | ishare.service.annotations | object | `{}` | addtional annotations, if required |
 | ishare.service.port | int | `8080` | port to be used by the service |
