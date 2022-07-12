@@ -1,0 +1,17 @@
+{{- if .Values.sidecarInjector.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "sidecarInjector.fullname" . }}
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - watch
+  - list
+  - create
+  - update
+{{ end -}}

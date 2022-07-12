@@ -1,0 +1,17 @@
+{{- if and (.Values.sidecarInjector.enabled) (eq .Values.sidecarInjector.certificate.type "cert-manager") -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "sidecarInjector.name" . }}-cert
+  labels:
+    {{ include "sidecarInjector.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "sidecarInjector.name" . }}-secret
+  issuerRef:
+    name: {{ .Values.sidecarInjector.certificate.issuer.name }}
+    kind: {{ .Values.sidecarInjector.certificate.issuer.kind }}
+    group: {{ .Values.sidecarInjector.certificate.issuer.group }}
+  dnsNames:
+    - {{ include "sidecarInjector.fullname" . }}.{{ .Release.Namespace }}.svc
+    - {{ include "sidecarInjector.fullname" . }}
+{{- end }}

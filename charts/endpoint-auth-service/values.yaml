@@ -284,13 +284,13 @@ sidecarInjector:
   # -- option to override the name config in the _helpers.tpl
   nameOverride: ""
   # -- option to override the fullname config in the _helpers.tpl
-  fullnameOverride: ""
+  fullnameOverride: eas-sidecar-injector
 
   # -- if a sidecarInjector specific service account should be used, it can be configured here
   # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   serviceAccount:
     # -- specifies if the account should be created
-    create: false
+    create: true
 
   # -- initial number of target replications, can be different if autoscaling is enabled
   replicaCount: 1
@@ -301,12 +301,38 @@ sidecarInjector:
   image:
     # -- sidecar-injector image name
     # ref: https://hub.docker.com/r/mayankkr/sidecarinjector
-    repository: tumblr/k8s-sidecar-injector
+    repository: expediagroup/kubernetes-sidecar-injector
     # -- tag of the image to be used
-    tag: release-v0.5.0
+    tag: 1.0.1
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
 
+  # -- configuration for the sidecar injection certificate
+  certificate:
+    # -- type of certificate to use, currently supported: cert-manager and inline
+    type: cert-manager
+    # -- issuer config, in case cert-manager is used
+    issuer:
+      # -- name of the issuer
+      name: self-signed
+      # -- kind of the issuer
+      kind: ClusterIssuer
+      # -- group of the issuer
+      group: cert-manager.io
+
+    # ONLY REQUIRED IN CASE OF certificate.type=inline 
+    # -- certificate to be used by the injector service in pem format, be aware that it has to provide SAN
+    cert: |
+      -----BEGIN CERTIFICATE-----
+        ---
+      -----END CERTIFICATE-----
+
+    # -- key to be used by the injector service
+    key: |
+      -----BEGIN PRIVATE KEY-----
+        ---
+      -----END PRIVATE KEY-----
+ 
   # -- additional labels for the deployment, if required
   additionalLabels: {}
   # -- additional annotations for the deployment, if required
@@ -357,18 +383,6 @@ sidecarInjector:
     port: 443
     # -- addtional annotations, if required
     annotations: {}
-
-  # -- certificate to be used by the injector service in pem format
-  cert: |
-    -----BEGIN CERTIFICATE-----
-    ...
-    -----END CERTIFICATE-----
-
-  # -- key to be used by the injector service
-  key: |
-    -----BEGIN RSA PRIVATE KEY-----
-    ...
-    -----END RSA PRIVATE KEY-----
 
   ## liveness and readiness probes of the endpoint-configuration-service, they will be evaluated against the health endpoint
   # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -554,4 +568,3 @@ authProvider:
   address: ishare-auth
   # -- port of the auth-service
   port: 8080
-

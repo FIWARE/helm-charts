@@ -31,29 +31,16 @@ spec:
         - name: sidecar-injector
           image: "{{ .Values.sidecarInjector.image.repository }}:{{ .Values.sidecarInjector.image.tag }}"
           imagePullPolicy: {{ .Values.sidecarInjector.image.pullPolicy }}
-          env:
-            - name: TLS_CERT_FILE
-              value:  /webhook/certs/tls.crt
-            - name: TLS_KEY_FILE
-              value:  /webhook/certs/tls.key
-            - name: ANNOTATION_NAMESPACE
-              value: {{ .Values.sidecarInjector.annotationNamespace }}
-            - name: CONFIGMAP_NAMESPACE
-              value: {{ .Release.Namespace }}
-            - name: CONFIGMAP_LABELS
-              value: "{{ .Values.sidecarInjector.labelNamespace }}={{ include "sidecarInjector.name" . }}"
-            - name: TLS_PORT
-              value: "{{ .Values.sidecarInjector.port }}"
-            - name: LIFECYCLE_PORT
-              value: "{{ .Values.sidecarInjector.healthPort }}"
-            - name: LOG_LEVEL
-              value: "{{ .Values.sidecarInjector.logLevel }}"
+          args:
+            - --port={{ .Values.sidecarInjector.port }}
+            - --certFile=/webhook/certs/tls.crt
+            - --keyFile=/webhook/certs/tls.key
+            - --injectPrefix={{ .Values.sidecarInjector.annotationNamespace }}
+            - --injectName=request
+            - --sidecarDataKey=envoy-sidecar
           ports:
-            - name: http
+            - name: https
               containerPort: {{ .Values.sidecarInjector.port }}
-              protocol: TCP
-            - name: http-health
-              containerPort: {{ .Values.sidecarInjector.healthPort }}
               protocol: TCP
           volumeMounts:
             - name: webhook-certs
@@ -61,16 +48,18 @@ spec:
               readOnly: true
           livenessProbe:
             httpGet:
-              path: /health
-              port: http-health
+              path: /healthz
+              port: https
+              scheme: HTTPS
             initialDelaySeconds: {{ .Values.sidecarInjector.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sidecarInjector.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.sidecarInjector.livenessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.sidecarInjector.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
-              path: /health
-              port: http-health
+              path: /healthz
+              port: https
+              scheme: HTTPS
             initialDelaySeconds: {{ .Values.sidecarInjector.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sidecarInjector.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.sidecarInjector.readinessProbe.successThreshold }}
@@ -94,5 +83,5 @@ spec:
       volumes:
         - name: webhook-certs
           secret:
-            secretName: {{ include "sidecarInjector.name" . }}-certificate
+            secretName: {{ include "sidecarInjector.name" . }}-secret
   {{- end }}

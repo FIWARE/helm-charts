@@ -1,10 +1,15 @@
 {{- if .Values.sidecarInjector.enabled -}}
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: {{ include "sidecarInjector.fullname" . }}
   labels:
     {{ include "sidecarInjector.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-weight": "1"
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "sidecarInjector.name" . }}-cert
 webhooks:
   - name: {{ include "sidecarInjector.name" . }}.sfdc.internal
     {{- if .Values.sidecarInjector.restrictNamespace.enabled }}
@@ -19,10 +24,17 @@ webhooks:
         name: {{ include "sidecarInjector.fullname" . }}
         namespace: {{ .Release.Namespace }}
         path: /mutate
+      {{- if (eq .Values.sidecarInjector.certificate.type "inline") -}}
       caBundle: {{ .Values.sidecarInjector.cert | b64enc | replace "\n" "" }}
+      {{- end }}
+      {{- if (eq .Values.sidecarInjector.certificate.type "cert-manager") }}
+      caBundle:
+      {{- end }}
     rules:
       - apiGroups: [""]
         apiVersions: ["v1"]
         operations: ["CREATE"]
         resources: ["pods"]
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
 {{- end }}
