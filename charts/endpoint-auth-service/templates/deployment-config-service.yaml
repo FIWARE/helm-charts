@@ -74,13 +74,13 @@ spec:
                  secretKeyRef:
                    name: {{ include "configService.fullname" . }}
                    key: dbPassword
-            - name: PROXY_LISTENER_YAML_PATH
+            - name: ENVOY_LISTENER_YAML_PATH
               value: /proxy-config/listener.yaml
-            - name: PROXY_CLUSTER_YAML_PATH
+            - name: ENVOY_CLUSTER_YAML_PATH
               value: /proxy-config/cluster.yaml
-            - name: PROXY_EXTERNAL_AUTH_ADDRESS
+            - name: ENVOY_EXTERNAL_AUTH_ADDRESS
               value: {{ include "ishare.fullname" . }}
-            - name: PROXY_EXTERNAL_AUTH_PORT
+            - name: ENVOY_EXTERNAL_AUTH_PORT
               value: "{{ .Values.ishare.service.port }}"
             {{- if .Values.configService.meshExtension.enabled }}
             - name: MESH_EXTENSION_ENABLED
