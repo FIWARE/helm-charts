@@ -1,0 +1,26 @@
+{{- if .Values.ishare.route.enabled -}}
+{{- $fullName := include "ishare.fullname" . -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "ishare.fullname" . }}
+  labels:
+    {{ include "ishare.labels" . | nindent 4 }}
+  {{- if .Values.ishare.route.annotations }}
+  annotations:
+    {{- with .Values.ishare.route.annotations }}
+      {{- toYaml . | nindent 4 }}
+      {{- end }}
+  {{- end }}
+spec:
+  host: {{ .Values.ishare.route.host}}
+  to:
+    kind: Service
+    name: {{ $fullName }}
+  {{- if .Values.ishare.route.tls }}
+  tls:
+  {{- with .Values.ishare.route.tls }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}
