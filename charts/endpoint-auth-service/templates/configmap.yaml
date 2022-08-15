@@ -15,8 +15,12 @@ data:
             port_value: {{ .Values.sidecar.port }}
         traffic_direction: OUTBOUND
         listener_filters:
-          - name: envoy.filters.listener.tls_inspector
-          - name: envoy.filters.listener.original_dst
+          - name: tls_inspector
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.listener.tls_inspector.v3.TlsInspector
+          - name: original_dst
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.listener.original_dst.v3.OriginalDst
         filter_chains:
           - name: https_chain
             filter_chain_match:
