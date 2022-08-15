@@ -50,7 +50,9 @@ data:
                             route:
                               cluster: passthrough
                   http_filters:
-                    - name: envoy.filters.http.router
+                    - name: http_router
+                      typed_config:
+                        "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
   cluster.yaml: |
     resources:
       - "@type": type.googleapis.com/envoy.config.cluster.v3.Cluster
