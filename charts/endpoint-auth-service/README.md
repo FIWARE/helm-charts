@@ -1,7 +1,13 @@
-# eas
+# endpoint-auth-service
 
-![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
-Chart holder for argo-cd
+![Version: 0.0.5](https://img.shields.io/badge/Version-0.0.5-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+A Helm chart for running the endpoint-auth-service on kubernetes.
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| wistefan | <stefan.wiedemann@fiware.org> |  |
 
 ## Additional Information
 
@@ -93,6 +99,10 @@ for now only workarounds might be a possibility.
 
 A potential workaround might be to setup the iptables, so that the traffic from the sidecar proxy does not directly get returned, but instead is also redirected to the mesh-proxy. Check the [init-iptables container](https://github.com/FIWARE/endpoint-auth-service/tree/initial-dev/src/iptables-init)
 for that.
+
+## Source Code
+
+* <https://github.com/FIWARE/endpoint-auth-service>
 
 ## Values
 
