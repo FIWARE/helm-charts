@@ -1,6 +1,6 @@
 # endpoint-auth-service
 
-![Version: 0.0.10](https://img.shields.io/badge/Version-0.0.10-informational?style=flat-square) ![AppVersion: 0.3.0](https://img.shields.io/badge/AppVersion-0.3.0-informational?style=flat-square)
+![Version: 0.0.11](https://img.shields.io/badge/Version-0.0.11-informational?style=flat-square) ![AppVersion: 0.4.0](https://img.shields.io/badge/AppVersion-0.4.0-informational?style=flat-square)
 A Helm chart for running the endpoint-auth-service on kubernetes.
 
 ## Maintainers
@@ -121,7 +121,7 @@ for that.
 | configService.configmapUpdater.enabled | bool | `true` | should the updater be deployed? |
 | configService.configmapUpdater.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | configService.configmapUpdater.image.repository | string | `"quay.io/fiware/envoy-configmap-updater"` | configmap updater image name ref: https://quay.io/repository/fiware/envoy-configmap-updater |
-| configService.configmapUpdater.image.tag | string | `"0.3.0"` | tag of the image to be used |
+| configService.configmapUpdater.image.tag | string | `"0.4.0"` | tag of the image to be used |
 | configService.db.password | string | `"pass"` | password for connecting the database |
 | configService.db.url | string | `"jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"` | host of the database to be used - be aware, defaults to an in-memory db |
 | configService.db.user | string | `"ecs"` | user for connecting the database |
@@ -129,7 +129,7 @@ for that.
 | configService.healthPort | int | `9090` | port to request health information at |
 | configService.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | configService.image.repository | string | `"quay.io/fiware/endpoint-configuration-service"` | endpoint-configuration-service image name ref: https://quay.io/repository/fiware/endpoint-configuration-service |
-| configService.image.tag | string | `"0.3.0"` | tag of the image to be used |
+| configService.image.tag | string | `"0.4.0"` | tag of the image to be used |
 | configService.ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | configService.ingress.enabled | bool | `false` | should there be an ingress to connect configService with the public internet |
 | configService.ingress.hosts | list | `[]` | all hosts to be provided |
@@ -145,7 +145,7 @@ for that.
 | configService.meshExtensionUpdater.enabled | bool | `false` |  |
 | configService.meshExtensionUpdater.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | configService.meshExtensionUpdater.image.repository | string | `"quay.io/fiware/mesh-extension-updater"` | image name ref: https://quay.io/repository/fiware/mesh-extension-updater |
-| configService.meshExtensionUpdater.image.tag | string | `"0.3.0"` | tag of the image to be used |
+| configService.meshExtensionUpdater.image.tag | string | `"0.4.0"` | tag of the image to be used |
 | configService.nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | configService.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | configService.port | int | `8080` | port that the endpoint-configuration-service container uses |
@@ -184,7 +184,7 @@ for that.
 | ishare.fullnameOverride | string | `""` | option to override the fullname config in the _helpers.tpl |
 | ishare.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | ishare.image.repository | string | `"quay.io/fiware/ishare-auth-provider"` | endpoint-configuration-service image name ref: https://quay.io/repository/fiware/ishare-auth-provider |
-| ishare.image.tag | string | `"0.3.0"` | tag of the image to be used |
+| ishare.image.tag | string | `"0.4.0"` | tag of the image to be used |
 | ishare.ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | ishare.ingress.enabled | bool | `false` | should there be an ingress to connect ishare with the public internet |
 | ishare.ingress.hosts | list | `[]` | all hosts to be provided |
@@ -218,18 +218,18 @@ for that.
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | sidecar.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | sidecar.image.repository | string | `"quay.io/fiware/envoy"` | envoy image name ref: https://quay.io/repository/fiware/envoy |
-| sidecar.image.tag | string | `"0.3.0"` | tag of the image to be used |
+| sidecar.image.tag | string | `"0.4.0"` | tag of the image to be used |
 | sidecar.initConfig.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | sidecar.initConfig.repository | string | `"quay.io/fiware/envoy-resource-updater"` | image name ref: https://quay.io/repository/fiware/envoy-resource-updater |
-| sidecar.initConfig.tag | string | `"0.3.0"` | tag of the image to be used |
+| sidecar.initConfig.tag | string | `"0.4.0"` | tag of the image to be used |
 | sidecar.initIptables.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | sidecar.initIptables.repository | string | `"quay.io/fiware/init-iptables"` | image name ref: https://quay.io/repository/fiware/init-iptables |
-| sidecar.initIptables.tag | string | `"0.3.0"` | tag of the image to be used |
+| sidecar.initIptables.tag | string | `"0.4.0"` | tag of the image to be used |
 | sidecar.logLevel | string | `"trace"` |  |
 | sidecar.port | int | `15001` |  |
 | sidecar.updateConfig.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | sidecar.updateConfig.repository | string | `"quay.io/fiware/envoy-resource-updater"` | image name ref: https://quay.io/repository/fiware/envoy-resource-updater |
-| sidecar.updateConfig.tag | string | `"0.3.0"` | tag of the image to be used |
+| sidecar.updateConfig.tag | string | `"0.4.0"` | tag of the image to be used |
 | sidecar.userId | int | `1337` |  |
 | sidecarInjector.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | sidecarInjector.additionalLabels | object | `{}` | additional labels for the deployment, if required |
