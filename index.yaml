@@ -951,6 +951,28 @@ entries:
     version: 0.0.1
   endpoint-auth-service:
   - apiVersion: v1
+    appVersion: 0.4.0
+    created: "2022-08-17T08:15:55.673363629Z"
+    description: A Helm chart for running the endpoint-auth-service on kubernetes.
+    digest: 50bf83e5b39fccfc082f8bf1a54cdc3919b402b9e32516faea7a951ae26c3cc1
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - auth
+    - ishare
+    - envoy
+    - openshift
+    - openshift service mesh
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: endpoint-auth-service
+    sources:
+    - https://github.com/FIWARE/endpoint-auth-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/endpoint-auth-service-0.0.11/endpoint-auth-service-0.0.11.tgz
+    version: 0.0.11
+  - apiVersion: v1
     appVersion: 0.3.0
     created: "2022-08-16T06:03:42.439359153Z"
     description: A Helm chart for running the endpoint-auth-service on kubernetes.
@@ -2384,4 +2406,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
-generated: "2022-08-16T06:03:42.439894051Z"
+generated: "2022-08-17T08:15:55.673991723Z"
