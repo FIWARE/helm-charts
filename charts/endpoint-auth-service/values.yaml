@@ -51,7 +51,7 @@ configService:
     # ref: https://quay.io/repository/fiware/endpoint-configuration-service
     repository: quay.io/fiware/endpoint-configuration-service
     # -- tag of the image to be used
-    tag: 0.4.0
+    tag: 0.4.3
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
 
@@ -190,7 +190,7 @@ configService:
       # ref: https://quay.io/repository/fiware/envoy-configmap-updater
       repository: quay.io/fiware/envoy-configmap-updater
       # -- tag of the image to be used
-      tag: 0.4.0
+      tag: 0.4.3
       # -- specification of the image pull policy
       pullPolicy: IfNotPresent
 
@@ -219,7 +219,7 @@ configService:
       # ref: https://quay.io/repository/fiware/mesh-extension-updater
       repository: quay.io/fiware/mesh-extension-updater
       # -- tag of the image to be used
-      tag: 0.4.0
+      tag: 0.4.3
       # -- specification of the image pull policy
       pullPolicy: IfNotPresent
 
@@ -241,7 +241,7 @@ sidecar:
     # ref: https://quay.io/repository/fiware/envoy
     repository: quay.io/fiware/envoy
     # -- tag of the image to be used
-    tag: 0.4.0
+    tag: 0.4.3
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
 
@@ -251,7 +251,7 @@ sidecar:
     # ref: https://quay.io/repository/fiware/init-iptables
     repository: quay.io/fiware/init-iptables
     # -- tag of the image to be used
-    tag: 0.4.0
+    tag: 0.4.3
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
 
@@ -261,7 +261,7 @@ sidecar:
     # ref: https://quay.io/repository/fiware/envoy-resource-updater
     repository: quay.io/fiware/envoy-resource-updater
     # -- tag of the image to be used
-    tag: 0.4.0
+    tag: 0.4.3
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
 
@@ -271,7 +271,7 @@ sidecar:
     # ref: https://quay.io/repository/fiware/envoy-resource-updater
     repository: quay.io/fiware/envoy-resource-updater
     # -- tag of the image to be used
-    tag: 0.4.0
+    tag: 0.4.3
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
 
@@ -438,7 +438,7 @@ ishare:
     # ref: https://quay.io/repository/fiware/ishare-auth-provider
     repository: quay.io/fiware/ishare-auth-provider
     # -- tag of the image to be used
-    tag: 0.4.0
+    tag: 0.4.3
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
 
