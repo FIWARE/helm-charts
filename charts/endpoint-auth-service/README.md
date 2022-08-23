@@ -1,6 +1,6 @@
 # endpoint-auth-service
 
-![Version: 0.0.12](https://img.shields.io/badge/Version-0.0.12-informational?style=flat-square) ![AppVersion: 0.4.3](https://img.shields.io/badge/AppVersion-0.4.3-informational?style=flat-square)
+![Version: 0.0.13](https://img.shields.io/badge/Version-0.0.13-informational?style=flat-square) ![AppVersion: 0.4.3](https://img.shields.io/badge/AppVersion-0.4.3-informational?style=flat-square)
 A Helm chart for running the endpoint-auth-service on kubernetes.
 
 ## Maintainers
@@ -267,6 +267,9 @@ for that.
 | sidecarInjector.restrictNamespace.enabled | bool | `true` | should the injector be restricted to labeld namespaces? |
 | sidecarInjector.restrictNamespace.label | string | `"sidecar-injection"` | label to apply to the namespaces |
 | sidecarInjector.restrictNamespace.value | string | `"enabled"` | value to be set for the label |
+| sidecarInjector.restrictObjects.enabled | bool | `true` | should the injector be restricted to certain objects? |
+| sidecarInjector.restrictObjects.label | string | `"sidecar-injection"` | label to apply to the namespaces |
+| sidecarInjector.restrictObjects.value | string | `"enabled"` | value to be set for the label |
 | sidecarInjector.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | sidecarInjector.service.annotations | object | `{}` | addtional annotations, if required |
 | sidecarInjector.service.port | int | `443` | port to be used by the service |
