@@ -19,6 +19,11 @@ webhooks:
           operator: In
           values: [ "{{ .Values.sidecarInjector.restrictNamespace.value }}" ]
     {{- end }}
+    {{- if .Values.sidecarInjector.restrictObjects.enabled }}
+    objectSelector:
+      matchLabels:
+        {{ .Values.sidecarInjector.restrictObjects.label }}:{{ .Values.sidecarInjector.restrictObjects.value }}
+    {{- end }}
     clientConfig:
       service:
         name: {{ include "sidecarInjector.fullname" . }}

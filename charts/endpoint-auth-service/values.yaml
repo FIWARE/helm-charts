@@ -363,6 +363,15 @@ sidecarInjector:
     # -- value to be set for the label
     value: enabled
 
+  ## restrict the objects to apply injection
+  restrictObjects:
+    # -- should the injector be restricted to certain objects?
+    enabled: true
+    # -- label to apply to the namespaces
+    label: sidecar-injection
+    # -- value to be set for the label
+    value: enabled
+
   # -- override the generated config for the sidecar, if not sufficient
   overrideSidecarconfig: {}
 
