@@ -22,7 +22,7 @@ webhooks:
     {{- if .Values.sidecarInjector.restrictObjects.enabled }}
     objectSelector:
       matchLabels:
-        {{ .Values.sidecarInjector.restrictObjects.label }}:{{ .Values.sidecarInjector.restrictObjects.value }}
+        {{ .Values.sidecarInjector.restrictObjects.label }}: {{ .Values.sidecarInjector.restrictObjects.value }}
     {{- end }}
     clientConfig:
       service:
