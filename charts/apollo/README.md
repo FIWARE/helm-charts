@@ -1,6 +1,6 @@
 # apollo
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: 0.0.10](https://img.shields.io/badge/AppVersion-0.0.10-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![AppVersion: 0.0.10](https://img.shields.io/badge/AppVersion-0.0.10-informational?style=flat-square)
 
 A Helm chart for running apollo on kubernetes.
 
@@ -28,7 +28,7 @@ A Helm chart for running apollo on kubernetes.
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | deployment.healthPort | int | `9090` | port to request health information at |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| deployment.image.repository | string | `"fiware/apollo"` | apollo image name ref: https://hub.docker.com/r/fiware/apollo |
+| deployment.image.repository | string | `"quay.io/fiware/apollo"` | apollo image name ref: https://quay.io/repository/fiware/apollo |
 | deployment.image.tag | string | `"0.0.10"` | tag of the image to be used |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
