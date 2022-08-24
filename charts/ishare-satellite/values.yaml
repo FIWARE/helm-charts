@@ -53,7 +53,7 @@ deployment:
   additionalLabels: {}
   # -- additional annotations for the deployment, if required
   additionalAnnotations: {}
-  ## Activation Service resource requests and limits, we leave the default empty to make that a concious choice by the user.
+  ## Satellite resource requests and limits, we leave the default empty to make that a concious choice by the user.
   ## for the autoscaling to make sense, you should configure this.
   # resources:
     # limits:

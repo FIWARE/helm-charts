@@ -22,12 +22,11 @@ spec:
         {{- with .Values.deployment.additionalLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if .Values.deployment.additionalAnnotations -}}
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- with .Values.deployment.additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- end }}
     spec: 
       serviceAccountName: {{ include "ishare-satellite.serviceAccountName" . }}
       containers:
