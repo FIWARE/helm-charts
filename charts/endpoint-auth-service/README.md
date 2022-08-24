@@ -1,6 +1,6 @@
 # endpoint-auth-service
 
-![Version: 0.0.13](https://img.shields.io/badge/Version-0.0.13-informational?style=flat-square) ![AppVersion: 0.4.3](https://img.shields.io/badge/AppVersion-0.4.3-informational?style=flat-square)
+![Version: 0.0.14](https://img.shields.io/badge/Version-0.0.14-informational?style=flat-square) ![AppVersion: 0.4.3](https://img.shields.io/badge/AppVersion-0.4.3-informational?style=flat-square)
 A Helm chart for running the endpoint-auth-service on kubernetes.
 
 ## Maintainers
