@@ -1,0 +1,23 @@
+Resources have been created!
+
+The ishare satellite application can be accessed on the following DNS name and port from within your cluster:
+{{ include "ishare-satellite.fullhostname" . }}
+
+To connect from outside the K8s cluster:
+export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "ishare-satellite.name" . }}" -o jsonpath="{.items[0].metadata.name}")
+export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+
+kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME {{ .Values.service.port }}:$CONTAINER_PORT
+
+
+{{ if .Values.ingress.enabled }}
+The satellite is available externally at the following hosts:
+{{- range .Values.ingress.hosts }}
+  - {{ .host | quote }}
+{{- end }}
+{{- end }}
+
+{{ if .Values.route.enabled }}
+The satellite is available externally at the following host:
+  - {{ .Values.route.host}}
+{{- end }}
