@@ -8,7 +8,7 @@ metadata:
     {{ include "apollo.labels" . | nindent 4 }}
   {{- if or .Values.route.annotations .Values.route.annotations }}
   annotations:
-    {{ - if .Values.route.certificate }}
+    {{- if .Values.route.certificate }}
     cert-utils-operator.redhat-cop.io/certs-from-secret: {{ include "apollo.fullname" . }}-tls-sec
     {{- end }}
     {{- with .Values.route.annotations }}
