@@ -191,6 +191,27 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/api-umbrella-0.0.1/api-umbrella-0.0.1.tgz
     version: 0.0.1
+  apollo:
+  - apiVersion: v1
+    appVersion: 0.0.10
+    created: "2022-08-24T12:38:22.996700226Z"
+    description: A Helm chart for running apollo on kubernetes.
+    digest: 57c0464c1be3289bccd134a8055a6f7e91dcc018299a14f4e6160aad8d83818a
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion
+    - orion-ld
+    - apollo
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: apollo
+    sources:
+    - https://github.com/fiware/apollo
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/apollo-0.0.1/apollo-0.0.1.tgz
+    version: 0.0.1
   bae-activation-service:
   - apiVersion: v1
     appVersion: 0.0.3
@@ -1920,6 +1941,26 @@ entries:
   mintaka:
   - apiVersion: v1
     appVersion: 0.0.5
+    created: "2022-08-24T12:38:23.147923527Z"
+    description: A Helm chart for running mintaka on kubernetes.
+    digest: 6d5186a8bc46a097186a14c838866e4922e05961f8f95f14f9aa91e590295f24
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion
+    - orion-ld
+    - mintaka
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: mintaka
+    sources:
+    - https://github.com/fiware/mintaka
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/mintaka-0.1.0/mintaka-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v1
+    appVersion: 0.0.5
     created: "2022-05-09T08:02:39.343142288Z"
     description: A Helm chart for running mintaka on kubernetes.
     digest: 2826125dfe76edc657fc295472f8b6ab8f90150401b1641d9e70404ba5158996
@@ -2495,4 +2536,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
-generated: "2022-08-24T10:07:15.957577933Z"
+generated: "2022-08-24T12:38:23.148549266Z"
