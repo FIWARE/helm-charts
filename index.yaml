@@ -1441,6 +1441,29 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/iotagent-ul-0.0.1/iotagent-ul-0.0.1.tgz
     version: 0.0.1
+  ishare-satellite:
+  - apiVersion: v2
+    appVersion: 1.1.0
+    created: "2022-08-24T10:07:15.957044227Z"
+    description: A Helm chart for running an implementation of the iSHARE Satellite
+    digest: 01bc00b88fe6383c5fff3aab090741f946fb91d3dd6d0083a2d545299daf414e
+    home: https://github.com/FIWARE/ishare-satellite
+    keywords:
+    - fiware
+    - i4trust
+    - ishare
+    - trust anchor
+    - trust authority
+    - scheme owner
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: ishare-satellite
+    sources:
+    - https://github.com/FIWARE/ishare-satellite
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/ishare-satellite-1.1.0/ishare-satellite-1.1.0.tgz
+    version: 1.1.0
   keyrock:
   - apiVersion: v1
     appVersion: 8.1.0
@@ -2472,4 +2495,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
-generated: "2022-08-23T13:46:14.863803663Z"
+generated: "2022-08-24T10:07:15.957577933Z"
