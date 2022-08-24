@@ -1,16 +1,16 @@
 apiVersion: v1
-name: mintaka
-version: 0.1.0
-appVersion: 0.0.5
-description: A Helm chart for running mintaka on kubernetes.
+name: apollo
+version: 0.0.1
+appVersion: 0.0.10
+description: A Helm chart for running apollo on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
 keywords:
 - fiware
 - orion
 - orion-ld
-- mintaka
+- apollo
 sources:
-- https://github.com/fiware/mintaka
+- https://github.com/fiware/apollo
 maintainers:
 - name: wistefan
   email: stefan.wiedemann@fiware.org
