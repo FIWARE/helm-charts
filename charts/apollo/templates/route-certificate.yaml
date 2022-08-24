@@ -1,0 +1,15 @@
+{{- if .Values.route.certificate -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "apollo.fullname" . }}
+  labels:
+    {{ include "apollo.metaLabels" . | nindent 4 }}
+spec:
+  secretName: {{ include "apollo.fullname" . }}-tls-sec
+  issuerRef:
+    {{- toYaml .Values.apollo.route.certificate.issuer | nindent 4 }}
+  commonName: {{ .Values.apollo.route.host }}
+  dnsNames:
+    - {{ .Values.apollo.route.host }}
+{{- end -}}
