@@ -41,8 +41,8 @@ deployment:
   ## configuration of the image to be used
   image:
     # -- apollo image name
-    # ref: https://hub.docker.com/r/fiware/apollo
-    repository: fiware/apollo
+    # ref: https://quay.io/repository/fiware/apollo
+    repository: quay.io/fiware/apollo
     # -- tag of the image to be used
     tag: 0.0.10
     # -- specification of the image pull policy
