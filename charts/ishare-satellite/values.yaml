@@ -1,0 +1,263 @@
+## Default values for ishare-satellite.
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+# -- option to override the name config in the _helpers.tpl
+nameOverride: ""
+# -- option to override the fullname config in the _helpers.tpl
+fullnameOverride: ""
+
+## configuration for the k8s service to access the satellite
+service:
+  # -- service type
+  type: ClusterIP
+  # -- port to be used by the service
+  port: 8080
+  # -- addtional annotations, if required
+  annotations: {}
+
+# -- if a satellite specific service account should be used, it can be configured here
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # -- specifies if the account should be created
+  create: false
+  # Name of service account
+  #name: ishare-satellite
+
+## deployment specific configuration
+deployment:
+  # -- initial number of target replications, can be different if autoscaling is enabled
+  replicaCount: 1
+  # -- number of old replicas to be retained
+  revisionHistoryLimit: 3
+  ## configuration of the update strategy
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 1
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 0
+  ## configuration of the image to be used
+  image:
+    # -- image name
+    # ref: https://hub.docker.com/r/i4trust/activation-service
+    repository: fiware/ishare-satellite
+    # -- tag of the image to be used
+    tag: 1.1.0
+    # -- specification of the image pull policy
+    pullPolicy: IfNotPresent
+  # -- additional labels for the deployment, if required
+  additionalLabels: {}
+  # -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  ## Activation Service resource requests and limits, we leave the default empty to make that a concious choice by the user.
+  ## for the autoscaling to make sense, you should configure this.
+  # resources:
+    # limits:
+      # cpu: 100m
+      # memory: 128Mi
+    # requests:
+      # cpu: 100m
+      # memory: 128Mi
+  # -- selector template
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  # -- tolerations template
+  # ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  # -- affinity template
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+  ## liveness and readiness probes of the activation service, they will be evaluated against the version endpoint
+  # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  livenessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 30
+  readinessProbe:
+    initialDelaySeconds: 21
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 30
+
+## pod autoscaling configuration, use for automatic scaling of the pods
+autoscaling:
+  #  -- should autoscaling be enabled for the activation service
+  enabled: false
+  # -- minimum number of running pods
+  minReplicas: 1
+  # -- maximum number of running pods
+  maxReplicas: 10
+  # -- metrics to react on
+  metrics: []
+
+## openshift specific route definition. Will not work on plain k8s
+route:
+  ## -- should the deployment create openshift routes
+  enabled: false
+  # -- annotations to be added to the route
+  annotations: {}
+  # -- host to be used
+  # host: localhost
+  # -- tls configuration for the route
+  tls: {}
+  # termination: edge
+  # -- configuration for certificate generation.
+  # -- see: https://github.com/FIWARE-Ops/fiware-gitops/blob/master/doc/ROUTES.md
+  certificate: { }
+  #   issuer:
+  #     kind: ClusterIssuer
+  #     name: letsencrypt-aws-prod
+  
+## ingress configuration
+ingress:
+  # -- should there be an ingress to connect the satellite with the public internet
+  enabled: false
+  # -- annotations to be added to the ingress
+  annotations: {}
+    # kubernetes.io/ingress.class: "ambassador"
+    ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
+    # kubernetes.io/tls-acme: "true"
+    # ingress.kubernetes.io/ssl-redirect: "true"
+  # -- all hosts to be provided
+  hosts: []
+    ## provide a hosts and the paths that should be available
+    # - host: localhost
+      # paths:
+      # - /
+  # -- configure the ingress' tls
+  tls: []
+    # - secretName: bae-as-tls
+      # hosts:
+        # - satellite.fiware.org
+
+# Use values from existing secret as ENVs (e.g., ENVs SATELLITE_KEY and SATELLITE_CERTS)
+#existingSecretEnvs: ""
+        
+# Satellite execution configuration
+satellite:
+
+  # -- Listen port
+  port: 8080
+
+  # -- Number of (gunicorn) workers that should be created
+  workers: 4
+
+  # -- Maximum header size in bytes
+  maxHeaderSize: 32768
+
+  # -- JWT expiration duration (in s) of response tokens, besides the access token
+  responseTokenDuration: 30
+
+  # -- Access token expiration duration (in s)
+  accessTokenDuration: 3600
+
+  # -- Maximum number of parties per page for queries
+  maxPartiesPerPage: 10
+
+  # -- Encoding of the certificate fingerprint for the trusted list
+  fingerprintEncoding: "UTF-8"
+
+  # -- Encoding of certificate subject names
+  subjectEncoding: "UTF-8"
+
+  # -- Encoding of x5c certificates in JWTs
+  x5cEncoding: "UTF-8"
+
+  # -- Header name where to expect access_token
+  authorizationHeader: "Authorization"
+
+  # -- Log Level
+  logLevel: "info"
+
+# Satellite data configuration (inserted as config/satellite.yml)
+config:
+
+  # -- Client-ID/EORI of satellite
+  id: <SATELLITE_EORI>
+
+  # -- Private key of satellite
+  key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    <Satellite private key>
+    -----END RSA PRIVATE KEY-----
+
+  # -- Certificate chain of satellite
+  crt: |
+    -----BEGIN CERTIFICATE-----
+    <Satellite certificate>
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    <Intermediate certificates>
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    <Root CA certificate>
+    -----END CERTIFICATE-----
+
+  # -- Configuration of CA trusted list
+  trusted_list:
+    - name: iSHARETestCA
+      status: "granted"
+      validity: "valid"
+      crt: |
+        -----BEGIN CERTIFICATE-----
+        <iSHARETestCA Certificate>
+        -----END CERTIFICATE-----
+        
+    - name: FIWARETEST-CA
+      status: "granted"
+      validity: "valid"
+      crt: |
+        -----BEGIN CERTIFICATE-----
+        <FIWARETEST-CA Certificate>
+        -----END CERTIFICATE-----
+
+  # -- Configuration of parties (trusted participants)
+  parties:
+    - id: "EU.EORI.NLPACKETDEL"
+      name: "Packet Delivery Company"
+      status: "Active"
+      start_date: "2021-09-27T00:00:00Z"
+      end_date: "2051-09-27T00:00:00Z"
+      crt: |
+        -----BEGIN CERTIFICATE-----
+        <Packet Delivery Company Certificate>
+        -----END CERTIFICATE-----
+      capability_url: "https://idp.packetdel.com/capabilities" # Optional
+      certifications: # Optional
+        - role: "IdentityProvider"
+          start_date: "2021-09-27T00:00:00Z"
+          end_date: "2051-09-27T00:00:00Z"
+          loa: 3
+        
+    - id: "EU.EORI.NLNOCHEAPER"
+      name: "NoCheaper"
+      status: "Active"
+      start_date: "2021-09-27T00:00:00Z"
+      end_date: "2051-09-27T00:00:00Z"
+      crt: |
+        -----BEGIN CERTIFICATE-----
+        <NoCheaper Certificate>
+        -----END CERTIFICATE-----
+      capability_url: "https://idp.packetdel.com/capabilities" # Optional
+      certifications: # Optional
+        - role: "IdentityProvider"
+          start_date: "2021-09-27T00:00:00Z"
+          end_date: "2051-09-27T00:00:00Z"
+          loa: 3
+
+    - id: "EU.EORI.NLHAPPYPETS"
+      name: "HappyPets"
+      status: "NotActive"
+      start_date: "2021-09-27T00:00:00Z"
+      end_date: "2051-09-27T00:00:00Z"
+      crt: |
+        -----BEGIN CERTIFICATE-----
+        <HappyPets Certificate>
+        -----END CERTIFICATE-----
+
+
