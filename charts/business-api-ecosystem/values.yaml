@@ -606,19 +606,21 @@ bizEcosystemLogicProxy:
   route:
     # -- should the deployment create openshift routes
     enabled: false
-    # -- annotations to be added to the route
-    annotations: {}
-    # -- host to be used
-    # host: localhost
-    # -- tls configuration for the route
-    tls: {}
-    # termination: edge
-    # -- configuration for certificate generation.
-    # -- see: https://github.com/FIWARE-Ops/fiware-gitops/blob/master/doc/ROUTES.md
-    certificate: {}
-    #   issuer:
-    #     kind: ClusterIssuer
-    #     name: letsencrypt-aws-prod
+    # -- Routes that should be created
+    routes:
+      # -- annotations to be added to the route
+      - annotations: {}
+        # -- host to be used
+        # host: localhost
+        # -- tls configuration for the route
+        tls: {}
+        # termination: edge
+        # -- configuration for certificate generation.
+        # -- see: https://github.com/FIWARE-Ops/fiware-gitops/blob/master/doc/ROUTES.md
+        certificate: {}
+        #   issuer:
+        #     kind: ClusterIssuer
+        #     name: letsencrypt-aws-prod
 
 
   # -- port that the logic proxy container uses

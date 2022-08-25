@@ -1,29 +1,31 @@
 {{- if and .Values.bizEcosystemLogicProxy.enabled .Values.bizEcosystemLogicProxy.route.enabled -}}
 {{- $fullName := include "bizEcosystemLogicProxy.fullname" . -}}
+{{- range $index, $route := .Values.bizEcosystemLogicProxy.route.routes }}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+  name: {{ include "bizEcosystemLogicProxy.fullname" . }}-{{ $index }}
   labels:
     {{ include "bizEcosystemLogicProxy.labels" . | nindent 4 }}
-  {{- if or .Values.bizEcosystemLogicProxy.route.annotations .Values.bizEcosystemLogicProxy.route.certificate }}
+  {{- if or $route.annotations $route.certificate }}
   annotations:
-    {{- if .Values.bizEcosystemLogicProxy.route.certificate }}
-      cert-utils-operator.redhat-cop.io/certs-from-secret: {{ include "bizEcosystemLogicProxy.fullname" . }}-tls-sec
+    {{- if $route.certificate }}
+      cert-utils-operator.redhat-cop.io/certs-from-secret: {{ include "bizEcosystemLogicProxy.fullname" . }}-tls-sec-{{ $index }}
     {{- end }}
-    {{- with .Values.bizEcosystemLogicProxy.route.annotations }}
+    {{- with $route.annotations }}
       {{- toYaml . | nindent 4 }}
       {{- end }}
   {{- end }}
 spec:
-  host: {{ .Values.bizEcosystemLogicProxy.route.host}}
+  host: {{ $route.host}}
   to:
     kind: Service
     name: {{ $fullName }}
-  {{- if .Values.bizEcosystemLogicProxy.route.tls }}
+  {{- if $route.tls }}
   tls:
-  {{- with .Values.bizEcosystemLogicProxy.route.tls }}
+  {{- with $route.tls }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
   {{- end }}
+{{- end }}
 {{- end }}
