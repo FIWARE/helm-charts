@@ -68,7 +68,7 @@ spec:
             - name: MICRONAUT_SERVER_PORT
               value: {{ .Values.port}}
             - name: MICRONAUT_METRICS_ENABLED
-              value: {{ .Values.metrics.enabled | quote }}
+              value: {{ .Values.prometheus.enabled | quote }}
             {{- if .Values.tenant }}
             - name: GENERAL_TENANT
               value: {{ .Values.tenant }}
