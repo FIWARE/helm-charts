@@ -194,6 +194,26 @@ entries:
   apollo:
   - apiVersion: v1
     appVersion: 0.0.10
+    created: "2022-08-25T05:53:03.053267657Z"
+    description: A Helm chart for running apollo on kubernetes.
+    digest: caaad0b9b7200c2a5d1f944c6ffe8b73ac7e9bbe4dffb7826778eecb357d1211
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion
+    - orion-ld
+    - apollo
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: apollo
+    sources:
+    - https://github.com/fiware/apollo
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/apollo-0.0.5/apollo-0.0.5.tgz
+    version: 0.0.5
+  - apiVersion: v1
+    appVersion: 0.0.10
     created: "2022-08-25T05:34:12.815193866Z"
     description: A Helm chart for running apollo on kubernetes.
     digest: 001338757da8ef7c6d2514ff7d29aac72c4c2f6d7fa53576583b3618e84e00ce
@@ -2596,4 +2616,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
-generated: "2022-08-25T05:34:12.815974297Z"
+generated: "2022-08-25T05:53:03.054342848Z"
