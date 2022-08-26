@@ -1,15 +1,19 @@
-{{- if .Values.route.certificate -}}
+{{- if .Values.route.enabled -}}
+{{- range $index, $route := .Values.route.routes }}
+{{- if $route.certificate -}}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ include "keyrock.fullname" . }}
+  name: {{ include "keyrock.fullname" $ }}-{{ $index }}
   labels:
-    {{ include "keyrock.labels" . | nindent 4 }}
+    {{ include "keyrock.labels" $ | nindent 4 }}
 spec:
-  secretName: {{ include "keyrock.fullname" . }}-tls-sec
+  secretName: {{ include "keyrock.fullname" $ }}-tls-sec-{{ $index }}
   issuerRef:
-    {{- toYaml .Values.route.certificate.issuer | nindent 4 }}
-  commonName: {{ .Values.route.host }}
+    {{- toYaml $route.certificate.issuer | nindent 4 }}
+  commonName: {{ $route.host | quote }}
   dnsNames:
-    - {{ .Values.route.host }}
+    - {{ $route.host }}
+{{- end }}
+{{- end }}
 {{- end -}}
