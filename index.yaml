@@ -456,6 +456,28 @@ entries:
   business-api-ecosystem:
   - apiVersion: v2
     appVersion: 8.0.0
+    created: "2022-08-26T10:15:26.172379789Z"
+    description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
+      Marketplace) on Kubernetes
+    digest: 5d1b189875a61f52fb1c31c3c0dc06c9801288a8ee687e416ab37c987b206bed
+    home: https://business-api-ecosystem.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - marketplace
+    - bae
+    - tmforum
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: business-api-ecosystem
+    sources:
+    - https://github.com/FIWARE-TMForum/Business-API-Ecosystem
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-0.4.15/business-api-ecosystem-0.4.15.tgz
+    version: 0.4.15
+  - apiVersion: v2
+    appVersion: 8.0.0
     created: "2022-08-26T08:51:32.520385687Z"
     description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
       Marketplace) on Kubernetes
@@ -1610,6 +1632,28 @@ entries:
   keyrock:
   - apiVersion: v1
     appVersion: 8.1.0
+    created: "2022-08-26T10:15:26.33471983Z"
+    description: A Helm chart for running the fiware idm keyrock on kubernetes.
+    digest: 22fd48e3b131460af4259800fdc110fc465313ac3251eebb644a3fe135fba811
+    home: https://fiware-idm.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - keyrock
+    - idm
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: keyrock
+    sources:
+    - https://github.com/ging/fiware-idm
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/keyrock-0.4.8/keyrock-0.4.8.tgz
+    version: 0.4.8
+  - apiVersion: v1
+    appVersion: 8.1.0
     created: "2022-08-26T08:51:32.713952033Z"
     description: A Helm chart for running the fiware idm keyrock on kubernetes.
     digest: 41d3a37f477431aeec522bbbcd3b1a1e76755ff2903ce1016dfe76b3c876905c
@@ -2680,4 +2724,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
-generated: "2022-08-26T08:51:32.714620639Z"
+generated: "2022-08-26T10:15:26.335298053Z"
