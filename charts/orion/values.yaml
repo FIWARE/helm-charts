@@ -46,7 +46,7 @@ deployment:
     repository: quay.io/fiware/orion-ld
     #repository: fiware/orion
     # -- tag of the image to be used
-    tag: 1.0.1
+    tag: 1.1.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
@@ -178,6 +178,7 @@ broker:
     dbPassword: password
     ## connection pool of postgres
     # poolSize: 10
+
   ## timeout in milliseconds for forwarding messages and notifications
   # httpTimeout: 5
   ## the timeout in seconds for REST connection
@@ -269,7 +270,14 @@ broker:
     # -- write concern for MongoDB write operations: acknowledged (1) or unacknowledged (0)
     # writeConcern: 1
 
-  ## configratuion of orion metrics
+  ## configuration of orion-ld prometheus endpoint
+  prometheus:
+    ## -- should the prometheus endpoint be enabled?
+    enabled: true
+    ## -- should the scrape annotation be set?
+    scrape: true
+
+  ## configuration of orion metrics
   metrics:
     # -- enable or disable metrics gathering
     enabled: "false"
