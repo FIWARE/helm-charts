@@ -78,10 +78,15 @@ spec:
               value: /proxy-config/listener.yaml
             - name: ENVOY_CLUSTER_YAML_PATH
               value: /proxy-config/cluster.yaml
+            {{- if .Values.configService.externalAuthAddress }}
+            - name: ENVOY_EXTERNAL_AUTH_ADDRESS
+              value: {{ .Values.configService.externalAuthAddress }}
+            {{- else }}
             - name: ENVOY_EXTERNAL_AUTH_ADDRESS
               value: {{ include "ishare.fullname" . }}
             - name: ENVOY_EXTERNAL_AUTH_PORT
               value: "{{ .Values.ishare.service.port }}"
+            {{- end }}
             {{- if .Values.configService.meshExtension.enabled }}
             - name: MESH_EXTENSION_ENABLED
               value: "true"
