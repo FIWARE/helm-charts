@@ -24,8 +24,12 @@ spec:
         {{- with .Values.deployment.additionalLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{ if .Values.deployment.additionalAnnotations -}}
+      {{ if or .Values.broker.prometheus.scrape.enabled .Values.deployment.additionalAnnotations -}}
       annotations:
+        {{- if .Values.broker.prometheus.scrape.enabled }}
+        - prometheus.io/scrape: 'true'
+        - prometheus.io/port: '8000'
+        {{- end }}
         {{- with .Values.deployment.additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -47,6 +51,11 @@ spec:
             - name: http
               containerPort: {{ .Values.broker.port}}
               protocol: TCP
+            {{- if .Values.broker.prometheus.enabled }}
+            - name: metrics
+              containerPort: 8000
+              protocol: TCP
+            {{- end }}
           {{ if eq .Values.deployment.image.repository "fiware/orion-ld" }}
           readinessProbe:
             tcpSocket:
