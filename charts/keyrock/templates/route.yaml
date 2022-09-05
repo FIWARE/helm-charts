@@ -1,33 +1,36 @@
 {{- if .Values.route.enabled -}}
 {{- $fullName := include "keyrock.fullname" . -}}
+{{- range $index, $route := .Values.route.routes }}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: {{ include "keyrock.fullname" . }}
+  name: {{ include "keyrock.fullname" $ }}-{{ $index }}
   labels:
-    {{ include "keyrock.labels" . | nindent 4 }}
-  {{- if or .Values.route.annotations .Values.route.certificate }}
+    {{ include "keyrock.labels" $ | nindent 4 }}
+  {{- if or $route.annotations $route.certificate }}
   annotations:
-    {{- if .Values.route.certificate }}
-    cert-utils-operator.redhat-cop.io/certs-from-secret: {{ include "keyrock.fullname" . }}-tls-sec
+    {{- if $route.certificate }}
+    cert-utils-operator.redhat-cop.io/certs-from-secret: {{ include "keyrock.fullname" $ }}-tls-sec-{{ $index }}
     {{- end }}
-    {{- with .Values.route.annotations }}
+    {{- with $route.annotations }}
       {{- toYaml . | nindent 4 }}
       {{- end }}
   {{- end }}
 spec:
-  {{- if .Values.route.host }}
-  host: {{ .Values.route.host }}
+  {{- if $route.host }}
+  host: {{ $route.host }}
   {{- end }}
   port:
-    targetPort: {{ .Values.port }}
+    targetPort: {{ $.Values.port }}
   to:
     kind: Service
     name: {{ $fullName }}
-  {{- if .Values.route.tls }}
+  {{- if $route.tls }}
   tls:
-  {{- with .Values.route.tls }}
+  {{- with $route.tls }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
   {{- end }}
+---
+{{- end }}
 {{- end }}

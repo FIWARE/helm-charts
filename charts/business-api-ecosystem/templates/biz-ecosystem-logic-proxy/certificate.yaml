@@ -1,15 +1,20 @@
-{{- if .Values.bizEcosystemLogicProxy.route.certificate -}}
+{{- if .Values.bizEcosystemLogicProxy.route.enabled -}}
+{{- range $index, $route := .Values.bizEcosystemLogicProxy.route.routes }}
+{{- if $route.certificate -}}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+  name: {{ include "bizEcosystemLogicProxy.fullname" $ }}-{{ $index }}
   labels:
-    {{ include "bizEcosystemLogicProxy.labels" . | nindent 4 }}
+    {{ include "bizEcosystemLogicProxy.labels" $ | nindent 4 }}
 spec:
-  secretName: {{ include "bizEcosystemLogicProxy.fullname" . }}-tls-sec
+  secretName: {{ include "bizEcosystemLogicProxy.fullname" $ }}-tls-sec-{{ $index }}
   issuerRef: 
-    {{- toYaml .Values.bizEcosystemLogicProxy.route.certificate.issuer | nindent 4 }}
-  commonName: {{ .Values.bizEcosystemLogicProxy.route.host | quote }}
+    {{- toYaml $route.certificate.issuer | nindent 4 }}
+  commonName: {{ $route.host | quote }}
   dnsNames:
-    - {{ .Values.bizEcosystemLogicProxy.route.host | quote }}
+    - {{ $route.host | quote }}
+---
+{{- end }}
+{{- end }}
 {{- end -}}

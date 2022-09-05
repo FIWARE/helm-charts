@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.4.13](https://img.shields.io/badge/Version-0.4.13-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.4.15](https://img.shields.io/badge/Version-0.4.15-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -146,10 +146,11 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.port | int | `8004` | port that the logic proxy container uses |
 | bizEcosystemLogicProxy.propagateToken | bool | `true` | Sets whether the logic proxy should propagate the user access token to the backend components |
 | bizEcosystemLogicProxy.revenueModel | int | `30` | Default market owner precentage for Revenue Sharing models |
-| bizEcosystemLogicProxy.route.annotations | object | `{}` | annotations to be added to the route |
-| bizEcosystemLogicProxy.route.certificate | object | `{}` | see: https://github.com/FIWARE-Ops/fiware-gitops/blob/master/doc/ROUTES.md |
 | bizEcosystemLogicProxy.route.enabled | bool | `false` | should the deployment create openshift routes |
-| bizEcosystemLogicProxy.route.tls | object | `{}` | tls configuration for the route |
+| bizEcosystemLogicProxy.route.routes | list | `[{"annotations":{},"certificate":{},"tls":{}}]` | Routes that should be created |
+| bizEcosystemLogicProxy.route.routes[0] | object | `{"annotations":{},"certificate":{},"tls":{}}` | annotations to be added to the route |
+| bizEcosystemLogicProxy.route.routes[0].certificate | object | `{}` | see: https://github.com/FIWARE-Ops/fiware-gitops/blob/master/doc/ROUTES.md |
+| bizEcosystemLogicProxy.route.routes[0].tls | object | `{}` | tls configuration for the route |
 | bizEcosystemLogicProxy.securityContext | object | `{}` |  |
 | bizEcosystemLogicProxy.service.annotations | object | `{}` |  |
 | bizEcosystemLogicProxy.service.port | int | `8004` |  |

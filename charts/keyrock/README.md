@@ -1,6 +1,6 @@
 # keyrock
 
-![Version: 0.4.6](https://img.shields.io/badge/Version-0.4.6-informational?style=flat-square) ![AppVersion: 8.1.0](https://img.shields.io/badge/AppVersion-8.1.0-informational?style=flat-square)
+![Version: 0.4.8](https://img.shields.io/badge/Version-0.4.8-informational?style=flat-square) ![AppVersion: 8.1.0](https://img.shields.io/badge/AppVersion-8.1.0-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -51,10 +51,11 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | ingress.tls | list | `[]` | configure the ingress' tls |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | port | int | `8080` | port that the keyrock container uses |
-| route.annotations | object | `{}` | annotations to be added to the route |
-| route.certificate | object | `{}` | see: https://github.com/FIWARE-Ops/fiware-gitops/blob/master/doc/ROUTES.md |
 | route.enabled | bool | `false` |  |
-| route.tls | object | `{}` | tls configuration for the route |
+| route.routes | list | `[{"annotations":{},"certificate":{},"tls":{}}]` | Routes that should be created |
+| route.routes[0] | object | `{"annotations":{},"certificate":{},"tls":{}}` | annotations to be added to the route |
+| route.routes[0].certificate | object | `{}` | see: https://github.com/FIWARE-Ops/fiware-gitops/blob/master/doc/ROUTES.md |
+| route.routes[0].tls | object | `{}` | tls configuration for the route |
 | satellite.enabled | bool | `false` | Enable usage of satellite |
 | satellite.identifier | string | `""` | Identifier (EORI) of satellite |
 | satellite.partiesEndpoint | string | `"https://my-satellite.com/parties"` | Parties endpoint of satellite |
