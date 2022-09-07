@@ -24,7 +24,7 @@ spec:
         {{- with .Values.deployment.additionalLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{ if or .Values.broker.prometheus.scrape.enabled .Values.deployment.additionalAnnotations -}}
+      {{ if or .Values.broker.prometheus.scrape .Values.deployment.additionalAnnotations -}}
       annotations:
         {{- if .Values.broker.prometheus.scrape }}
         prometheus.io/scrape: 'true'
