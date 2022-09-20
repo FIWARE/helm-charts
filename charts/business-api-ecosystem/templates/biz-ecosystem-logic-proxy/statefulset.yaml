@@ -100,14 +100,14 @@ spec:
           {{- end }}
           {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
             - name: themes
-              mountPath: /business-ecosystem-logic-proxy/themes
+              mountPath: {{ .Values.bizEcosystemLogicProxy.basePath }}/themes
           {{- end }}
           {{- if .Values.bizEcosystemLogicProxy.token.enabled }}
             - name: key-volume
-              mountPath: /business-ecosystem-logic-proxy/key.pem
+              mountPath: {{ .Values.bizEcosystemLogicProxy.basePath }}/key.pem
               subPath: key.pem
             - name: cert-volume
-              mountPath: /business-ecosystem-logic-proxy/cert.pem
+              mountPath: {{ .Values.bizEcosystemLogicProxy.basePath }}/cert.pem
               subPath: cert.pem
           {{- end }}
           {{- end }}
@@ -228,9 +228,9 @@ spec:
               value: {{ .Values.bizEcosystemLogicProxy.propagateToken | quote }}
             {{- if .Values.bizEcosystemLogicProxy.token.enabled }}
             - name: BAE_TOKEN_KEY
-              value: /business-ecosystem-logic-proxy/key.pem
+              value: {{ .Values.bizEcosystemLogicProxy.basePath }}/key.pem
             - name: BAE_TOKEN_CRT
-              value: /business-ecosystem-logic-proxy/cert.pem
+              value: {{ .Values.bizEcosystemLogicProxy.basePath }}/cert.pem
             - name: BAE_EORI
               value: {{ .Values.bizEcosystemLogicProxy.token.identifier | quote }}
             {{- end }}
