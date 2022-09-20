@@ -657,6 +657,9 @@ bizEcosystemLogicProxy:
     # -- API version of elasticsearch
     version: 7
 
+  ## -- Base app path of logic proxy
+  basePath: /business-ecosystem-logic-proxy
+
   ## -- Custom theme configuration
   theme:
     # -- Enable theme
