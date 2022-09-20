@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.4.16](https://img.shields.io/badge/Version-0.4.16-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.4.17](https://img.shields.io/badge/Version-0.4.17-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -121,6 +121,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.verifyRequests | bool | `true` | Whether or not the BAE validates SSL certificates on requests to external components |
 | bizEcosystemLogicProxy.allowEditParty | bool | `true` | Allow users to edit party attributes |
 | bizEcosystemLogicProxy.allowLocalEORI | bool | `false` | Allow to use organisations from local IDP as participants when creating or acquiring offerings |
+| bizEcosystemLogicProxy.basePath | string | `"/business-ecosystem-logic-proxy"` |  |
 | bizEcosystemLogicProxy.collectStaticCommand | string | `"True"` | Execute the collect static command on startup |
 | bizEcosystemLogicProxy.command | object | `{}` | in case the startup command should be alterd |
 | bizEcosystemLogicProxy.db.database | string | `"belp_db"` | Database name for connecting the database |
