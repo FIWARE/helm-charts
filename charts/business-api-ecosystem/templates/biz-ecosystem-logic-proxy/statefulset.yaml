@@ -222,6 +222,8 @@ spec:
               value: {{ .Values.bizEcosystemLogicProxy.externalIdp.showLocalLogin | quote }}
             - name: BAE_LP_ALLOW_LOCAL_EORI
               value: {{ .Values.bizEcosystemLogicProxy.allowLocalEORI | quote }}
+            - name: BAE_LP_EDIT_PARTY
+              value: {{ .Values.bizEcosystemLogicProxy.allowEditParty | quote }}
             - name: BAE_LP_PROPAGATE_TOKEN
               value: {{ .Values.bizEcosystemLogicProxy.propagateToken | quote }}
             {{- if .Values.bizEcosystemLogicProxy.token.enabled }}
