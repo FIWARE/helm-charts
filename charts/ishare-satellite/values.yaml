@@ -46,7 +46,7 @@ deployment:
     # ref: https://hub.docker.com/r/i4trust/activation-service
     repository: fiware/ishare-satellite
     # -- tag of the image to be used
-    tag: 1.1.0
+    tag: 1.2.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required

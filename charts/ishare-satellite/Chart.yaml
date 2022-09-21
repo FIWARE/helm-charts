@@ -1,9 +1,10 @@
 apiVersion: v2
 name: ishare-satellite
-version: 1.1.0
-appVersion: 1.1.0
+version: 1.2.0
+appVersion: 1.2.0
 home: https://github.com/FIWARE/ishare-satellite
 description: A Helm chart for running an implementation of the iSHARE Satellite
+icon: https://fiware.github.io/catalogue/img/fiware.png
 keywords:
 - fiware
 - i4trust
