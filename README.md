@@ -49,6 +49,10 @@ helm install <RELEASE_NAME> fiware/<CHART_NAME>
 
 If you are searching for some configurations that can be used in a production environment, we recommend our [Loadtest Repository](https://github.com/FIWARE/orion-loadtest). It provides values for different sizes of environments and the configuration for [Orion-LD](https://github.com/FIWARE/context.Orion-LD) and [Mongo-DB](https://www.mongodb.com/).
 
+## Platform deployment
+
+An easy to use deployment of a FIWARE Platform(including a SmartCity-Application) based on the Helm-Charts can be found in the [FIWARE-Ops/marinera](https://github.com/FIWARE-Ops/marinera) Repository.
+
 ---
 
 ## License
