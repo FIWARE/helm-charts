@@ -217,6 +217,9 @@ spec:
       name: themes-img
     spec:
       accessModes: [ "ReadWriteOnce" ]
+      {{- if .Values.theme.storageClass }}
+      storageClassName: {{ .Values.theme.storageClass }}
+      {{- end -}}
       resources:
         requests:
           storage: {{ .Values.theme.size | quote }}
@@ -225,6 +228,9 @@ spec:
       name: themes-javascript
     spec:
       accessModes: [ "ReadWriteOnce" ]
+      {{- if .Values.theme.storageClass }}
+      storageClassName: {{ .Values.theme.storageClass }}
+      {{- end -}}
       resources:
         requests:
           storage: {{ .Values.theme.size | quote }}
@@ -234,6 +240,9 @@ spec:
       name: themes-fonts
     spec:
       accessModes: [ "ReadWriteOnce" ]
+      {{- if .Values.theme.storageClass }}
+      storageClassName: {{ .Values.theme.storageClass }}
+      {{- end -}}
       resources:
         requests:
           storage: {{ .Values.theme.size | quote }}
@@ -243,6 +252,9 @@ spec:
       name: themes-favicon
     spec:
       accessModes: [ "ReadWriteOnce" ]
+      {{- if .Values.theme.storageClass }}
+      storageClassName: {{ .Values.theme.storageClass }}
+      {{- end -}}
       resources:
         requests:
           storage: {{ .Values.theme.size | quote }}
