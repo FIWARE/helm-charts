@@ -10,6 +10,9 @@ metadata:
   labels:
     {{- include "keyrock.labels" . | nindent 4 }}
 spec:
+  {{- if .Values.certs.pvc.storageClass }}
+  storageClassName: {{ .Values.certs.pvc.storageClass }}
+  {{- end -}}
   accessModes:
     - ReadWriteOnce
   resources:
