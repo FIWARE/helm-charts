@@ -1,0 +1,18 @@
+{{- $PVCDefaultName := printf "%s-%s" $.Release.Name "pvc" -}}
+{{- if .Values.pvcs -}}
+{{- range .Values.pvcs }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: {{ .name | default $PVCDefaultName }}
+ annotations:
+   volume.beta.kubernetes.io/storage-class: {{ .storageClass | default $.Values.defaults.storageClass }}
+spec:
+ accessModes:
+  - {{ .accessMode | default $.Values.defaults.accessMode }}
+ resources:
+   requests:
+     storage: {{ .size | default $.Values.defaults.storageSize }}
+---
+{{- end }}
+{{- end }}

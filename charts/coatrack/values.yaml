@@ -1,0 +1,159 @@
+# Default values for coatrack
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ""
+fullnameOverride: ""
+
+imageRepo: ubuntu
+imageTag: latest
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+deployments: []
+  # Set the port used by the container and, in the case of Spring apps, the
+  # server.port env variable as well
+  # port: 80
+  # Set this to true when installing to apply configurations specific to spring apps
+  # spring: false
+  # labels: {}
+  # Set the configmaps to be used and if they are optional
+  # replicaCount: 1
+  # podAnnotations: {}
+  # image:
+  #   repository: nginx
+  #   pullPolicy: IfNotPresent
+  #   # Overrides the image tag whose default is the chart appVersion.
+  #   tag: ""
+  # imagePullSecrets: []
+  # configMaps: []
+    # - name: coatrack-global-config
+    #   optional: true
+    # - name: coatrack-environment-config
+    #   optional: true
+    # - name: coatrack-media-config
+  # volumes: []
+    # - name: gluster
+    #   mountPath: /mnt/media
+    #   readOnly: true
+    #   type: |-
+    #     persistentVolumeClaim:
+    #       claimName: coatrack-media-pvc
+  # autoscaling:
+  #   enabled: false
+  #   minReplicas: 1
+  #   maxReplicas: 100
+  #   targetCPUUtilizationPercentage: 80
+  #   # targetMemoryUtilizationPercentage: 80
+  # resources: {}
+  #   # We usually recommend not to specify default resources and to leave this as a conscious
+  #   # choice for the user. This also increases chances charts run on environments with little
+  #   # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  #   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  #   # limits:
+  #   #   cpu: 100m
+  #   #   memory: 128Mi
+  #   # requests:
+  #   #   cpu: 100m
+  #   #   memory: 128Mi
+  # nodeSelector: {}
+  # tolerations: []
+  # affinity: {}
+  # strategy: Recreate
+  # service:
+  #   type: ClusterIP
+  #   port: 80
+  # ingress:
+  #   enabled: false
+  #   className: ""
+  #   annotations: {}
+  #     # kubernetes.io/ingress.class: nginx
+  #     # kubernetes.io/tls-acme: "true"
+  #   hosts:
+  #     - host: chart-example.local
+  #       paths:
+  #         - path: /
+  #           pathType: Prefix
+  #   tls: []
+  #   #  - secretName: chart-example-tls
+  #   #    hosts:
+  #   #      - chart-example.local
+
+cronjobs: []
+  # name: ""
+  # schedule: ""
+  # startingDeadlineSeconds: ""
+  # concurrentPolicy: ""
+  # suspend: ""
+  # image:
+  #   repository: ""
+  #   tag: ""
+  #   pullPolicy: ""
+  # command: []
+  # args: []
+  # spring: false
+  # configMaps: []
+  #   - name: ""
+  #     optional: false
+  # volumes: []
+  #   - name: ""
+  #     mountPath: ""
+  #     readOnly: false
+  # resources: ""
+  # restartPolicy: ""
+  # terminationGracePeriodSeconds: ""
+  # imagePullSecrets: ""
+  # nodeSelector: ""
+  # affinity: ""
+  # tolerations: ""
+  # successfulJobsHistoryLimit: ""
+  # failedJobsHistoryLimit: ""
+
+defaults:
+  schedule: "0 0 1 * *"
+  storageClass: glusterfs-default
+  accessMode: ReadWriteMany
+  storageSize: "2Gi"
+  ingressAnnotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
+    nginx.ingress.kubernetes.io/satisfy: "any"
+
+pvcs: []
+  # - name: bxd-media-pvc
+  #   size: 100Gi
+  #   storageClass: glusterfs-default
+
+configMaps: []
+  # - name: coatrack-media-config
+  #   values:
+  #     spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation: "true"
+  #     spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQL95Dialect
+  #     logging.level.org.springframework: INFO
+
+tests:
+  enabled: false
+
+
+

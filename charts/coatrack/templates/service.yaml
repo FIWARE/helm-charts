@@ -1,0 +1,42 @@
+{{- if .Values.deployments -}}
+{{- range .Values.deployments }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name | default $.Release.Name }}
+  labels:
+    {{- include "coatrack.labels" (merge . $) | nindent 4 }}
+    {{- if .service }}
+    {{- range $key, $val := .service.labels }}
+    {{ $key }}: {{ $val | quote }}
+    {{- end }}
+    {{- end }}
+    {{- if .spring }}
+    spring-boot: "true"
+    {{- end }}
+spec:
+  selector:
+    {{- include "coatrack.selectorLabels" (merge . $) | nindent 4 }}
+  {{- if .ports }}
+  ports:
+    {{- range .ports }}
+    - port: {{ .servicePort | default 80 }}
+      targetPort: {{ .port }}
+      {{- if .protocol }}
+      protocol: {{ .protocol }}
+      {{- end }}
+      {{- if .name }}
+      name: {{ .name }}
+      {{- end }}
+    {{- end }}
+  {{- else }}
+  ports:
+    - port: {{ if .service }}{{ .service.port | default 80}}{{ else }}80{{ end }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  {{- end }}
+  type: {{ if .service }}{{ .service.type | default "ClusterIP" }}{{ else }}"ClusterIP"{{ end }}
+---
+{{- end }}
+{{- end }}

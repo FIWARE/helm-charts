@@ -1,0 +1,14 @@
+{{- $configDefaultName := printf "%s-%s" $.Release.Name "config" -}}
+{{- if .Values.configMaps -}}
+{{- range .Values.configMaps }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .name | default $configDefaultName }}
+data:
+  {{- range $key, $val := .values }}
+  {{ $key }}: {{ $val | quote }}
+  {{- end }}
+---
+{{- end }}
+{{- end }}

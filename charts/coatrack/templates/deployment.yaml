@@ -1,0 +1,68 @@
+{{- $defaultPort := 80 }}
+{{- if .Values.deployments -}}
+{{- range .Values.deployments }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name | default $.Release.Name }}
+  labels:
+    {{- include "coatrack.labels" (merge . $) | nindent 4 }}
+    {{- range $key, $val := .labels }}
+    {{ $key }}: {{ $val | quote }}
+    {{- end }}
+spec:
+  {{- if not .autoscaling }}
+  replicas: {{ .replicaCount | default 1 }}
+  {{- end }}
+  strategy:
+    type: {{ .strategy | default "Recreate" }}
+  selector:
+    matchLabels:
+      {{- include "coatrack.selectorLabels" (merge . $) | nindent 6 }}
+  template:
+    metadata:
+      {{- with .podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "coatrack.selectorLabels" (merge . $) | nindent 8 }}
+        {{- range $key, $val := .labels }}
+        {{ $key }}: {{ $val | quote }}
+        {{- end }}
+    spec:
+      containers:
+        {{- range .containers }}
+        {{- include "coatrack.deployment_containers_containerlist" (merge . $) | nindent 8}}
+        {{- end }}
+        {{- if not .containers }}
+        {{- include "coatrack.deployment_containers_containerlist" (merge . $) | nindent 8}}
+        {{- end }}
+      {{- range .containers }}
+      {{- include "coatrack.deployment_containers_volumes" (merge . $) | indent 6}}
+      {{- end }}
+      {{- if not .containers }}
+      {{- include "coatrack.deployment_containers_volumes" (merge . $) | indent 6}}
+      {{- end }}
+      {{- with .serviceAccount }}
+      serviceAccountName: {{ .name | default $.Release.Name }}
+      {{- end }}
+      {{- with .imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+---
+{{- end }}
+{{- end }}

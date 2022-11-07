@@ -1,0 +1,116 @@
+{{- if .Values.cronjobs -}}
+{{- range .Values.cronjobs }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .name | default $.Release.Name }}
+  labels:
+    {{- include "coatrack.labels" (merge . $) | nindent 4 }}
+    {{- range $key, $val := .labels }}
+    {{ $key }}: {{ $val | quote }}
+    {{- end }}
+spec:
+  schedule: {{ .schedule | default $.Values.defaults.schedule | quote}}
+  startingDeadlineSeconds: {{ .startingDeadlineSeconds | default 86400 }}
+  concurrencyPolicy: {{ .concurrentPolicy | default "Replace" }}
+  suspend: {{ .suspend | default "false" }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "coatrack.selectorLabels" (merge . $) | nindent 12 }}
+        spec:
+          containers:
+            - name: {{ .name | default $.Release.Name }}-container
+              {{- if .image }}
+              image: "{{ .image.repository | default $.Values.imageRepo }}:{{ .image.tag | default $.Values.imageTag }}"
+              imagePullPolicy: {{ .image.pullPolicy | default "IfNotPresent" }}
+              {{- else }}
+              image: "{{ $.Values.imageRepo }}:{{ $.Values.imageTag }}"
+              imagePullPolicy: IfNotPresent
+              {{- end }}
+              {{- with .command }}
+              command:
+              {{- range . }}
+                - {{ . | quote }}
+              {{- end }}
+              {{- end }}
+              {{- with .args }}
+              args:
+              {{- range . }}
+                - {{ . | quote }}
+              {{- end }}
+              {{- end }}
+              {{- if .configMaps }}
+              envFrom:
+              {{- if and .spring (eq $.Release.Namespace "bxd") }}
+              - configMapRef:
+                  name: bxd-global-config
+                  optional: true
+              - configMapRef:
+                  name: bxd-environment-config
+                  optional: true
+              {{- end }}
+              {{- range .configMaps }}
+              - configMapRef:
+                  name: {{ .name }}
+                  {{- if .optional }}
+                  optional: true
+                  {{- end }}
+              {{- end }}
+              {{- else }}
+              {{- if and .spring (eq $.Release.Namespace "bxd") }}
+              envFrom:
+              - configMapRef:
+                  name: bxd-global-config
+                  optional: true
+              - configMapRef:
+                  name: bxd-environment-config
+                  optional: true
+              {{- end }}
+              {{- end }}
+              {{- with .volumes }}
+              volumeMounts:
+              {{- range . }}
+              - name: {{ .name }}
+                mountPath: {{ .mountPath }}
+                {{- if .readOnly }}
+                readOnly: true
+                {{- end }}
+              {{- end }}
+              {{- end }}
+              {{- with .resources }}
+              resources:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          restartPolicy: {{ .restartPolicy | default "OnFailure" }}
+          terminationGracePeriodSeconds: {{ .terminationGracePeriodSeconds | default "30" }}
+          {{- with .volumes }}
+          volumes:
+          {{- range . }}
+          - name: {{ .name }}
+            {{- .type | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- with .imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+  successfulJobsHistoryLimit: {{ .successfulJobsHistoryLimit | default "3" }}
+  failedJobsHistoryLimit: {{ .failedJobsHistoryLimit | default "1" }}
+---
+{{- end }}
+{{- end }}
