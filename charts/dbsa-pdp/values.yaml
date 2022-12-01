@@ -1,0 +1,169 @@
+## Default values for dsba-pdp.
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+# -- option to override the name config in the _helpers.tpl
+nameOverride: ""
+# -- option to override the fullname config in the _helpers.tpl
+fullnameOverride: ""
+
+## configuration for the k8s service to access dsba-pdp
+service:
+  # -- service type
+  type: ClusterIP
+  # -- port to be used by the service
+  port: 8080
+  # -- additional annotations, if required
+  annotations: {}
+
+# -- if a dsba-pdp specific service account should be used, it can be configured here
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # -- specifies if the account should be created
+  create: false
+
+## deployment specific configuration
+deployment:
+  # -- initial number of target replications, can be different if autoscaling is enabled
+  replicaCount: 1
+  # -- number of old replicas to be retained
+  revisionHistoryLimit: 3
+  ## configuration of the dsba-pdp update strategy
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 1
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 0
+  ## configuration of the image to be used
+  image:
+    # -- dsba-pdp image name
+    # ref: https://quay.io/repository/wi_stefan/dsba-pdp
+    repository: quay.io/wi_stefan/dsba-pdp
+    # -- tag of the image to be used
+    tag: 0.0.9
+    # -- specification of the image pull policy
+    pullPolicy: IfNotPresent
+  # -- additional labels for the deployment, if required
+  additionalLabels: {}
+  # -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+
+  # -- configuration for the default account to be used in case no wallet information is provided
+  defaultAccount:
+    # -- should a default account be used
+    enabled: true
+
+  # -- loglevel to be used
+  logLevel: INFO
+
+  ## all ishare related configuration
+  ishare:
+    # -- should the pdp support the usage of iShare authorization registries
+    enabled: true
+    # -- id of the pdp as an iShare participant
+    clientId: "EU.EORI.TEST_PARTICIPANT"
+    # -- certificate(in pem format) to be used for the ishare client - its recommended to provide the cert and secret as an existing secret using ```ishare.existingSecret``` instead of a plain value
+    certificate: ""
+    # -- key(in pem format) to be used for the ishare client - its recommended to provide the cert and secret as an existing secret using ```ishare.existingSecret``` instead of a plain value
+    key: ""
+    # -- name of the existing secret to be used for certificate and key
+    existingSecret: ishareSecret
+
+    ## configuration for the default authorization registry
+    ar:
+      # -- id of the authorization registry in iShare
+      id: "EU.EORI.NL000000004"
+      # -- url of the registry
+      url: "https://ar.isharetest.net"
+      # -- path to be used for delegation requests
+      delegationPath: "/delegation"
+      # -- path to be used for token requests
+      tokenPath: "/delegation"
+
+  # -- id of pdp as a dataprovider to verify on roles targeting the pdp
+  providerId: "did:my:pdp"
+
+
+  ## dsba-pdp resource requests and limits, we leave the default empty to make that a concious choice by the user.
+  ## for the autoscaling to make sense, you should configure this.
+  # resources:
+    # limits:
+      # cpu: 100m
+      # memory: 128Mi
+    # requests:
+      # cpu: 100m
+      # memory: 128Mi
+  # -- selector template
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  # -- tolerations template
+  # ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  # -- affinity template
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+  # -- port to request health information at
+  healthPort: 9090
+  ## liveness and readiness probes of the dsba-pdp broker, they will be evaluated against the version endpoint
+  # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 30
+  readinessProbe:
+    initialDelaySeconds: 31
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 30
+
+## configuration of the database to be used for trusteissuers list
+db:
+  # -- should the dsba-pdp be connected to a real databse or just store in-memory
+  enabled: true
+  # -- host that the db is available at
+  host: mysql
+  # -- port of the db
+  port: 3306
+  # -- name of the database schema to be used
+  name: dsba
+  # -- username to be used on the database
+  username: root
+  # -- password for connecting the db
+  password: password
+  # -- name of the existing secret to be used for the password
+  existingSecret:
+
+  ## migration init container config
+  migrate:
+    # -- should database migration(or initial seeding) be applied through the init container
+    enabled: true
+    ## image config of the migration-init contaienr
+    image:
+      # -- dsba-db-migrations image name
+      # ref: https://quay.io/repository/wi_stefan/dsba-db-migrations
+      repository: quay.io/wi_stefan/dsba-db-migrations
+      # -- tag of the image to be used
+      tag: 0.0.9
+      # -- specification of the image pull policy
+      pullPolicy: IfNotPresent
+
+# -- port that the dsba-pdp container uses
+port: 8080
+
+## configuration for prometheus montioring
+prometheus:
+  # -- should prometheus scrape be enabled
+  enabled: true
+  # -- path for prometheus scrape
+  path: /metrics
+  # -- port prometheus scrape is available at
+  port: 8080
+
+# -- a list of additional env vars to be set, check the dsba-pdp docu for all available options
+additonalEnvVars: []
+
