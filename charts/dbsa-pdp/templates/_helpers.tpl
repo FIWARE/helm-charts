@@ -65,8 +65,8 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{- define "dsba-pdp.ishareSecret" -}}
-    {{- if .Values.ishare.existingSecret -}}
-        {{- printf "%s" (tpl .Values.ishare.existingSecret $) -}}
+    {{- if .Values.deployment.ishare.existingSecret -}}
+        {{- printf "%s" (tpl .Values.deployment.ishare.existingSecret $) -}}
     {{- else -}}
         {{- printf "%s-ishare" (include "dsba-pdp.fullname" .) -}}
     {{- end -}}
