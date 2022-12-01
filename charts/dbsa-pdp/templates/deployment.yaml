@@ -33,7 +33,7 @@ spec:
       {{- end }}
     spec: 
       serviceAccountName: {{ include "dsba-pdp.serviceAccountName" . }}
-      {{- if .Values.db.migrate.enabled -}}
+      {{- if .Values.db.migrate.enabled }}
       initContainers:
         - name: db-migrate
           imagePullPolicy: {{ .Values.db.migrate.image.pullPolicy }}
@@ -49,10 +49,10 @@ spec:
             - name: MYSQL_USERNAME
               value: {{ .Values.db.username | quote }}
             - name: MYSQL_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: {{ include "dsba-pdp.secretName" . }}
-                    key: dbPassword
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dsba-pdp.secretName" . }}
+                  key: dbPassword
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
@@ -97,10 +97,10 @@ spec:
               value: {{ .Values.deployment.ishare.ar.tokenPath | quote }}
             - name: PROVIDER_ID
               value: {{ .Values.deployment.providerId | quote }}
-            {{- if .Values.db.enabled -}}
+            {{- if .Values.db.enabled }}
             - name: MYSQL_HOST
               value: {{ .Values.db.host | quote }}
-            {{- else -}}
+            {{- else }}
             # setting the host to empty configures the pdp to run with an in-memory repo
             - name: MYSQL_HOST
               value: ""
@@ -114,14 +114,14 @@ spec:
             - name: MYSQL_USERNAME
               value: {{ .Values.db.username | quote }}
             - name: MYSQL_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: {{ include "dsba-pdp.secretName" . }}
-                    key: dbPassword
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dsba-pdp.secretName" . }}
+                  key: dbPassword
             {{- with .Values.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-          {{ - if .Values.deployment.ishare.enabled - }}
+          {{- if .Values.deployment.ishare.enabled }}
           volumeMounts:
             - name: ishare-secret
               mountPath: /iShare/
@@ -129,7 +129,7 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
-      {{- if .Values.deployment.ishare.enabled -}}
+      {{- if .Values.deployment.ishare.enabled }}
       volumes:
         - name: ishare-secret
           secret:

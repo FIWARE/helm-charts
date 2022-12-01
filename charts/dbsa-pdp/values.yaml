@@ -71,7 +71,7 @@ deployment:
     # -- key(in pem format) to be used for the ishare client - its recommended to provide the cert and secret as an existing secret using ```ishare.existingSecret``` instead of a plain value
     key: ""
     # -- name of the existing secret to be used for certificate and key
-    existingSecret: ishareSecret
+    existingSecret:
 
     ## configuration for the default authorization registry
     ar:
