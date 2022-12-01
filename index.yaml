@@ -1179,6 +1179,28 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/canis-major-0.0.1/canis-major-0.0.1.tgz
     version: 0.0.1
+  dsba-pdp:
+  - apiVersion: v1
+    appVersion: 0.0.9
+    created: "2022-12-01T14:32:28.961089395Z"
+    description: A Helm chart for running the dsba-pdp on kubernetes.
+    digest: 513018adf7a0c8a0979f9f4355157eac6e94a73d3fc57de443caafe636fefa0a
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - dsba
+    - verifiablecredentials
+    - ssi
+    - pdp
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: dsba-pdp
+    sources:
+    - https://github.com/wistefan/dsba-pdp
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/dsba-pdp-0.0.1/dsba-pdp-0.0.1.tgz
+    version: 0.0.1
   endpoint-auth-service:
   - apiVersion: v1
     appVersion: 0.4.4
@@ -3016,4 +3038,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
-generated: "2022-10-18T08:51:34.65855689Z"
+generated: "2022-12-01T14:32:28.961756097Z"
