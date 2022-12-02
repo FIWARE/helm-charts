@@ -82,7 +82,7 @@ deployment:
       # -- path to be used for delegation requests
       delegationPath: "/delegation"
       # -- path to be used for token requests
-      tokenPath: "/delegation"
+      tokenPath: "/connect/token"
 
   # -- id of pdp as a dataprovider to verify on roles targeting the pdp
   providerId: "did:my:pdp"
