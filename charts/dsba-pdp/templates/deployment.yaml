@@ -96,7 +96,7 @@ spec:
             - name: ISHARE_TOKEN_PATH
               value: {{ .Values.deployment.ishare.ar.tokenPath | quote }}
             - name: ISHARE_TRUSTED_FINGERPRINTS_LIST
-
+              value: {{ include "dsba-pdp.ishareTrustedList" . | quote}}
             - name: PROVIDER_ID
               value: {{ .Values.deployment.providerId | quote }}
             {{- if .Values.db.enabled }}
