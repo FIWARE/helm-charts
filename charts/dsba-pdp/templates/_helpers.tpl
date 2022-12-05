@@ -71,3 +71,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
         {{- printf "%s-ishare" (include "dsba-pdp.fullname" .) -}}
     {{- end -}}
 {{- end -}}
+
+{{- define "dsba-pdp.ishareTrustedList" -}}
+{{- join "," .Values.ishare.trustedFingerprints }}
+{{- end -}}

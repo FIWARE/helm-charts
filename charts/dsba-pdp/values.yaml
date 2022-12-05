@@ -72,7 +72,9 @@ deployment:
     key: ""
     # -- name of the existing secret to be used for certificate and key
     existingSecret:
-
+    # -- list of certificates sha256-fingerprints that are trusted initially. Should contain the CA used by the satellite to allow validation of the trusted-list token
+    trustedFingerprints:
+      - "myFingerprint"
     ## configuration for the default authorization registry
     ar:
       # -- id of the authorization registry in iShare
