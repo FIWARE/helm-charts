@@ -74,7 +74,17 @@ deployment:
     existingSecret:
     # -- list of certificates sha256-fingerprints that are trusted initially. Should contain the CA used by the satellite to allow validation of the trusted-list token
     trustedFingerprints:
-      - "myFingerprint"
+      # current fingerprint of the ca used by the default trustAnchor
+      - "A78FDF7BA13BBD95C6236972DD003FAE07F4E447B791B6EF6737AD22F0B61862"
+    # -- configuration of the trust anchor service to be used, e.g. the satellite
+    trustAnchor:
+      # -- id of the trust anchor
+      id: "EU.EORI.NL000000000"
+      # -- url of the trust anchor
+      url: "https://scheme.isharetest.net"
+    # -- frequency of updates to the trusted list. In s
+    updateRate: 5
+
     ## configuration for the default authorization registry
     ar:
       # -- id of the authorization registry in iShare
