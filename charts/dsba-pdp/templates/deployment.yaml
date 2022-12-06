@@ -97,6 +97,12 @@ spec:
               value: {{ .Values.deployment.ishare.ar.tokenPath | quote }}
             - name: ISHARE_TRUSTED_FINGERPRINTS_LIST
               value: {{ include "dsba-pdp.ishareTrustedList" . | quote}}
+            - name: ISHARE_TRUST_ANCHOR_URL
+              value: {{ .Values.deployment.ishare.trustAnchor.url | quote }}
+            - name: ISHARE_TRUST_ANCHOR_ID
+              value: {{ .Values.deployment.ishare.trustAnchor.id | quote }}
+            - name: ISHARE_TRUSTED_LIST_UPDATE_RATE
+              value: {{ .Values.deployment.ishare.updateRate | quote }}
             - name: PROVIDER_ID
               value: {{ .Values.deployment.providerId | quote }}
             {{- if .Values.db.enabled }}
