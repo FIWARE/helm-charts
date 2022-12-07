@@ -44,7 +44,7 @@ deployment:
     # ref: https://quay.io/repository/wi_stefan/dsba-pdp
     repository: quay.io/wi_stefan/dsba-pdp
     # -- tag of the image to be used
-    tag: 0.0.11
+    tag: 0.0.12
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
@@ -160,7 +160,7 @@ db:
       # ref: https://quay.io/repository/wi_stefan/dsba-db-migrations
       repository: quay.io/wi_stefan/dsba-db-migrations
       # -- tag of the image to be used
-      tag: 0.0.9
+      tag: 0.0.12
       # -- specification of the image pull policy
       pullPolicy: IfNotPresent
 

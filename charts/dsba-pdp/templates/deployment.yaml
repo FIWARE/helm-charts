@@ -38,7 +38,6 @@ spec:
         - name: db-migrate
           imagePullPolicy: {{ .Values.db.migrate.image.pullPolicy }}
           image: "{{ .Values.db.migrate.image.repository }}:{{ .Values.db.migrate.image.tag }}"
-          command: ["rel", "migrate"]
           env:
             - name: MYSQL_HOST
               value: {{ .Values.db.host | quote }}
