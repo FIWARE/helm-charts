@@ -1182,6 +1182,27 @@ entries:
   dsba-pdp:
   - apiVersion: v1
     appVersion: 0.0.12
+    created: "2022-12-07T09:32:31.19180024Z"
+    description: A Helm chart for running the dsba-pdp on kubernetes.
+    digest: e216eab8e8887faaa07ccec98fc3ffc028c0162282c02169ce793e281ad1e0a1
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - dsba
+    - verifiablecredentials
+    - ssi
+    - pdp
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: dsba-pdp
+    sources:
+    - https://github.com/wistefan/dsba-pdp
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/dsba-pdp-0.0.11/dsba-pdp-0.0.11.tgz
+    version: 0.0.11
+  - apiVersion: v1
+    appVersion: 0.0.12
     created: "2022-12-07T08:31:36.916783948Z"
     description: A Helm chart for running the dsba-pdp on kubernetes.
     digest: 950d7d99fab9a5a12bdb0735844aaf0763a1941dc22c3d7624bf4f95be92abd7
@@ -3227,4 +3248,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
-generated: "2022-12-07T08:31:36.91741814Z"
+generated: "2022-12-07T09:32:31.192660155Z"
