@@ -52,6 +52,9 @@ spec:
                 secretKeyRef:
                   name: {{ include "dsba-pdp.secretName" . }}
                   key: dbPassword
+          volumeMounts:
+            - name: cache-volume
+              mountPath: /.cache/
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
@@ -134,8 +137,15 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
-      {{- if .Values.deployment.ishare.enabled }}
+      {{- if or .Values.deployment.ishare.enabled .Values.db.migrate.enabled }}
       volumes:
+      {{- end }}
+      {{- if .Values.db.migrate.enabled }}
+        - name: cache-volume
+          emptyDir:
+            sizeLimit: 500Mi
+      {{- end }}
+      {{- if .Values.deployment.ishare.enabled }}
         - name: ishare-secret
           secret:
             secretName: {{ include "dsba-pdp.ishareSecret" . }}
