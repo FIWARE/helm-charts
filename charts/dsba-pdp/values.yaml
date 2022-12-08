@@ -60,7 +60,7 @@ deployment:
   # -- loglevel to be used
   logLevel: INFO
 
-  ## all ishare related configuration
+  ## all iShare related configuration
   ishare:
     # -- should the pdp support the usage of iShare authorization registries
     enabled: true
