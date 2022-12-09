@@ -42,7 +42,7 @@ deployment:
   image:
     # -- dsba-pdp image name
     # ref: https://quay.io/repository/wi_stefan/dsba-pdp
-    repository: quay.io/wi_stefan/dsba-pdp
+    repository: quay.io/fiware/dsba-pdp
     # -- tag of the image to be used
     tag: 0.0.12
     # -- specification of the image pull policy
