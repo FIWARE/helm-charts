@@ -87,6 +87,8 @@ spec:
               value: {{ .Values.deployment.logLevel | quote }}
             - name: ISHARE_ENABLED
               value: {{ .Values.deployment.ishare.enabled | quote }}
+            - name: ISHARE_TRUSTED_LIST_ENABLED
+              value: {{ .Values.deployment.ishare.trustedList | quote }}
             - name: ISHARE_CLIENT_ID
               value: {{ .Values.deployment.ishare.clientId | quote }}
             - name: ISHARE_AR_ID

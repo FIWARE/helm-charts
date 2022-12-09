@@ -64,6 +64,8 @@ deployment:
   ishare:
     # -- should the pdp support the usage of iShare authorization registries
     enabled: true
+    # -- should the iShare compliant authorization registry be used as trusted-list provider?
+    trustedList: true
     # -- id of the pdp as an iShare participant
     clientId: "EU.EORI.TEST_PARTICIPANT"
     # -- certificate(in pem format) to be used for the ishare client - its recommended to provide the cert and secret as an existing secret using ```ishare.existingSecret``` instead of a plain value
