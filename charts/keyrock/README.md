@@ -1,6 +1,6 @@
 # keyrock
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![AppVersion: 8.1.0](https://img.shields.io/badge/AppVersion-8.1.0-informational?style=flat-square)
+![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![AppVersion: 8.1.0](https://img.shields.io/badge/AppVersion-8.1.0-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -85,7 +85,6 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | statefulset.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | statefulset.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | statefulset.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
-| theme.annotations | object | `{}` | PVC Annotations |
 | theme.enabled | bool | `false` | Enable theme |
 | theme.image | string | `"my-theme-image:latest"` | Image which holds the theme files |
 | theme.imagePullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
@@ -95,7 +94,6 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | theme.mountJavascript | string | `"/opt/fiware-idm/public/javascripts/my-theme"` | Mount path for the source javascript files |
 | theme.mountTheme | string | `"/opt/fiware-idm/themes/my-theme"` | Mount path for the source theme files |
 | theme.name | string | `"default"` | Name of the theme |
-| theme.size | string | `"50Mi"` | Size of PVCs to be created |
 | theme.sourceImg | string | `"/img/my-theme"` | Path to the source image files inside the container |
 | theme.sourceTheme | string | `"/themes/my-theme"` | Path to the source theme files inside the container |
 | token.cert | string | `""` | String with certificate (chain) in PEM format |

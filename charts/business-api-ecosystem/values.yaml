@@ -666,10 +666,6 @@ bizEcosystemLogicProxy:
     enabled: false
     # -- Name of the theme
     name: default
-    # -- Size of PVC to be created
-    size: 4Gi
-    # -- PVC Annotations
-    annotations: {}
     # Image which holds the theme files
     image: my-theme-image:latest
     # -- specification of the image pull policy

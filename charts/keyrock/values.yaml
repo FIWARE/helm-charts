@@ -188,10 +188,6 @@ theme:
     enabled: false
     # -- Name of the theme
     name: default
-    # -- Size of PVCs to be created
-    size: 50Mi
-    # -- PVC Annotations
-    annotations: {}
     # -- Image which holds the theme files
     image: my-theme-image:latest
     # -- specification of the image pull policy
