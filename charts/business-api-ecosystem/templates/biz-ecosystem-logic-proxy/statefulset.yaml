@@ -93,7 +93,7 @@ spec:
             periodSeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.bizEcosystemLogicProxy.statefulset.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.readinessProbe.timeoutSeconds }}
-          {{- if or .Values.bizEcosystemLogicProxy.theme.enabled .Values.bizEcosystemLogicProxy.token.enabled }}
+          {{- if or .Values.bizEcosystemLogicProxy.theme.enabled .Values.bizEcosystemLogicProxy.token.enabled .Values.bizEcosystemLogicProxy.extraVolumeMounts }}
           volumeMounts:
           {{- if .Values.bizEcosystemLogicProxy.extraVolumeMounts }}
           {{ toYaml .Values.bizEcosystemLogicProxy.extraVolumeMounts | nindent 12 }}
@@ -246,10 +246,14 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if or .Values.bizEcosystemLogicProxy.token.enabled .Values.bizEcosystemLogicProxy.extraContainerVolumes }}
+      {{- if or .Values.bizEcosystemLogicProxy.token.enabled .Values.bizEcosystemLogicProxy.extraContainerVolumes .Values.bizEcosystemLogicProxy.theme.enabled }}
       volumes:
       {{- if .Values.bizEcosystemLogicProxy.extraContainerVolumes }}
       {{ toYaml .Values.bizEcosystemLogicProxy.extraContainerVolumes | nindent 8 }}
+      {{- end }}
+      {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
+        - name: themes
+          emptyDir: {}
       {{- end }}
       {{- if .Values.bizEcosystemLogicProxy.token.enabled }}
         - name: key-volume
@@ -266,14 +270,4 @@ spec:
                 path: cert.pem
       {{- end }}
       {{- end }}
-  {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
-  volumeClaimTemplates:
-  - metadata:
-      name: themes
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: {{ .Values.bizEcosystemLogicProxy.theme.size | quote }}
-  {{- end }}
 {{- end }}

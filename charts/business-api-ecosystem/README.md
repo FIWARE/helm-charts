@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.4.17](https://img.shields.io/badge/Version-0.4.17-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -179,12 +179,10 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.statefulset.revisionHistoryLimit | int | `3` |  |
 | bizEcosystemLogicProxy.statefulset.tolerations | list | `[]` |  |
 | bizEcosystemLogicProxy.statefulset.updateStrategy.type | string | `"RollingUpdate"` |  |
-| bizEcosystemLogicProxy.theme.annotations | object | `{}` | PVC Annotations |
 | bizEcosystemLogicProxy.theme.enabled | bool | `false` | Enable theme |
 | bizEcosystemLogicProxy.theme.image | string | `"my-theme-image:latest"` |  |
 | bizEcosystemLogicProxy.theme.imagePullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | bizEcosystemLogicProxy.theme.name | string | `"default"` | Name of the theme |
-| bizEcosystemLogicProxy.theme.size | string | `"4Gi"` | Size of PVC to be created |
 | bizEcosystemLogicProxy.theme.sourcePath | string | `"/my-theme"` |  |
 | bizEcosystemLogicProxy.token.cert | string | `""` | String with certificate (chain) in PEM format |
 | bizEcosystemLogicProxy.token.enabled | bool | `false` | Enable storage of local key and certificate |
