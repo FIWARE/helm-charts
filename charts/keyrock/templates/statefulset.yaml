@@ -198,65 +198,29 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.certs.pvc.enabled }}
+      {{- if or (.Values.theme.enabled) (.Values.certs.pvc.enabled) }}
       volumes:
+      {{- if .Values.certs.pvc.enabled }}
         - name: certs
           persistentVolumeClaim:
             claimName: {{ include "keyrock.fullname" . }}-certs
       {{- end }}
-  {{- if .Values.theme.enabled }}
-  volumeClaimTemplates:
-  - metadata:
-      name: themes-theme
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: {{ .Values.theme.size | quote }}
-  - metadata:
-      name: themes-img
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      {{- if .Values.theme.storageClass }}
-      storageClassName: {{ .Values.theme.storageClass }}
-      {{- end -}}
-      resources:
-        requests:
-          storage: {{ .Values.theme.size | quote }}
-  {{- if .Values.theme.sourceJavascript }}
-  - metadata:
-      name: themes-javascript
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      {{- if .Values.theme.storageClass }}
-      storageClassName: {{ .Values.theme.storageClass }}
-      {{- end -}}
-      resources:
-        requests:
-          storage: {{ .Values.theme.size | quote }}
-  {{- end }}
-  {{- if .Values.theme.sourceFonts }}
-  - metadata:
-      name: themes-fonts
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      {{- if .Values.theme.storageClass }}
-      storageClassName: {{ .Values.theme.storageClass }}
-      {{- end -}}
-      resources:
-        requests:
-          storage: {{ .Values.theme.size | quote }}
-  {{- end }}
-  {{- if .Values.theme.sourceFavicon }}
-  - metadata:
-      name: themes-favicon
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      {{- if .Values.theme.storageClass }}
-      storageClassName: {{ .Values.theme.storageClass }}
-      {{- end -}}
-      resources:
-        requests:
-          storage: {{ .Values.theme.size | quote }}
-  {{- end }}
-  {{- end }}
+      {{- if .Values.theme.enabled }}
+        - name: themes-theme
+          emptyDir: {}
+        - name: themes-img
+          emptyDir: {}
+        {{- if .Values.theme.sourceJavascript }}
+        - name: themes-javascript
+          emptyDir: {}
+        {{- end }}
+        {{- if .Values.theme.sourceFonts }}
+        - name: themes-fonts
+          emptyDir: {}
+        {{- end }}
+        {{- if .Values.theme.sourceFavicon }}
+        - name: themes-favicon
+          emptyDir: {}
+        {{- end }}
+      {{- end }}
+      {{- end }}
