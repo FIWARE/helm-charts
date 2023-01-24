@@ -213,7 +213,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "orion.secretName" . }}
-                  key: dbPassword
+                  key: {{ include "orion.secretKey" . }}
               {{- if .Values.broker.db.auth.mech }} 
             - name: {{ .Values.broker.envPrefix }}MONGO_AUTH_MECH
               value: {{ .Values.broker.db.auth.mech }}
