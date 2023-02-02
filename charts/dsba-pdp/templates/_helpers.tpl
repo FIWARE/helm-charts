@@ -75,3 +75,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- define "dsba-pdp.ishareTrustedList" -}}
 {{- join "," .Values.deployment.ishare.trustedFingerprints }}
 {{- end -}}
+
+{{- define "dsba-pdp.trustedVerifiers" -}}
+{{- join "," .Values.deployment.trustedVerifiers }}
+{{- end -}}
