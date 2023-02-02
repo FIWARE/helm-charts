@@ -105,10 +105,18 @@ spec:
               value: {{ .Values.deployment.ishare.trustAnchor.url | quote }}
             - name: ISHARE_TRUST_ANCHOR_ID
               value: {{ .Values.deployment.ishare.trustAnchor.id | quote }}
+            - name: ISHARE_TRUST_ANCHOR_TOKEN_PATH
+              value: {{ .Values.deployment.ishare.trustAnchor.tokenPath | quote }} 
+            - name: ISHARE_TRUST_ANCHOR_TRUSTED_LIST_PATH
+              value: {{ .Values.deployment.ishare.trustAnchor.trustedListPath | quote }} 
             - name: ISHARE_TRUSTED_LIST_UPDATE_RATE
               value: {{ .Values.deployment.ishare.updateRate | quote }}
             - name: PROVIDER_ID
               value: {{ .Values.deployment.providerId | quote }}
+            - name: TRUSTED_VERIFIERS
+              value: {{ include "dsba-pdp.trustedVerifiers" . | quote}}
+            - name: JWK_UPDATE_INTERVAL_IN_S
+              value: {{ .Values.deployment.jwkUpdateInterval | quote }}
             {{- if .Values.db.enabled }}
             - name: MYSQL_HOST
               value: {{ .Values.db.host | quote }}

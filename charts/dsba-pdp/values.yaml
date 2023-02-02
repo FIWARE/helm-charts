@@ -44,7 +44,7 @@ deployment:
     # ref: https://quay.io/repository/wi_stefan/dsba-pdp
     repository: quay.io/fiware/dsba-pdp
     # -- tag of the image to be used
-    tag: 0.0.12
+    tag: 0.3.2
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
@@ -84,8 +84,17 @@ deployment:
       id: "EU.EORI.NL000000000"
       # -- url of the trust anchor
       url: "https://scheme.isharetest.net"
+      # -- path of the token endpoint
+      tokenPath: "/connect/token"
+      # -- path of the trusted list endpoint
+      trustedListPath: "/trusted_list"
+
     # -- frequency of updates to the trusted list. In s
     updateRate: 5
+    # -- jwk-endpoints from trusted verifiers. Needs to provide RFC-7517 compatible JWKS, wich will be used to validate incoming JWT.
+    trustedVerifiers: []
+    # -- frequency of updates from the jwk endpoints. In s
+    jwkUpdateInterval: 60
 
     ## configuration for the default authorization registry
     ar:
