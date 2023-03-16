@@ -1204,6 +1204,27 @@ entries:
   dsba-pdp:
   - apiVersion: v1
     appVersion: 0.3.2
+    created: "2023-03-16T12:47:17.27772861Z"
+    description: A Helm chart for running the dsba-pdp on kubernetes.
+    digest: 3940c3a56a21ca5c9bc2f8e7e37ff4614119b81b6b69f88152375b0292aa2247
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - dsba
+    - verifiablecredentials
+    - ssi
+    - pdp
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: dsba-pdp
+    sources:
+    - https://github.com/wistefan/dsba-pdp
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/dsba-pdp-0.0.17/dsba-pdp-0.0.17.tgz
+    version: 0.0.17
+  - apiVersion: v1
+    appVersion: 0.3.2
     created: "2023-02-02T09:00:37.178201202Z"
     description: A Helm chart for running the dsba-pdp on kubernetes.
     digest: f4e18110ee201b52e243fb189bcf2c5848b7a91bd05e2000dedb8b0836280c6c
@@ -2121,6 +2142,28 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/ishare-satellite-1.1.0/ishare-satellite-1.1.0.tgz
     version: 1.1.0
   keyrock:
+  - apiVersion: v1
+    appVersion: 8.3.0
+    created: "2023-03-16T12:47:17.447472907Z"
+    description: A Helm chart for running the fiware idm keyrock on kubernetes.
+    digest: 5b6d3f494435c826c6b9e05851358b330304840734e19a48efd219c992030b9f
+    home: https://fiware-idm.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - keyrock
+    - idm
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: keyrock
+    sources:
+    - https://github.com/ging/fiware-idm
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/keyrock-0.6.0/keyrock-0.6.0.tgz
+    version: 0.6.0
   - apiVersion: v1
     appVersion: 8.1.0
     created: "2023-01-19T14:00:32.121451265Z"
@@ -3442,4 +3485,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
-generated: "2023-02-02T09:00:37.179092201Z"
+generated: "2023-03-16T12:47:17.448541813Z"
