@@ -82,6 +82,14 @@ spec:
             periodSeconds: {{ .Values.statefulset.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.statefulset.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.statefulset.readinessProbe.timeoutSeconds }}
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: {{ .Values.statefulset.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.statefulset.startupProbe.periodSeconds }}
+            failureThreshold: {{ .Values.statefulset.startupProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.statefulset.startupProbe.timeoutSeconds }}
           {{- if or (.Values.theme.enabled) (.Values.certs.pvc.enabled) }}
           volumeMounts:
             {{- if .Values.theme.enabled }}
