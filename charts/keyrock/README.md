@@ -1,6 +1,6 @@
 # keyrock
 
-![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![AppVersion: 8.1.0](https://img.shields.io/badge/AppVersion-8.1.0-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![AppVersion: 8.3.0](https://img.shields.io/badge/AppVersion-8.3.0-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -71,7 +71,7 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | statefulset.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | statefulset.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | statefulset.image.repository | string | `"fiware/idm"` | keyrock image name ref: https://hub.docker.com/r/fiware/idm |
-| statefulset.image.tag | string | `"8.1.0"` | tag of the image to be used |
+| statefulset.image.tag | string | `"8.3.0"` | tag of the image to be used |
 | statefulset.livenessProbe.initialDelaySeconds | int | `30` |  |
 | statefulset.livenessProbe.periodSeconds | int | `10` |  |
 | statefulset.livenessProbe.successThreshold | int | `1` |  |
@@ -83,6 +83,10 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | statefulset.readinessProbe.timeoutSeconds | int | `30` |  |
 | statefulset.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | statefulset.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
+| statefulset.startupProbe.failureThreshold | int | `5` |  |
+| statefulset.startupProbe.initialDelaySeconds | int | `5` |  |
+| statefulset.startupProbe.periodSeconds | int | `5` |  |
+| statefulset.startupProbe.timeoutSeconds | int | `30` |  |
 | statefulset.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | statefulset.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | theme.enabled | bool | `false` | Enable theme |
