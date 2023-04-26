@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -63,6 +63,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.backup.image.tag | string | `"0.0.3"` |  |
 | bizEcosystemChargingBackend.backup.schedule | string | `"* 1 *  *  *"` |  |
 | bizEcosystemChargingBackend.backup.secretName | string | `"gcs-secret"` |  |
+| bizEcosystemChargingBackend.basePath | string | `"/business-ecosystem-charging-backend"` | Base app path of charging backend (for versions < 8.1.0: /business-ecosystem-charging-backend, for versions >= 8.1.0: /opt/business-ecosystem-charging-backend) |
 | bizEcosystemChargingBackend.db.database | string | `"charging_db"` |  |
 | bizEcosystemChargingBackend.db.host | string | `"mongo"` |  |
 | bizEcosystemChargingBackend.db.password | string | `"pass"` |  |
@@ -121,7 +122,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.verifyRequests | bool | `true` | Whether or not the BAE validates SSL certificates on requests to external components |
 | bizEcosystemLogicProxy.allowEditParty | bool | `true` | Allow users to edit party attributes |
 | bizEcosystemLogicProxy.allowLocalEORI | bool | `false` | Allow to use organisations from local IDP as participants when creating or acquiring offerings |
-| bizEcosystemLogicProxy.basePath | string | `"/business-ecosystem-logic-proxy"` |  |
+| bizEcosystemLogicProxy.basePath | string | `"/business-ecosystem-logic-proxy"` | Base app path of logic proxy (for versions < 8.1.0: /business-ecosystem-logic-proxy, for versions >= 8.1.0: /opt/business-ecosystem-logic-proxy) |
 | bizEcosystemLogicProxy.collectStaticCommand | string | `"True"` | Execute the collect static command on startup |
 | bizEcosystemLogicProxy.command | object | `{}` | in case the startup command should be alterd |
 | bizEcosystemLogicProxy.db.database | string | `"belp_db"` | Database name for connecting the database |
