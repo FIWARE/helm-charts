@@ -465,6 +465,9 @@ bizEcosystemChargingBackend:
   # -- Authorize service path of the logic proxy
   authorizeServicePath: /authorizeService/apiKeys
 
+  # -- Base app path of charging backend (for versions < 8.1.0: /business-ecosystem-charging-backend, for versions >= 8.1.0: /opt/business-ecosystem-charging-backend)
+  basePath: /business-ecosystem-charging-backend
+
   ## -- Configuration of local key and certificate for validation and generation of tokens
   token:
     # -- Enable storage of local key and certificate
@@ -657,7 +660,7 @@ bizEcosystemLogicProxy:
     # -- API version of elasticsearch
     version: 7
 
-  ## -- Base app path of logic proxy
+  # -- Base app path of logic proxy (for versions < 8.1.0: /business-ecosystem-logic-proxy, for versions >= 8.1.0: /opt/business-ecosystem-logic-proxy)
   basePath: /business-ecosystem-logic-proxy
 
   ## -- Custom theme configuration
