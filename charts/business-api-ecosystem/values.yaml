@@ -94,7 +94,7 @@ initContainer:
   ## -- Wait for RSS
   rss:
     ## -- Name:
-    name: wait-for-rss
+    name: rss-wait
     ## -- Image
     image: curlimages/curl
     ## -- Image pull policy
