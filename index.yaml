@@ -456,6 +456,28 @@ entries:
   business-api-ecosystem:
   - apiVersion: v2
     appVersion: 8.0.0
+    created: "2023-05-22T13:24:14.452106291Z"
+    description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
+      Marketplace) on Kubernetes
+    digest: c920ec77cb0dd8337162bd76b8874e3c6740b9bf7dfddc1bff38bfcfd20092d4
+    home: https://business-api-ecosystem.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - marketplace
+    - bae
+    - tmforum
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: business-api-ecosystem
+    sources:
+    - https://github.com/FIWARE-TMForum/Business-API-Ecosystem
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-0.5.2/business-api-ecosystem-0.5.2.tgz
+    version: 0.5.2
+  - apiVersion: v2
+    appVersion: 8.0.0
     created: "2023-04-26T08:38:25.453834303Z"
     description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
       Marketplace) on Kubernetes
@@ -3507,4 +3529,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
-generated: "2023-04-26T08:38:25.454748409Z"
+generated: "2023-05-22T13:24:14.453111554Z"
