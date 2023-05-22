@@ -91,6 +91,18 @@ initContainer:
     maxRetries: 60
     ## -- Sleep interval in s between each retry
     sleepInterval: 10
+  ## -- Wait for RSS
+  rss:
+    ## -- Name:
+    name: wait-for-rss
+    ## -- Image
+    image: curlimages/curl
+    ## -- Image pull policy
+    imagePullPolicy: IfNotPresent
+    ## -- Maximum number of retries to check for API avilability
+    maxRetries: 60
+    ## -- Sleep interval in s between each retry
+    sleepInterval: 10
 
 
   
