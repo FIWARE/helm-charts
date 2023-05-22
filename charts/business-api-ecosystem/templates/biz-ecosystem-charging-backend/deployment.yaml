@@ -49,6 +49,7 @@ spec:
         {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-billing" "path" "DSBillingManagement" ) | nindent 8 }}
         {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-customer" "path" "DSCustomerManagement" ) | nindent 8 }}
         {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-usage" "path" "DSUsageManagement" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.rss" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.rssInitContainer\" . }}" ) | nindent 8 }}
       containers:
         {{- if .Values.bizEcosystemChargingBackend.backup.enabled }}
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemChargingBackend.name }}-backup

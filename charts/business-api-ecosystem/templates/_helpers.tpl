@@ -281,6 +281,13 @@ Create the name of the API check initContainer for bizEcosystemRss
 {{- end }}
 
 {{/*
+Create the name of the RSS check initContainer for bizEcosystemChargingBackend
+*/}}
+{{- define "bizEcosystemChargingBackend.rssInitContainer" -}}
+{{- printf "%s-%s-%s" .Release.Name .Values.bizEcosystemChargingBackend.name .Values.initContainer.rss.name | trunc 50 | trimSuffix "-" -}}
+{{- end }}
+
+{{/*
 Create the name of the API check initContainer for bizEcosystemChargingBackend
 */}}
 {{- define "bizEcosystemChargingBackend.apiInitContainer" -}}
@@ -325,6 +332,17 @@ Template for TMForum APIs initContainer check
   imagePullPolicy: {{ .ctx.Values.initContainer.apis.imagePullPolicy | quote }}
   command: ['sh', '-c',
     'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" .ctx }}/{{ .path }}"; do echo "Waiting for APIs"; ((i++)) && ((i=={{ .ctx.Values.initContainer.apis.maxRetries }})) && break; sleep {{ .ctx.Values.initContainer.apis.sleepInterval }}; done;']
+{{- end }}
+
+{{/*
+Template for RSS initContainer check
+*/}}
+{{- define "business-api-ecosystem.initContainer.rss" }}
+- name: {{ tpl .name .ctx }}
+  image: "{{ .ctx.Values.initContainer.rss.image }}"
+  imagePullPolicy: {{ .ctx.Values.initContainer.rss.imagePullPolicy | quote }}
+  command: ['sh', '-c',
+    'while ! curl "{{ include "bizEcosystemRss.fullhostname" .ctx }}"; do echo "Waiting for RSS"; ((i++)) && ((i=={{ .ctx.Values.initContainer.rss.maxRetries }})) && break; sleep {{ .ctx.Values.initContainer.rss.sleepInterval }}; done;']
 {{- end }}
 
 {{/*
