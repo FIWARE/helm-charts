@@ -277,28 +277,28 @@ Create the full hostname:port for the Logic Proxy
 Create the name of the API check initContainer for bizEcosystemRss
 */}}
 {{- define "bizEcosystemRss.apiInitContainer" -}}
-{{- printf "%s-%s-%s" .Release.Name .Values.bizEcosystemRss.name .Values.initContainer.apis.name | trunc 50 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Values.bizEcosystemRss.name .Values.initContainer.apis.name | trunc 50 | trimSuffix "-" -}}
 {{- end }}
 
 {{/*
 Create the name of the RSS check initContainer for bizEcosystemChargingBackend
 */}}
 {{- define "bizEcosystemChargingBackend.rssInitContainer" -}}
-{{- printf "%s-%s-%s" .Release.Name .Values.bizEcosystemChargingBackend.name .Values.initContainer.rss.name | trunc 50 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Values.bizEcosystemChargingBackend.name .Values.initContainer.rss.name | trunc 50 | trimSuffix "-" -}}
 {{- end }}
 
 {{/*
 Create the name of the API check initContainer for bizEcosystemChargingBackend
 */}}
 {{- define "bizEcosystemChargingBackend.apiInitContainer" -}}
-{{- printf "%s-%s-%s" .Release.Name .Values.bizEcosystemChargingBackend.name .Values.initContainer.apis.name | trunc 50 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Values.bizEcosystemChargingBackend.name .Values.initContainer.apis.name | trunc 50 | trimSuffix "-" -}}
 {{- end }}
 
 {{/*
 Create the name of the API check initContainer for bizEcosystemLogicProxy
 */}}
 {{- define "bizEcosystemLogicProxy.apiInitContainer" -}}
-{{- printf "%s-%s-%s" .Release.Name .Values.bizEcosystemLogicProxy.name .Values.initContainer.apis.name | trunc 50 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Values.bizEcosystemLogicProxy.name .Values.initContainer.apis.name | trunc 50 | trimSuffix "-" -}}
 {{- end }}
 
 {{/*
