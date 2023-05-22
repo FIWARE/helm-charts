@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.5.2](https://img.shields.io/badge/Version-0.5.2-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.5.3](https://img.shields.io/badge/Version-0.5.3-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -249,7 +249,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | initContainer.rss.image | string | `"curlimages/curl"` |  |
 | initContainer.rss.imagePullPolicy | string | `"IfNotPresent"` |  |
 | initContainer.rss.maxRetries | int | `60` |  |
-| initContainer.rss.name | string | `"wait-for-rss"` |  |
+| initContainer.rss.name | string | `"rss-wait"` |  |
 | initContainer.rss.sleepInterval | int | `10` |  |
 | nameOverride | string | `""` |  |
 | oauth.adminrole | string | `"admin"` | Admin role |
