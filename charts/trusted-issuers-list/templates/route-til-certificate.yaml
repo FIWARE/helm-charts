@@ -1,0 +1,15 @@
+{{- if .Values.route.til.certificate -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "til.fullname" . }}
+  labels:
+    {{ include "til.metaLabels" . | nindent 4 }}
+spec:
+  secretName: {{ include "til.fullname" . }}-til-tls-sec
+  issuerRef:
+    {{- toYaml .Values.route.til.certificate.issuer | nindent 4 }}
+  commonName: {{ .Values.route.til.host }}
+  dnsNames:
+    - {{ .Values.route.til.host }}
+{{- end -}}
