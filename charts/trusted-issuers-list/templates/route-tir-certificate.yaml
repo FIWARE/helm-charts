@@ -4,7 +4,7 @@ kind: Certificate
 metadata:
   name: {{ include "til.fullname" . }}-tir
   labels:
-    {{ include "til.metaLabels" . | nindent 4 }}
+    {{ include "til.labels" . | nindent 4 }}
 spec:
   secretName: {{ include "til.fullname" . }}-tir-tls-sec
   issuerRef:
