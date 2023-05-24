@@ -1,0 +1,32 @@
+{{- if .Values.route.til.enabled -}}
+{{- $fullName := include "til.fullname" . -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "til.fullname" . }}-til
+  labels:
+    {{ include "til.labels" . | nindent 4 }}
+  {{- if or .Values.route.til.annotations .Values.route.til.annotations }}
+  annotations:
+    {{- if .Values.route.til.certificate }}
+    cert-utils-operator.redhat-cop.io/certs-from-secret: {{ include "til.fullname" . }}-til-tls-sec
+    {{- end }}
+    {{- with .Values.route.til.annotations }}
+      {{- toYaml . | nindent 4 }}
+      {{- end }}
+  {{- end }}
+spec:
+  {{- if .Values.route.til.host }}
+  host: {{ .Values.route.til.host}}
+  {{- end }}
+  path: /issuer
+  to:
+    kind: Service
+    name: {{ $fullName }}
+  {{- if .Values.route.til.tls }}
+  tls:
+  {{- with .Values.route.til.tls }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

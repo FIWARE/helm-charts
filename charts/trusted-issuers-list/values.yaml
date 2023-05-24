@@ -113,21 +113,40 @@ autoscaling:
 
 ## openshift specific route definition. Will not work on plain k8s
 route:
-  ## -- should the deployment create openshift routes
-  enabled: false
-  # -- annotations to be added to the route
-  annotations: {}
-  # -- host to be used
-  # host: localhost
-  # -- tls configuration for the route
-  tls: {}
-  # termination: edge
-  # configuration for creation of certificates, using cert-manager.
-  certificate: {}
-  # allows to specify the issuer to be used.
-  # issuer:
-  #   kind: ClusterIssuer
-  #   name: letsencrypt-aws-prod
+  # -- route config for the trusted issuers list endpoint
+  til:
+    ## -- should the deployment create openshift routes
+    enabled: false
+    # -- annotations to be added to the route
+    annotations: {}
+    # -- host to be used
+    # host: localhost
+    # -- tls configuration for the route
+    tls: {}
+    # termination: edge
+    # configuration for creation of certificates, using cert-manager.
+    certificate: {}
+    # allows to specify the issuer to be used.
+    # issuer:
+    #   kind: ClusterIssuer
+    #   name: letsencrypt-aws-prod
+  # -- route config for the trusted issuers registry endpoint
+  tir:
+    ## -- should the deployment create openshift routes
+    enabled: false
+    # -- annotations to be added to the route
+    annotations: {}
+    # -- host to be used
+    # host: localhost
+    # -- tls configuration for the route
+    tls: {}
+    # termination: edge
+    # configuration for creation of certificates, using cert-manager.
+    certificate: {}
+    # allows to specify the issuer to be used.
+    # issuer:
+    #   kind: ClusterIssuer
+    #   name: letsencrypt-aws-prod
 
 ## ingress configuration
 ingress:
