@@ -71,7 +71,7 @@ deployment:
   affinity: {}
   # -- port to request health information at
   healthPort: 9090
-  ## liveness and readiness probes of the til broker, they will be evaluated against the version endpoint
+  ## liveness and readiness probes
   # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   livenessProbe:
     initialDelaySeconds: 30
