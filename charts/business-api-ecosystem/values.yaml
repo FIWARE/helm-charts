@@ -320,6 +320,14 @@ bizEcosystemChargingBackend:
   ## -- Configure existing secret to be used for: (iSHARE) token key and certificates
   # existingCertSecret: cb-cert-secret
 
+  # -- List of additional ENV vars to be set, e.g., to be used in asset plugins
+  extraEnvVars: []
+  # - name: MY-ENV
+  #   value: MY-VALUE
+
+  # -- Name of existing Secret containing extra ENV vars to be set (in case of sensitive data)
+  extraEnvVarsSecret: ""
+  
   ## -- Component name
   name: biz-ecosystem-charging-backend
 
