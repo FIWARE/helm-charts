@@ -220,6 +220,14 @@ spec:
             - name: BAE_EORI
               value: {{ .Values.bizEcosystemChargingBackend.token.identifier | quote }}
             {{- end }}
+            {{- with .Values.bizEcosystemChargingBackend.extraEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- if .Values.bizEcosystemChargingBackend.extraEnvVarsSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ tpl .Values.bizEcosystemChargingBackend.extraEnvVarsSecret . | quote }}
+          {{- end }}
       {{- with .Values.bizEcosystemChargingBackend.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
