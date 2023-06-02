@@ -1,8 +1,8 @@
-# trusted-issuers-list
+# credentials-config-service
 
-![Version: 0.0.5](https://img.shields.io/badge/Version-0.0.5-informational?style=flat-square) ![AppVersion: 0.0.2](https://img.shields.io/badge/AppVersion-0.0.2-informational?style=flat-square)
+![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
-A Helm chart for running the trusted-issuers-list on kubernetes.
+A Helm chart for running the credentials-config-service on kubernetes.
 
 ## Maintainers
 
@@ -12,7 +12,7 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 
 ## Source Code
 
-* <https://github.com/fiware/trusted-issuers-list>
+* <https://github.com/fiware/credentials-config-service>
 
 ## Values
 
@@ -28,7 +28,7 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 | database.existingSecret.key | string | `"password"` | key to retrieve the password from |
 | database.existingSecret.name | string | `"the-secret"` | name of the secret |
 | database.host | string | `"mysql"` | host of the database to be connected - will be ignored if persistence is disabled |
-| database.name | string | `"til-db"` | name of the database-schema to be accessed - will be ignored if persistence is disabled |
+| database.name | string | `"ccs-db"` | name of the database-schema to be accessed - will be ignored if persistence is disabled |
 | database.password | string | `"password"` | passowrd to connect the db - ignored if existing secret is configured |
 | database.persistence | bool | `false` | should the database support persistence? If disabled, a H2-InMemory-Database will be used.  |
 | database.port | int | `3306` | port of the database to be connected - will be ignored if persistence is disabled |
@@ -38,8 +38,8 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | deployment.healthPort | int | `9090` | port to request health information at |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| deployment.image.repository | string | `"quay.io/fiware/trusted-issuers-list"` | til image name ref: https://quay.io/repository/fiware/trusted-issuers-list |
-| deployment.image.tag | string | `"0.0.2"` | tag of the image to be used |
+| deployment.image.repository | string | `"quay.io/fiware/credentials-config-service"` | til image name ref: https://quay.io/repository/fiware/credentials-config-service |
+| deployment.image.tag | string | `"0.0.1"` | tag of the image to be used |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
@@ -66,12 +66,10 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 | prometheus.enabled | bool | `true` | should prometheus scrape be enabled |
 | prometheus.path | string | `"/prometheus"` | path for prometheus scrape |
 | prometheus.port | int | `9090` | port prometheus scrape is available at |
-| route.til | object | `{"annotations":{},"certificate":{},"enabled":false,"tls":{}}` | route config for the trusted issuers list endpoint |
-| route.til.annotations | object | `{}` | annotations to be added to the route |
-| route.til.tls | object | `{}` | tls configuration for the route |
-| route.tir | object | `{"annotations":{},"certificate":{},"enabled":false,"tls":{}}` | route config for the trusted issuers registry endpoint |
-| route.tir.annotations | object | `{}` | annotations to be added to the route |
-| route.tir.tls | object | `{}` | tls configuration for the route |
+| route.annotations | object | `{}` | annotations to be added to the route |
+| route.certificate | object | `{}` |  |
+| route.enabled | bool | `false` |  |
+| route.tls | object | `{}` | tls configuration for the route |
 | service.annotations | object | `{}` | additional annotations, if required |
 | service.port | int | `8080` | port to be used by the service |
 | service.type | string | `"ClusterIP"` | service type |
