@@ -54,22 +54,3 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
-
-{{/*
-Support for existing database secret 
-*/}}
-{{- define "tir.secretName" -}}
-    {{- if .Values.database.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.database.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "%s" (include "tir.fullname" .) -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "tir.passwordKey" -}}
-    {{- if and (.Values.database.existingSecret.enabled) (.Values.database.existingSecret.key) -}}
-        {{- printf "%s" (tpl .Values.database.existingSecret.key $) -}}
-    {{- else -}}
-        {{- printf "password" -}}
-    {{- end -}}
-{{- end -}}
