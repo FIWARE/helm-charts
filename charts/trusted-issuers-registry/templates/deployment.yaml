@@ -62,17 +62,32 @@ spec:
             periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
-          env:
+          env:            
+            - name: ENDPOINTS_ALL_PORT
+              value: {{ .Values.deployment.healthPort | quote }}
             - name: MICRONAUT_SERVER_PORT
               value: {{ .Values.port | quote }}
             - name: MICRONAUT_METRICS_ENABLED
               value: {{ .Values.prometheus.enabled | quote }}
-            {{- end }}
+            - name: MICRONAUT_CONFIG_FILES
+              value: "/application.yaml"
+          
             {{- with .Values.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+          volumeMounts:
+            - name: application-yaml
+              mountPath: /application.yaml
+              subPath: application.yaml      
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
+      volumes:
+        - name: application-yaml
+          configMap:
+            name: {{ include "tir.fullname" . }}
+            items:
+              - key: application.yaml
+                path: application.yaml
       {{- with .Values.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
