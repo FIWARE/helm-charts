@@ -12,7 +12,7 @@ metadata:
 spec:
   {{- if .Values.certs.pvc.storageClass }}
   storageClassName: {{ .Values.certs.pvc.storageClass }}
-  {{- end -}}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
