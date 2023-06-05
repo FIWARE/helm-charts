@@ -28,8 +28,8 @@ A Helm chart for running the trusted-issuers-registry on kubernetes.
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | deployment.healthPort | int | `9090` | port to request health information at |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| deployment.image.repository | string | `"quay.io/fiware/trusted-issuers-list"` | til image name ref: https://quay.io/repository/fiware/trusted-issuers-list |
-| deployment.image.tag | string | `"0.0.2"` | tag of the image to be used |
+| deployment.image.repository | string | `"quay.io/pulledtim/trusted-issuers-registry"` | til image name ref: https://quay.io/repository/fiware/trusted-issuers-registry |
+| deployment.image.tag | string | `"0.1.0-PRE-5"` | tag of the image to be used |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
@@ -40,6 +40,7 @@ A Helm chart for running the trusted-issuers-registry on kubernetes.
 | deployment.readinessProbe.successThreshold | int | `1` |  |
 | deployment.readinessProbe.timeoutSeconds | int | `30` |  |
 | deployment.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
+| deployment.resources | object | `{}` |  |
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
