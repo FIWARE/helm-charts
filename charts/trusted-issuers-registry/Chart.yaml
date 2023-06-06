@@ -1,7 +1,7 @@
 apiVersion: v1
 name: trusted-issuers-registry
 version: 0.0.1
-appVersion: 0.0.1
+appVersion: 0.3.0
 description: A Helm chart for running the trusted-issuers-registry on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
 keywords:
