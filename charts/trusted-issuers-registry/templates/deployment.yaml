@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tir.fullname" . }}
+  labels:
+    {{ include "tir.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.deployment.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
+  strategy:
+  {{- with .Values.deployment.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "tir.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{ include "tir.labels" . | nindent 8 }}
+        {{- with .Values.deployment.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.deployment.additionalAnnotations -}}
+      annotations:
+        prometheus.io/scrape: {{ .Values.prometheus.enabled | quote }}
+        prometheus.io/path: {{ .Values.prometheus.path }}
+        prometheus.io/port: { { .Values.prometheus.port } }
+        {{- with .Values.deployment.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec: 
+      serviceAccountName: {{ include "tir.serviceAccountName" . }}
+      containers:
+        - name: {{ .Chart.Name }}
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.port}}
+              protocol: TCP
+            - name: http-health
+              containerPort: {{ .Values.deployment.healthPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http-health
+            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http-health
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+          env:            
+            - name: ENDPOINTS_ALL_PORT
+              value: {{ .Values.deployment.healthPort | quote }}
+            - name: MICRONAUT_SERVER_PORT
+              value: {{ .Values.port | quote }}
+            - name: MICRONAUT_METRICS_ENABLED
+              value: {{ .Values.prometheus.enabled | quote }}
+            - name: MICRONAUT_CONFIG_FILES
+              value: "/application.yaml"
+          
+            {{- with .Values.additionalEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+            - name: application-yaml
+              mountPath: /application.yaml
+              subPath: application.yaml      
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+      volumes:
+        - name: application-yaml
+          configMap:
+            name: {{ include "tir.fullname" . }}
+            items:
+              - key: application.yaml
+                path: application.yaml
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
