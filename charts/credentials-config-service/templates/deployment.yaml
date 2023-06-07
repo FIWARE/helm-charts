@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "til.fullname" . }}
+  name: {{ include "ccs.fullname" . }}
   labels:
-    {{ include "til.labels" . | nindent 4 }}
+    {{ include "ccs.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.deployment.replicaCount }}
@@ -15,12 +15,12 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "til.name" . }}
+      app.kubernetes.io/name: {{ include "ccs.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        {{ include "til.labels" . | nindent 8 }}
+        {{ include "ccs.labels" . | nindent 8 }}
         {{- with .Values.deployment.additionalLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -34,7 +34,7 @@ spec:
         {{- end }}
       {{- end }}
     spec: 
-      serviceAccountName: {{ include "til.serviceAccountName" . }}
+      serviceAccountName: {{ include "ccs.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
@@ -81,8 +81,8 @@ spec:
             - name: DATASOURCES_DEFAULT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "til.secretName" . }}
-                  key: {{ include "til.passwordKey" . }}
+                  name: {{ include "ccs.secretName" . }}
+                  key: {{ include "ccs.passwordKey" . }}
             {{- else }}
             - name: DATASOURCES_DEFAULT_URL
               value: "jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"

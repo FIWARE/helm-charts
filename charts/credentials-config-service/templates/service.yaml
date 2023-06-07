@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "til.fullname" . }}
+  name: {{ include "ccs.fullname" . }}
   {{- if .Values.service.annotations }}
   annotations:
     {{ toYaml .Values.service.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{ include "til.labels" . | nindent 4 }}
+    {{ include "ccs.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -16,5 +16,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "til.name" . }}
+    app.kubernetes.io/name: {{ include "ccs.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
