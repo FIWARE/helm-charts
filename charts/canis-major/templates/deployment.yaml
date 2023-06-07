@@ -71,7 +71,7 @@ spec:
               value: {{ .Values.deployment.ngsi.url | quote }}
             - name: MICRONAUT_HTTP_SERVICES_NGSI_PATH
               value: {{ .Values.deployment.ngsi.path | quote }}
-            - name: GENERAL_NGIS_TENANT
+            - name: GENERAL_NGSI_TENANT
               value: {{ .Values.deployment.ngsi.tenant }}
             - name: ETHEREUM_ENABLED
               value: {{ .Values.deployment.ethereum.enabled | quote }}
