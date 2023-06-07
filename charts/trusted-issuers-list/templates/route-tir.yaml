@@ -6,7 +6,7 @@ metadata:
   name: {{ include "til.fullname" . }}-tir
   labels:
     {{ include "til.labels" . | nindent 4 }}
-  {{- if or .Values.route.tir.annotations .Values.route.tir.annotations }}
+  {{- if or .Values.route.tir.annotations .Values.route.tir.certificate }}
   annotations:
     {{- if .Values.route.tir.certificate }}
     cert-utils-operator.redhat-cop.io/certs-from-secret: {{ include "til.fullname" . }}-tir-tls-sec
