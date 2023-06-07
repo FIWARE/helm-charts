@@ -71,7 +71,7 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | statefulset.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | statefulset.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | statefulset.image.repository | string | `"fiware/idm"` | keyrock image name ref: https://hub.docker.com/r/fiware/idm |
-| statefulset.image.tag | string | `"8.3.0"` | tag of the image to be used |
+| statefulset.image.tag | string | `"8.3.3"` | tag of the image to be used |
 | statefulset.livenessProbe.initialDelaySeconds | int | `30` |  |
 | statefulset.livenessProbe.periodSeconds | int | `10` |  |
 | statefulset.livenessProbe.successThreshold | int | `1` |  |
