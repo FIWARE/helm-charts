@@ -1293,6 +1293,26 @@ entries:
   canis-major:
   - apiVersion: v1
     appVersion: 1.5.15
+    created: "2023-06-07T08:26:08.009022905Z"
+    description: A Helm chart for running canis major on kubernetes.
+    digest: bbcc770c2ff53b0ab744f4538f28407c673831a04e2d56a0913a929381e1b24d
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - canismajor
+    - blockchain
+    - dlt
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: canis-major
+    sources:
+    - https://github.com/FIWARE/CanisMajor
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/canis-major-0.0.6/canis-major-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v1
+    appVersion: 1.5.15
     created: "2023-06-07T08:16:33.253591913Z"
     description: A Helm chart for running canis major on kubernetes.
     digest: dd7c94950a1a3758643d11e787edea5ec098135bc103920651ad556ec3d304c3
@@ -3893,4 +3913,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-registry-0.0.1/trusted-issuers-registry-0.0.1.tgz
     version: 0.0.1
-generated: "2023-06-07T08:16:33.254509119Z"
+generated: "2023-06-07T08:26:08.009932811Z"
