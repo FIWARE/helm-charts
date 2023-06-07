@@ -2,7 +2,6 @@
 
 ![Version: 0.0.4](https://img.shields.io/badge/Version-0.0.4-informational?style=flat-square) ![AppVersion: 1.5.15](https://img.shields.io/badge/AppVersion-1.5.15-informational?style=flat-square)
 
-
 A Helm chart for running canis major on kubernetes.
 
 ## Maintainers
