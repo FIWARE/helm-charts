@@ -243,6 +243,10 @@ spec:
             - name: BAE_EORI
               value: {{ .Values.bizEcosystemLogicProxy.token.identifier | quote }}
             {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.ccs.endpoint }}
+            - name: BAE_LP_CCS_CLIENT_ID
+              value: {{ .Values.bizEcosystemLogicProxy.ccs.id | quote }}
+            {{- end }}
       {{- with .Values.bizEcosystemLogicProxy.statefulset.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
