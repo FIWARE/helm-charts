@@ -683,6 +683,21 @@ bizEcosystemLogicProxy:
   # -- Base app path of logic proxy (for versions < 8.1.0: /business-ecosystem-logic-proxy, for versions >= 8.1.0: /opt/business-ecosystem-logic-proxy)
   basePath: /business-ecosystem-logic-proxy
 
+  ccs:
+    # -- Endpoint of the CCS, e.g. http://credentials-config-service:8080
+    endpoint: ""
+    # -- Id of the service
+    id: "baelp"
+    # -- Credential configuration to be registered
+    credentials:
+      - type: "VerifiableCredential"
+        trustedParticipantsLists: [
+          "https://tir.fiware.dev"
+        ]
+        trustedIssuersLists: [
+          "https://til.fiware.dev"
+        ]
+
   ## -- Custom theme configuration
   theme:
     # -- Enable theme
