@@ -1,6 +1,6 @@
 # canis-major
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: 0.0.5](https://img.shields.io/badge/AppVersion-0.0.5-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![AppVersion: 1.5.15](https://img.shields.io/badge/AppVersion-1.5.15-informational?style=flat-square)
 
 A Helm chart for running canis major on kubernetes.
 
@@ -37,7 +37,7 @@ A Helm chart for running canis major on kubernetes.
 | deployment.healthPort | int | `9090` | port to request health information at |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/canis-major"` | canis-major image name ref: https://quay.io/repository/fiware/canis-major |
-| deployment.image.tag | string | `"1.3.11"` | tag of the image to be used |
+| deployment.image.tag | string | `"1.5.15"` | tag of the image to be used |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
