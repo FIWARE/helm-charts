@@ -4,7 +4,7 @@ kind: Certificate
 metadata:
   name: {{ include "canis-major.fullname" . }}
   labels:
-    {{ include "canis-major.metaLabels" . | nindent 4 }}
+    {{ include "canis-major.labels" . | nindent 4 }}
 spec:
   secretName: {{ include "canis-major.fullname" . }}-tls-sec
   issuerRef:
