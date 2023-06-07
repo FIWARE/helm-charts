@@ -54,3 +54,12 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+
+{{- define "canis-major.secretName" -}}
+    {{- if .Values.existingSecret -}}
+        {{- printf "%s" (tpl .Values.existingSecret $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "canis-major.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
