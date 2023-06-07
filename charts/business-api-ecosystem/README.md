@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.6.1](https://img.shields.io/badge/Version-0.6.1-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -125,6 +125,9 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.allowEditParty | bool | `true` | Allow users to edit party attributes |
 | bizEcosystemLogicProxy.allowLocalEORI | bool | `false` | Allow to use organisations from local IDP as participants when creating or acquiring offerings |
 | bizEcosystemLogicProxy.basePath | string | `"/business-ecosystem-logic-proxy"` | Base app path of logic proxy (for versions < 8.1.0: /business-ecosystem-logic-proxy, for versions >= 8.1.0: /opt/business-ecosystem-logic-proxy) |
+| bizEcosystemLogicProxy.ccs.credentials | list | `[{"trustedIssuersLists":["https://til.fiware.dev"],"trustedParticipantsLists":["https://tir.fiware.dev"],"type":"VerifiableCredential"}]` | Credential configuration to be registered |
+| bizEcosystemLogicProxy.ccs.endpoint | string | `""` | Endpoint of the CCS, e.g. http://credentials-config-service:8080 |
+| bizEcosystemLogicProxy.ccs.id | string | `"baelp"` | Id of the service |
 | bizEcosystemLogicProxy.collectStaticCommand | string | `"True"` | Execute the collect static command on startup |
 | bizEcosystemLogicProxy.command | object | `{}` | in case the startup command should be alterd |
 | bizEcosystemLogicProxy.db.database | string | `"belp_db"` | Database name for connecting the database |

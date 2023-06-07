@@ -59,6 +59,15 @@ spec:
             - name: themes
               mountPath: /themes
         {{- end }}
+        {{- if .Values.bizEcosystemLogicProxy.ccs.endpoint}}
+        - name: register-credential-config
+          image: quay.io/curl/curl:8.1.2
+          command: [ "/bin/sh", "-c", "/bin/init.sh" ]
+          volumeMounts:
+            - name: ccs-init-volume
+              mountPath: /bin/init.sh
+              subPath: init.sh
+        {{- end }}
       containers:
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemLogicProxy.name }}
           imagePullPolicy: {{ .Values.bizEcosystemLogicProxy.statefulset.image.pullPolicy }}
@@ -246,7 +255,8 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if or .Values.bizEcosystemLogicProxy.token.enabled .Values.bizEcosystemLogicProxy.extraContainerVolumes .Values.bizEcosystemLogicProxy.theme.enabled }}
+      {{- if or .Values.bizEcosystemLogicProxy.token.enabled .Values.bizEcosystemLogicProxy.extraContainerVolumes
+        .Values.bizEcosystemLogicProxy.theme.enabled .Values.bizEcosystemLogicProxy.ccs.endpoint }}
       volumes:
       {{- if .Values.bizEcosystemLogicProxy.extraContainerVolumes }}
       {{ toYaml .Values.bizEcosystemLogicProxy.extraContainerVolumes | nindent 8 }}
@@ -268,6 +278,12 @@ spec:
             items:
               - key: cert.pem
                 path: cert.pem
+      {{- end }}
+      {{- if .Values.bizEcosystemLogicProxy.ccs.endpoint}}
+        - name: ccs-init-volume
+          configMap:
+            name: {{ include "bizEcosystemLogicProxy.fullname" . }}-ccs
+            defaultMode: 0755
       {{- end }}
       {{- end }}
 {{- end }}
