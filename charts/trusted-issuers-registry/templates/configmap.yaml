@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "tir.fullname" . }}
+  labels:
+    {{- include "tir.labels" . | nindent 4 }}
+data:
+  application.yaml: |-
+    micronaut:
+      server:
+        port: {{ .Values.port }}          
+      security:
+        enabled: true
+        basic-auth:
+          enabled: false
+        authentication: bearer
+        token:
+          jwt:
+            enabled: true
+      http:
+        services:
+          read-timeout: {{.Values.tir.ngsiBroker.timeout}}
+          ngsi:
+            path: {{.Values.tir.ngsiBroker.path}}
+            url: {{.Values.tir.ngsiBroker.url}}
+            read-timeout: {{.Values.tir.ngsiBroker.timeout}}
+      satellite:
+    {{- with .Values.tir.satellite }}
+    {{- toYaml . | nindent 8 }}
+    {{- end }}
