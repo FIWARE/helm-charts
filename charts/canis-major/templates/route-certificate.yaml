@@ -8,8 +8,8 @@ metadata:
 spec:
   secretName: {{ include "canis-major.fullname" . }}-tls-sec
   issuerRef:
-    {{- toYaml .Values.canis-major.route.certificate.issuer | nindent 4 }}
-  commonName: {{ .Values.canis-major.route.host }}
+    {{- toYaml .Values.route.certificate.issuer | nindent 4 }}
+  commonName: {{ .Values.route.host }}
   dnsNames:
-    - {{ .Values.canis-major.route.host }}
+    - {{ .Values.route.host }}
 {{- end -}}
