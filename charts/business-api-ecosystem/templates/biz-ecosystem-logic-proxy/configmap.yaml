@@ -1,3 +1,4 @@
+{{- if .Values.bizEcosystemLogicProxy.ccs.endpoint}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,3 +15,4 @@ data:
       "id": "{{ .Values.bizEcosystemLogicProxy.ccs.id }}",
       "credentials": {{- toJson .Values.bizEcosystemLogicProxy.ccs.credentials }}
     }'
+{{- end }}
