@@ -41,6 +41,36 @@ oauth:
   # Default role: Role to be used if no role is assigned to user (optional)
   #defaultRole: seller
 
+# VC login configuration
+siop:
+  enabled: false
+  callbackPath: /auth/vc/callback
+  clientId: marketplace-client
+  credentialTypes:
+    - VerifiableCredential
+    - MarketplaceUserCredential
+  verifier:
+    host: https://verifier.apps.fiware.fiware.dev
+    qrCodePath: /api/v1/loginQR
+    tokenPath: /token
+    jwksPath: /.well-known/jwks
+  allowedRoles:
+    - seller
+    - customer
+  # Configuration for the Credential Config Service initiation
+  ccs:
+    # -- Endpoint of the CCS
+    endpoint: "http://credentials-config-service:8080"
+    # -- Credential configuration to be registered
+    credentials:
+      - type: "VerifiableCredential"
+        trustedParticipantsLists: [
+          "https://tir.fiware.dev"
+        ]
+        trustedIssuersLists: [
+          "https://til.fiware.dev"
+        ]
+
   
 ## -- External URL used to access the BAE frontend (logic proxy)
 ## Should match the host of the Ingress or Route of the Logic Proxy
@@ -682,21 +712,6 @@ bizEcosystemLogicProxy:
 
   # -- Base app path of logic proxy (for versions < 8.1.0: /business-ecosystem-logic-proxy, for versions >= 8.1.0: /opt/business-ecosystem-logic-proxy)
   basePath: /business-ecosystem-logic-proxy
-
-  ccs:
-    # -- Endpoint of the CCS, e.g. http://credentials-config-service:8080
-    endpoint: ""
-    # -- Id of the service
-    id: "baelp"
-    # -- Credential configuration to be registered
-    credentials:
-      - type: "VerifiableCredential"
-        trustedParticipantsLists: [
-          "https://tir.fiware.dev"
-        ]
-        trustedIssuersLists: [
-          "https://til.fiware.dev"
-        ]
 
   ## -- Custom theme configuration
   theme:

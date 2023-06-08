@@ -1,4 +1,4 @@
-{{- if .Values.bizEcosystemLogicProxy.ccs.endpoint}}
+{{- if .Values.siop.enabled}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8,11 +8,11 @@ metadata:
 data:
   init.sh: |-
     curl -X 'POST' \
-      '{{ .Values.bizEcosystemLogicProxy.ccs.endpoint }}/service' \
+      '{{ .Values.siop.ccs.endpoint }}/service' \
       -H 'Accept: */*' \
       -H 'Content-Type: application/json' \
       -d '{
-      "id": "{{ .Values.bizEcosystemLogicProxy.ccs.id }}",
-      "credentials": {{- toJson .Values.bizEcosystemLogicProxy.ccs.credentials }}
+      "id": "{{ .Values.siop.clientId }}",
+      "credentials": {{- toJson .Values.siop.ccs.credentials }}
     }'
 {{- end }}

@@ -59,7 +59,7 @@ spec:
             - name: themes
               mountPath: /themes
         {{- end }}
-        {{- if .Values.bizEcosystemLogicProxy.ccs.endpoint}}
+        {{- if .Values.siop.enabled}}
         - name: register-credential-config
           image: quay.io/curl/curl:8.1.2
           command: [ "/bin/sh", "-c", "/bin/init.sh" ]
@@ -243,9 +243,25 @@ spec:
             - name: BAE_EORI
               value: {{ .Values.bizEcosystemLogicProxy.token.identifier | quote }}
             {{- end }}
-            {{- if .Values.bizEcosystemLogicProxy.ccs.endpoint }}
-            - name: BAE_LP_CCS_CLIENT_ID
-              value: {{ .Values.bizEcosystemLogicProxy.ccs.id | quote }}
+            {{- if .Values.siop.enabled }}
+            - name: BAE_LP_SIOP_ENABLED
+              value: {{ .Values.siop.enabled | quote }}
+            - name: BAE_LP_SIOP_CLIENT_ID
+              value: {{ .Values.siop.clientId | quote }}
+            - name: BAE_LP_SIOP_VERIFIER_HOST
+              value: {{ .Values.siop.verifier.host | quote }}
+            - name: BAE_LP_SIOP_VERIFIER_QRCODE_PATH
+              value: {{ .Values.siop.verifier.qrCodePath | quote }}
+            - name: BAE_LP_SIOP_VERIFIER_TOKEN_PATH
+              value: {{ .Values.siop.verifier.tokenPath | quote }}
+            - name: BAE_LP_SIOP_VERIFIER_JWKS_PATH
+              value: {{ .Values.siop.verifier.jwksPath | quote }}
+            - name: BAE_LP_SIOP_CALLBACK_PATH
+              value: {{ .Values.externalUrl }}{{ .Values.siop.callbackPath }}
+            - name: BAE_LP_SIOP_ALLOWED_ROLES
+              value: {{ join "," .Values.siop.allowedRoles }}
+            - name: BAE_LP_SIOP_CREDENTIAL_TYPES
+              value: {{ join "," .Values.siop.credentialTypes }}
             {{- end }}
       {{- with .Values.bizEcosystemLogicProxy.statefulset.nodeSelector }}
       nodeSelector:
@@ -260,7 +276,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- if or .Values.bizEcosystemLogicProxy.token.enabled .Values.bizEcosystemLogicProxy.extraContainerVolumes
-        .Values.bizEcosystemLogicProxy.theme.enabled .Values.bizEcosystemLogicProxy.ccs.endpoint }}
+        .Values.bizEcosystemLogicProxy.theme.enabled .Values.siop.enabled }}
       volumes:
       {{- if .Values.bizEcosystemLogicProxy.extraContainerVolumes }}
       {{ toYaml .Values.bizEcosystemLogicProxy.extraContainerVolumes | nindent 8 }}
@@ -283,7 +299,7 @@ spec:
               - key: cert.pem
                 path: cert.pem
       {{- end }}
-      {{- if .Values.bizEcosystemLogicProxy.ccs.endpoint}}
+      {{- if .Values.siop.enabled}}
         - name: ccs-init-volume
           configMap:
             name: {{ include "bizEcosystemLogicProxy.fullname" . }}-ccs
