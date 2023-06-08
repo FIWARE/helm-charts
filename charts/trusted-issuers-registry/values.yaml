@@ -9,6 +9,11 @@ fullnameOverride: ""
 
 # -- configuration used by the application
 tir:
+  # -- additional properties that shall be added to the application config
+  additionalConfigs:
+  #  loggers:
+  #    levels:
+  #      ROOT: INFO
   # -- configuration necessary for accessing the backing NGSI LD broker
   ngsiBroker:
     # -- URL of the NGSI LD broker

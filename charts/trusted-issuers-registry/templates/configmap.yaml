@@ -28,3 +28,6 @@ data:
     {{- with .Values.tir.satellite }}
     {{- toYaml . | nindent 8 }}
     {{- end }}
+    {{- with .Values.tir.additionalConfigs }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
