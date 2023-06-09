@@ -260,8 +260,6 @@ spec:
               value: {{ .Values.externalUrl }}{{ .Values.siop.callbackPath }}
             - name: BAE_LP_SIOP_ALLOWED_ROLES
               value: {{ join "," .Values.siop.allowedRoles }}
-            - name: BAE_LP_SIOP_CREDENTIAL_TYPES
-              value: {{ join "," .Values.siop.credentialTypes }}
             {{- end }}
       {{- with .Values.bizEcosystemLogicProxy.statefulset.nodeSelector }}
       nodeSelector:

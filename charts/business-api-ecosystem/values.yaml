@@ -46,9 +46,6 @@ siop:
   enabled: false
   callbackPath: /auth/vc/callback
   clientId: marketplace-client
-  credentialTypes:
-    - VerifiableCredential
-    - MarketplaceUserCredential
   verifier:
     host: https://verifier.apps.fiware.fiware.dev
     qrCodePath: /api/v1/loginQR
