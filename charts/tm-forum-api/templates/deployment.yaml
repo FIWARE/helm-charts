@@ -1,0 +1,289 @@
+{{- range .Values.apis -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tmforum.fullname" $ }}-{{ .name }}
+  labels:
+    {{ include "tmforum.labels" $ | nindent 4 }}
+spec:
+  serviceAccountName: {{ include "tmforum.serviceAccountName" $ }}
+  {{- if .replicaCount }}
+  replicas: {{ .replicaCount }}
+  {{- else if $.Values.defaultConfig.replicaCount }}
+  replicas: {{ $.Values.defaultConfig.replicaCount }}
+  {{- end }}
+  {{- if .revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .revisionHistoryLimit }}
+  {{- else if $.Values.defaultConfig.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ $.Values.defaultConfig.revisionHistoryLimit }}
+  {{- end }}
+  strategy:
+  {{- if .updateStrategy }}
+  {{- with .updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- else if $.Values.defaultConfig.updateStrategy }}
+  {{- with $.Values.defaultConfig.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "tmforum.name" $ }}-{{ .name }}
+      app.kubernetes.io/instance: {{ $.Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{ include "tmforum.labels" $ | nindent 8 }}
+        {{- if .additionalLabels }}
+        {{- with .additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- else if $.Values.defaultConfig.additionalLabels }}
+        {{- with $.Values.defaultConfig.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+      annotations:
+        {{- if .prometheus -}}
+        prometheus.io/scrape: {{ .prometheus.enabled | quote }}
+        prometheus.io/path: {{ .prometheus.path }}
+        {{- else if $.Values.defaultConfig.prometheus }} 
+        prometheus.io/scrape: {{ $.Values.defaultConfig.prometheus.enabled | quote }}
+        prometheus.io/path: {{ $.Values.defaultConfig.prometheus.path }}
+        {{- end }}
+        {{- if .endpointsPort }}
+        prometheus.io/port: {{ .endpointsPort }}
+        {{- else if $.Values.defaultConfig.endpointsPort }}
+        prometheus.io/port: {{ $.Values.defaultConfig.endpointsPort }}
+        {{- end }}
+        {{- if .additionalAnnotations -}}
+        {{- with .additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- else if $.Values.defaultConfig.additionalAnnotations }}
+        {{- with $.Values.defaultConfig.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+    spec: 
+      serviceAccountName: {{ include "tmforum.serviceAccountName" $ }}
+      containers:
+        - name: {{ .name }}
+          {{- if .pullPolicy }}
+          imagePullPolicy: {{ .pullPolicy }}
+          {{- else }}
+          imagePullPolicy: {{ $.Values.defaultConfig.pullPolicy }}
+          {{- end }}
+          {{- if .repository }}
+          image: "{{ .repository }}/{{ .image }}:{{ .tag }}"
+          {{- else }}
+          image: "{{ $.Values.defaultConfig.repository }}/{{ .image }}:{{ $.Values.defaultConfig.tag }}"
+          {{- end }}
+          ports:
+            - name: http
+              {{- if .port }}
+              containerPort: {{ .port}}
+              {{- else }}
+              containerPort: {{ $.Values.defaultConfig.port}}
+              {{- end}}
+              protocol: TCP
+            - name: http-health
+              {{- if .endpointsPort }}
+              containerPort: {{ .endpointsPort}}
+              {{- else }}
+              containerPort: {{ $.Values.defaultConfig.endpointsPort}}
+              {{- end}}
+              protocol: TCP
+          {{- if .livenessProbe }}
+          livenessProbe:
+            httpGet:
+              path: {{ .livenessProbe.healthPath }}
+              port: http-health
+            initialDelaySeconds: {{ .livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .livenessProbe.periodSeconds }}
+            successThreshold: {{ .livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .livenessProbe.timeoutSeconds }}
+          {{- else if $.Values.defaultConfig.livenessProbe }}
+          livenessProbe:
+            httpGet:
+              path: {{ $.Values.defaultConfig.livenessProbe.healthPath }}
+              port: http-health
+            initialDelaySeconds: {{ $.Values.defaultConfig.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ $.Values.defaultConfig.livenessProbe.periodSeconds }}
+            successThreshold: {{ $.Values.defaultConfig.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ $.Values.defaultConfig.livenessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- if .readinessProbe }}
+          readinessProbe:
+            httpGet:
+              path: {{ .readinessProbe.healthPath }}
+              port: http-health
+            initialDelaySeconds: {{ .readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .readinessProbe.periodSeconds }}
+            successThreshold: {{ .readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .readinessProbe.timeoutSeconds }}
+          {{- else if $.Values.defaultConfig.readinessProbe }}
+          readinessProbe:
+            httpGet:
+              path: {{ $.Values.defaultConfig.readinessProbe.healthPath }}
+              port: http-health
+            initialDelaySeconds: {{ $.Values.defaultConfig.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ $.Values.defaultConfig.readinessProbe.periodSeconds }}
+            successThreshold: {{ $.Values.defaultConfig.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ $.Values.defaultConfig.readinessProbe.timeoutSeconds }}
+          {{- end }}
+          env:
+            {{- if .endpointsPort }}
+            - name: ENDPOINTS_ALL_PORT
+              value: {{ .endpointsPort | quote }}
+            {{- else if $.Values.defaultConfig.endpointsPort }}
+            - name: ENDPOINTS_ALL_PORT
+              value: {{ $.Values.defaultConfig.endpointsPort | quote }}
+            {{- end }}
+            {{- if .port }}
+            - name: MICRONAUT_SERVER_PORT
+              value: {{ .port | quote }}
+            {{- else }}
+            - name: MICRONAUT_SERVER_PORT
+              value: {{ $.Values.defaultConfig.port | quote }}
+            {{- end }}
+            {{- if .prometheus }}
+            {{- if .prometheus.enabled }}
+            - name: MICRONAUT_METRICS_ENABLED
+              value: {{ .prometheus.enabled | quote }}
+            {{- end }}
+            {{- else if $.Values.defaultConfig.prometheus.enabled }}
+            - name: MICRONAUT_METRICS_ENABLED
+              value: {{ $.Values.defaultConfig.prometheus.enabled | quote }}
+            {{- end }}
+            {{- if .logLevel -}}
+            - name: LOGGER_LEVELS_ROOT
+              value: {{ .logLevel | quote}}
+            {{- else if $.Values.defaultConfig.logLevel }}
+            - name: LOGGER_LEVELS_ROOT
+              value: {{ $.Values.defaultConfig.logLevel | quote}}
+            {{- end }}
+
+            {{- if .cache }}
+            {{- if .cache.maximumSize }}
+            - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
+              value: {{ .cache.maximumSize | quote}}
+            {{- end }}
+            {{- if .cache.expireAfterWrite }}
+            - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+              value: {{ .cache.expireAfterWrite | quote}}
+            {{- end }}
+            {{- if .cache.expireAfterAccess }}
+            - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+              value: {{ .cache.expireAfterAccess | quote}}
+            {{- end }}
+            {{- else if $.Values.defaultConfig.cache }}
+            {{- if $.Values.defaultConfig.cache.maximumSize }}
+            - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
+              value: {{ $.Values.defaultConfig.cache.maximumSize | quote}}
+            {{- end }}
+            {{- if $.Values.defaultConfig.cache.expireAfterWrite }}
+            - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+              value: {{ $.Values.defaultConfig.cache.expireAfterWrite | quote}}
+            {{- end }}
+            {{- if $.Values.defaultConfig.cache.expireAfterAccess }}
+            - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+              value: {{ $.Values.defaultConfig.cache.expireAfterAccess | quote}}
+            {{- end }}
+            {{- end }}
+
+            {{- if .ngsiLd }}
+            {{- if .ngsiLd.readTimeout }}
+            - name: MICRONAUT_HTTP_SERVICES_READ_TIMEOUT
+              value: {{ .ngsiLd.readTimeout | quote }}
+            {{- end }}
+            {{- if .ngsiLd.path }}
+            - name: MICRONAUT_HTTP_SERVICES_NGSI_PATH
+              value: {{ .ngsiLd.path | quote }}
+            {{- end }}
+            {{- if .ngsiLd.url }}
+            - name: MICRONAUT_HTTP_SERVICES_NGSI_URL
+              value: {{ .ngsiLd.url | quote }}
+            {{- end }}
+            {{- else if  $.Values.defaultConfig.ngsiLd }}
+            {{- if $.Values.defaultConfig.ngsiLd.readTimeout }}
+            - name: MICRONAUT_HTTP_SERVICES_READ_TIMEOUT
+              value: {{ $.Values.defaultConfig.ngsiLd.readTimeout | quote }}
+            {{- end }}
+            {{- if $.Values.defaultConfig.ngsiLd.path }}
+            - name: MICRONAUT_HTTP_SERVICES_NGSI_PATH
+              value: {{ $.Values.defaultConfig.ngsiLd.path | quote }}
+            {{- end }}
+            {{- if $.Values.defaultConfig.ngsiLd.url }}
+            - name: MICRONAUT_HTTP_SERVICES_NGSI_URL
+              value: {{ $.Values.defaultConfig.ngsiLd.url | quote }}
+            {{- end }}
+            {{- end }}
+
+            {{- if .basePath }}
+            - name: GENERAL_BASEPATH
+              value: {{ .basePath | quote }}
+            {{- end }}
+
+            {{- if .contextUrl }}
+            - name: GENERAL_CONTEXT_URL
+              value: {{ .contextUrl | quote }}
+            {{- else if $.Values.defaultConfig.contextUrl }}
+            - name: GENERAL_CONTEXT_URL
+              value: {{ $.Values.defaultConfig.contextUrl | quote }}
+            {{- end }}
+
+            {{- if .additionalEnvVars }}
+            {{- with .additionalEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- else if $.Values.defaultConfig.additionalEnvVars }}
+            {{- with $.Values.defaultConfig.additionalEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- end }}
+          {{- if .resources }}
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+          {{- else if  $.Values.defaultConfig.resources }}
+          resources:
+            {{- toYaml $.Values.defaultConfig.resources | nindent 12 }}
+          {{- end }}
+      {{- if .nodeSelector }}
+      {{- with .nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- else if $.Values.defaultConfig.nodeSelector }}
+      {{- with $.Values.defaultConfig.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+
+      {{- if .affinity }}
+      {{- with .affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- else if $.Values.defaultConfig.affinity }}
+      {{- with $.Values.defaultConfig.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+
+      {{- if .tolerations }}
+      {{- with .tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- else if $.Values.defaultConfig.tolerations }} 
+      {{- with $.Values.defaultConfig.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+---
+{{- end }}

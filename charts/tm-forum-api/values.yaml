@@ -1,0 +1,237 @@
+## Default values for tmforum.
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+# -- option to override the name config in the _helpers.tpl
+nameOverride: ""
+# -- option to override the fullname config in the _helpers.tpl
+fullnameOverride: ""
+
+# -- if a tmforum specific service account should be used, it can be configured here
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # -- specifies if the account should be created
+  create: false
+
+## pod autoscaling configuration, use for automatic scaling of the broker pods
+autoscaling:
+  # -- should autoscaling be enabled for the context broker
+  enabled: false
+  # -- minimum number of running pods
+  minReplicas: 1
+  # -- maximum number of running pods
+  maxReplicas: 10
+  # -- metrics to react on
+  metrics: []
+  # -- List of MetricSpecs to decide whether to scale
+  # See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#metricspec-v2beta2-autoscaling
+  # scaler targets to hold average cpu around 80%
+  #- type: Resource
+  #  resource:
+  #    name: cpu
+  #    target:
+  #      type: Utilization
+  #      averageUtilization: 80
+  ## scaler targets to hold average memory around 80%
+  #  - type: Resource
+  #    resource:
+  #      name: memory
+  #      target:
+  #        type: Utilization
+  #        averageUtilization: 80
+
+## openshift specific route definition. Will not work on plain k8s
+route:
+  ## -- should the deployment create openshift routes
+  enabled: false
+  # -- annotations to be added to the route
+  annotations: {}
+  # -- host to be used
+  host: localhost
+  # -- tls configuration for the route
+  tls: {}
+  # termination: edge
+
+## ingress configuration
+ingress:
+  # -- should there be an ingress to connect tmforum with the public internet
+  enabled: false
+  # -- annotations to be added to the ingress
+  annotations: {}
+    # kubernetes.io/ingress.class: "ambassador"
+    ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
+    # kubernetes.io/tls-acme: "true"
+    # ingress.kubernetes.io/ssl-redirect: "true"
+  # -- all hosts to be provided
+  hosts: 
+    # -- provide a hosts and the paths that should be available
+    - host: localhost
+      # paths:
+      # - /
+  # -- configure the ingress' tls
+  tls: []
+    # - secretName: tmforum-tls
+      # hosts:
+        # - tmforum.fiware.org
+
+## configuration to be used by every api-deployment if nothing specific is provided.
+defaultConfig:
+   # -- additional labels for the deployment, if required
+  additionalLabels: {}
+  # -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  # -- selector template
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  # -- tolerations template
+  # ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  # -- affinity template
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+  # -- additional sidecars for the deployment, if required
+  sidecars: []
+  # -- initial number of target replications, can be different if autoscaling is enabled
+  replicaCount: 1
+  # -- number of old replicas to be retained
+  revisionHistoryLimit: 3
+  ## configuration of the tmforum update strategy
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 1
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 0
+
+  # -- tmforum resource requests and limits, we leave the default empty to make that a concious choice by the user.
+  # for the autoscaling to make sense, you should configure this.
+  # resources:
+    # limits:
+      # cpu: 100m
+      # memory: 128Mi
+    # requests:
+      # cpu: 100m
+      # memory: 128Mi
+  ## liveness and readiness probes of the tmforum api
+  # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  # if one of the values should be overwritten by the individual api, you need to provide all values.
+  livenessProbe:
+    # -- path to be used for the health check
+    healthPath: /health
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 30
+  readinessProbe:
+    # -- path to be used for the health check
+    readinessPath: /health
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 30
+   
+  # -- a list of additional env vars to be set, check the tm-forum api docu for all available options
+  additonalEnvVars: []
+
+  # -- configuration to be used for the image of the container
+  image:
+    # -- repository to get the container from
+    repository: quay.io/wi_stefan
+    # -- tag to be used, most of the time the apis will use the same version
+    tag: 0.4.1
+    # -- pull policy to be used
+    pullPolicy: IfNotPresent
+  # -- log level of the api
+  logLevel: DEBUG
+  # -- default context to be used when contacting the context broker
+  contextUrl: https://smartdatamodels.org/context.jsonld
+  # -- port to be used for the app
+  port: 8080
+  # -- cache config for connecting the broker
+  cache:
+    # -- maximum size of the cache
+    maximumSize: 1000
+    # -- how fast should the cache entry expire after it was written?
+    expireAfterWrite: 2s
+    # -- how fast should the cache entry expire after it was last accessed?
+    expireAfterAccess: 2s
+
+  # -- metrics and health port
+  endpointsPort: 9090
+  # -- configuration for proemtheus metrics
+  prometheus:
+    # -- path to get the metrics from
+    path: /prometheus
+    # -- should it be enabled
+    enabled: true
+
+  # --  ngsi-ld broker connection information
+  ngsiLd:
+    # -- timeout for requests ot the broker
+    readTimeout: 30s
+    # -- base path for the ngsi-ld api
+    path: ngsi-ld/v1
+    # -- address of the broker
+    url: http://context-broker:1026
+
+## configuration for the k8s service to access tmforum
+service:
+  # -- service type
+  type: ClusterIP
+  # -- port to be used by the service
+  port: 8080
+  # -- addtional annotations, if required
+  annotations: {}
+
+# -- list of apis to be deployed
+# -- every api needs to define a name and image. Basepath is required when routes or ingress will be enabled. Beside that, they can overwrite the default-config by using the same keys.
+# -- be aware: when you change the image repositrory or the tag for an api, you have to provide both values for the changes to take effect
+apis:
+  - name: party-catalog
+    image: tmforum-party-catalog
+    basePath: /tmf-api/party/v4
+
+  - name: customer-bill-management
+    image: tmforum-customer-bill-management
+    basePath: /tmf-api/customerBillManagement/v4
+
+  - name: customer-management
+    image: tmforum-customer-management
+    basePath: /tmf-api/customerManagement/v4
+
+  - name: product-catalog
+    image: tmforum-product-catalog
+    basePath: /tmf-api/productCatalogManagement/v4
+
+  - name: product-inventory
+    image: tmforum-product-inventory
+    basePath: /tmf-api/productInventory/v4
+
+  - name: product-inventory
+    image: tmforum-product-inventory
+    basePath: /tmf-api/productInventory/v4
+
+  - name: product-ordering-management
+    image: tmforum-product-ordering-management
+    basePath: /tmf-api/productOrderingManagement/v4
+
+  - name: resource-catalog
+    image: tmforum-resource-catalog
+    basePath: /tmf-api/resourceCatalog/v4
+
+  - name: resource-function-activation
+    image: tmforum-resource-function-activation
+    basePath: /tmf-api/resourceFunctionActivation/v4
+
+  - name: resource-inventory
+    image: tmforum-resource-inventory
+    basePath: /tmf-api/resourceInventoryManagement/v4
+
+  - name: service-catalog
+    image: tmforum-service-catalog
+    basePath: /tmf-api/serviceCatalogManagement/v4
+
+
