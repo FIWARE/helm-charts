@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.6.3](https://img.shields.io/badge/Version-0.6.3-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.6.4](https://img.shields.io/badge/Version-0.6.4-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -273,8 +273,6 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | siop.ccs.credentials | list | `[{"trustedIssuersLists":["https://til.fiware.dev"],"trustedParticipantsLists":["https://tir.fiware.dev"],"type":"VerifiableCredential"}]` | Credential configuration to be registered |
 | siop.ccs.endpoint | string | `"http://credentials-config-service:8080"` | Endpoint of the CCS |
 | siop.clientId | string | `"marketplace-client"` |  |
-| siop.credentialTypes[0] | string | `"VerifiableCredential"` |  |
-| siop.credentialTypes[1] | string | `"MarketplaceUserCredential"` |  |
 | siop.enabled | bool | `false` |  |
 | siop.verifier.host | string | `"https://verifier.apps.fiware.fiware.dev"` |  |
 | siop.verifier.jwksPath | string | `"/.well-known/jwks"` |  |
