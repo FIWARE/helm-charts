@@ -210,10 +210,6 @@ apis:
     image: tmforum-product-inventory
     basePath: /tmf-api/productInventory/v4
 
-  - name: product-inventory
-    image: tmforum-product-inventory
-    basePath: /tmf-api/productInventory/v4
-
   - name: product-ordering-management
     image: tmforum-product-ordering-management
     basePath: /tmf-api/productOrderingManagement/v4

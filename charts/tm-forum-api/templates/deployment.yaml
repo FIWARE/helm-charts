@@ -6,7 +6,6 @@ metadata:
   labels:
     {{ include "tmforum.labels" $ | nindent 4 }}
 spec:
-  serviceAccountName: {{ include "tmforum.serviceAccountName" $ }}
   {{- if .replicaCount }}
   replicas: {{ .replicaCount }}
   {{- else if $.Values.defaultConfig.replicaCount }}
@@ -34,6 +33,8 @@ spec:
   template:
     metadata:
       labels:
+        app.kubernetes.io/name: {{ include "tmforum.name" $ }}-{{ .name }}
+        app.kubernetes.io/instance: {{ $.Release.Name }}
         {{ include "tmforum.labels" $ | nindent 8 }}
         {{- if .additionalLabels }}
         {{- with .additionalLabels }}
@@ -55,7 +56,7 @@ spec:
         {{- if .endpointsPort }}
         prometheus.io/port: {{ .endpointsPort }}
         {{- else if $.Values.defaultConfig.endpointsPort }}
-        prometheus.io/port: {{ $.Values.defaultConfig.endpointsPort }}
+        prometheus.io/port: {{ $.Values.defaultConfig.endpointsPort | quote }}
         {{- end }}
         {{- if .additionalAnnotations -}}
         {{- with .additionalAnnotations }}
@@ -73,12 +74,12 @@ spec:
           {{- if .pullPolicy }}
           imagePullPolicy: {{ .pullPolicy }}
           {{- else }}
-          imagePullPolicy: {{ $.Values.defaultConfig.pullPolicy }}
+          imagePullPolicy: {{ $.Values.defaultConfig.image.pullPolicy }}
           {{- end }}
           {{- if .repository }}
           image: "{{ .repository }}/{{ .image }}:{{ .tag }}"
           {{- else }}
-          image: "{{ $.Values.defaultConfig.repository }}/{{ .image }}:{{ $.Values.defaultConfig.tag }}"
+          image: "{{ $.Values.defaultConfig.image.repository }}/{{ .image }}:{{ $.Values.defaultConfig.image.tag }}"
           {{- end }}
           ports:
             - name: http
@@ -117,7 +118,7 @@ spec:
           {{- if .readinessProbe }}
           readinessProbe:
             httpGet:
-              path: {{ .readinessProbe.healthPath }}
+              path: {{ .readinessProbe.readinessPath }}
               port: http-health
             initialDelaySeconds: {{ .readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .readinessProbe.periodSeconds }}
@@ -126,7 +127,7 @@ spec:
           {{- else if $.Values.defaultConfig.readinessProbe }}
           readinessProbe:
             httpGet:
-              path: {{ $.Values.defaultConfig.readinessProbe.healthPath }}
+              path: {{ $.Values.defaultConfig.readinessProbe.readinessPath }}
               port: http-health
             initialDelaySeconds: {{ $.Values.defaultConfig.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ $.Values.defaultConfig.readinessProbe.periodSeconds }}
@@ -157,6 +158,8 @@ spec:
             - name: MICRONAUT_METRICS_ENABLED
               value: {{ $.Values.defaultConfig.prometheus.enabled | quote }}
             {{- end }}
+            - name: ENDPOINTS_HEALTH_ENABLED
+              value: "true"
             {{- if .logLevel -}}
             - name: LOGGER_LEVELS_ROOT
               value: {{ .logLevel | quote}}
