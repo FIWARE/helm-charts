@@ -1,10 +1,7 @@
 # tm-forum-api
 
 ![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: 0.4.1](https://img.shields.io/badge/AppVersion-0.4.1-informational?style=flat-square)
-
 A Helm chart for running the FIWARE TMForum-APIs
-
-**Homepage:** <https://github.com/FIWARE/tmforum-api>
 
 ## Maintainers
 
@@ -12,13 +9,59 @@ A Helm chart for running the FIWARE TMForum-APIs
 | ---- | ------ | --- |
 | wistefan | <stefan.wiedemann@fiware.org> |  |
 
+## Individual Configuration
+
+The chart deploys all configured APIs, using the same default-configuration for each of them to make the deployment easier. However, it also allows to overwrite
+every configuration for the individual API as following:
+
+While the default-config might set:
+```yaml
+  defaultConfig:
+    replicaCount: 1
+    image:
+      # -- repository to get the container from
+      repository: quay.io/wi_stefan
+      # -- tag to be used, most of the time the apis will use the same version
+      tag: 0.4.1
+      # -- pull policy to be used
+      pullPolicy: IfNotPresent
+    # -- log level of the api
+    logLevel: WARN
+    # -- cache config for connecting the broker
+    cache:
+      # -- maximum size of the cache
+      maximumSize: 1000
+      # -- how fast should the cache entry expire after it was written?
+      expireAfterWrite: 2s
+```
+
+Those values can be overwritten on an individual API level as following:
+
+```yaml
+apis:
+  # uses the default
+  - name: party-catalog
+    image: tmforum-party-catalog
+    basePath: /tmf-api/party/v4
+
+  # customized
+  - name: product-catalog
+    image: tmforum-product-catalog
+    basePath: /tmf-api/productCatalogManagement/v4
+    replicaCount: 3
+    image:
+      repository: quay.io/my_own_repo
+      tag: 1.2.3
+      pullPolicy: Always
+    logLevel: DEBUG
+    cache:
+      maximumSize: 3000
+```
+For all untouched values, the customized deployement will still use the defaults, while the explicitly set once are overwritten.
+
 ## Source Code
 
 * <https://github.com/FIWARE/tmforum-api>
-
-## Requirements
-
-Kubernetes: `>= 1.19-0`
 
 ## Values
 
