@@ -456,6 +456,28 @@ entries:
   business-api-ecosystem:
   - apiVersion: v2
     appVersion: 8.0.0
+    created: "2023-06-28T07:44:44.341517956Z"
+    description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
+      Marketplace) on Kubernetes
+    digest: cbe90155470f0d3d830210ec76e1fbc5ec2b36fa467bdff3b5fc479ca4fac75a
+    home: https://business-api-ecosystem.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - marketplace
+    - bae
+    - tmforum
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: business-api-ecosystem
+    sources:
+    - https://github.com/FIWARE-TMForum/Business-API-Ecosystem
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-0.6.5/business-api-ecosystem-0.6.5.tgz
+    version: 0.6.5
+  - apiVersion: v2
+    appVersion: 8.0.0
     created: "2023-06-09T09:22:26.026745216Z"
     description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
       Marketplace) on Kubernetes
@@ -3893,6 +3915,29 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
+  tm-forum-api:
+  - annotations:
+      charts.openshift.io/name: tm-forum-api
+    apiVersion: v2
+    appVersion: 0.4.1
+    created: "2023-06-28T07:44:44.503081247Z"
+    description: A Helm chart for running the FIWARE TMForum-APIs
+    digest: f37fa8c6a5c04ee303e2cb17385627ad07341a9cf4b71090661783b07fb333e1
+    home: https://github.com/FIWARE/tmforum-api
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - tmforum
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: tm-forum-api
+    sources:
+    - https://github.com/FIWARE/tmforum-api
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/tm-forum-api-0.0.1/tm-forum-api-0.0.1.tgz
+    version: 0.0.1
   trusted-issuers-list:
   - apiVersion: v1
     appVersion: 0.0.2
@@ -4084,4 +4129,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-registry-0.0.1/trusted-issuers-registry-0.0.1.tgz
     version: 0.0.1
-generated: "2023-06-09T09:22:26.027645718Z"
+generated: "2023-06-28T07:44:44.503973609Z"
