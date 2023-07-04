@@ -3,7 +3,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: orion-init-data-{{ randAlphaNum 5 | lower }}
+  name: {{ include "orion.fullname" . }}-init-data
   annotations:
     "helm.sh/hook": post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation
@@ -14,7 +14,7 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-        - name: orion-init-data
+        - name: {{ include "orion.fullname" . }}-init-data
           image: alpine/curl
           command:
             - /bin/sh
@@ -31,5 +31,5 @@ spec:
           projected:
             sources:
               - configMap:
-                  name: orion-init-data-cm
+                  name: {{ include "orion.fullname" . }}-init-data-cm
 {{- end }}

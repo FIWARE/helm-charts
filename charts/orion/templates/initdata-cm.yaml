@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: orion-init-data-cm
+  name: {{ include "orion.fullname" . }}-init-data-cm
 data:
   entrypoint.sh: |-
     {{- range $d := .Values.initData.entities }}
