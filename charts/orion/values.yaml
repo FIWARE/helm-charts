@@ -307,3 +307,17 @@ mongo:
 test:
   # -- should the test be enabled?
   enabled: true
+
+## Configuration for the creation of initial entities
+initData:
+  # -- should the creation of initial entities be enabled
+  initEnabled: false
+  # -- Array of entities to be created
+  entities: []
+  #  - name: entity001.json
+  #    data: |
+  #      {
+  #        "type": "type",
+  #        "id: "id",
+  #        ...
+  #      }

@@ -1,0 +1,16 @@
+{{- if .Values.initData.initEnabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "orion.fullname" . }}-init-data-cm
+data:
+  entrypoint.sh: |-
+    {{- range $d := .Values.initData.entities }}
+    curl -X POST ${ORION_HOST}/ngsi-ld/v1/entities --header "Content-Type: application/ld+json" -d @/data/{{ $d.name }}
+    {{- end }}
+  {{ range $d := .Values.initData.entities }}
+  {{ $d.name }}: |
+    {{- $d.data | nindent 4 }}
+  {{- end }}
+
+{{- end }}

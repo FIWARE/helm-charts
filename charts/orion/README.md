@@ -1,6 +1,6 @@
 # orion
 
-![Version: 1.1.1](https://img.shields.io/badge/Version-1.1.1-informational?style=flat-square) ![AppVersion: 1.0.1](https://img.shields.io/badge/AppVersion-1.0.1-informational?style=flat-square)
+![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![AppVersion: 1.0.1](https://img.shields.io/badge/AppVersion-1.0.1-informational?style=flat-square)
 
 A Helm chart for running the fiware orion-ld context broker on kubernetes.
 
@@ -75,6 +75,8 @@ Kubernetes: `>= 1.19-0`
 | ingress.enabled | bool | `false` | should there be an ingress to connect orion with the public internet |
 | ingress.hosts | list | `[]` | all hosts to be provided |
 | ingress.tls | list | `[]` | configure the ingress' tls |
+| initData.entities | list | `[]` | Array of entities to be created |
+| initData.initEnabled | bool | `false` | should the creation of initial entities be enabled |
 | mongo.enabled | bool | `true` | should mongodb be enabled |
 | mongo.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used for mongo |
 | mongo.image.repository | string | `"quay.io/opencloudio/ibm-mongodb"` | mongo image name |
