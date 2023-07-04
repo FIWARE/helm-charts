@@ -1,0 +1,35 @@
+{{- if .Values.initData.initEnabled -}}
+{{- $fullName := include "orion.fullname" . -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: orion-init-data-{{ randAlphaNum 5 | lower }}
+  annotations:
+    "helm.sh/hook": post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-weight": "1"
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: orion-init-data
+          image: alpine/curl
+          command:
+            - /bin/sh
+            - /data/entrypoint.sh
+          volumeMounts:
+            - name: orion-init-data-volume
+              mountPath: "/data"
+              readOnly: true
+          env:
+            - name: ORION_HOST
+              value: {{ $fullName }}
+      volumes:
+        - name: orion-init-data-volume
+          projected:
+            sources:
+              - configMap:
+                  name: orion-init-data-cm
+{{- end }}
