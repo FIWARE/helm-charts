@@ -26,6 +26,8 @@ spec:
           env:
             - name: ORION_HOST
               value: {{ $fullName }}
+            - name: ORION_PORT
+              value: {{ .Values.service.port }}
       volumes:
         - name: orion-init-data-volume
           projected:
