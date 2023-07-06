@@ -1,0 +1,37 @@
+{{- if .Values.initData.initEnabled -}}
+{{- $fullName := include "til.fullname" . -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "til.fullname" . }}-init-data
+  annotations:
+    "helm.sh/hook": post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-weight": "1"
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: {{ include "til.fullname" . }}-init-data
+          image: alpine/curl
+          command:
+            - /bin/sh
+            - /data/entrypoint.sh
+          volumeMounts:
+            - name: til-init-data-volume
+              mountPath: "/data"
+              readOnly: true
+          env:
+            - name: TIL_HOST
+              value: {{ $fullName }}
+            - name: TIL_PORT
+              value: {{ .Values.service.port | quote }}
+      volumes:
+        - name: til-init-data-volume
+          projected:
+            sources:
+              - configMap:
+                  name: {{ include "til.fullname" . }}-init-data-cm
+{{- end }}

@@ -208,5 +208,27 @@ database:
     # -- key to retrieve the password from
     key: password
 
-
-
+## Configuration for the creation of initial TIL entries
+initData:
+  # -- should the creation of initial entries be enabled
+  initEnabled: false
+  # -- Array of trusted issuers to be created
+  issuers: []
+    #- name: issuer001
+    #  issuer:
+    #    did: "did:web:my-did:did"
+    #    credentials:
+    #      - validFor:
+    #          from: "2022-07-21T17:32:28Z"
+    #          to: "2040-07-21T17:32:28Z"
+    #        credentialsType: "MyService"
+    #        claims:
+    #          - name: "roles"
+    #            allowedValues: 
+    #              - - names:
+    #                  - "MY_ROLE"
+    #                  target: "did:web:my-target:did"
+    #      - validFor:
+    #          from: "2022-07-21T17:32:28Z"
+    #          to: "2040-07-21T17:32:28Z"
+    #        credentialsType: "VerifiableCredential"
