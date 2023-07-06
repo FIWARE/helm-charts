@@ -1,6 +1,6 @@
 # trusted-issuers-list
 
-![Version: 0.0.6](https://img.shields.io/badge/Version-0.0.6-informational?style=flat-square) ![AppVersion: 0.0.2](https://img.shields.io/badge/AppVersion-0.0.2-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![AppVersion: 0.0.2](https://img.shields.io/badge/AppVersion-0.0.2-informational?style=flat-square)
 
 A Helm chart for running the trusted-issuers-list on kubernetes.
 
@@ -61,6 +61,8 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 | ingress.enabled | bool | `false` | should there be an ingress to connect til with the public internet |
 | ingress.hosts | list | `[]` | all hosts to be provided |
 | ingress.tls | list | `[]` | configure the ingress' tls |
+| initData.initEnabled | bool | `false` | should the creation of initial entries be enabled |
+| initData.issuers | list | `[]` | Array of trusted issuers to be created |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | port | int | `8080` | port that the til container uses |
 | prometheus.enabled | bool | `true` | should prometheus scrape be enabled |

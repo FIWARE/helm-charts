@@ -1,0 +1,16 @@
+{{- if .Values.initData.initEnabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "til.fullname" . }}-init-data-cm
+data:
+  entrypoint.sh: |-
+    {{- range $d := .Values.initData.issuers }}
+    curl -X POST ${TIL_HOST}:${TIL_PORT}/issuer --header "Content-Type: application/json" -d @/data/{{ $d.name }}.json
+    {{- end }}
+  {{ range $d := .Values.initData.issuers }}
+  {{ $d.name }}.json: |
+    {{- $d.issuer | toJson | nindent 4 }}
+  {{- end }}
+
+{{- end }}
