@@ -70,8 +70,25 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v14.6
       
-      - name: List all changed files
+      - id: pr
+        uses: actions-ecosystem/action-get-merged-pull-request@v1.0.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update versions
         run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done
+          cp .github/build/update-version.sh update-version.sh 
+          ./update-version.sh ${{ steps.changed-files.outputs.all_changed_files }} ${{ steps.pr.outputs.labels }}
+
+      - name: Commit files
+        continue-on-error: true
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Update helm documentation" -a
+
+      - name: Push changes
+        continue-on-error: true
+        uses: ad-m/github-push-action@master
+        with:
+          branch: ${{ github.ref }}
