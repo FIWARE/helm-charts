@@ -1,0 +1,10 @@
+{{- if and .Values.initData.initEnabled .Values.initData.scriptData -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "keyrock.fullname" . }}-init-data-cm
+data:
+  {{- with .Values.initData.scriptData }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}

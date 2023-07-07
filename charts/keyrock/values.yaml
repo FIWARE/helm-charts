@@ -257,7 +257,7 @@ token:
     
 # -- a list of additional env vars to be set, check the keyrock docu for all available options
 # ref: https://fiware-idm.readthedocs.io/en/latest/installation_and_administration_guide/environment_variables/index.html
-additonalEnvVars: []
+additionalEnvVars: []
 # - name: IDM_TITLE
 #   value: MyKeyrock
 
@@ -265,3 +265,25 @@ additonalEnvVars: []
 # -- Name of existing Secret containing extra env vars (in case of sensitive data)
 extraEnvVarsSecret: ""
 
+# -- Configuration for initial data created during deployment
+initData:
+  # -- should the creation of initial data be enabled
+  initEnabled: true
+  # -- Image to be used for post-hook job
+  image: mysql:5.7
+  # -- Command to be executed
+  command:
+    - /bin/sh
+    - /scripts/create.sh
+  # -- Volume where ConfigMap is mounted
+  volumeMount:
+    name: scripts
+    mountPath: /scripts
+  # -- Use existing ConfigMap
+  existingConfigMap: ""
+  # -- Script data for ConfigMap to be created (mandatory when no 'existingConfigMap' is set)
+  scriptData: {}
+  # -- Environment variables for job
+  env: []
+    #- name: ENV_NAME
+    #  value: ENV_VALUE
