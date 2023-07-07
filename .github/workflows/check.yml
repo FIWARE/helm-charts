@@ -140,4 +140,4 @@ jobs:
         continue-on-error: true
         uses: ad-m/github-push-action@master
         with:
-          branch: ${{ GITHUB_HEAD_REF }}
+          branch: ${GITHUB_HEAD_REF}
