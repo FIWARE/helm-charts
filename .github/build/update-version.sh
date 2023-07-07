@@ -5,6 +5,7 @@ prType=$2
 declare -A changedCharts
 
 echo Type is $prType
+echo Files to be evaluated $changedFiles
 
 for file in ${changedFiles[@]}; do         
 
