@@ -106,7 +106,6 @@ jobs:
       - name: Update versions
         shell: bash
         run: |
-          prType=${{ steps.pr.outputs.labels }}
           declare -A changedCharts
 
           for file in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}; do         
@@ -126,15 +125,15 @@ jobs:
               minor=$(cut -d'.' -f2 <<< "$version")
               patch=$(cut -d'.' -f3 <<< "$version")
 
-              echo Update version with type $prType
-              if [ $prType="major" ]; then 
+              echo Update version with type ${{ steps.pr.outputs.labels }}
+              if [ ${{ steps.pr.outputs.labels }}="major" ]; then 
                   major=$((major+1))
                   minor=0
                   patch=0
-              elif [ $prType="minor" ]; then
+              elif [ ${{ steps.pr.outputs.labels }}="minor" ]; then
                   minor=$((minor+1))
                   patch=0
-              elif [ $prType="patch" ]; then 
+              elif [ ${{ steps.pr.outputs.labels }}="patch" ]; then 
                   patch=$((patch+1))
               fi
               echo Update version to $major.$minor.$patch for $c
