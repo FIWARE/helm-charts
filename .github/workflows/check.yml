@@ -98,6 +98,7 @@ jobs:
 
       - name: Update versions
         run: |
+          echo ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
           cp .github/build/update-version.sh update-version.sh 
           ./update-version.sh ${{ steps.changed-files.outputs.all_changed_and_modified_files }} ${{ steps.pr.outputs.labels }}
           rm ./update-version.sh
