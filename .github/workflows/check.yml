@@ -125,17 +125,18 @@ jobs:
               minor=$(cut -d'.' -f2 <<< "$version")
               patch=$(cut -d'.' -f3 <<< "$version")
 
-              echo Update version $version with type ${{ steps.bump.outputs.match }}
-              if [ ${{ steps.bump.outputs.match }}=="major" ]; then 
+              prType=${{ steps.bump.outputs.match }}
+              echo Update version $version with type $prType
+              if [ $prType="major" ]; then 
                   echo Update major
                   major=$((major+1))
                   minor=0
                   patch=0
-              elif [ ${{ steps.bump.outputs.match }}=="minor" ]; then
+              elif [ $prType="minor" ]; then
                   echo Update minor
                   minor=$((minor+1))
                   patch=0
-              elif [ ${{ steps.bump.outputs.match }}=="patch" ]; then 
+              elif [ $prType="patch" ]; then 
                   echo Update patch
                   patch=$((patch+1))
               fi
