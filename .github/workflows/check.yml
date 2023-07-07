@@ -3,6 +3,12 @@ name: Chart Test
 on:
   push:
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - labeled
+      - unlabeled
     branches:
       - main
 
