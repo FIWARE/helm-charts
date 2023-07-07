@@ -127,6 +127,12 @@ jobs:
         run:
           docker run --rm --volume "$(pwd):/helm-docs" -u $(id -u) jnorwood/helm-docs:latest
 
+      - name: check
+        run: |
+          git status
+          git branch
+          
+
       - name: Commit files
         continue-on-error: true
         run: |
