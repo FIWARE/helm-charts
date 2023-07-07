@@ -2507,6 +2507,28 @@ entries:
   keyrock:
   - apiVersion: v1
     appVersion: 8.3.3
+    created: "2023-07-07T13:10:05.643098189Z"
+    description: A Helm chart for running the fiware idm keyrock on kubernetes.
+    digest: 6727adb381674ab5268e1584bb8803fa1dee63c87ef90b2ecd60d1b9c573027c
+    home: https://fiware-idm.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - keyrock
+    - idm
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: keyrock
+    sources:
+    - https://github.com/ging/fiware-idm
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/keyrock-0.7.2/keyrock-0.7.2.tgz
+    version: 0.7.2
+  - apiVersion: v1
+    appVersion: 8.3.3
     created: "2023-07-07T11:55:06.327458647Z"
     description: A Helm chart for running the fiware idm keyrock on kubernetes.
     digest: 50ed042331b7577ed6b98f73a79de3530ea83e6d25387cf8fac44aec7ce486d2
@@ -4264,4 +4286,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-registry-0.0.1/trusted-issuers-registry-0.0.1.tgz
     version: 0.0.1
-generated: "2023-07-07T11:55:06.331127103Z"
+generated: "2023-07-07T13:10:05.644096677Z"
