@@ -72,13 +72,18 @@ jobs:
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v14.6
-    
+        
+
       # prepare yaml parser
       - uses: actions/setup-go@v4
       - name: Install yq
         run: |
           go install github.com/mikefarah/yq/v4@latest
           yq --version
+
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Update versions
         shell: bash
@@ -131,7 +136,7 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git status
-          echo commit ${GITHUB_HEAD_REF}
+          echo commit
           git commit -m "Update helm documentation" -a
           echo status update
           git status
@@ -140,4 +145,4 @@ jobs:
         continue-on-error: true
         uses: ad-m/github-push-action@master
         with:
-          branch: ${GITHUB_HEAD_REF}
+          branch: ${{ github.head_ref }}
