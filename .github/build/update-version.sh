@@ -1,6 +1,6 @@
 #!/bin/bash
 
-changedFiles=$1
+declare -a changedFiles=("${!1}")
 prType=$2
 declare -A changedCharts
 
