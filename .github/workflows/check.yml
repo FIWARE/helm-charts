@@ -72,10 +72,6 @@ jobs:
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v14.6
-
-      - uses: actions/checkout@v3
-        with: 
-          ref: ${{ GITHUB_HEAD_REF }}
     
       # prepare yaml parser
       - uses: actions/setup-go@v4
@@ -135,7 +131,7 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git status
-          echo commit
+          echo commit ${GITHUB_HEAD_REF}
           git commit -m "Update helm documentation" -a
           echo status update
           git status
