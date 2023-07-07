@@ -125,14 +125,16 @@ jobs:
               major=$(cut -d'.' -f1 <<< "$version")
               minor=$(cut -d'.' -f2 <<< "$version")
               patch=$(cut -d'.' -f3 <<< "$version")
-              if [ $prType = "major" ]; then 
+
+              echo Update version with type $prType
+              if [ $prType="major" ]; then 
                   major=$((major+1))
                   minor=0
                   patch=0
-              elif [ $prType = "minor" ]; then
+              elif [ $prType="minor" ]; then
                   minor=$((minor+1))
                   patch=0
-              elif [ $prType = "patch" ]; then 
+              elif [ $prType="patch" ]; then 
                   patch=$((patch+1))
               fi
               echo Update version to $major.$minor.$patch for $c
