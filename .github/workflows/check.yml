@@ -1,7 +1,6 @@
 name: Chart Test
 
 on:
-  push:
   pull_request:
     types:
       - opened
@@ -86,7 +85,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 10
+          fetch-depth: 0
 
       - name: Get changed files
         id: changed-files
