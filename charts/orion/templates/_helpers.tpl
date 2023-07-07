@@ -46,16 +46,24 @@ Create the name of the service account to use
 orion secrets
 */}}
 {{- define "orion.secretName" -}}
-    {{- if and .Values.broker.db.existingSecret .Values.broker.db.existingSecret.name -}}
-        {{- printf "%s" (tpl .Values.broker.db.existingSecret.name $) -}}
+    {{- if .Values.broker.db.existingSecret -}}
+        {{- if .Values.broker.db.existingSecret.name -}}
+            {{- printf "%s" (tpl .Values.broker.db.existingSecret.name $) -}}
+        {{- else -}}
+            {{- printf "%s" (include "orion.fullname" .) -}}
+        {{- end -}}
     {{- else -}}
         {{- printf "%s" (include "orion.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 
 {{- define "orion.secretKey" -}}
-    {{- if and .Values.broker.db.existingSecret .Values.broker.db.existingSecret.key -}}
-        {{- printf "%s" (tpl .Values.broker.db.existingSecret.key $) -}}
+    {{- if .Values.broker.db.existingSecret -}}
+        {{- if .Values.broker.db.existingSecret.key -}}
+            {{- printf "%s" (tpl .Values.broker.db.existingSecret.key $) -}}
+        {{- else -}}
+            {{- printf "dbPassword" -}}
+        {{- end -}}
     {{- else -}}
         {{- printf "dbPassword" -}}
     {{- end -}}
