@@ -29,6 +29,7 @@ jobs:
           allowed: major,minor,patch
   
   comment:
+    needs: "check"
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -37,7 +38,7 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Comment PR
-        if: env.WORKFLOW_CONCLUSION == 'failure'
+        if:  ${{ contains(needs.check.result, 'failure') }
         uses: thollander/actions-comment-pull-request@1.0.2
         with:
           message: "Please apply one of the following labels to the PR: 'patch', 'minor', 'major'."
