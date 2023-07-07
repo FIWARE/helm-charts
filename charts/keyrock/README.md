@@ -1,6 +1,6 @@
 # keyrock
 
-![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![AppVersion: 8.3.3](https://img.shields.io/badge/AppVersion-8.3.3-informational?style=flat-square)
+![Version: 0.7.1](https://img.shields.io/badge/Version-0.7.1-informational?style=flat-square) ![AppVersion: 8.3.3](https://img.shields.io/badge/AppVersion-8.3.3-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -49,12 +49,12 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | ingress.enabled | bool | `false` | should there be an ingress to connect keyrock with the public internet |
 | ingress.hosts | list | `[]` | all hosts to be provided |
 | ingress.tls | list | `[]` | configure the ingress' tls |
-| initData | object | `{"command":["/bin/sh","/scripts/create.sh"],"env":[],"existingConfigMap":"","image":"mysql:5.7","initEnabled":true,"scriptData":{},"volumeMount":{"mountPath":"/scripts","name":"scripts"}}` | Configuration for initial data created during deployment |
+| initData | object | `{"command":["/bin/sh","/scripts/create.sh"],"env":[],"existingConfigMap":"","image":"mysql:5.7","initEnabled":false,"scriptData":{},"volumeMount":{"mountPath":"/scripts","name":"scripts"}}` | Configuration for initial data created during deployment |
 | initData.command | list | `["/bin/sh","/scripts/create.sh"]` | Command to be executed |
 | initData.env | list | `[]` | Environment variables for job |
 | initData.existingConfigMap | string | `""` | Use existing ConfigMap |
 | initData.image | string | `"mysql:5.7"` | Image to be used for post-hook job |
-| initData.initEnabled | bool | `true` | should the creation of initial data be enabled |
+| initData.initEnabled | bool | `false` | should the creation of initial data be enabled |
 | initData.scriptData | object | `{}` | Script data for ConfigMap to be created (mandatory when no 'existingConfigMap' is set) |
 | initData.volumeMount | object | `{"mountPath":"/scripts","name":"scripts"}` | Volume where ConfigMap is mounted |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
