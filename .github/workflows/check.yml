@@ -75,10 +75,6 @@ jobs:
         
       - uses: actions/checkout@v3
 
-      - name: generate docs
-        run:
-          docker run --rm --volume "$(pwd):/helm-docs" -u $(id -u) jnorwood/helm-docs:latest
-
       # prepare yaml parser
       - uses: actions/setup-go@v4
       - name: Install yq
@@ -127,6 +123,9 @@ jobs:
               yq e -i '.version = "'$major.$minor.$patch'"' charts/$c/Chart.yaml
           done
 
+      - name: generate docs
+        run:
+          docker run --rm --volume "$(pwd):/helm-docs" -u $(id -u) jnorwood/helm-docs:latest
 
       - name: Commit files
         continue-on-error: true
