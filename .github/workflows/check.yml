@@ -18,7 +18,6 @@ jobs:
   lint:
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v2
@@ -57,7 +56,6 @@ jobs:
           allowed: major,minor,patch
 
   doc:
-    needs: ["check","eval"]
     runs-on: ubuntu-latest
 
     steps:
@@ -81,7 +79,7 @@ jobs:
           branch: ${{ github.ref }}
 
   versions:
-    needs: ["check","eval"]
+    needs: ["check"]
 
     runs-on: ubuntu-latest
 
