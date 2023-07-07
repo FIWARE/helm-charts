@@ -268,7 +268,7 @@ extraEnvVarsSecret: ""
 # -- Configuration for initial data created during deployment
 initData:
   # -- should the creation of initial data be enabled
-  initEnabled: true
+  initEnabled: false
   # -- Image to be used for post-hook job
   image: mysql:5.7
   # -- Command to be executed
