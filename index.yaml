@@ -2507,6 +2507,28 @@ entries:
   keyrock:
   - apiVersion: v1
     appVersion: 8.3.3
+    created: "2023-08-18T11:35:40.579920322Z"
+    description: A Helm chart for running the fiware idm keyrock on kubernetes.
+    digest: bd743ce141e1d9979a403fcdf05fb08d58b7b9916522b9f6664c915175cc22c8
+    home: https://fiware-idm.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - keyrock
+    - idm
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: keyrock
+    sources:
+    - https://github.com/ging/fiware-idm
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/keyrock-0.7.4/keyrock-0.7.4.tgz
+    version: 0.7.4
+  - apiVersion: v1
+    appVersion: 8.3.3
     created: "2023-07-07T13:10:05.643098189Z"
     description: A Helm chart for running the fiware idm keyrock on kubernetes.
     digest: 6727adb381674ab5268e1584bb8803fa1dee63c87ef90b2ecd60d1b9c573027c
@@ -3279,6 +3301,29 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/mintaka-0.0.1/mintaka-0.0.1.tgz
     version: 0.0.1
   orion:
+  - annotations:
+      charts.openshift.io/name: orion-ld
+    apiVersion: v2
+    appVersion: 1.0.1
+    created: "2023-08-18T11:35:40.808099932Z"
+    description: A Helm chart for running the fiware orion-ld context broker on kubernetes.
+    digest: 7197bf3a85dac4e7db84fb537e873f9d3b003268fc1850c7ff792ed909a48f38
+    home: https://github.com/FIWARE/context.Orion-LD
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion-ld
+    - orion
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: orion
+    sources:
+    - https://github.com/FIWARE/context.Orion-LD
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/orion-1.2.5/orion-1.2.5.tgz
+    version: 1.2.5
   - annotations:
       charts.openshift.io/name: orion-ld
     apiVersion: v2
@@ -4077,6 +4122,27 @@ entries:
   trusted-issuers-list:
   - apiVersion: v1
     appVersion: 0.0.2
+    created: "2023-08-18T11:35:41.045107558Z"
+    description: A Helm chart for running the trusted-issuers-list on kubernetes.
+    digest: b76db8359b6f18dcd2464ed3ae10b37723d0c9a8f3bd88792e6b5bb2047e27b1
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - trusted-issuers-list
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: trusted-issuers-list
+    sources:
+    - https://github.com/fiware/trusted-issuers-list
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-list-0.1.2/trusted-issuers-list-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v1
+    appVersion: 0.0.2
     created: "2023-07-06T07:45:50.52047215Z"
     description: A Helm chart for running the trusted-issuers-list on kubernetes.
     digest: 89fcf6c3713c27f9de9c53c0fb3efe4b93bf66074aea96640638133aca15c654
@@ -4286,4 +4352,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-registry-0.0.1/trusted-issuers-registry-0.0.1.tgz
     version: 0.0.1
-generated: "2023-07-07T13:10:05.644096677Z"
+generated: "2023-08-18T11:35:41.046411694Z"
