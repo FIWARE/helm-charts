@@ -212,6 +212,8 @@ database:
 initData:
   # -- should the creation of initial entries be enabled
   initEnabled: false
+  # -- Annotation value for the Hook
+  hook: post-install,post-upgrade
   # -- Array of trusted issuers to be created
   issuers: []
     #- name: issuer001
