@@ -312,6 +312,8 @@ test:
 initData:
   # -- should the creation of initial entities be enabled
   initEnabled: false
+  # -- Annotation value for the Hook
+  hook: post-install,post-upgrade
   # -- Array of entities to be created
   entities: []
   #  - name: entity001.json
