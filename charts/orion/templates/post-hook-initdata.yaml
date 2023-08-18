@@ -9,7 +9,7 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation
     "helm.sh/hook-weight": "1"
 spec:
-  backoffLimit: 1
+  backoffLimit: {{ .Values.initData.backoffLimit }}
   template:
     spec:
       restartPolicy: Never
