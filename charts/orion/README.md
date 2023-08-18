@@ -1,6 +1,6 @@
 # orion
 
-![Version: 1.2.5](https://img.shields.io/badge/Version-1.2.5-informational?style=flat-square) ![AppVersion: 1.0.1](https://img.shields.io/badge/AppVersion-1.0.1-informational?style=flat-square)
+![Version: 1.2.6](https://img.shields.io/badge/Version-1.2.6-informational?style=flat-square) ![AppVersion: 1.0.1](https://img.shields.io/badge/AppVersion-1.0.1-informational?style=flat-square)
 
 A Helm chart for running the fiware orion-ld context broker on kubernetes.
 
@@ -75,6 +75,7 @@ Kubernetes: `>= 1.19-0`
 | ingress.enabled | bool | `false` | should there be an ingress to connect orion with the public internet |
 | ingress.hosts | list | `[]` | all hosts to be provided |
 | ingress.tls | list | `[]` | configure the ingress' tls |
+| initData.backoffLimit | int | `1` | Number of retries before considering a Job as failed |
 | initData.entities | list | `[]` | Array of entities to be created |
 | initData.hook | string | `"post-install,post-upgrade"` | Annotation value for the Hook |
 | initData.initEnabled | bool | `false` | should the creation of initial entities be enabled |
