@@ -314,6 +314,8 @@ initData:
   initEnabled: false
   # -- Annotation value for the Hook
   hook: post-install,post-upgrade
+  # -- Number of retries before considering a Job as failed
+  backoffLimit: 1
   # -- Array of entities to be created
   entities: []
   #  - name: entity001.json
