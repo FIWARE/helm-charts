@@ -150,25 +150,44 @@ route:
 
 ## ingress configuration
 ingress:
-  # -- should there be an ingress to connect til with the public internet
-  enabled: false
-  # -- annotations to be added to the ingress
-  annotations: {}
-    # kubernetes.io/ingress.class: "ambassador"
-    ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
-    # kubernetes.io/tls-acme: "true"
-    # ingress.kubernetes.io/ssl-redirect: "true"
-  # -- all hosts to be provided
-  hosts: []
-    ## provide a hosts and the paths that should be available
-    # - host: localhost
-      # paths:
-      # - /
-  # -- configure the ingress' tls
-  tls: []
-    # - secretName: til-tls
-      # hosts:
-        # - til.fiware.org
+  # -- route config for the trusted issuers list endpoint
+  til:
+    # -- should there be an ingress to connect til with the public internet
+    enabled: false
+    # -- annotations to be added to the ingress
+    annotations: {}
+      # kubernetes.io/ingress.class: "ambassador"
+      ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
+      # kubernetes.io/tls-acme: "true"
+      # ingress.kubernetes.io/ssl-redirect: "true"
+    # -- all hosts to be provided
+    hosts: []
+      ## provide a hosts and the paths that should be available
+      # - host: localhost
+    # -- configure the ingress' tls
+    tls: []
+      # - secretName: til-tls
+        # hosts:
+          # - til.fiware.org
+  # -- route config for the trusted issuers registry endpoint
+  tir:
+    # -- should there be an ingress to connect til with the public internet
+    enabled: false
+    # -- annotations to be added to the ingress
+    annotations: {}
+      # kubernetes.io/ingress.class: "ambassador"
+      ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
+      # kubernetes.io/tls-acme: "true"
+      # ingress.kubernetes.io/ssl-redirect: "true"
+    # -- all hosts to be provided
+    hosts: []
+      ## provide a hosts and the paths that should be available
+      # - host: localhost
+    # -- configure the ingress' tls
+    tls: []
+      # - secretName: til-tls
+        # hosts:
+          # - til.fiware.org
 
 # -- port that the til container uses
 port: 8080
