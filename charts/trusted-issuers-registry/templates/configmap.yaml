@@ -31,3 +31,27 @@ data:
     {{- with .Values.tir.additionalConfigs }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+---
+{{- if .Values.ccs.endpoint -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "tir.fullname" . }}-ccs
+  labels:
+    {{- include "tir.labels" . | nindent 4 }}
+data:
+  init.sh: |-
+    curl -X 'POST' \
+      '{{ .Values.ccs.endpoint }}service' \
+      -H 'accept: */*' \
+      -H 'Content-Type: application/json' \
+      -d '{
+      "id": "{{ .Values.ccs.id }}",
+      {{- if .Values.ccs.credentials -}}
+      "credentials": {{- toJson .Values.ccs.credentials }},
+      {{- end }}
+      {{- if .Values.ccs.scopes -}}
+      "scopes": {{- toJson .Values.ccs.scopes }}
+      {{- end }}
+    }'
+{{- end }}
