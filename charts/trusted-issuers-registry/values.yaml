@@ -74,7 +74,7 @@ ccs:
   # -- Endpoint of the CCS (uncomment endpoint for initial CCS config creation)
   #endpoint: "http://credentials-config-service:8080/"
   # -- Id of the service
-  id: "dod-registry"
+  id: "did-registry"
   # -- Credential configuration to be registered
   credentials:
     - type: "VerifiableCredential"
