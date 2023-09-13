@@ -1,6 +1,6 @@
 # keyrock
 
-![Version: 0.6.2](https://img.shields.io/badge/Version-0.6.2-informational?style=flat-square) ![AppVersion: 8.3.3](https://img.shields.io/badge/AppVersion-8.3.3-informational?style=flat-square)
+![Version: 0.7.5](https://img.shields.io/badge/Version-0.7.5-informational?style=flat-square) ![AppVersion: 8.3.3](https://img.shields.io/badge/AppVersion-8.3.3-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -21,7 +21,7 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| additonalEnvVars | list | `[]` | a list of additional env vars to be set, check the keyrock docu for all available options ref: https://fiware-idm.readthedocs.io/en/latest/installation_and_administration_guide/environment_variables/index.html |
+| additionalEnvVars | list | `[]` | a list of additional env vars to be set, check the keyrock docu for all available options ref: https://fiware-idm.readthedocs.io/en/latest/installation_and_administration_guide/environment_variables/index.html |
 | admin.email | string | `"admin@admin.org"` | email address of the admin user |
 | admin.password | string | `"admin"` | password of the initial admin, leave empty to get a generated one |
 | admin.user | string | `"admin"` | username of the initial keyrock admin |
@@ -49,6 +49,16 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | ingress.enabled | bool | `false` | should there be an ingress to connect keyrock with the public internet |
 | ingress.hosts | list | `[]` | all hosts to be provided |
 | ingress.tls | list | `[]` | configure the ingress' tls |
+| initData | object | `{"backoffLimit":1,"command":["/bin/sh","/scripts/create.sh"],"env":[],"existingConfigMap":"","hook":"post-install,post-upgrade","image":"mysql:5.7","initEnabled":false,"scriptData":{},"volumeMount":{"mountPath":"/scripts","name":"scripts"}}` | Configuration for initial data created during deployment |
+| initData.backoffLimit | int | `1` | Number of retries before considering a Job as failed |
+| initData.command | list | `["/bin/sh","/scripts/create.sh"]` | Command to be executed |
+| initData.env | list | `[]` | Environment variables for job |
+| initData.existingConfigMap | string | `""` | Use existing ConfigMap |
+| initData.hook | string | `"post-install,post-upgrade"` | Annotation value for the Hook |
+| initData.image | string | `"mysql:5.7"` | Image to be used for post-hook job |
+| initData.initEnabled | bool | `false` | should the creation of initial data be enabled |
+| initData.scriptData | object | `{}` | Script data for ConfigMap to be created (mandatory when no 'existingConfigMap' is set) |
+| initData.volumeMount | object | `{"mountPath":"/scripts","name":"scripts"}` | Volume where ConfigMap is mounted |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | port | int | `8080` | port that the keyrock container uses |
 | route.enabled | bool | `false` |  |

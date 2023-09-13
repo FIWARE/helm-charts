@@ -5,11 +5,11 @@ kind: Job
 metadata:
   name: {{ include "orion.fullname" . }}-init-data
   annotations:
-    "helm.sh/hook": post-upgrade
+    "helm.sh/hook": {{ .Values.initData.hook }}
     "helm.sh/hook-delete-policy": before-hook-creation
     "helm.sh/hook-weight": "1"
 spec:
-  backoffLimit: 1
+  backoffLimit: {{ .Values.initData.backoffLimit }}
   template:
     spec:
       restartPolicy: Never

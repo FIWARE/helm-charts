@@ -1,17 +1,17 @@
 apiVersion: v1
 name: credentials-config-service
-version: 0.0.2
+version: 0.0.4
 appVersion: 0.0.1
 description: A Helm chart for running the credentials-config-service on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
 keywords:
-- FIWARE
-- credentials-config-service
-- DSBA
-- VerifiableCredentials
-- IAM
+  - FIWARE
+  - credentials-config-service
+  - DSBA
+  - VerifiableCredentials
+  - IAM
 sources:
-- https://github.com/fiware/credentials-config-service
+  - https://github.com/fiware/credentials-config-service
 maintainers:
-- name: wistefan
-  email: stefan.wiedemann@fiware.org
+  - name: wistefan
+    email: stefan.wiedemann@fiware.org

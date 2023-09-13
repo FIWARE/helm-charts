@@ -1,6 +1,6 @@
 # trusted-issuers-list
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![AppVersion: 0.0.2](https://img.shields.io/badge/AppVersion-0.0.2-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![AppVersion: 0.0.2](https://img.shields.io/badge/AppVersion-0.0.2-informational?style=flat-square)
 
 A Helm chart for running the trusted-issuers-list on kubernetes.
 
@@ -57,10 +57,18 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 | deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
 | deployment.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | fullnameOverride | string | `""` | option to override the fullname config in the _helpers.tpl |
-| ingress.annotations | object | `{}` | annotations to be added to the ingress |
-| ingress.enabled | bool | `false` | should there be an ingress to connect til with the public internet |
-| ingress.hosts | list | `[]` | all hosts to be provided |
-| ingress.tls | list | `[]` | configure the ingress' tls |
+| ingress.til | object | `{"annotations":{},"enabled":false,"hosts":[],"tls":[]}` | route config for the trusted issuers list endpoint |
+| ingress.til.annotations | object | `{}` | annotations to be added to the ingress |
+| ingress.til.enabled | bool | `false` | should there be an ingress to connect til with the public internet |
+| ingress.til.hosts | list | `[]` | all hosts to be provided |
+| ingress.til.tls | list | `[]` | configure the ingress' tls |
+| ingress.tir | object | `{"annotations":{},"enabled":false,"hosts":[],"tls":[]}` | route config for the trusted issuers registry endpoint |
+| ingress.tir.annotations | object | `{}` | annotations to be added to the ingress |
+| ingress.tir.enabled | bool | `false` | should there be an ingress to connect til with the public internet |
+| ingress.tir.hosts | list | `[]` | all hosts to be provided |
+| ingress.tir.tls | list | `[]` | configure the ingress' tls |
+| initData.backoffLimit | int | `1` | Number of retries before considering a Job as failed |
+| initData.hook | string | `"post-install,post-upgrade"` | Annotation value for the Hook |
 | initData.initEnabled | bool | `false` | should the creation of initial entries be enabled |
 | initData.issuers | list | `[]` | Array of trusted issuers to be created |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |

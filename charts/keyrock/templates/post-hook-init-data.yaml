@@ -1,0 +1,46 @@
+{{- if .Values.initData.initEnabled -}}
+{{- $fullName := include "keyrock.fullname" . -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "keyrock.fullname" . }}-init-data
+  annotations:
+    "helm.sh/hook": {{ .Values.initData.hook }}
+    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-weight": "1"
+spec:
+  backoffLimit: {{ .Values.initData.backoffLimit }}
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: {{ include "keyrock.fullname" . }}-init-data
+          image: {{ .Values.initData.image }}
+          command:
+            {{- with .Values.initData.command }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+            - name: {{ .Values.initData.volumeMount.name }}
+              mountPath: {{ .Values.initData.volumeMount.mountPath }}
+              readOnly: true
+          {{- if .Values.initData.env }}
+          env:
+            {{- with .Values.initData.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- end }}
+      volumes:
+        - name: {{ .Values.initData.volumeMount.name }}
+          projected:
+            sources:
+              {{- if .Values.initData.existingConfigMap }}
+              - configMap:
+                  name: {{ .Values.initData.existingConfigMap }}
+              {{ else if .Values.initData.scriptData }}    
+              - configMap:
+                  name: {{ include "keyrock.fullname" . }}-init-data-cm
+              {{ else }}
+              {{- fail "No ConfigMap was set for initData post-hook" }}
+              {{- end }}
+{{- end }}
