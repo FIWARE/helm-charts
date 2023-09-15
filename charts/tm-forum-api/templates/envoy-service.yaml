@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  {{- if .Values.apiProxy.service.nameOverride -}}
+  {{- if .Values.apiProxy.service.nameOverride }}
   name: {{ .Values.apiProxy.service.nameOverride }}
   {{- else if $.Values.defaultConfig.updateStrategy }}
   name: {{ include "tmforum.fullname" $ }}-envoy
-  {{- end -}}
+  {{- end }}
   labels:
     {{ include "tmforum.labels" $ | nindent 4 }}
   {{- if .Values.apiProxy.service.annotations }}
