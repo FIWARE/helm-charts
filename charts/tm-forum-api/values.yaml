@@ -78,7 +78,7 @@ ingress:
 
 ## configuration to be used by every api-deployment if nothing specific is provided.
 defaultConfig:
-   # -- additional labels for the deployment, if required
+  # -- additional labels for the deployment, if required
   additionalLabels: {}
   # -- additional annotations for the deployment, if required
   additionalAnnotations: {}
@@ -187,6 +187,68 @@ service:
   port: 8080
   # -- addtional annotations, if required
   annotations: {}
+
+
+## configuration for the api proxy, to serve all apis through one kubernetes service 
+apiProxy:
+  # -- should the proxy be deployed?
+  enabled: false
+  # -- configuration to be used for the image of the proxy
+  image:
+    # -- repository to get the proxy from
+    repository: envoyproxy/envoy
+    # -- tag to be used
+    tag: v1.27-latest
+    # -- pull policy to be used
+    pullPolicy: IfNotPresent
+  # -- configuration for the proxy service
+  service:
+    # -- name to be used for the proxy service.
+    nameOverride: 
+    # -- service type
+    type: ClusterIP
+    # -- port to be used by the service
+    port: 8080
+    # -- addtional annotations, if required
+    annotations: {}
+   # -- additional labels for the deployment, if required
+  additionalLabels: {}
+  # -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  # -- selector template
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  # -- tolerations template
+  # ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  # -- affinity template
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+  # -- additional sidecars for the deployment, if required
+  sidecars: []
+  # -- initial number of target replications, can be different if autoscaling is enabled
+  replicaCount: 1
+  # -- number of old replicas to be retained
+  revisionHistoryLimit: 3
+  ## configuration of the tmforum update strategy
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 1
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 0
+  # -- api proxy resource requests and limits, we leave the default empty to make that a concious choice by the user.
+  # for the autoscaling to make sense, you should configure this.
+  # resources:
+    # limits:
+      # cpu: 100m
+      # memory: 128Mi
+    # requests:
+      # cpu: 100m
+      # memory: 128Mi
 
 # -- list of apis to be deployed
 # -- every api needs to define a name and image. Basepath is required when routes or ingress will be enabled. Beside that, they can overwrite the default-config by using the same keys.

@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.0.3](https://img.shields.io/badge/Version-0.0.3-informational?style=flat-square) ![AppVersion: 0.4.1](https://img.shields.io/badge/AppVersion-0.4.1-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![AppVersion: 0.4.1](https://img.shields.io/badge/AppVersion-0.4.1-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -67,6 +67,28 @@ For all untouched values, the customized deployement will still use the defaults
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| apiProxy.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
+| apiProxy.additionalLabels | object | `{}` |  |
+| apiProxy.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| apiProxy.enabled | bool | `false` | should the proxy be deployed? |
+| apiProxy.image | object | `{"pullPolicy":"IfNotPresent","repository":"envoyproxy/envoy","tag":"v1.27-latest"}` | configuration to be used for the image of the proxy |
+| apiProxy.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used |
+| apiProxy.image.repository | string | `"envoyproxy/envoy"` | repository to get the proxy from |
+| apiProxy.image.tag | string | `"v1.27-latest"` | tag to be used |
+| apiProxy.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| apiProxy.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
+| apiProxy.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
+| apiProxy.service | object | `{"annotations":{},"nameOverride":null,"port":8080,"type":"ClusterIP"}` | configuration for the proxy service |
+| apiProxy.service.annotations | object | `{}` | addtional annotations, if required |
+| apiProxy.service.nameOverride | string | `nil` | name to be used for the proxy service. |
+| apiProxy.service.port | int | `8080` | port to be used by the service |
+| apiProxy.service.type | string | `"ClusterIP"` | service type |
+| apiProxy.sidecars | list | `[]` | additional sidecars for the deployment, if required |
+| apiProxy.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| apiProxy.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
+| apiProxy.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
+| apiProxy.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
+| apiProxy.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | apis | list | `[{"basePath":"/tmf-api/party/v4","image":"tmforum-party-catalog","name":"party-catalog"},{"basePath":"/tmf-api/customerBillManagement/v4","image":"tmforum-customer-bill-management","name":"customer-bill-management"},{"basePath":"/tmf-api/customerManagement/v4","image":"tmforum-customer-management","name":"customer-management"},{"basePath":"/tmf-api/productCatalogManagement/v4","image":"tmforum-product-catalog","name":"product-catalog"},{"basePath":"/tmf-api/productInventory/v4","image":"tmforum-product-inventory","name":"product-inventory"},{"basePath":"/tmf-api/productOrderingManagement/v4","image":"tmforum-product-ordering-management","name":"product-ordering-management"},{"basePath":"/tmf-api/resourceCatalog/v4","image":"tmforum-resource-catalog","name":"resource-catalog"},{"basePath":"/tmf-api/resourceFunctionActivation/v4","image":"tmforum-resource-function-activation","name":"resource-function-activation"},{"basePath":"/tmf-api/resourceInventoryManagement/v4","image":"tmforum-resource-inventory","name":"resource-inventory"},{"basePath":"/tmf-api/serviceCatalogManagement/v4","image":"tmforum-service-catalog","name":"service-catalog"}]` | be aware: when you change the image repositrory or the tag for an api, you have to provide both values for the changes to take effect |
 | autoscaling.enabled | bool | `false` | should autoscaling be enabled for the context broker |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |

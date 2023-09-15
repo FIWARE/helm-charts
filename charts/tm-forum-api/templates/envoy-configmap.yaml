@@ -1,0 +1,59 @@
+{{- if .Values.apiProxy.enabled -}}
+{{- $servicePort := .Values.service.port -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "tmforum.fullname" $ }}-envoy
+  labels:
+    {{ include "tmforum.labels" $ | nindent 4 }}
+data:
+  envoy-config.yaml: |
+    static_resources:
+      listeners:
+        - name: listener_0
+          address:
+            socket_address:
+              address: 0.0.0.0
+              port_value: 10000
+          filter_chains:
+          - filters: 
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                stat_prefix: ingress_http
+                codec_type: AUTO
+                route_config:
+                  name: tmforum-api
+                  virtual_hosts:
+                    - name: tmforum-api
+                      domains: ["*"]
+                      routes:
+                        {{- range .Values.apis }}
+                        - match: 
+                            prefix: {{ .basePath | quote }}
+                          route:
+                            cluster: {{ .name }}
+                        {{- end }}                        
+                http_filters:
+                  - name: http_router
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+      clusters:
+        {{- range .Values.apis }}
+        - name: {{ .name }}
+          connect_timeout: 15s
+          type: STRICT_DNS
+          dns_lookup_family: V4_ONLY
+          lb_policy: ROUND_ROBIN
+          load_assignment:
+            cluster_name: {{ .name }}
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          protocol: TCP
+                          address: {{ include "tmforum.fullname" $ }}-{{ .name }}
+                          port_value: {{ $servicePort }}
+        {{- end }}
+{{- end }}
