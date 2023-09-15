@@ -4180,6 +4180,28 @@ entries:
       charts.openshift.io/name: tm-forum-api
     apiVersion: v2
     appVersion: 0.4.1
+    created: "2023-09-15T10:37:56.860686386Z"
+    description: A Helm chart for running the FIWARE TMForum-APIs
+    digest: f39d8dcf96ec46faa3b0baedd6f7a983470a5a314cbb815b1f0580790766d2bc
+    home: https://github.com/FIWARE/tmforum-api
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - tmforum
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: tm-forum-api
+    sources:
+    - https://github.com/FIWARE/tmforum-api
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/tm-forum-api-0.2.0/tm-forum-api-0.2.0.tgz
+    version: 0.2.0
+  - annotations:
+      charts.openshift.io/name: tm-forum-api
+    apiVersion: v2
+    appVersion: 0.4.1
     created: "2023-09-14T08:43:10.343524894Z"
     description: A Helm chart for running the FIWARE TMForum-APIs
     digest: d80f750bd0c08bb26034cdf667d7d7736ea9c333e64bba39f7ddb3974637dcee
@@ -4516,4 +4538,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-registry-0.0.1/trusted-issuers-registry-0.0.1.tgz
     version: 0.0.1
-generated: "2023-09-14T08:43:10.876876241Z"
+generated: "2023-09-15T10:37:56.861685099Z"
