@@ -4289,6 +4289,27 @@ entries:
   trusted-issuers-list:
   - apiVersion: v1
     appVersion: 0.0.2
+    created: "2023-09-21T09:41:43.978570489Z"
+    description: A Helm chart for running the trusted-issuers-list on kubernetes.
+    digest: d98ba514448208c4a9b81113aac1cbc7f135cb677dab367805068a8ddfdd5cfb
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - trusted-issuers-list
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: trusted-issuers-list
+    sources:
+    - https://github.com/fiware/trusted-issuers-list
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-list-0.3.4/trusted-issuers-list-0.3.4.tgz
+    version: 0.3.4
+  - apiVersion: v1
+    appVersion: 0.0.2
     created: "2023-08-24T07:12:51.483613996Z"
     description: A Helm chart for running the trusted-issuers-list on kubernetes.
     digest: 023ab60ef70bb19fc816fb801cf244cbb1c732f5c5a581a9cd6dedea42a233be
@@ -4582,4 +4603,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-registry-0.0.1/trusted-issuers-registry-0.0.1.tgz
     version: 0.0.1
-generated: "2023-09-15T11:07:21.06606301Z"
+generated: "2023-09-21T09:41:43.978949698Z"
