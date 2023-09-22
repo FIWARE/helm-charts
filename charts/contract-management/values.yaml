@@ -137,13 +137,13 @@ til:
 services:
   til:
     path: ""
-    url: http://packet-delivery-til-trusted-issuers-list:8080
+    url: http://trusted-issuers-list:8080
     read-timeout: 30
   product:
     path: "/tmf-api/productOrderingManagement/v4"
-    url: http://packet-delivery-tm-forum-api-product-ordering-management:8080
+    url: http://tm-forum-api-product-ordering-management:8080
     read-timeout: 30
   party:
     path: "/tmf-api/party/v4"
-    url: http://packet-delivery-tm-forum-api-party-catalog:8080
+    url: http://tm-forum-api-party-catalog:8080
     read-timeout: 30
