@@ -127,23 +127,41 @@ prometheus:
 # -- a list of additional env vars to be set, check the til docu for all available options
 additionalEnvVars: []
 
+## Describes the configuration needed when adding entries to the Trusted Issuers List
 til:
+  ## Type of Verifiable Credential necessary for accessing the service
   credentialType: MyCredential
+  ## Claims with permissions granted to given Verifiable Credential
   claims:
+      ## DID of the target service that is requiring the permissions
       - target: "did:some:service"
+        ## Roles that are added/allowed for the given service
         roles:
           - Consumer
           - Admin
+## Configuration needed for accessing other services
 services:
+  ## Config for Trusted Issuers List
   til:
+    ## Path to be used
     path: ""
+    ## URL of the Trusted Issuers List Service
     url: http://trusted-issuers-list:8080
+    ## Read timeout in sec
     read-timeout: 30
+  ## Config for the TM Forum Service hosting the Product Ordering API
   product:
+    ## Path to be used
     path: "/tmf-api/productOrderingManagement/v4"
+    ## URL of the TM Forum Service hosting the Product Ordering API
     url: http://tm-forum-api-product-ordering-management:8080
+    ## Read timeout in sec
     read-timeout: 30
+  ## Config for the TM Forum Service hosting the Party API
   party:
+    ## Path to be used
     path: "/tmf-api/party/v4"
+    ## URL of the TM Forum Service hosting the Party API
     url: http://tm-forum-api-party-catalog:8080
+    ## Read timeout in sec
     read-timeout: 30
