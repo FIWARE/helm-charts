@@ -67,7 +67,7 @@ Support for existing database secret
 {{- end -}}
 
 {{- define "til.passwordKey" -}}
-    {{- if and (.Values.database.existingSecret.enabled) (.Values.database.existingSecret.key) -}}
+    {{- if .Values.database.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.database.existingSecret.key $) -}}
     {{- else -}}
         {{- printf "password" -}}
