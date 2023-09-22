@@ -1,6 +1,6 @@
 # contract-management
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 A Helm chart for running the contract-management on kubernetes.
 
@@ -59,13 +59,13 @@ A Helm chart for running the contract-management on kubernetes.
 | serviceAccount.create | bool | `false` | specifies if the account should be created |
 | services.party.path | string | `"/tmf-api/party/v4"` |  |
 | services.party.read-timeout | int | `30` |  |
-| services.party.url | string | `"http://packet-delivery-tm-forum-api-party-catalog:8080"` |  |
+| services.party.url | string | `"http://tm-forum-api-party-catalog:8080"` |  |
 | services.product.path | string | `"/tmf-api/productOrderingManagement/v4"` |  |
 | services.product.read-timeout | int | `30` |  |
-| services.product.url | string | `"http://packet-delivery-tm-forum-api-product-ordering-management:8080"` |  |
+| services.product.url | string | `"http://tm-forum-api-product-ordering-management:8080"` |  |
 | services.til.path | string | `""` |  |
 | services.til.read-timeout | int | `30` |  |
-| services.til.url | string | `"http://packet-delivery-til-trusted-issuers-list:8080"` |  |
+| services.til.url | string | `"http://trusted-issuers-list:8080"` |  |
 | til.claims[0].roles[0] | string | `"Consumer"` |  |
 | til.claims[0].roles[1] | string | `"Admin"` |  |
 | til.claims[0].target | string | `"did:some:service"` |  |
