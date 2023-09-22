@@ -1521,6 +1521,28 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/canis-major-0.0.1/canis-major-0.0.1.tgz
     version: 0.0.1
+  contract-management:
+  - apiVersion: v1
+    appVersion: 0.0.1
+    created: "2023-09-22T09:09:02.612442292Z"
+    description: A Helm chart for running the contract-management on kubernetes.
+    digest: 356f588fd69eb8f7e82f355c575461929faf0d699eda2e33f218eb6a6593fb70
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - contract-management
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: tim.smyth@fiware.org
+      name: pulledtim
+    name: contract-management
+    sources:
+    - https://github.com/fiware/contract-management
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/contract-management-0.5.0/contract-management-0.5.0.tgz
+    version: 0.5.0
   credentials-config-service:
   - apiVersion: v1
     appVersion: 0.0.1
@@ -4624,4 +4646,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-registry-0.0.1/trusted-issuers-registry-0.0.1.tgz
     version: 0.0.1
-generated: "2023-09-21T09:49:04.682547032Z"
+generated: "2023-09-22T09:09:02.612980198Z"
