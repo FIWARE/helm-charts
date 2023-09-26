@@ -43,6 +43,17 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+Create the name of the service
+*/}}
+{{- define "til.serviceName" -}}
+{{- if .Values.service.serviceNameOverride -}}
+    {{- .Values.service.serviceNameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+    {{ include "til.fullname" . }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Common labels
 */}}
 {{- define "til.labels" -}}
