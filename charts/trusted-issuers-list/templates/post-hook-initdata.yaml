@@ -25,7 +25,7 @@ spec:
               readOnly: true
           env:
             - name: TIL_HOST
-              value: {{ $fullName }}
+              value: {{ include "til.serviceName" . }}
             - name: TIL_PORT
               value: {{ .Values.service.port | quote }}
       volumes:
