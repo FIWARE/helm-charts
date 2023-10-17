@@ -141,9 +141,9 @@ defaultConfig:
   # -- configuration to be used for the image of the container
   image:
     # -- repository to get the container from
-    repository: quay.io/wi_stefan
+    repository: quay.io/fiware
     # -- tag to be used, most of the time the apis will use the same version
-    tag: 0.4.1
+    tag: 0.9.0
     # -- pull policy to be used
     pullPolicy: IfNotPresent
   # -- log level of the api
@@ -152,14 +152,6 @@ defaultConfig:
   contextUrl: https://smartdatamodels.org/context.jsonld
   # -- port to be used for the app
   port: 8080
-  # -- cache config for connecting the broker
-  cache:
-    # -- maximum size of the cache
-    maximumSize: 1000
-    # -- how fast should the cache entry expire after it was written?
-    expireAfterWrite: 2s
-    # -- how fast should the cache entry expire after it was last accessed?
-    expireAfterAccess: 2s
 
   # -- metrics and health port
   endpointsPort: 9090
@@ -178,6 +170,11 @@ defaultConfig:
     path: ngsi-ld/v1
     # -- address of the broker
     url: http://context-broker:1026
+
+  # -- redis connection information
+  redis:
+    uri: redis://tmforum-redis-master:6379
+
 
 ## configuration for the k8s service to access tmforum
 service:
@@ -294,4 +291,14 @@ apis:
     image: tmforum-service-catalog
     basePath: /tmf-api/serviceCatalogManagement/v4
 
-
+redis:
+  fullnameOverride: tmforum-redis
+  architecture: standalone
+  auth:
+    enabled: false
+    sentinel: false
+  master:
+    podSecurityContext:
+      enabled: false
+    containerSecurityContext:
+      enabled: false
