@@ -1,6 +1,6 @@
 # trusted-issuers-list
 
-![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![AppVersion: 0.0.2](https://img.shields.io/badge/AppVersion-0.0.2-informational?style=flat-square)
+![Version: 0.5.3](https://img.shields.io/badge/Version-0.5.3-informational?style=flat-square) ![AppVersion: 0.0.2](https://img.shields.io/badge/AppVersion-0.0.2-informational?style=flat-square)
 
 A Helm chart for running the trusted-issuers-list on kubernetes.
 
@@ -84,6 +84,7 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 | route.tir.tls | object | `{}` | tls configuration for the route |
 | service.annotations | object | `{}` | additional annotations, if required |
 | service.port | int | `8080` | port to be used by the service |
+| service.serviceNameOverride | string | `""` | define the name of the service and avoid generating one |
 | service.type | string | `"ClusterIP"` | service type |
 | serviceAccount | object | `{"create":false}` | if a til specific service account should be used, it can be configured here ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | serviceAccount.create | bool | `false` | specifies if the account should be created |
