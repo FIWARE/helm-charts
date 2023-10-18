@@ -1,17 +1,17 @@
 apiVersion: v1
 name: trusted-issuers-registry
-version: 0.0.3
+version: 0.0.4
 appVersion: 0.3.0
 description: A Helm chart for running the trusted-issuers-registry on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
 keywords:
-- FIWARE
-- trusted-issuers-registry
-- DSBA
-- VerifiableCredentials
-- IAM
+  - FIWARE
+  - trusted-issuers-registry
+  - DSBA
+  - VerifiableCredentials
+  - IAM
 sources:
-- https://github.com/fiware/trusted-issuers-registry
+  - https://github.com/fiware/trusted-issuers-registry
 maintainers:
-- name: pulledtim
-  email: tim.smyth@fiware.org
+  - name: pulledtim
+    email: tim.smyth@fiware.org
