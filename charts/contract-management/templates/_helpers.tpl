@@ -3,7 +3,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "til.name" -}}
+{{- define "contract.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -12,7 +12,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "til.fullname" -}}
+{{- define "contract.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -27,38 +27,27 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "til.chart" -}}
+{{- define "contract.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "til.serviceAccountName" -}}
+{{- define "contract.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "til.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "contract.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Create the name of the service
-*/}}
-{{- define "til.serviceName" -}}
-{{- if .Values.service.serviceNameOverride -}}
-    {{- .Values.service.serviceNameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-    {{ include "til.fullname" . }}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Common labels
 */}}
-{{- define "til.labels" -}}
-app.kubernetes.io/name: {{ include "til.name" . }}
-helm.sh/chart: {{ include "til.chart" . }}
+{{- define "contract.labels" -}}
+app.kubernetes.io/name: {{ include "contract.name" . }}
+helm.sh/chart: {{ include "contract.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -69,16 +58,16 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Support for existing database secret 
 */}}
-{{- define "til.secretName" -}}
+{{- define "contract.secretName" -}}
     {{- if .Values.database.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.database.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "%s" (include "til.fullname" .) -}}
+        {{- printf "%s" (include "contract.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "til.passwordKey" -}}
-    {{- if .Values.database.existingSecret.enabled -}}
+{{- define "contract.passwordKey" -}}
+    {{- if and (.Values.database.existingSecret.enabled) (.Values.database.existingSecret.key) -}}
         {{- printf "%s" (tpl .Values.database.existingSecret.key $) -}}
     {{- else -}}
         {{- printf "password" -}}
