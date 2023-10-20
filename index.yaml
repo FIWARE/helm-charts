@@ -456,6 +456,28 @@ entries:
   business-api-ecosystem:
   - apiVersion: v2
     appVersion: 8.0.0
+    created: "2023-10-20T10:58:31.32863451Z"
+    description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
+      Marketplace) on Kubernetes
+    digest: 28b5b243e9138b123019d8678a42a3f11e2d0bd034b138f46550667d1cf2b73b
+    home: https://business-api-ecosystem.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - marketplace
+    - bae
+    - tmforum
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: business-api-ecosystem
+    sources:
+    - https://github.com/FIWARE-TMForum/Business-API-Ecosystem
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-0.6.6/business-api-ecosystem-0.6.6.tgz
+    version: 0.6.6
+  - apiVersion: v2
+    appVersion: 8.0.0
     created: "2023-06-28T07:44:44.341517956Z"
     description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
       Marketplace) on Kubernetes
@@ -4773,4 +4795,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-registry-0.0.1/trusted-issuers-registry-0.0.1.tgz
     version: 0.0.1
-generated: "2023-10-20T07:05:03.528050566Z"
+generated: "2023-10-20T10:58:31.329400054Z"
