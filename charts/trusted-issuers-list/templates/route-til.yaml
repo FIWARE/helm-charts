@@ -22,7 +22,7 @@ spec:
   path: /issuer
   to:
     kind: Service
-    name: {{ $fullName }}
+    name: {{ include "til.serviceName" . }}
   {{- if .Values.route.til.tls }}
   tls:
   {{- with .Values.route.til.tls }}
