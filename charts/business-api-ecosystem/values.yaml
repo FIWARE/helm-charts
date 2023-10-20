@@ -754,6 +754,8 @@ bizEcosystemLogicProxy:
   # -- Allow users to edit party attributes
   allowEditParty: true
 
+  # -- use initcontainers to wait for the apis to be deployed
+  initContainers: true
   # -- additional init-containers to be added for the belp
   extraInitContainers: {}
   # -- additional volumes to be added for the container
