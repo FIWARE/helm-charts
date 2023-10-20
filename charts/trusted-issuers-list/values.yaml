@@ -15,6 +15,8 @@ service:
   port: 8080
   # -- additional annotations, if required
   annotations: {}
+  # -- define the name of the service and avoid generating one
+  serviceNameOverride: ""
 
 # -- if a til specific service account should be used, it can be configured here
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
