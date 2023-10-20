@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.6.9](https://img.shields.io/badge/Version-0.6.9-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.6.10](https://img.shields.io/badge/Version-0.6.10-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -96,6 +96,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.extraEnvVars | list | `[]` | List of additional ENV vars to be set, e.g., to be used in asset plugins |
 | bizEcosystemChargingBackend.extraEnvVarsSecret | string | `""` | Name of existing Secret containing extra ENV vars to be set (in case of sensitive data) |
 | bizEcosystemChargingBackend.fullnameOverride | string | `""` |  |
+| bizEcosystemChargingBackend.initContainers | bool | `true` | use initcontainers to wait for the apis to be deployed |
 | bizEcosystemChargingBackend.loglevel | string | `"info"` | Loglevel |
 | bizEcosystemChargingBackend.maxUploadSize | int | `428800` | Maximum asset upload size (in MB) |
 | bizEcosystemChargingBackend.media.annotations | object | `{}` | Annotations |
