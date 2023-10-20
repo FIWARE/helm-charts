@@ -546,6 +546,9 @@ bizEcosystemChargingBackend:
     schedule: "* 1 *  *  *"
     ## -- name of the secret containing the service account to be used for accessing the bucket. The account should be provided in json format and have write permission on the referenced schema
     secretName: "gcs-secret"
+    
+  # -- use initcontainers to wait for the apis to be deployed
+  initContainers: true
 
 
 ## -- Configuration for biz-ecosystem-logic-proxy component
