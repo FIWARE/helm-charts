@@ -139,6 +139,39 @@ bizEcosystemApis:
   ## -- If false, will not be installed
   enabled: true
 
+  ## -- in case the apis(or some of them) are available somwhere else, alternative paths to them can be provided.
+  tmForum:
+  #   catalog:
+  #     host: 
+  #     port:
+  #     path:
+  #   inventory:
+  #     host:
+  #     port:
+  #     path:
+  #   ordering:
+  #     host:
+  #     port:
+  #     path:
+  #   billing:
+  #     host:
+  #     port:
+  #     path:
+  #   usage:
+  #     host:
+  #     port:
+  #     path:
+  #   party:
+  #     host:
+  #     port:
+  #     path:
+  #   customer:
+  #     host:
+  #     port:
+  #     path:
+
+
+
   ## -- Configure existing secret to be used for DB password
   # existingSecret: apis-secret
 
