@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.6.11](https://img.shields.io/badge/Version-0.6.11-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.6.12](https://img.shields.io/badge/Version-0.6.12-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -54,6 +54,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemApis.serviceAccount.annotations | object | `{}` |  |
 | bizEcosystemApis.serviceAccount.create | bool | `false` |  |
 | bizEcosystemApis.serviceAccount.name | string | `"ssc"` |  |
+| bizEcosystemApis.tmForum | string | `nil` |  |
 | bizEcosystemChargingBackend.authorizeServicePath | string | `"/authorizeService/apiKeys"` | Authorize service path of the logic proxy |
 | bizEcosystemChargingBackend.backup.bucketName | string | `"gs://my/bucket"` |  |
 | bizEcosystemChargingBackend.backup.enabled | bool | `false` |  |
