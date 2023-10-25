@@ -143,7 +143,7 @@ defaultConfig:
     # -- repository to get the container from
     repository: quay.io/fiware
     # -- tag to be used, most of the time the apis will use the same version
-    tag: 0.9.0
+    tag: 0.13.2
     # -- pull policy to be used
     pullPolicy: IfNotPresent
   # -- log level of the api
@@ -170,10 +170,6 @@ defaultConfig:
     path: ngsi-ld/v1
     # -- address of the broker
     url: http://context-broker:1026
-
-  # -- redis connection information
-  redis:
-    uri: redis://tmforum-redis-master:6379
 
 
 ## configuration for the k8s service to access tmforum
@@ -292,6 +288,25 @@ apis:
     basePath: /tmf-api/serviceCatalogManagement/v4
 
 redis:
+  # custom values
+  enabled: false
+  cacheConfig:
+    uri: redis://tmforum-redis-master:6379
+    caches:
+      # cache for entities
+      entities:
+        # -- how fast should the cache entry expire after it was written?
+        expireAfterWrite: 2s
+        # -- how fast should the cache entry expire after it was last accessed?
+        expireAfterAccess: 2s
+      # cache for subscriptions
+      subscriptions:
+        # -- how fast should the cache entry expire after it was written?
+        expireAfterWrite: 14d
+        # -- how fast should the cache entry expire after it was last accessed?
+        expireAfterAccess: 14d
+
+  # bitnami dependency values
   fullnameOverride: tmforum-redis
   architecture: standalone
   auth:

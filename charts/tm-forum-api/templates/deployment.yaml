@@ -209,8 +209,23 @@ spec:
               value: {{ $.Values.defaultConfig.contextUrl | quote }}
             {{- end }}
 
+            {{- if $.Values.redis.enabled }}
             - name: REDIS_URI
-              value: {{ $.Values.defaultConfig.redis.uri | quote }}
+              value: {{ $.Values.redis.cacheConfig.uri | quote }}
+            - name: REDIS_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+              value: {{ $.Values.redis.cacheConfig.caches.entities.expireAfterWrite | quote }}
+            - name: REDIS_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+              value: {{ $.Values.redis.cacheConfig.caches.entities.expireAfterAccess | quote }}
+            - name: REDIS_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
+              value: {{ $.Values.redis.cacheConfig.caches.subscriptions.expireAfterWrite | quote }}
+            - name: REDIS_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
+              value: {{ $.Values.redis.cacheConfig.caches.subscriptions.expireAfterAccess | quote }}
+            - name: MICRONAUT_ENVIRONMENTS
+              value: redis
+            {{- else }}
+            - name: MICRONAUT_ENVIRONMENTS
+              value: in-memory
+            {{- end }}
 
             {{- if .additionalEnvVars }}
             {{- with .additionalEnvVars }}
