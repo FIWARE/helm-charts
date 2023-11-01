@@ -183,7 +183,9 @@ spec:
               value: {{ .Values.bizEcosystemLogicProxy.revenueModel | quote }}
             {{- if .Values.bizEcosystemApis.tmForum.catalog }}
             - name: BAE_LP_ENDPOINT_CATALOG_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.catalog.host }}{{ .Values.bizEcosystemApis.tmForum.catalog.path }}
+              value: {{ .Values.bizEcosystemApis.tmForum.catalog.host }}
+            - name: BAE_LP_ENDPOINT_CATALOG_PATH
+              value: {{ .Values.bizEcosystemApis.tmForum.catalog.path }}
             - name: BAE_LP_ENDPOINT_CATALOG_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.catalog.port | quote }}
             {{- else }}
@@ -194,7 +196,9 @@ spec:
             {{- end }}
             {{- if .Values.bizEcosystemApis.tmForum.inventory }}
             - name: BAE_LP_ENDPOINT_INVENTORY_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.inventory.host }}{{ .Values.bizEcosystemApis.tmForum.inventory.path }}
+              value: {{ .Values.bizEcosystemApis.tmForum.inventory.host }}
+            - name: BAE_LP_ENDPOINT_INVENTORY_PATH
+              value: {{ .Values.bizEcosystemApis.tmForum.inventory.path }}
             - name: BAE_LP_ENDPOINT_INVENTORY_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.inventory.port | quote }}
             {{- else }}
@@ -205,7 +209,9 @@ spec:
             {{- end }}
             {{- if .Values.bizEcosystemApis.tmForum.ordering }}
             - name: BAE_LP_ENDPOINT_ORDERING_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.ordering.host }}{{ .Values.bizEcosystemApis.tmForum.ordering.path }}
+              value: {{ .Values.bizEcosystemApis.tmForum.ordering.host }}
+            - name: BAE_LP_ENDPOINT_ORDERING_PATH
+              value: {{ .Values.bizEcosystemApis.tmForum.ordering.path }}
             - name: BAE_LP_ENDPOINT_ORDERING_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.ordering.port | quote }}
             {{- else }}
@@ -216,7 +222,9 @@ spec:
             {{- end }}
             {{- if .Values.bizEcosystemApis.tmForum.billing }}
             - name: BAE_LP_ENDPOINT_BILLING_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.billing.host }}{{ .Values.bizEcosystemApis.tmForum.billing.path }}
+              value: {{ .Values.bizEcosystemApis.tmForum.billing.host }}
+            - name: BAE_LP_ENDPOINT_BILLING_PATH
+              value: {{ .Values.bizEcosystemApis.tmForum.billing.path }}
             - name: BAE_LP_ENDPOINT_BILLING_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.billing.port | quote }}
             {{- else }}
@@ -231,7 +239,9 @@ spec:
               value: {{ .Values.bizEcosystemRss.service.port | quote }}
             {{- if .Values.bizEcosystemApis.tmForum.usage }}
             - name: BAE_LP_ENDPOINT_USAGE_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.usage.host }}{{ .Values.bizEcosystemApis.tmForum.usage.path }}
+              value: {{ .Values.bizEcosystemApis.tmForum.usage.host }}
+            - name: BAE_LP_ENDPOINT_USAGE_PATH
+              value: {{ .Values.bizEcosystemApis.tmForum.usage.path }}
             - name: BAE_LP_ENDPOINT_USAGE_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.usage.port | quote }}
             {{- else }}
@@ -242,7 +252,9 @@ spec:
             {{- end }}           
             {{- if .Values.bizEcosystemApis.tmForum.party }}
             - name: BAE_LP_ENDPOINT_PARTY_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.party.host }}{{ .Values.bizEcosystemApis.tmForum.party.path }}
+              value: {{ .Values.bizEcosystemApis.tmForum.party.host }}
+            - name: BAE_LP_ENDPOINT_PARTY_PATH
+              value: {{ .Values.bizEcosystemApis.tmForum.party.path }}
             - name: BAE_LP_ENDPOINT_PARTY_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.party.port | quote }}
             {{- else }}
@@ -253,7 +265,9 @@ spec:
             {{- end }}             
             {{- if .Values.bizEcosystemApis.tmForum.customer }}  
             - name: BAE_LP_ENDPOINT_CUSTOMER_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.customer.host }}{{ .Values.bizEcosystemApis.tmForum.customer.path }}
+              value: {{ .Values.bizEcosystemApis.tmForum.customer.host }}
+            - name: BAE_LP_ENDPOINT_CUSTOMER_PATH
+              value: {{ .Values.bizEcosystemApis.tmForum.customer.path }}
             - name: BAE_LP_ENDPOINT_CUSTOMER_PORT
               value: {{  .Values.bizEcosystemApis.tmForum.customer.port | quote }}
             {{- else }}       
