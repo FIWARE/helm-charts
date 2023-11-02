@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -99,9 +99,11 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.additonalEnvVars | list | `[]` | a list of additional env vars to be set, check the tm-forum api docu for all available options |
 | defaultConfig.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | defaultConfig.cache | object | `{"entities":{"expireAfterAccess":"2s","expireAfterWrite":"2s","maximumSize":1000},"subscriptions":{"expireAfterAccess":"14d","expireAfterWrite":"14d","maximumSize":1000}}` | cache config for connecting the broker |
+| defaultConfig.cache.entities | object | `{"expireAfterAccess":"2s","expireAfterWrite":"2s","maximumSize":1000}` | entities cache |
 | defaultConfig.cache.entities.expireAfterAccess | string | `"2s"` | how fast should the cache entry expire after it was last accessed? |
 | defaultConfig.cache.entities.expireAfterWrite | string | `"2s"` | how fast should the cache entry expire after it was written? |
 | defaultConfig.cache.entities.maximumSize | int | `1000` | maximum size of the cache |
+| defaultConfig.cache.subscriptions | object | `{"expireAfterAccess":"14d","expireAfterWrite":"14d","maximumSize":1000}` | subscriptions cache |
 | defaultConfig.cache.subscriptions.expireAfterAccess | string | `"14d"` | how fast should the cache entry expire after it was last accessed? |
 | defaultConfig.cache.subscriptions.expireAfterWrite | string | `"14d"` | how fast should the cache entry expire after it was written? |
 | defaultConfig.cache.subscriptions.maximumSize | int | `1000` | maximum size of the cache |
@@ -147,14 +149,9 @@ For all untouched values, the customized deployement will still use the defaults
 | ingress.hosts[0] | object | `{"host":"localhost"}` | provide a hosts and the paths that should be available |
 | ingress.tls | list | `[]` | configure the ingress' tls |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
-| redis.architecture | string | `"standalone"` |  |
-| redis.auth.enabled | bool | `false` |  |
-| redis.auth.sentinel | bool | `false` |  |
-| redis.cacheConfig.uri | string | `"redis://tmforum-redis-master:6379"` |  |
-| redis.enabled | bool | `false` |  |
-| redis.fullnameOverride | string | `"tmforum-redis"` |  |
-| redis.master.containerSecurityContext.enabled | bool | `false` |  |
-| redis.master.podSecurityContext.enabled | bool | `false` |  |
+| redis | object | `{"architecture":"standalone","auth":{"enabled":false,"sentinel":false},"cacheConfig":{"uri":"redis://tmforum-redis-master:6379"},"enabled":false,"fullnameOverride":"tmforum-redis","master":{"containerSecurityContext":{"enabled":false},"podSecurityContext":{"enabled":false}}}` | configuration of redis caching. If it's disabled, the default in-memory cache will be used |
+| redis.cacheConfig.uri | string | `"redis://tmforum-redis-master:6379"` | uri of redis master |
+| redis.enabled | bool | `false` | enable redis caching? |
 | route.annotations | object | `{}` | annotations to be added to the route |
 | route.enabled | bool | `false` |  |
 | route.host | string | `"localhost"` | host to be used |
