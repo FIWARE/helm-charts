@@ -210,21 +210,33 @@ spec:
             {{- end }}
 
             {{- if $.Values.redis.enabled }}
+            - name: MICRONAUT_ENVIRONMENTS
+              value: redis
             - name: REDIS_URI
               value: {{ $.Values.redis.cacheConfig.uri | quote }}
             - name: REDIS_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
-              value: {{ $.Values.redis.cacheConfig.caches.entities.expireAfterWrite | quote }}
+              value: {{ $.Values.defaultConfig.cache.entities.expireAfterWrite | quote }}
             - name: REDIS_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
-              value: {{ $.Values.redis.cacheConfig.caches.entities.expireAfterAccess | quote }}
+              value: {{ $.Values.defaultConfig.cache.entities.expireAfterAccess | quote }}
             - name: REDIS_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
-              value: {{ $.Values.redis.cacheConfig.caches.subscriptions.expireAfterWrite | quote }}
+              value: {{ $.Values.defaultConfig.cache.subscriptions.expireAfterWrite | quote }}
             - name: REDIS_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
-              value: {{ $.Values.redis.cacheConfig.caches.subscriptions.expireAfterAccess | quote }}
-            - name: MICRONAUT_ENVIRONMENTS
-              value: redis
+              value: {{ $.Values.defaultConfig.cache.subscriptions.expireAfterAccess | quote }}
             {{- else }}
             - name: MICRONAUT_ENVIRONMENTS
               value: in-memory
+            - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
+              value: {{ $.Values.defaultConfig.cache.entities.maximumSize | quote}}
+            - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+              value: {{ $.Values.defaultConfig.cache.entities.expireAfterWrite | quote}}
+            - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+              value: {{ $.Values.defaultConfig.cache.entities.expireAfterAccess | quote}}
+            - name: MICRONAUT_CACHES_SUBSCRIPTIONS_MAXIMUM_SIZE
+              value: {{ $.Values.defaultConfig.cache.subscriptions.maximumSize | quote}}
+            - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
+              value: {{ $.Values.defaultConfig.cache.subscriptions.expireAfterWrite | quote}}
+            - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
+              value: {{ $.Values.defaultConfig.cache.subscriptions.expireAfterAccess | quote}}
             {{- end }}
 
             {{- if .additionalEnvVars }}

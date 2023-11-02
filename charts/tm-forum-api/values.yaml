@@ -152,6 +152,22 @@ defaultConfig:
   contextUrl: https://smartdatamodels.org/context.jsonld
   # -- port to be used for the app
   port: 8080
+  # -- cache config for connecting the broker
+  cache:
+    entities:
+      # -- maximum size of the cache
+      maximumSize: 1000
+      # -- how fast should the cache entry expire after it was written?
+      expireAfterWrite: 2s
+      # -- how fast should the cache entry expire after it was last accessed?
+      expireAfterAccess: 2s
+    subscriptions:
+      # -- maximum size of the cache
+      maximumSize: 1000
+      # -- how fast should the cache entry expire after it was written?
+      expireAfterWrite: 14d
+      # -- how fast should the cache entry expire after it was last accessed?
+      expireAfterAccess: 14d
 
   # -- metrics and health port
   endpointsPort: 9090
@@ -292,19 +308,6 @@ redis:
   enabled: false
   cacheConfig:
     uri: redis://tmforum-redis-master:6379
-    caches:
-      # cache for entities
-      entities:
-        # -- how fast should the cache entry expire after it was written?
-        expireAfterWrite: 2s
-        # -- how fast should the cache entry expire after it was last accessed?
-        expireAfterAccess: 2s
-      # cache for subscriptions
-      subscriptions:
-        # -- how fast should the cache entry expire after it was written?
-        expireAfterWrite: 14d
-        # -- how fast should the cache entry expire after it was last accessed?
-        expireAfterAccess: 14d
 
   # bitnami dependency values
   fullnameOverride: tmforum-redis
