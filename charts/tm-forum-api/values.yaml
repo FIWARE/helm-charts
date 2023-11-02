@@ -305,7 +305,7 @@ apis:
     image: tmforum-service-catalog
     basePath: /tmf-api/serviceCatalogManagement/v4
 
-# -- configuration of redis caching. If it's disabled, the default in-memory cache will be used
+## configuration of redis caching. If it's disabled, the default in-memory cache will be used
 redis:
   # -- enable redis caching?
   enabled: false
