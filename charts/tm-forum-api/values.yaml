@@ -154,6 +154,7 @@ defaultConfig:
   port: 8080
   # -- cache config for connecting the broker
   cache:
+    # -- entities cache
     entities:
       # -- maximum size of the cache
       maximumSize: 1000
@@ -161,6 +162,7 @@ defaultConfig:
       expireAfterWrite: 2s
       # -- how fast should the cache entry expire after it was last accessed?
       expireAfterAccess: 2s
+    # -- subscriptions cache
     subscriptions:
       # -- maximum size of the cache
       maximumSize: 1000
@@ -303,10 +305,13 @@ apis:
     image: tmforum-service-catalog
     basePath: /tmf-api/serviceCatalogManagement/v4
 
+# -- configuration of redis caching. If it's disabled, the default in-memory cache will be used
 redis:
-  # custom values
+  # -- enable redis caching?
   enabled: false
+  ## redis cache configuration
   cacheConfig:
+    # -- uri of redis master
     uri: redis://tmforum-redis-master:6379
 
   # bitnami dependency values
