@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![AppVersion: 0.4.1](https://img.shields.io/badge/AppVersion-0.4.1-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -98,16 +98,19 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | defaultConfig.additonalEnvVars | list | `[]` | a list of additional env vars to be set, check the tm-forum api docu for all available options |
 | defaultConfig.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-| defaultConfig.cache | object | `{"expireAfterAccess":"2s","expireAfterWrite":"2s","maximumSize":1000}` | cache config for connecting the broker |
-| defaultConfig.cache.expireAfterAccess | string | `"2s"` | how fast should the cache entry expire after it was last accessed? |
-| defaultConfig.cache.expireAfterWrite | string | `"2s"` | how fast should the cache entry expire after it was written? |
-| defaultConfig.cache.maximumSize | int | `1000` | maximum size of the cache |
+| defaultConfig.cache | object | `{"entities":{"expireAfterAccess":"2s","expireAfterWrite":"2s","maximumSize":1000},"subscriptions":{"expireAfterAccess":"14d","expireAfterWrite":"14d","maximumSize":1000}}` | cache config for connecting the broker |
+| defaultConfig.cache.entities.expireAfterAccess | string | `"2s"` | how fast should the cache entry expire after it was last accessed? |
+| defaultConfig.cache.entities.expireAfterWrite | string | `"2s"` | how fast should the cache entry expire after it was written? |
+| defaultConfig.cache.entities.maximumSize | int | `1000` | maximum size of the cache |
+| defaultConfig.cache.subscriptions.expireAfterAccess | string | `"14d"` | how fast should the cache entry expire after it was last accessed? |
+| defaultConfig.cache.subscriptions.expireAfterWrite | string | `"14d"` | how fast should the cache entry expire after it was written? |
+| defaultConfig.cache.subscriptions.maximumSize | int | `1000` | maximum size of the cache |
 | defaultConfig.contextUrl | string | `"https://smartdatamodels.org/context.jsonld"` | default context to be used when contacting the context broker |
 | defaultConfig.endpointsPort | int | `9090` | metrics and health port |
-| defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/wi_stefan","tag":"0.4.1"}` | configuration to be used for the image of the container |
+| defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/fiware","tag":"0.13.2"}` | configuration to be used for the image of the container |
 | defaultConfig.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used |
-| defaultConfig.image.repository | string | `"quay.io/wi_stefan"` | repository to get the container from |
-| defaultConfig.image.tag | string | `"0.4.1"` | tag to be used, most of the time the apis will use the same version |
+| defaultConfig.image.repository | string | `"quay.io/fiware"` | repository to get the container from |
+| defaultConfig.image.tag | string | `"0.13.2"` | tag to be used, most of the time the apis will use the same version |
 | defaultConfig.livenessProbe.healthPath | string | `"/health"` | path to be used for the health check |
 | defaultConfig.livenessProbe.initialDelaySeconds | int | `30` |  |
 | defaultConfig.livenessProbe.periodSeconds | int | `10` |  |
@@ -144,6 +147,14 @@ For all untouched values, the customized deployement will still use the defaults
 | ingress.hosts[0] | object | `{"host":"localhost"}` | provide a hosts and the paths that should be available |
 | ingress.tls | list | `[]` | configure the ingress' tls |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
+| redis.architecture | string | `"standalone"` |  |
+| redis.auth.enabled | bool | `false` |  |
+| redis.auth.sentinel | bool | `false` |  |
+| redis.cacheConfig.uri | string | `"redis://tmforum-redis-master:6379"` |  |
+| redis.enabled | bool | `false` |  |
+| redis.fullnameOverride | string | `"tmforum-redis"` |  |
+| redis.master.containerSecurityContext.enabled | bool | `false` |  |
+| redis.master.podSecurityContext.enabled | bool | `false` |  |
 | route.annotations | object | `{}` | annotations to be added to the route |
 | route.enabled | bool | `false` |  |
 | route.host | string | `"localhost"` | host to be used |
