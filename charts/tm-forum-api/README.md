@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -149,9 +149,14 @@ For all untouched values, the customized deployement will still use the defaults
 | ingress.hosts[0] | object | `{"host":"localhost"}` | provide a hosts and the paths that should be available |
 | ingress.tls | list | `[]` | configure the ingress' tls |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
-| redis | object | `{"architecture":"standalone","auth":{"enabled":false,"sentinel":false},"cacheConfig":{"uri":"redis://tmforum-redis-master:6379"},"enabled":false,"fullnameOverride":"tmforum-redis","master":{"containerSecurityContext":{"enabled":false},"podSecurityContext":{"enabled":false}}}` | configuration of redis caching. If it's disabled, the default in-memory cache will be used |
+| redis.architecture | string | `"standalone"` |  |
+| redis.auth.enabled | bool | `false` |  |
+| redis.auth.sentinel | bool | `false` |  |
 | redis.cacheConfig.uri | string | `"redis://tmforum-redis-master:6379"` | uri of redis master |
 | redis.enabled | bool | `false` | enable redis caching? |
+| redis.fullnameOverride | string | `"tmforum-redis"` |  |
+| redis.master.containerSecurityContext.enabled | bool | `false` |  |
+| redis.master.podSecurityContext.enabled | bool | `false` |  |
 | route.annotations | object | `{}` | annotations to be added to the route |
 | route.enabled | bool | `false` |  |
 | route.host | string | `"localhost"` | host to be used |
