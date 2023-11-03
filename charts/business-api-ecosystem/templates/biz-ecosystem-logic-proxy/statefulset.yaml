@@ -232,7 +232,33 @@ spec:
               value: {{ include "bizEcosystemApis.hostnameonly" . }}
             - name: BAE_LP_ENDPOINT_BILLING_PORT
               value: {{ .Values.bizEcosystemApis.service.port | quote }}
-            {{- end }}           
+            {{- end }}   
+            {{- if .Values.bizEcosystemApis.tmForum.resources }}
+            - name: BAE_LP_ENDPOINT_RESOURCE_HOST
+              value: {{ .Values.bizEcosystemApis.tmForum.resources.host }}
+            - name: BAE_LP_ENDPOINT_RESOURCE_PATH
+              value: {{ .Values.bizEcosystemApis.tmForum.resources.path }}
+            - name: BAE_LP_ENDPOINT_RESOURCE_PORT
+              value: {{ .Values.bizEcosystemApis.tmForum.resources.port | quote }}
+            {{- else }}
+            - name: BAE_LP_ENDPOINT_RESOURCE_HOST
+              value: {{ include "bizEcosystemApis.hostnameonly" . }}
+            - name: BAE_LP_ENDPOINT_RESOURCE_PORT
+              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+            {{- end }}   
+            {{- if .Values.bizEcosystemApis.tmForum.services }}
+            - name: BAE_LP_ENDPOINT_SERVICE_HOST
+              value: {{ .Values.bizEcosystemApis.tmForum.services.host }}
+            - name: BAE_LP_ENDPOINT_SERVICE_PATH
+              value: {{ .Values.bizEcosystemApis.tmForum.services.path }}
+            - name: BAE_LP_ENDPOINT_SERVICE_PORT
+              value: {{ .Values.bizEcosystemApis.tmForum.services.port | quote }}
+            {{- else }}
+            - name: BAE_LP_ENDPOINT_SERVICE_HOST
+              value: {{ include "bizEcosystemApis.hostnameonly" . }}
+            - name: BAE_LP_ENDPOINT_SERVICE_PORT
+              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+            {{- end }}                   
             - name: BAE_LP_ENDPOINT_RSS_HOST
               value: {{ include "bizEcosystemRss.hostnameonly" . }}
             - name: BAE_LP_ENDPOINT_RSS_PORT
