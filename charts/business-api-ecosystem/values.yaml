@@ -169,6 +169,14 @@ bizEcosystemApis:
   #     host:
   #     port:
   #     path:
+  #   resources:
+  #     host:
+  #     port:
+  #     path:
+  #   services:
+  #     host:
+  #     port:
+  #     path:
 
 
 
