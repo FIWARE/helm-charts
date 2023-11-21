@@ -168,34 +168,6 @@ spec:
               value: {{ $.Values.defaultConfig.logLevel | quote}}
             {{- end }}
 
-            {{- if .cache }}
-            {{- if .cache.maximumSize }}
-            - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
-              value: {{ .cache.maximumSize | quote}}
-            {{- end }}
-            {{- if .cache.expireAfterWrite }}
-            - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
-              value: {{ .cache.expireAfterWrite | quote}}
-            {{- end }}
-            {{- if .cache.expireAfterAccess }}
-            - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
-              value: {{ .cache.expireAfterAccess | quote}}
-            {{- end }}
-            {{- else if $.Values.defaultConfig.cache }}
-            {{- if $.Values.defaultConfig.cache.maximumSize }}
-            - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
-              value: {{ $.Values.defaultConfig.cache.maximumSize | quote}}
-            {{- end }}
-            {{- if $.Values.defaultConfig.cache.expireAfterWrite }}
-            - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
-              value: {{ $.Values.defaultConfig.cache.expireAfterWrite | quote}}
-            {{- end }}
-            {{- if $.Values.defaultConfig.cache.expireAfterAccess }}
-            - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
-              value: {{ $.Values.defaultConfig.cache.expireAfterAccess | quote}}
-            {{- end }}
-            {{- end }}
-
             {{- if .ngsiLd }}
             {{- if .ngsiLd.readTimeout }}
             - name: MICRONAUT_HTTP_SERVICES_READ_TIMEOUT
@@ -235,6 +207,36 @@ spec:
             {{- else if $.Values.defaultConfig.contextUrl }}
             - name: GENERAL_CONTEXT_URL
               value: {{ $.Values.defaultConfig.contextUrl | quote }}
+            {{- end }}
+
+            {{- if $.Values.redis.enabled }}
+            - name: MICRONAUT_ENVIRONMENTS
+              value: redis
+            - name: REDIS_URI
+              value: {{ $.Values.redis.cacheConfig.uri | quote }}
+            - name: REDIS_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+              value: {{ $.Values.defaultConfig.cache.entities.expireAfterWrite | quote }}
+            - name: REDIS_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+              value: {{ $.Values.defaultConfig.cache.entities.expireAfterAccess | quote }}
+            - name: REDIS_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
+              value: {{ $.Values.defaultConfig.cache.subscriptions.expireAfterWrite | quote }}
+            - name: REDIS_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
+              value: {{ $.Values.defaultConfig.cache.subscriptions.expireAfterAccess | quote }}
+            {{- else }}
+            - name: MICRONAUT_ENVIRONMENTS
+              value: in-memory
+            - name: MICRONAUT_CACHES_ENTITIES_MAXIMUM_SIZE
+              value: {{ $.Values.defaultConfig.cache.entities.maximumSize | quote}}
+            - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_WRITE
+              value: {{ $.Values.defaultConfig.cache.entities.expireAfterWrite | quote}}
+            - name: MICRONAUT_CACHES_ENTITIES_EXPIRE_AFTER_ACCESS
+              value: {{ $.Values.defaultConfig.cache.entities.expireAfterAccess | quote}}
+            - name: MICRONAUT_CACHES_SUBSCRIPTIONS_MAXIMUM_SIZE
+              value: {{ $.Values.defaultConfig.cache.subscriptions.maximumSize | quote}}
+            - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_WRITE
+              value: {{ $.Values.defaultConfig.cache.subscriptions.expireAfterWrite | quote}}
+            - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
+              value: {{ $.Values.defaultConfig.cache.subscriptions.expireAfterAccess | quote}}
             {{- end }}
 
             {{- if .additionalEnvVars }}

@@ -1,18 +1,23 @@
 apiVersion: v2
 name: tm-forum-api
-version: 0.0.1
-appVersion: 0.4.1
+version: 0.5.0
+appVersion: 0.13.2
 kubeVersion: '>= 1.19-0'
 home: https://github.com/FIWARE/tmforum-api
 description: A Helm chart for running the FIWARE TMForum-APIs
 icon: https://fiware.github.io/catalogue/img/fiware.png
 keywords:
-- fiware
-- tmforum
+  - fiware
+  - tmforum
 sources:
-- https://github.com/FIWARE/tmforum-api
+  - https://github.com/FIWARE/tmforum-api
 maintainers:
-- name: wistefan
-  email: stefan.wiedemann@fiware.org
+  - name: wistefan
+    email: stefan.wiedemann@fiware.org
 annotations:
   charts.openshift.io/name: tm-forum-api
+dependencies:
+  - name: redis
+    version: 18.1.2
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled

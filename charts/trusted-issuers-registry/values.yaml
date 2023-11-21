@@ -27,47 +27,35 @@ tir:
   # -- configuation needed for the iShare Satellite functionality
   satellite:
     # -- Client-ID/EORI of satellite
-    id: "EU.EORI.FIWARESATELLITE"
+    # id: "EU.EORI.FIWARESATELLITE"
     # -- Private key of satellite
-    key: |
-      -----BEGIN RSA PRIVATE KEY-----
-      <Satellite private key>
-      -----END RSA PRIVATE KEY-----
+    # key: 
     # -- Certificate chain of satellite
-    certificate: |
-      -----BEGIN CERTIFICATE-----
-      <Satellite certificate>
-      -----END CERTIFICATE-----
-      -----BEGIN CERTIFICATE-----
-      <Intermediate certificates>
-      -----END CERTIFICATE-----
-      -----BEGIN CERTIFICATE-----
-      <Root CA certificate>
-      -----END CERTIFICATE-----
+    # certificate: 
     # -- Configuration of CA trusted list
-    trustedList:
-      - name: FIWARE_CA
-        crt: |
-          -----BEGIN CERTIFICATE-----
-          <FIWARETEST-CA Certificate>
-          -----END CERTIFICATE-----
+    # trustedList:
+      # - name: FIWARE_CA
+        # crt: |
+        #  -----BEGIN CERTIFICATE-----
+        #  <FIWARETEST-CA Certificate>
+        #  -----END CERTIFICATE-----
     # -- Configuration of parties (trusted participants)      
-    parties:
-      - id: "EU.EORI.NLPACKETDEL"
-        name: "Packet Delivery Company"
-        status: "Active"
-        start_date: "2021-09-27T00:00:00Z"
-        end_date: "2051-09-27T00:00:00Z"
-        crt: |
-          -----BEGIN CERTIFICATE-----
-          <Packet Delivery Company Certificate>
-          -----END CERTIFICATE-----
-        capability_url: "https://idp.packetdel.com/capabilities" # Optional
-        certifications: # Optional
-          - role: "IdentityProvider"
-            start_date: "2021-09-27T00:00:00Z"
-            end_date: "2051-09-27T00:00:00Z"
-            loa: 3
+    # parties:
+    #  - id: "EU.EORI.NLPACKETDEL"
+    #    name: "Packet Delivery Company"
+    #    status: "Active"
+    #    start_date: "2021-09-27T00:00:00Z"
+    #    end_date: "2051-09-27T00:00:00Z"
+    #    crt: |
+    #      -----BEGIN CERTIFICATE-----
+    #      <Packet Delivery Company Certificate>
+    #      -----END CERTIFICATE-----
+    #    capability_url: "https://idp.packetdel.com/capabilities" # Optional
+    #    certifications: # Optional
+    #      - role: "IdentityProvider"
+    #        start_date: "2021-09-27T00:00:00Z"
+    #        end_date: "2051-09-27T00:00:00Z"
+    #        loa: 3
 
 # -- Configuration for the Credential Config Service initiation
 ccs:

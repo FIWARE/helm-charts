@@ -1,0 +1,26 @@
+{{- if .Values.apiProxy.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  {{- if .Values.apiProxy.service.nameOverride }}
+  name: {{ .Values.apiProxy.service.nameOverride }}
+  {{- else if $.Values.defaultConfig.updateStrategy }}
+  name: {{ include "tmforum.fullname" $ }}-envoy
+  {{- end }}
+  labels:
+    {{ include "tmforum.labels" $ | nindent 4 }}
+  {{- if .Values.apiProxy.service.annotations }}
+  annotations:
+    {{ toYaml .Values.apiProxy.service.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.apiProxy.service.type }}
+  ports:
+    - port: {{ .Values.apiProxy.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "tmforum.name" $ }}-envoy
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+{{- end }}

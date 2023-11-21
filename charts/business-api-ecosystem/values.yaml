@@ -150,6 +150,47 @@ bizEcosystemApis:
   ## -- If false, will not be installed
   enabled: true
 
+  ## -- in case the apis(or some of them) are available somwhere else, alternative paths to them can be provided.
+  tmForum:
+  #   catalog:
+  #     host: 
+  #     port:
+  #     path:
+  #   inventory:
+  #     host:
+  #     port:
+  #     path:
+  #   ordering:
+  #     host:
+  #     port:
+  #     path:
+  #   billing:
+  #     host:
+  #     port:
+  #     path:
+  #   usage:
+  #     host:
+  #     port:
+  #     path:
+  #   party:
+  #     host:
+  #     port:
+  #     path:
+  #   customer:
+  #     host:
+  #     port:
+  #     path:
+  #   resources:
+  #     host:
+  #     port:
+  #     path:
+  #   services:
+  #     host:
+  #     port:
+  #     path:
+
+
+
   ## -- Configure existing secret to be used for DB password
   # existingSecret: apis-secret
 
@@ -557,6 +598,9 @@ bizEcosystemChargingBackend:
     schedule: "* 1 *  *  *"
     ## -- name of the secret containing the service account to be used for accessing the bucket. The account should be provided in json format and have write permission on the referenced schema
     secretName: "gcs-secret"
+    
+  # -- use initcontainers to wait for the apis to be deployed
+  initContainers: true
 
 
 ## -- Configuration for biz-ecosystem-logic-proxy component
@@ -765,6 +809,8 @@ bizEcosystemLogicProxy:
   # -- Allow users to edit party attributes
   allowEditParty: true
 
+  # -- use initcontainers to wait for the apis to be deployed
+  initContainers: true
   # -- additional init-containers to be added for the belp
   extraInitContainers: {}
   # -- additional volumes to be added for the container

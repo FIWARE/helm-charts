@@ -24,7 +24,7 @@ data:
             path: {{.Values.tir.ngsiBroker.path}}
             url: {{.Values.tir.ngsiBroker.url}}
             read-timeout: {{.Values.tir.ngsiBroker.timeout}}
-      satellite:
+    satellite:
     {{- with .Values.tir.satellite }}
     {{- toYaml . | nindent 8 }}
     {{- end }}
