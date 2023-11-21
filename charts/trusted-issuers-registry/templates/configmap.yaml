@@ -47,9 +47,7 @@ data:
       -H 'Content-Type: application/json' \
       -d '{
       "id": "{{ .Values.ccs.id }}",
-      {{- if .Values.ccs.credentials -}}
-      "credentials": {{- toJson .Values.ccs.credentials }},
-      {{- end }}
+      "default_scope": "{{ .Values.ccs.defaultScope }}",
       {{- if .Values.ccs.scopes -}}
       "scopes": {{- toJson .Values.ccs.scopes }}
       {{- end }}

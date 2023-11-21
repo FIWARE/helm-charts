@@ -75,17 +75,18 @@ ccs:
   #endpoint: "http://credentials-config-service:8080/"
   # -- Id of the service
   id: "did-registry"
-  # -- Credential configuration to be registered
-  credentials:
-    - type: "VerifiableCredential"
-      trustedParticipantsLists: [
-        "https://tir.fiware.dev"
-      ]
-      trustedIssuersLists: [
-        "https://til.fiware.dev"
-      ]
+  # -- Default scope to be used from scopes below, if none is provided
+  defaultScope: "defaultScope"
   # -- Credential configurations for particular scopes
   scopes:
+    defaultScope:
+      - type: "ParticipantRegistryDefaultCredential"
+        trustedParticipantsLists: [
+          "https://tir.fiware.dev"
+        ]
+        trustedIssuersLists: [
+          "https://til.fiware.dev"
+        ]
     didRead:
       - type: "ParticipantRegistryCredential"
         trustedParticipantsLists: [
