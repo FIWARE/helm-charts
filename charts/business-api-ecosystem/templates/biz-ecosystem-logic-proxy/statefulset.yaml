@@ -207,6 +207,32 @@ spec:
             - name: BAE_LP_ENDPOINT_INVENTORY_PORT
               value: {{ .Values.bizEcosystemApis.service.port | quote }}
             {{- end }}
+            {{- if .Values.bizEcosystemApis.tmForum.serviceInventory }}
+            - name: BAE_LP_ENDPOINT_SERVICE_INVENTORY_HOST
+              value: {{ .Values.bizEcosystemApis.tmForum.serviceInventory.host }}
+            - name: BAE_LP_ENDPOINT_SERVICE_INVENTORY_PATH
+              value: {{ .Values.bizEcosystemApis.tmForum.serviceInventory.path }}
+            - name: BAE_LP_ENDPOINT_SERVICE_INVENTORY_PORT
+              value: {{ .Values.bizEcosystemApis.tmForum.serviceInventory.port | quote }}
+            {{- else }}
+            - name: BAE_LP_ENDPOINT_SERVICE_INVENTORY_HOST
+              value: {{ include "bizEcosystemApis.hostnameonly" . }}
+            - name: BAE_LP_ENDPOINT_SERVICE_INVENTORY_PORT
+              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemApis.tmForum.resourceInventory }}
+            - name: BAE_LP_ENDPOINT_RESOURCE_INVENTORY_HOST
+              value: {{ .Values.bizEcosystemApis.tmForum.resourceInventory.host }}
+            - name: BAE_LP_ENDPOINT_RESOURCE_INVENTORY_PATH
+              value: {{ .Values.bizEcosystemApis.tmForum.resourceInventory.path }}
+            - name: BAE_LP_ENDPOINT_RESOURCE_INVENTORY_PORT
+              value: {{ .Values.bizEcosystemApis.tmForum.resourceInventory.port | quote }}
+            {{- else }}
+            - name: BAE_LP_ENDPOINT_RESOURCE_INVENTORY_HOST
+              value: {{ include "bizEcosystemApis.hostnameonly" . }}
+            - name: BAE_LP_ENDPOINT_RESOURCE_INVENTORY_PORT
+              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+            {{- end }}
             {{- if .Values.bizEcosystemApis.tmForum.ordering }}
             - name: BAE_LP_ENDPOINT_ORDERING_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.ordering.host }}
