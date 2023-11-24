@@ -13,6 +13,7 @@ metadata:
       {{- end }}
   {{- end }}
 spec:
+  ingressClassName: {{ .Values.ingress.className | quote }}
   {{- if .Values.ingress.tls }}
   tls:
     {{- range .Values.ingress.tls }}

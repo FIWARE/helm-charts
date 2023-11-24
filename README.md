@@ -39,7 +39,7 @@ helm repo add fiware https://fiware.github.io/helm-charts
 
 ## Install
 
-After the repo is added all charts can be installed via:
+After the repo is added all charts can be installed via: 
 
 ```console
 helm install <RELEASE_NAME> fiware/<CHART_NAME>

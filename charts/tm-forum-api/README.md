@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: 0.4.1](https://img.shields.io/badge/AppVersion-0.4.1-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -67,6 +67,28 @@ For all untouched values, the customized deployement will still use the defaults
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| apiProxy.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
+| apiProxy.additionalLabels | object | `{}` |  |
+| apiProxy.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| apiProxy.enabled | bool | `false` | should the proxy be deployed? |
+| apiProxy.image | object | `{"pullPolicy":"IfNotPresent","repository":"envoyproxy/envoy","tag":"v1.27-latest"}` | configuration to be used for the image of the proxy |
+| apiProxy.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used |
+| apiProxy.image.repository | string | `"envoyproxy/envoy"` | repository to get the proxy from |
+| apiProxy.image.tag | string | `"v1.27-latest"` | tag to be used |
+| apiProxy.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| apiProxy.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
+| apiProxy.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
+| apiProxy.service | object | `{"annotations":{},"nameOverride":null,"port":8080,"type":"ClusterIP"}` | configuration for the proxy service |
+| apiProxy.service.annotations | object | `{}` | addtional annotations, if required |
+| apiProxy.service.nameOverride | string | `nil` | name to be used for the proxy service. |
+| apiProxy.service.port | int | `8080` | port to be used by the service |
+| apiProxy.service.type | string | `"ClusterIP"` | service type |
+| apiProxy.sidecars | list | `[]` | additional sidecars for the deployment, if required |
+| apiProxy.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| apiProxy.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
+| apiProxy.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
+| apiProxy.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
+| apiProxy.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | apis | list | `[{"basePath":"/tmf-api/party/v4","image":"tmforum-party-catalog","name":"party-catalog"},{"basePath":"/tmf-api/customerBillManagement/v4","image":"tmforum-customer-bill-management","name":"customer-bill-management"},{"basePath":"/tmf-api/customerManagement/v4","image":"tmforum-customer-management","name":"customer-management"},{"basePath":"/tmf-api/productCatalogManagement/v4","image":"tmforum-product-catalog","name":"product-catalog"},{"basePath":"/tmf-api/productInventory/v4","image":"tmforum-product-inventory","name":"product-inventory"},{"basePath":"/tmf-api/productOrderingManagement/v4","image":"tmforum-product-ordering-management","name":"product-ordering-management"},{"basePath":"/tmf-api/resourceCatalog/v4","image":"tmforum-resource-catalog","name":"resource-catalog"},{"basePath":"/tmf-api/resourceFunctionActivation/v4","image":"tmforum-resource-function-activation","name":"resource-function-activation"},{"basePath":"/tmf-api/resourceInventoryManagement/v4","image":"tmforum-resource-inventory","name":"resource-inventory"},{"basePath":"/tmf-api/serviceCatalogManagement/v4","image":"tmforum-service-catalog","name":"service-catalog"}]` | be aware: when you change the image repositrory or the tag for an api, you have to provide both values for the changes to take effect |
 | autoscaling.enabled | bool | `false` | should autoscaling be enabled for the context broker |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
@@ -76,16 +98,21 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | defaultConfig.additonalEnvVars | list | `[]` | a list of additional env vars to be set, check the tm-forum api docu for all available options |
 | defaultConfig.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-| defaultConfig.cache | object | `{"expireAfterAccess":"2s","expireAfterWrite":"2s","maximumSize":1000}` | cache config for connecting the broker |
-| defaultConfig.cache.expireAfterAccess | string | `"2s"` | how fast should the cache entry expire after it was last accessed? |
-| defaultConfig.cache.expireAfterWrite | string | `"2s"` | how fast should the cache entry expire after it was written? |
-| defaultConfig.cache.maximumSize | int | `1000` | maximum size of the cache |
+| defaultConfig.cache | object | `{"entities":{"expireAfterAccess":"2s","expireAfterWrite":"2s","maximumSize":1000},"subscriptions":{"expireAfterAccess":"14d","expireAfterWrite":"14d","maximumSize":1000}}` | cache config for connecting the broker |
+| defaultConfig.cache.entities | object | `{"expireAfterAccess":"2s","expireAfterWrite":"2s","maximumSize":1000}` | entities cache |
+| defaultConfig.cache.entities.expireAfterAccess | string | `"2s"` | how fast should the cache entry expire after it was last accessed? |
+| defaultConfig.cache.entities.expireAfterWrite | string | `"2s"` | how fast should the cache entry expire after it was written? |
+| defaultConfig.cache.entities.maximumSize | int | `1000` | maximum size of the cache |
+| defaultConfig.cache.subscriptions | object | `{"expireAfterAccess":"14d","expireAfterWrite":"14d","maximumSize":1000}` | subscriptions cache |
+| defaultConfig.cache.subscriptions.expireAfterAccess | string | `"14d"` | how fast should the cache entry expire after it was last accessed? |
+| defaultConfig.cache.subscriptions.expireAfterWrite | string | `"14d"` | how fast should the cache entry expire after it was written? |
+| defaultConfig.cache.subscriptions.maximumSize | int | `1000` | maximum size of the cache |
 | defaultConfig.contextUrl | string | `"https://smartdatamodels.org/context.jsonld"` | default context to be used when contacting the context broker |
 | defaultConfig.endpointsPort | int | `9090` | metrics and health port |
-| defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/wi_stefan","tag":"0.4.1"}` | configuration to be used for the image of the container |
+| defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/fiware","tag":"0.13.2"}` | configuration to be used for the image of the container |
 | defaultConfig.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used |
-| defaultConfig.image.repository | string | `"quay.io/wi_stefan"` | repository to get the container from |
-| defaultConfig.image.tag | string | `"0.4.1"` | tag to be used, most of the time the apis will use the same version |
+| defaultConfig.image.repository | string | `"quay.io/fiware"` | repository to get the container from |
+| defaultConfig.image.tag | string | `"0.13.2"` | tag to be used, most of the time the apis will use the same version |
 | defaultConfig.livenessProbe.healthPath | string | `"/health"` | path to be used for the health check |
 | defaultConfig.livenessProbe.initialDelaySeconds | int | `30` |  |
 | defaultConfig.livenessProbe.periodSeconds | int | `10` |  |
@@ -116,11 +143,20 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | fullnameOverride | string | `""` | option to override the fullname config in the _helpers.tpl |
 | ingress.annotations | object | `{}` | annotations to be added to the ingress |
+| ingress.className | string | `"nginx"` | class of the ingress controller to handle the ingress |
 | ingress.enabled | bool | `false` | should there be an ingress to connect tmforum with the public internet |
 | ingress.hosts | list | `[{"host":"localhost"}]` | all hosts to be provided |
 | ingress.hosts[0] | object | `{"host":"localhost"}` | provide a hosts and the paths that should be available |
 | ingress.tls | list | `[]` | configure the ingress' tls |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
+| redis.architecture | string | `"standalone"` |  |
+| redis.auth.enabled | bool | `false` |  |
+| redis.auth.sentinel | bool | `false` |  |
+| redis.cacheConfig.uri | string | `"redis://tmforum-redis-master:6379"` | uri of redis master |
+| redis.enabled | bool | `false` | enable redis caching? |
+| redis.fullnameOverride | string | `"tmforum-redis"` |  |
+| redis.master.containerSecurityContext.enabled | bool | `false` |  |
+| redis.master.podSecurityContext.enabled | bool | `false` |  |
 | route.annotations | object | `{}` | annotations to be added to the route |
 | route.enabled | bool | `false` |  |
 | route.host | string | `"localhost"` | host to be used |
@@ -132,4 +168,4 @@ For all untouched values, the customized deployement will still use the defaults
 | serviceAccount.create | bool | `false` | specifies if the account should be created |
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.11.0](https://github.com/norwoodj/helm-docs/releases/v1.11.0)
+Autogenerated from chart metadata using [helm-docs v1.11.3](https://github.com/norwoodj/helm-docs/releases/v1.11.3)

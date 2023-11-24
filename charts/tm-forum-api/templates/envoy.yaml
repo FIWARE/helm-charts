@@ -1,0 +1,43 @@
+{{- if .Values.apiProxy.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tmforum.fullname" . }}-envoy
+  labels:
+    {{ include "tmforum.labels" $ | nindent 4 }}
+spec:
+  replicas: {{ .Values.apiProxy.replicaCount }}
+  revisionHistoryLimit: {{ .Values.apiProxy.revisionHistoryLimit }}
+  strategy:
+  {{- with .Values.apiProxy.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "tmforum.name" . }}-envoy
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "tmforum.name" . }}-envoy
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec: 
+      containers:
+        - name: envoy-proxy
+          imagePullPolicy:  {{ .Values.apiProxy.image.pullPolicy }}
+          image: "{{ .Values.apiProxy.image.repository }}:{{ .Values.apiProxy.image.tag }}"
+          args: 
+            - -c /config/envoy-config.yaml
+            - -l debug
+          ports:
+            - name: http
+              containerPort: 10000
+              protocol: TCP    
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "tmforum.fullname" $ }}-envoy
+{{- end }}
