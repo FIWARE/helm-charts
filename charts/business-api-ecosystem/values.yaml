@@ -58,15 +58,26 @@ siop:
   ccs:
     # -- Endpoint of the CCS
     endpoint: "http://credentials-config-service:8080"
-    # -- Credential configuration to be registered
-    credentials:
-      - type: "VerifiableCredential"
-        trustedParticipantsLists: [
-          "https://tir.fiware.dev"
-        ]
-        trustedIssuersLists: [
-          "https://til.fiware.dev"
-        ]
+    # -- Default scope to be used from scopes below, if none is provided
+    defaultOidcScope: "defaultScope"
+    # -- Credential configurations for particular scopes
+    oidcScopes:
+      defaultScope:
+        - type: "ParticipantRegistryDefaultCredential"
+          trustedParticipantsLists: [
+            "https://tir.fiware.dev"
+          ]
+          trustedIssuersLists: [
+            "https://til.fiware.dev"
+          ]
+      didRead:
+        - type: "ParticipantRegistryCredential"
+          trustedParticipantsLists: [
+            "https://tir.fiware.dev"
+          ]
+          trustedIssuersLists: [
+            "https://til.fiware.dev"
+          ]
 
   
 ## -- External URL used to access the BAE frontend (logic proxy)

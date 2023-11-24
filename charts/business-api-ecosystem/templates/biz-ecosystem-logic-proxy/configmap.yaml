@@ -13,6 +13,9 @@ data:
       -H 'Content-Type: application/json' \
       -d '{
       "id": "{{ .Values.siop.clientId }}",
-      "credentials": {{- toJson .Values.siop.ccs.credentials }}
+      "defaultOidcScope": "{{ .Values.siop.ccs.defaultOidcScope }}",
+      {{- if .Values.siop.ccs.oidcScopes -}}
+      "oidcScopes": {{- toJson .Values.siop.ccs.oidcScopes }}
+      {{- end }}
     }'
 {{- end }}

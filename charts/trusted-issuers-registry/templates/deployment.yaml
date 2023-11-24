@@ -35,6 +35,16 @@ spec:
       {{- end }}
     spec: 
       serviceAccountName: {{ include "tir.serviceAccountName" . }}
+      {{- if .Values.ccs.endpoint}}
+      initContainers:
+        - name: register-credential-config
+          image: quay.io/curl/curl:8.1.2
+          command: [ "/bin/sh", "-c", "/bin/init.sh"]
+          volumeMounts:
+            - name: ccs-init-volume
+              mountPath: /bin/init.sh
+              subPath: init.sh
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
@@ -88,6 +98,12 @@ spec:
             items:
               - key: application.yaml
                 path: application.yaml
+        {{- if .Values.ccs.endpoint}}
+        - name: ccs-init-volume
+          configMap:
+            name: {{ include "tir.fullname" . }}-ccs
+            defaultMode: 0755
+        {{- end }}
       {{- with .Values.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
