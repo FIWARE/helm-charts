@@ -76,9 +76,9 @@ ccs:
   # -- Id of the service
   id: "did-registry"
   # -- Default scope to be used from scopes below, if none is provided
-  defaultScope: "defaultScope"
+  defaultOidcScope: "defaultScope"
   # -- Credential configurations for particular scopes
-  scopes:
+  oidcScopes:
     defaultScope:
       - type: "ParticipantRegistryDefaultCredential"
         trustedParticipantsLists: [

@@ -59,9 +59,9 @@ siop:
     # -- Endpoint of the CCS
     endpoint: "http://credentials-config-service:8080"
     # -- Default scope to be used from scopes below, if none is provided
-    defaultScope: "defaultScope"
+    defaultOidcScope: "defaultScope"
     # -- Credential configurations for particular scopes
-    scopes:
+    oidcScopes:
       defaultScope:
         - type: "ParticipantRegistryDefaultCredential"
           trustedParticipantsLists: [
