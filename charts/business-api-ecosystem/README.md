@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.6.16](https://img.shields.io/badge/Version-0.6.16-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
+![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![AppVersion: 8.0.0](https://img.shields.io/badge/AppVersion-8.0.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -273,8 +273,9 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | siop.allowedRoles[0] | string | `"seller"` |  |
 | siop.allowedRoles[1] | string | `"customer"` |  |
 | siop.callbackPath | string | `"/auth/vc/callback"` |  |
-| siop.ccs.credentials | list | `[{"trustedIssuersLists":["https://til.fiware.dev"],"trustedParticipantsLists":["https://tir.fiware.dev"],"type":"VerifiableCredential"}]` | Credential configuration to be registered |
+| siop.ccs.defaultOidcScope | string | `"defaultScope"` | Default scope to be used from scopes below, if none is provided |
 | siop.ccs.endpoint | string | `"http://credentials-config-service:8080"` | Endpoint of the CCS |
+| siop.ccs.oidcScopes | object | `{"defaultScope":[{"trustedIssuersLists":["https://til.fiware.dev"],"trustedParticipantsLists":["https://tir.fiware.dev"],"type":"ParticipantRegistryDefaultCredential"}],"didRead":[{"trustedIssuersLists":["https://til.fiware.dev"],"trustedParticipantsLists":["https://tir.fiware.dev"],"type":"ParticipantRegistryCredential"}]}` | Credential configurations for particular scopes |
 | siop.clientId | string | `"marketplace-client"` |  |
 | siop.enabled | bool | `false` |  |
 | siop.verifier.host | string | `"https://verifier.apps.fiware.fiware.dev"` |  |
