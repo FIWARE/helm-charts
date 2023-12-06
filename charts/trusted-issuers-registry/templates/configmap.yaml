@@ -9,14 +9,15 @@ data:
     micronaut:
       server:
         port: {{ .Values.port }}          
+      {{- if .Values.tir.security.enabled }}
       security:
-        enabled: true
-        basic-auth:
-          enabled: false
-        authentication: bearer
-        token:
-          jwt:
-            enabled: true
+        {{- with .Values.tir.security }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- else -}}
+      security:
+        enabled: false
+      {{- end }}
       http:
         services:
           read-timeout: {{.Values.tir.ngsiBroker.timeout}}
