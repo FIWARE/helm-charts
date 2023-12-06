@@ -72,6 +72,33 @@ tir:
     #        verifier:
     #          url: https://verifier.org/.well-known/jwks
 
+# -- Configuration for the Credential Config Service initiation
+ccs:
+  # -- Endpoint of the CCS (uncomment endpoint for initial CCS config creation)
+  #endpoint: "http://credentials-config-service:8080/"
+  # -- Id of the service
+  id: "did-registry"
+  # -- Default scope to be used from scopes below, if none is provided
+  defaultOidcScope: "defaultScope"
+  # -- Credential configurations for particular scopes
+  oidcScopes:
+    defaultScope:
+      - type: "ParticipantRegistryDefaultCredential"
+        trustedParticipantsLists: [
+          "https://tir.fiware.dev"
+        ]
+        trustedIssuersLists: [
+          "https://til.fiware.dev"
+        ]
+    didRead:
+      - type: "ParticipantRegistryCredential"
+        trustedParticipantsLists: [
+          "https://tir.fiware.dev"
+        ]
+        trustedIssuersLists: [
+          "https://til.fiware.dev"
+        ]
+            
 ## configuration for the k8s service to access tir
 service:
   # -- service type
