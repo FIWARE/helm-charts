@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "tmforum.fullname" $ }}-{{ .name }}
+  namespace: {{ .Release.Namespace | quote }}
   labels:
     {{ include "tmforum.labels" $ | nindent 4 }}
 spec:
