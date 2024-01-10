@@ -4,6 +4,7 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: {{ include "tmforum.fullname" $ }}-{{ .name }}
+  namespace: {{ .Release.Namespace | quote }}
   labels:
     {{ include "tmforum.labels" $  | nindent 4 }}
   {{- if or $.Values.route.annotations $.Values.route.certificate }}
