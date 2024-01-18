@@ -51,11 +51,13 @@ service:
   port: 9090
 
 readinessProbe:
+  path: /actuator/health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
 
 livenessProbe:
+  path: /actuator/health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10 

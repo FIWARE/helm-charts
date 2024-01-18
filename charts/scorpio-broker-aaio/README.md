@@ -1,6 +1,6 @@
 # scorpio-broker-aaio
 
-![Version: 0.1.6](https://img.shields.io/badge/Version-0.1.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.0](https://img.shields.io/badge/AppVersion-2.1.0-informational?style=flat-square)
+![Version: 0.1.7](https://img.shields.io/badge/Version-0.1.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.0](https://img.shields.io/badge/AppVersion-2.1.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes in which all the microservices are deployed under a single container and thus less effective for production environment but serves well in testing and dev environment.
 
@@ -28,6 +28,7 @@ A Helm chart for Kubernetes in which all the microservices are deployed under a 
 | ingress.tls | list | `[]` |  |
 | livenessProbe.failureThreshold | int | `6` |  |
 | livenessProbe.initialDelaySeconds | int | `40` |  |
+| livenessProbe.path | string | `"/actuator/health"` |  |
 | livenessProbe.periodSeconds | int | `10` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
@@ -35,6 +36,7 @@ A Helm chart for Kubernetes in which all the microservices are deployed under a 
 | podSecurityContext | object | `{}` |  |
 | readinessProbe.failureThreshold | int | `6` |  |
 | readinessProbe.initialDelaySeconds | int | `40` |  |
+| readinessProbe.path | string | `"/actuator/health"` |  |
 | readinessProbe.periodSeconds | int | `10` |  |
 | replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | resources | object | `{}` |  |
