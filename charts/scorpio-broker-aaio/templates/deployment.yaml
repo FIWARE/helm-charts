@@ -53,6 +53,12 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
     
           env:
+            - name: DBHOST
+              value: {{ .Values.db.dbhost }}
+            - name: DBPASS
+              value: {{ .Values.db.password }}
+            - name: DBUSER
+              value: {{ .Values.db.user }}
             - name: POSTGRES_DB
               value: {{ .Values.db.dbhost }}
             - name: DBHOST
