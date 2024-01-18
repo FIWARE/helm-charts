@@ -61,6 +61,8 @@ spec:
               value: {{ .Values.db.user }}
             - name: POSTGRES_DB
               value: {{ .Values.db.dbhost }}
+            - name: DBHOST
+              value: {{ .Values.db.dbhost }}
             - name: POSTGRES_PASSWORD
               value: {{ .Values.db.password }}
             - name: POSTGRES_USER
