@@ -81,23 +81,23 @@ ccs:
   # -- Default scope to be used from scopes below, if none is provided
   defaultOidcScope: "defaultScope"
   # -- Credential configurations for particular scopes
-  oidcScopes:
-    defaultScope:
-      - type: "ParticipantRegistryDefaultCredential"
-        trustedParticipantsLists: [
-          "https://tir.fiware.dev"
-        ]
-        trustedIssuersLists: [
-          "https://til.fiware.dev"
-        ]
-    didRead:
-      - type: "ParticipantRegistryCredential"
-        trustedParticipantsLists: [
-          "https://tir.fiware.dev"
-        ]
-        trustedIssuersLists: [
-          "https://til.fiware.dev"
-        ]
+  #oidcScopes:
+  #  defaultScope:
+  #    - type: "ParticipantRegistryDefaultCredential"
+  #      trustedParticipantsLists: [
+  #        "https://tir.fiware.dev"
+  #      ]
+  #      trustedIssuersLists: [
+  #        "https://til.fiware.dev"
+  #      ]
+  #  didRead:
+  #    - type: "ParticipantRegistryCredential"
+  #      trustedParticipantsLists: [
+  #        "https://tir.fiware.dev"
+  #      ]
+  #      trustedIssuersLists: [
+  #        "https://til.fiware.dev"
+  #      ]
             
 ## configuration for the k8s service to access tir
 service:
