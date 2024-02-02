@@ -64,7 +64,7 @@ spec:
               value: {{ .Values.db.user }}
             - name: POSTGRES_DB
               value: {{ .Values.db.dbhost }}
-            {{- if .Values.kafka.enabled -}}
+            {{- if .Values.kafka.enabled }}
             - name: BUSHOST
               value: {{ .Values.kafka.bushost }}
             - name: BUSPORT
