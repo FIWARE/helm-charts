@@ -60,3 +60,22 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Support for existing database secret 
+*/}}
+{{- define "scorpioBroker-aaio.secretName" -}}
+    {{- if .Values.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "scorpioBroker-aaio.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "scorpioBroker-aaio.passwordKey" -}}
+    {{- if .Values.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "password" -}}
+    {{- end -}}
+{{- end -}}

@@ -86,8 +86,30 @@ db:
   # -- user for connecting the database
   user: ngb
   # -- password for connecting the database
-  password: ngb  
+  password: ngb
+  # -- existing secret to retrieve the db password
+  existingSecret:
+    # -- should an existing secret be used
+    enabled: false
+    # -- name of the secret
+    name: the-secret
+    # -- key to retrieve the password from
+    key: password
 
+# Kafka related settings
+kafka:
+  # -- Enable usage of Kafka
+  enabled: false
+  # -- Bus host for Kafka
+  bushost: kafka
+  # -- Bus port for Kafka
+  busport: 9092
+
+# Logging settings
+logging:
+  # -- Log level
+  level: INFO
+  
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
