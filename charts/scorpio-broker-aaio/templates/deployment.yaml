@@ -67,6 +67,8 @@ spec:
             {{- if .Values.kafka.enabled -}}
             - name: BUSHOST
               value: {{ .Values.kafka.bushost }}
+            - name: BUSPORT
+              value: {{ .Values.kafka.busport | quote }}
             {{- end }}
             - name: POSTGRES_PASSWORD
               valueFrom:
