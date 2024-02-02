@@ -81,7 +81,8 @@ spec:
               value: zookeeper:2181
             - name: KAFKA_ADVERTISED_PORT
               value: {{ .Values.kafka.busport | quote }}
-            
+            - name: QUARKUS_LOG_LEVEL
+              value: {{ .Values.logging.level | quote }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
