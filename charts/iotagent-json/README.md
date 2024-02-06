@@ -28,11 +28,12 @@ A Helm chart for running the fiware iotagent-json on kubernetes.
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | deployment.amqpPort | int | `5672` | port to be used by the service for amqp communication |
+| deployment.configPath | string | `"/opt/iotagent-json"` | path to config.js file of the iot agent. Default value valid from 2.0 version the path is /opt/iotagent-json, otherwise (up tp 1.19) should be set to /opt/iotajson |
 | deployment.httpNorthPort | int | `4041` | port to be used by the service for northBound communication |
 | deployment.httpSouthPort | int | `7896` | port to be used by the service for southBound communication |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"fiware/iotagent-json"` | iotagent image name ref: https://hub.docker.com/r/fiware/iotagent-json/ |
-| deployment.image.tag | string | `"1.14.0"` | tag of the image to be used |
+| deployment.image.tag | string | `"3.1.0"` | tag of the image to be used |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |

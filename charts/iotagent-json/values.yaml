@@ -50,9 +50,11 @@ deployment:
     # ref: https://hub.docker.com/r/fiware/iotagent-json/
     repository: fiware/iotagent-json
     # -- tag of the image to be used
-    tag: 1.14.0
+    tag: 3.1.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
+  # -- path to config.js file of the iot agent. Default value valid from 2.0 version the path is /opt/iotagent-json, otherwise (up tp 1.19) should be set to /opt/iotajson
+  configPath: /opt/iotagent-json
   # -- port to be used by the service for northBound communication
   httpNorthPort: 4041
   # -- port to be used by the service for southBound communication
