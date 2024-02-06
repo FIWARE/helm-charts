@@ -1,6 +1,6 @@
 # scorpio-broker-aaio
 
-![Version: 0.1.7](https://img.shields.io/badge/Version-0.1.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.0](https://img.shields.io/badge/AppVersion-2.1.0-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.0](https://img.shields.io/badge/AppVersion-2.1.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes in which all the microservices are deployed under a single container and thus less effective for production environment but serves well in testing and dev environment.
 
@@ -14,6 +14,10 @@ A Helm chart for Kubernetes in which all the microservices are deployed under a 
 | autoscaling.minReplicas | int | `1` | minimum number of running pods |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` | target average CPU utilization over all the pods |
 | db.dbhost | string | `"ngb"` | host of the database to be used |
+| db.existingSecret | object | `{"enabled":false,"key":"password","name":"the-secret"}` | existing secret to retrieve the db password |
+| db.existingSecret.enabled | bool | `false` | should an existing secret be used |
+| db.existingSecret.key | string | `"password"` | key to retrieve the password from |
+| db.existingSecret.name | string | `"the-secret"` | name of the secret |
 | db.password | string | `"ngb"` | password for connecting the database |
 | db.user | string | `"ngb"` | user for connecting the database |
 | fullnameOverride | string | `""` |  |
@@ -26,10 +30,14 @@ A Helm chart for Kubernetes in which all the microservices are deployed under a 
 | ingress.hosts | list | `[{"host":"chart-example.local","paths":[]}]` | all hosts to be provided   |
 | ingress.hosts[0] | object | `{"host":"chart-example.local","paths":[]}` | provide a hosts and the paths that should be available     |
 | ingress.tls | list | `[]` |  |
+| kafka.bushost | string | `"kafka"` | Bus host for Kafka |
+| kafka.busport | int | `9092` | Bus port for Kafka |
+| kafka.enabled | bool | `false` | Enable usage of Kafka |
 | livenessProbe.failureThreshold | int | `6` |  |
 | livenessProbe.initialDelaySeconds | int | `40` |  |
 | livenessProbe.path | string | `"/actuator/health"` |  |
 | livenessProbe.periodSeconds | int | `10` |  |
+| logging.level | string | `"INFO"` | Log level |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | podAnnotations | object | `{}` |  |
