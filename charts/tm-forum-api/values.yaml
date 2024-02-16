@@ -331,7 +331,7 @@ health:
   ## broker related health checks
   broker:
     # -- enable including the broker state in the service's health state
-    enabled: true
+    enabled: false
     # -- path to be used for broker health endpoint
     path: "/q/health"
     # -- to be set if the broker url differs from defaultConfig.ngsiLd.url
