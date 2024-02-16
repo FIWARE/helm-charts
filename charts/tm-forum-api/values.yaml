@@ -122,21 +122,21 @@ defaultConfig:
   # if one of the values should be overwritten by the individual api, you need to provide all values.
   livenessProbe:
     # -- path to be used for the health check
-    healthPath: /health
+    healthPath: /health/liveness
     initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 30
   readinessProbe:
     # -- path to be used for the health check
-    readinessPath: /health
+    readinessPath: /health/readiness
     initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 30
    
   # -- a list of additional env vars to be set, check the tm-forum api docu for all available options
-  additonalEnvVars: []
+  additionalEnvVars: []
 
   # -- configuration to be used for the image of the container
   image:
@@ -325,3 +325,17 @@ redis:
       enabled: false
     containerSecurityContext:
       enabled: false
+
+## controls the aspects of the health checks
+health:
+  ## broker related health checks
+  broker:
+    # -- enable including the broker state in the service's health state
+    enabled: true
+    # -- path to be used for broker health endpoint
+    path: "/q/health"
+    # -- to be set if the broker url differs from defaultConfig.ngsiLd.url
+    urlOverride: ""
+    # -- broker health endpoint response codes to be acceptable as 'healthy'
+    allowedResponseCodes:
+      - 200
