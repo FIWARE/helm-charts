@@ -98,7 +98,9 @@ spec:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
           volumeMounts:
             - name: config-volume
-              mountPath: /opt/iotajson/config.js
+            {{- if .Values.deployment.configPath }}
+              mountPath: {{ .Values.deployment.configPath }}/config.js
+            {{- end }} 
               subPath: config.js
       volumes:
         - name: config-volume
