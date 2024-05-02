@@ -5,6 +5,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "vcverifier.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{ include "vcverifier.labels" . | nindent 4 }}
   {{- if .Values.ingress.annotations }}
