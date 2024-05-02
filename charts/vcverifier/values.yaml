@@ -1,0 +1,197 @@
+# Default values for vcverifier.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+## -- option to override the name config in the _helpers.tpl for the whole chart
+nameOverride: ""
+## -- option to override the fullname config in the _helpers.tpl for the whole chart
+fullnameOverride: ""
+
+# -- if a specific service account should be used, it can be configured here
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # -- specifies if the account should be created
+  create: false
+
+## deployment specific configuration
+deployment:
+  # -- initial number of target replications, can be different if autoscaling is enabled
+  replicaCount: 1
+  # -- number of old replicas to be retained
+  revisionHistoryLimit: 3
+  ## configuration of the update strategy
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 1
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 0
+  ## configuration of the image to be used
+  image:
+    # -- image name
+    repository: quay.io/fiware/vcverifier
+    # -- tag of the image to be used
+    tag: 4.0.1
+    # -- specification of the image pull policy
+    pullPolicy: IfNotPresent
+  # -- port to run the container at
+  port: 3000
+  # -- configuration for server
+  server: 
+    # -- host of the verifier
+    host: my-verifier.org
+    # -- directory to be used for static content, f.e. images referenced from the templates
+    staticDir: views/static
+    # -- directory to be used for retrieving the templates.
+    templateDir: views/
+    # -- port to bind the server to
+    port: 3000
+  # -- logging configuration
+  logging:
+    # -- the log level, can be DEBUG, INFO, WARN, ERROR
+    level: WARN
+    # -- should the log be in structured json
+    jsonLogging: true
+    # -- should requests be logged
+    logRequests: true
+    # -- list of paths to be excluded from the request logging
+    pathsToSkip: 
+      - /metrics
+      - /health
+  # -- m2m related config
+  m2m:
+    # -- should authentication be enabled for m2m interaction
+    authEnabled: false
+    # -- path to the private key to be used(in pem format)
+    keyPath:
+    # -- type of the provided key
+    keyType: RSAPS256
+    # -- path to the credential to be used for authentication
+    credentialPath:
+    # -- verification method to be provided for the proof
+    verificationMethod:
+    # -- signature type to be used for the proof
+    signatureType:
+    # -- id of the verifier when retrieving tokens
+    clientId:
+
+  # -- configuration required for the verifier functionality
+  verifier:
+    # -- did to be used for the verifier
+    did: did:key:myverifier
+    # -- address of the trusted issuers registry to be used for verification
+    tirAddress: http://my-tir.org
+    # -- expiry of a login-session in seconds
+    sessionExpiry: 30
+    # -- validation mode for validation the vcs (dont get confused, its just about validation, verfication happens anyways)
+    # applicable modes:
+    # * `none`: No validation, just swallow everything
+    # * `combined`: ld and schema validation
+    # * `jsonLd`: uses JSON-LD parser for validation
+    # * `baseContext`: validates that only the fields and values (when applicable)are present in the document. No extra fields are allowed (outside of credentialSubject).
+    # Default is set to `none` to ensure backwards compatibility
+    validationMode: none
+  
+  # -- config repo configuration
+  configRepo:
+    configEndpoint: http://credentials-config:8080/
+
+  # -- additional labels for the deployment, if required
+  additionalLabels: {}
+  # -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  # resources:
+    # limits:
+      # cpu: 100m
+      # memory: 128Mi
+    # requests:
+      # cpu: 100m
+      # memory: 128Mi
+  # -- selector template
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  # -- tolerations template
+  # ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  # -- affinity template
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+  ## liveness and readiness probes of the dsba-pdp broker, they will be evaluated against the version endpoint
+  # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  livenessProbe:
+    initialDelaySeconds: 3
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 30
+  readinessProbe:
+    initialDelaySeconds: 4
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 30
+
+## configuration for the k8s service to access the vcwaltid
+service:
+  # -- service type
+  type: ClusterIP
+  # -- additional annotations, if required
+  annotations: {}
+  # -- port to be set for the internal service
+  port: 3000
+
+route:
+  ## -- should the deployment create openshift routes
+  enabled: false
+  # -- annotations to be added to the route
+  annotations: {}
+  # -- host to be used
+  # host: localhost
+  # -- tls configuration for the route
+  tls: 
+    termination: edge
+  # -- configuration for certificate generation.
+  # -- see: https://github.com/FIWARE-Ops/fiware-gitops/blob/master/doc/ROUTES.md
+  certificate: { }
+  #   issuer:
+  #     kind: ClusterIssuer
+  #     name: letsencrypt-aws-prod
+
+## ingress configuration
+ingress:
+  # -- should there be an ingress to connect the verifier with the public internet
+  enabled: false
+  # -- annotations to be added to the ingress
+  annotations: {}
+    # kubernetes.io/ingress.class: "ambassador"
+    ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
+    # kubernetes.io/tls-acme: "true"
+    # ingress.kubernetes.io/ssl-redirect: "true"
+  # -- all hosts to be provided
+  hosts: []
+    ## provide a hosts and the paths that should be available
+    # - host: localhost
+      # paths:
+      # - /
+  # -- configure the ingress' tls
+  tls: []
+    # - secretName: bae-as-tls
+      # hosts:
+        # - vcverifier.fiware.org
+
+# -- if the style of the login-page should be altered, templates can be provided here.
+templates: 
+  # for example:
+  # verifier_present_qr.html:
+  #   <!doctype html>
+  #   <html>
+  #      <head> My Custom Template </head>
+  #   <body> 
+  #   <main>
+  #         <h3>Scan the qr to login</h3>
+  #         <img src="data:{{.qrcode}}" alt="The qr should be here.">
+  #   </main>
+
+static: 
+  enabled: false
