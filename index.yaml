@@ -1867,6 +1867,27 @@ entries:
   contract-management:
   - apiVersion: v1
     appVersion: 0.0.1
+    created: "2024-05-02T13:32:34.97066548Z"
+    description: A Helm chart for running the contract-management on kubernetes.
+    digest: 25463408334d14c2387c1b4f8ed48f7f5652b6f1b64d67e106c43dd26f0da640
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - contract-management
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: tim.smyth@fiware.org
+      name: pulledtim
+    name: contract-management
+    sources:
+    - https://github.com/fiware/contract-management
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/contract-management-0.6.2/contract-management-0.6.2.tgz
+    version: 0.6.2
+  - apiVersion: v1
+    appVersion: 0.0.1
     created: "2024-05-02T13:26:31.408033638Z"
     description: A Helm chart for running the contract-management on kubernetes.
     digest: 820bd21afbff5ebd7a1aeac2210d8a68a7b578701abdba586cf46acf0106c962
@@ -1908,6 +1929,27 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/contract-management-0.5.0/contract-management-0.5.0.tgz
     version: 0.5.0
   credentials-config-service:
+  - apiVersion: v1
+    appVersion: 0.0.1
+    created: "2024-05-02T13:32:35.129486435Z"
+    description: A Helm chart for running the credentials-config-service on kubernetes.
+    digest: ead9fd110f833183f2d56f5492d3759dcdc6390129d20ca53e5f0466ac2afe94
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - credentials-config-service
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: credentials-config-service
+    sources:
+    - https://github.com/fiware/credentials-config-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/credentials-config-service-0.1.2/credentials-config-service-0.1.2.tgz
+    version: 0.1.2
   - apiVersion: v1
     appVersion: 0.0.1
     created: "2024-05-02T13:26:31.510670583Z"
@@ -5120,6 +5162,27 @@ entries:
   trusted-issuers-list:
   - apiVersion: v1
     appVersion: 0.0.2
+    created: "2024-05-02T13:32:36.087207325Z"
+    description: A Helm chart for running the trusted-issuers-list on kubernetes.
+    digest: fd4124daf9756ad4ab4e9b1727db4e84b809e772416c82b882ad8f8836d1ec48
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - trusted-issuers-list
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: trusted-issuers-list
+    sources:
+    - https://github.com/fiware/trusted-issuers-list
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-list-0.6.2/trusted-issuers-list-0.6.2.tgz
+    version: 0.6.2
+  - apiVersion: v1
+    appVersion: 0.0.2
     created: "2024-05-02T13:26:32.943019568Z"
     description: A Helm chart for running the trusted-issuers-list on kubernetes.
     digest: 41a7e01db5145cc5bb886afe302d8fb85d554ef776391a484cff840eb96ccbfb
@@ -5684,4 +5747,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2024-05-02T13:26:33.158340689Z"
+generated: "2024-05-02T13:32:36.087717554Z"
