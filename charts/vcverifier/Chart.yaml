@@ -1,0 +1,14 @@
+apiVersion: v1
+name: vcverifier
+version: 2.3.0
+appVersion: 2.0.1
+home: https://github.com/fiware/vcverifier
+description: A Helm chart for running the FIWARE VCVerifier.
+keywords:
+  - FIWARE Data Space Connector
+  - FIWARE
+  - Verifiable Credentials
+  - OID4VP
+maintainers:
+  - name: wistefan
+    email: stefan.wiedemann@fiware.org

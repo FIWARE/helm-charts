@@ -1,0 +1,15 @@
+{{- if .Values.route.certificate -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "vcverifier.fullname" . }}
+  labels:
+    {{ include "vcverifier.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "vcverifier.fullname" . }}-tls-sec
+  issuerRef:
+    {{- toYaml .Values.route.certificate.issuer | nindent 4 }}
+  commonName: {{ .Values.route.host }}
+  dnsNames:
+    - {{ .Values.route.host }}
+{{- end -}}

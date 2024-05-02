@@ -1,0 +1,12 @@
+{{- if .Values.templates }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "vcverifier.fullname" . }}-template
+  labels:
+    {{- include "vcverifier.labels" . | nindent 4 }}
+data:
+  {{- with .Values.templates }}
+    {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}
