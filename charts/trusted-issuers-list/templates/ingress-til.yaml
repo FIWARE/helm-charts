@@ -5,6 +5,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "til.fullname" . }}-til
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{ include "til.labels" . | nindent 4 }}
   {{- if .Values.ingress.til.annotations }}

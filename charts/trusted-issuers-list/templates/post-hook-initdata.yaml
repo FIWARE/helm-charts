@@ -4,6 +4,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "til.fullname" . }}-init-data
+  namespace: {{ $.Release.Namespace | quote }}
   annotations:
     "helm.sh/hook": {{ .Values.initData.hook }}
     "helm.sh/hook-delete-policy": before-hook-creation
