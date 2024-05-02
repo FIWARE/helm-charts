@@ -1,16 +1,16 @@
 apiVersion: v1
 name: apollo
-version: 0.0.6
+version: 0.1.0
 appVersion: 0.0.10
 description: A Helm chart for running apollo on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
 keywords:
-- fiware
-- orion
-- orion-ld
-- apollo
+  - fiware
+  - orion
+  - orion-ld
+  - apollo
 sources:
-- https://github.com/fiware/apollo
+  - https://github.com/fiware/apollo
 maintainers:
-- name: wistefan
-  email: stefan.wiedemann@fiware.org
+  - name: wistefan
+    email: stefan.wiedemann@fiware.org
