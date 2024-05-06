@@ -1,0 +1,12 @@
+{{- if .Values.additionalMapping.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "pap.fullname" . }}-mapping
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "pap.labels" . | nindent 4 }}
+data:
+  mapping.json: |
+    {{ .Values.additionalMapping.json | nindent 4 }}
+{{- end }}
