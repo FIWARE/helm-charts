@@ -108,7 +108,7 @@ spec:
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
       volumes:
-        {{- if .Values.additionalMappings.enabled }}
+        {{- if .Values.additionalMapping.enabled }}
         - name: mappings
           configMap:
             name: {{ include "pap.fullname" . }}-mapping
