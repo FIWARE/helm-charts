@@ -97,7 +97,7 @@ spec:
             {{- toYaml . | nindent 12 }}
             {{- end }}
           volumeMounts:
-            {{- if .Values.additionalMappings.enabled }}
+            {{- if .Values.additionalMapping.enabled }}
             - name: mappings
               mountPath: /mappings
             {{- end }}
