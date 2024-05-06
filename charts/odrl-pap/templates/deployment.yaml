@@ -89,7 +89,7 @@ spec:
             - name: PATHS_MAPPING
               value: /mappings/mapping.json
             {{- end }}
-            {{- if .Values.additionalRego .enabled }}
+            {{- if .Values.additionalRego.enabled }}
             - name: PATHS_REGO
               value: /rego-packages
             {{- end }}
