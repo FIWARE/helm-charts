@@ -185,7 +185,7 @@ database:
 
 
 ## configuration to provide additional mappings from odrl to rego
-additonalMapping:
+additionalMapping:
   # -- should an additional mapping.json be loaded
   enabled: false
   # -- mapping.json to merged with the defaults
