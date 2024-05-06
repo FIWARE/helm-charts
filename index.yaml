@@ -3962,6 +3962,28 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/mintaka-0.0.1/mintaka-0.0.1.tgz
     version: 0.0.1
+  odrl-pap:
+  - apiVersion: v1
+    appVersion: 0.0.1
+    created: "2024-05-06T15:12:01.814677074Z"
+    description: A Helm chart for running the odrl-pap on kubernetes.
+    digest: b8e864d66911aa94bb4bf75bc745fb1f6569d5d4614e00e7d1c5631b7cb44099
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - Data Space Connector
+    - DSBA
+    - Authorization
+    - ODRL
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: Stefan Wiedemann
+    name: odrl-pap
+    sources:
+    - https://github.com/wistefan/odrl-pap
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/odrl-pap-0.0.3/odrl-pap-0.0.3.tgz
+    version: 0.0.3
   orion:
   - annotations:
       charts.openshift.io/name: orion-ld
@@ -5747,4 +5769,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2024-05-02T13:32:36.087717554Z"
+generated: "2024-05-06T15:12:01.8150967Z"
