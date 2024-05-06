@@ -85,7 +85,7 @@ spec:
                   key: {{ include "pap.passwordKey" . }}
             - name: QUARKUS_DATASOURCE_JDBC_URL
               value: {{ .Values.database.url | quote }}
-            {{- if .Values.additionalMappings.enabled }}
+            {{- if .Values.additionalMapping.enabled }}
             - name: PATHS_MAPPING
               value: /mappings/mapping.json
             {{- end }}
