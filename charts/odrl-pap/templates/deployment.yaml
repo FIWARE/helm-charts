@@ -28,7 +28,7 @@ spec:
       {{- if .Values.deployment.additionalAnnotations -}}
       annotations:
         prometheus.io/scrape: {{ .Values.management.prometheus.enabled | quote }}
-        prometheus.io/path: {{ .Values.management.prometheus.path }}
+        prometheus.io/path: /q/metrics
         prometheus.io/port: {{ .Values.management.port }}
         {{- with .Values.deployment.additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
@@ -71,11 +71,7 @@ spec:
             {{- if .Values.management.prometheus.enabled }}
             - name: QUARKUS_MICROMETER_EXPORT_PROMETHEUS_ENABLED
               value: {{ .Values.management.prometheus.enabled | quote }}
-            - name: QUARKUS_MICROMETER_EXPORT_PROMETHEUS_PATH
-              value: {{ .Values.management.prometheus.path | quote }}
             {{- end }}
-            - name: QUARKUS_DATASOURCE_DB_KIND
-              value: {{ .Values.database.kind | quote }}
             - name: QUARKUS_DATASOURCE_USERNAME
               value: {{ .Values.database.username | quote }}
             - name: QUARKUS_DATASOURCE_PASSWORD
