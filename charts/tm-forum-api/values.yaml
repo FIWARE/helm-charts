@@ -143,13 +143,15 @@ defaultConfig:
     # -- repository to get the container from
     repository: quay.io/fiware
     # -- tag to be used, most of the time the apis will use the same version
-    tag: 0.13.2
+    tag: 0.20.1
     # -- pull policy to be used
     pullPolicy: IfNotPresent
   # -- log level of the api
   logLevel: DEBUG
   # -- default context to be used when contacting the context broker
   contextUrl: https://smartdatamodels.org/context.jsonld
+  # -- host that the tm-forum api can be reached at
+  serverHost: http://tmf-api:8080
   # -- port to be used for the app
   port: 8080
   # -- cache config for connecting the broker
