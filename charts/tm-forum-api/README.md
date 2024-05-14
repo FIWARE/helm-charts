@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
+![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -109,10 +109,10 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.cache.subscriptions.maximumSize | int | `1000` | maximum size of the cache |
 | defaultConfig.contextUrl | string | `"https://smartdatamodels.org/context.jsonld"` | default context to be used when contacting the context broker |
 | defaultConfig.endpointsPort | int | `9090` | metrics and health port |
-| defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/fiware","tag":"0.13.2"}` | configuration to be used for the image of the container |
+| defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/fiware","tag":"0.20.1"}` | configuration to be used for the image of the container |
 | defaultConfig.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used |
 | defaultConfig.image.repository | string | `"quay.io/fiware"` | repository to get the container from |
-| defaultConfig.image.tag | string | `"0.13.2"` | tag to be used, most of the time the apis will use the same version |
+| defaultConfig.image.tag | string | `"0.20.1"` | tag to be used, most of the time the apis will use the same version |
 | defaultConfig.livenessProbe.healthPath | string | `"/health/liveness"` | path to be used for the health check |
 | defaultConfig.livenessProbe.initialDelaySeconds | int | `30` |  |
 | defaultConfig.livenessProbe.periodSeconds | int | `10` |  |
@@ -135,6 +135,7 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.readinessProbe.timeoutSeconds | int | `30` |  |
 | defaultConfig.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | defaultConfig.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
+| defaultConfig.serverHost | string | `"http://tmf-api:8080"` | host that the tm-forum api can be reached at |
 | defaultConfig.sidecars | list | `[]` | additional sidecars for the deployment, if required |
 | defaultConfig.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | defaultConfig.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
