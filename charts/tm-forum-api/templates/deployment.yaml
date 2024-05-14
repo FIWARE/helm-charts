@@ -209,6 +209,15 @@ spec:
             - name: GENERAL_CONTEXT_URL
               value: {{ $.Values.defaultConfig.contextUrl | quote }}
             {{- end }}
+            
+
+            {{- if .serverHost }}
+            - name: GENERAL_SERVER_HOST
+              value: {{ .serverHost | quote }}
+            {{- else if $.Values.defaultConfig.serverHost }}
+            - name: GENERAL_SERVER_HOST
+              value: {{ $.Values.defaultConfig.serverHost | quote }}
+            {{- end }}
 
             {{- if $.Values.redis.enabled }}
             - name: MICRONAUT_ENVIRONMENTS
