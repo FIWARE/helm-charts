@@ -23,7 +23,7 @@ data:
       {{- end }}
 
     verifier:
-      {{- with .Values.deployment.server }}
+      {{- with .Values.deployment.verifier }}
       {{- toYaml . | nindent 6 }}
       {{- end }}
     
