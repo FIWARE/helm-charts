@@ -56,6 +56,21 @@ tir:
     #        start_date: "2021-09-27T00:00:00Z"
     #        end_date: "2051-09-27T00:00:00Z"
     #        loa: 3
+  ## auth config to be used for the tir
+  security:
+    # -- should auth be enabled
+    enabled: false
+    # -- configuration of the auth, see micronaut-security doc for details
+    # basic-auth:
+    #  enabled: false
+    # authentication: bearer
+    # token:
+    #  jwt:
+    #    enabled: true
+    #    signatures:
+    #      jwks:
+    #        verifier:
+    #          url: https://verifier.org/.well-known/jwks
 
 # -- Configuration for the Credential Config Service initiation
 ccs:
@@ -66,23 +81,23 @@ ccs:
   # -- Default scope to be used from scopes below, if none is provided
   defaultOidcScope: "defaultScope"
   # -- Credential configurations for particular scopes
-  oidcScopes:
-    defaultScope:
-      - type: "ParticipantRegistryDefaultCredential"
-        trustedParticipantsLists: [
-          "https://tir.fiware.dev"
-        ]
-        trustedIssuersLists: [
-          "https://til.fiware.dev"
-        ]
-    didRead:
-      - type: "ParticipantRegistryCredential"
-        trustedParticipantsLists: [
-          "https://tir.fiware.dev"
-        ]
-        trustedIssuersLists: [
-          "https://til.fiware.dev"
-        ]
+  #oidcScopes:
+  #  defaultScope:
+  #    - type: "ParticipantRegistryDefaultCredential"
+  #      trustedParticipantsLists: [
+  #        "https://tir.fiware.dev"
+  #      ]
+  #      trustedIssuersLists: [
+  #        "https://til.fiware.dev"
+  #      ]
+  #  didRead:
+  #    - type: "ParticipantRegistryCredential"
+  #      trustedParticipantsLists: [
+  #        "https://tir.fiware.dev"
+  #      ]
+  #      trustedIssuersLists: [
+  #        "https://til.fiware.dev"
+  #      ]
             
 ## configuration for the k8s service to access tir
 service:

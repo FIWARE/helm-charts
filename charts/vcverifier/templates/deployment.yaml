@@ -1,0 +1,125 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ include "vcverifier.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{ include "vcverifier.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicaCount }}
+  revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
+  strategy:
+  {{- with .Values.deployment.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "vcverifier.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{ include "vcverifier.labels" . | nindent 8 }}
+        {{- with .Values.deployment.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.deployment.additionalAnnotations -}}
+      annotations:
+        {{- with .Values.deployment.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec: 
+      serviceAccountName: {{ include "vcverifier.serviceAccountName" . }}
+      {{- if .Values.deployment.initContainers }}
+      initContainers:
+        {{- with .Values.deployment.initContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.deployment.port }}
+              name: backend
+          env:
+          {{- if .Values.deployment.alternativeConfig }}
+            - name: CONFIG_FILE
+              value: {{ .Values.deployment.alternativeConfig }}
+          {{- else }}
+            - name: CONFIG_FILE
+              value: /configs/server.yaml
+          {{- end }}
+          {{- if .Values.deployment.additionalEnvVars }}
+            {{- with .Values.deployment.additionalEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: backend
+            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: backend
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+          ## workaround for missing db support
+          volumeMounts:
+            - mountPath: /configs/
+              name: config-volume
+            {{- if .Values.templates }}
+            - mountPath: /templates/
+              name: template-volume
+            {{- end }}
+            {{- if .Values.static.enabled }}
+            - mountPath: /static/
+              name: static-volume
+            {{- end }}
+            {{- if .Values.deployment.additionalVolumeMounts }}
+            {{- with .Values.deployment.additionalVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- end }}
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ include "vcverifier.fullname" . }}
+      {{- if .Values.deployment.additionalVolumes }}
+      {{- with .Values.deployment.additionalVolumes }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.templates }}
+      - name: template-volume
+        configMap:
+          name: {{ include "vcverifier.fullname" . }}-template
+      {{- end }}
+      {{- if .Values.static.enabled }}
+      - name: static-volume
+        emptyDir:
+          sizeLimit: 500Mi
+      {{- end }}
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

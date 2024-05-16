@@ -1,0 +1,34 @@
+{{- if .Values.route.enabled }}
+{{- $fullName := include "vcverifier.fullname" . -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "vcverifier.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{ include "vcverifier.labels" . | nindent 4 }}
+  {{- if or .Values.route.annotations .Values.route.certificate }}
+  annotations:
+    {{- if .Values.route.certificate }}
+    cert-utils-operator.redhat-cop.io/certs-from-secret: {{ include "vcverifier.fullname" . }}-tls-sec
+    {{- end }}
+    {{- with .Values.route.annotations }}
+      {{- toYaml . | nindent 4 }}
+      {{- end }}
+  {{- end }}
+spec:
+  port:
+    targetPort: {{ .Values.service.port }}
+  {{- if .Values.route.host }}
+  host: {{ .Values.route.host}}
+  {{- end }}
+  to:
+    kind: Service
+    name: {{ $fullName }}
+  {{- if .Values.route.tls }}
+  tls:
+  {{- with .Values.route.tls }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

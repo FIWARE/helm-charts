@@ -1,0 +1,17 @@
+apiVersion: v1
+name: odrl-pap
+version: 0.0.12
+appVersion: 0.0.1
+description: A Helm chart for running the odrl-pap on kubernetes.
+icon: https://fiware.github.io/catalogue/img/fiware.png
+keywords:
+  - FIWARE
+  - Data Space Connector
+  - DSBA
+  - Authorization
+  - ODRL
+sources:
+  - https://github.com/wistefan/odrl-pap
+maintainers:
+  - name: Stefan Wiedemann
+    email: stefan.wiedemann@fiware.org

@@ -1,0 +1,11 @@
+{{- if .Values.additionalRego.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "pap.fullname" . }}-rego
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "pap.labels" . | nindent 4 }}
+data:
+  {{ .Values.additionalRego.packages | nindent 4 }}
+{{- end }}

@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "tmforum.fullname" $ }}-{{ .name }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{ include "tmforum.labels" $ | nindent 4 }}
 spec:
@@ -208,6 +209,15 @@ spec:
             - name: GENERAL_CONTEXT_URL
               value: {{ $.Values.defaultConfig.contextUrl | quote }}
             {{- end }}
+            
+
+            {{- if .serverHost }}
+            - name: GENERAL_SERVER_HOST
+              value: {{ .serverHost | quote }}
+            {{- else if $.Values.defaultConfig.serverHost }}
+            - name: GENERAL_SERVER_HOST
+              value: {{ $.Values.defaultConfig.serverHost | quote }}
+            {{- end }}
 
             {{- if $.Values.redis.enabled }}
             - name: MICRONAUT_ENVIRONMENTS
@@ -238,7 +248,20 @@ spec:
             - name: MICRONAUT_CACHES_SUBSCRIPTIONS_EXPIRE_AFTER_ACCESS
               value: {{ $.Values.defaultConfig.cache.subscriptions.expireAfterAccess | quote}}
             {{- end }}
-
+            {{- if $.Values.health.broker.enabled }}
+            - name: MICRONAUT_HTTP_SERVICES_NGSIHEALTH_URL
+            {{- if $.Values.health.broker.urlOverride }}
+              value: {{ $.Values.health.broker.urlOverride | quote }}
+            {{- else }}
+              value: {{ $.Values.defaultConfig.ngsiLd.url | quote }}
+            {{- end }}
+            - name: MICRONAUT_HTTP_SERVICES_NGSIHEALTH_PATH
+              value: {{ $.Values.health.broker.path | quote }}
+            - name: ENDPOINTS_HEALTH_BROKER_ENABLED
+              value: 'true'
+            - name: ENDPOINTS_HEALTH_BROKER_ALLOWED_RESPONSE_CODES
+              value: {{ $.Values.health.broker.allowedResponseCodes | quote }}
+            {{- end }}
             {{- if .additionalEnvVars }}
             {{- with .additionalEnvVars }}
             {{- toYaml . | nindent 12 }}

@@ -1,19 +1,19 @@
 apiVersion: v2
 name: ishare-satellite
-version: 1.2.0
+version: 1.3.0
 appVersion: 1.2.0
 home: https://github.com/FIWARE/ishare-satellite
 description: A Helm chart for running an implementation of the iSHARE Satellite
 icon: https://fiware.github.io/catalogue/img/fiware.png
 keywords:
-- fiware
-- i4trust
-- ishare
-- trust anchor
-- trust authority
-- scheme owner
+  - fiware
+  - i4trust
+  - ishare
+  - trust anchor
+  - trust authority
+  - scheme owner
 sources:
-- https://github.com/FIWARE/ishare-satellite
+  - https://github.com/FIWARE/ishare-satellite
 maintainers:
-- name: dwendland
-  email: dennis.wendland@fiware.org
+  - name: dwendland
+    email: dennis.wendland@fiware.org

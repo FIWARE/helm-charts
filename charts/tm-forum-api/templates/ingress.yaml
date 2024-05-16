@@ -4,6 +4,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "tmforum.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels:
     {{ include "tmforum.labels" . | nindent 4 }}
   {{- if .Values.ingress.annotations }}

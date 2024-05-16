@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "scorpioBroker-aaio.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{- include "scorpioBroker-aaio.labels" . | nindent 4 }}
 spec:
@@ -38,33 +39,52 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /actuator/health
+              path: {{ .Values.livenessProbe.path }}
               port: 9090
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
-              path: /actuator/health
+              path: {{ .Values.readinessProbe.path }}
               port: 9090
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
     
           env:
+            - name: DBHOST
+              value: {{ .Values.db.dbhost }}
+            - name: DBPASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "scorpioBroker-aaio.secretName" . }}
+                  key: {{ include "scorpioBroker-aaio.passwordKey" . }}
+            - name: DBUSER
+              value: {{ .Values.db.user }}
             - name: POSTGRES_DB
               value: {{ .Values.db.dbhost }}
+            {{- if .Values.kafka.enabled }}
+            - name: BUSHOST
+              value: {{ .Values.kafka.bushost }}
+            - name: BUSPORT
+              value: {{ .Values.kafka.busport | quote }}
+            {{- end }}
             - name: POSTGRES_PASSWORD
-              value: {{ .Values.db.password }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "scorpioBroker-aaio.secretName" . }}
+                  key: {{ include "scorpioBroker-aaio.passwordKey" . }}
             - name: POSTGRES_USER
               value: {{ .Values.db.user }}  
             - name: KAFKA_ADVERTISED_HOST_NAME
-              value: kafka
+              value: {{ .Values.kafka.bushost }}
             - name: KAFKA_ZOOKEEPER_CONNECT
               value: zookeeper:2181
             - name: KAFKA_ADVERTISED_PORT
-              value: "9092"
-            
+              value: {{ .Values.kafka.busport | quote }}
+            - name: QUARKUS_LOG_LEVEL
+              value: {{ .Values.logging.level | quote }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

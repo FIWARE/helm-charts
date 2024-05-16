@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
+![Version: 0.9.0](https://img.shields.io/badge/Version-0.9.0-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -95,8 +95,8 @@ For all untouched values, the customized deployement will still use the defaults
 | autoscaling.metrics | list | `[]` | metrics to react on |
 | autoscaling.minReplicas | int | `1` | minimum number of running pods |
 | defaultConfig.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
+| defaultConfig.additionalEnvVars | list | `[]` | a list of additional env vars to be set, check the tm-forum api docu for all available options |
 | defaultConfig.additionalLabels | object | `{}` | additional labels for the deployment, if required |
-| defaultConfig.additonalEnvVars | list | `[]` | a list of additional env vars to be set, check the tm-forum api docu for all available options |
 | defaultConfig.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | defaultConfig.cache | object | `{"entities":{"expireAfterAccess":"2s","expireAfterWrite":"2s","maximumSize":1000},"subscriptions":{"expireAfterAccess":"14d","expireAfterWrite":"14d","maximumSize":1000}}` | cache config for connecting the broker |
 | defaultConfig.cache.entities | object | `{"expireAfterAccess":"2s","expireAfterWrite":"2s","maximumSize":1000}` | entities cache |
@@ -109,11 +109,11 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.cache.subscriptions.maximumSize | int | `1000` | maximum size of the cache |
 | defaultConfig.contextUrl | string | `"https://smartdatamodels.org/context.jsonld"` | default context to be used when contacting the context broker |
 | defaultConfig.endpointsPort | int | `9090` | metrics and health port |
-| defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/fiware","tag":"0.13.2"}` | configuration to be used for the image of the container |
+| defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/fiware","tag":"0.20.1"}` | configuration to be used for the image of the container |
 | defaultConfig.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used |
 | defaultConfig.image.repository | string | `"quay.io/fiware"` | repository to get the container from |
-| defaultConfig.image.tag | string | `"0.13.2"` | tag to be used, most of the time the apis will use the same version |
-| defaultConfig.livenessProbe.healthPath | string | `"/health"` | path to be used for the health check |
+| defaultConfig.image.tag | string | `"0.20.1"` | tag to be used, most of the time the apis will use the same version |
+| defaultConfig.livenessProbe.healthPath | string | `"/health/liveness"` | path to be used for the health check |
 | defaultConfig.livenessProbe.initialDelaySeconds | int | `30` |  |
 | defaultConfig.livenessProbe.periodSeconds | int | `10` |  |
 | defaultConfig.livenessProbe.successThreshold | int | `1` |  |
@@ -130,11 +130,12 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.prometheus.path | string | `"/prometheus"` | path to get the metrics from |
 | defaultConfig.readinessProbe.initialDelaySeconds | int | `30` |  |
 | defaultConfig.readinessProbe.periodSeconds | int | `10` |  |
-| defaultConfig.readinessProbe.readinessPath | string | `"/health"` | path to be used for the health check |
+| defaultConfig.readinessProbe.readinessPath | string | `"/health/readiness"` | path to be used for the health check |
 | defaultConfig.readinessProbe.successThreshold | int | `1` |  |
 | defaultConfig.readinessProbe.timeoutSeconds | int | `30` |  |
 | defaultConfig.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | defaultConfig.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
+| defaultConfig.serverHost | string | `"http://tmf-api:8080"` | host that the tm-forum api can be reached at |
 | defaultConfig.sidecars | list | `[]` | additional sidecars for the deployment, if required |
 | defaultConfig.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | defaultConfig.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
@@ -142,6 +143,10 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
 | defaultConfig.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | fullnameOverride | string | `""` | option to override the fullname config in the _helpers.tpl |
+| health.broker.allowedResponseCodes | list | `[200]` | broker health endpoint response codes to be acceptable as 'healthy' |
+| health.broker.enabled | bool | `false` | enable including the broker state in the service's health state |
+| health.broker.path | string | `"/q/health"` | path to be used for broker health endpoint |
+| health.broker.urlOverride | string | `""` | to be set if the broker url differs from defaultConfig.ngsiLd.url |
 | ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | ingress.className | string | `"nginx"` | class of the ingress controller to handle the ingress |
 | ingress.enabled | bool | `false` | should there be an ingress to connect tmforum with the public internet |
@@ -168,4 +173,4 @@ For all untouched values, the customized deployement will still use the defaults
 | serviceAccount.create | bool | `false` | specifies if the account should be created |
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.11.3](https://github.com/norwoodj/helm-docs/releases/v1.11.3)
+Autogenerated from chart metadata using [helm-docs v1.13.1](https://github.com/norwoodj/helm-docs/releases/v1.13.1)
