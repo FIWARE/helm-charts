@@ -178,8 +178,10 @@ spec:
             {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
             - name: BAE_LP_THEME
               value: {{ .Values.bizEcosystemLogicProxy.theme.name | quote }}
+            {{- if .Values.bizEcosystemLogicProxy.theme.url }}
             - name: BAE_LP_THEME_URL
               value: {{ .Values.bizEcosystemLogicProxy.theme.url | quote }}
+            {{- end }}
             {{- end }}
             - name: BAE_LP_REVENUE_MODEL
               value: {{ .Values.bizEcosystemLogicProxy.revenueModel | quote }}
