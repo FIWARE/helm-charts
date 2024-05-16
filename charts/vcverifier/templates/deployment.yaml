@@ -45,8 +45,13 @@ spec:
             - containerPort: {{ .Values.deployment.port }}
               name: backend
           env:
+          {{- if .Values.deployment.alternativeConfig }}
+            - name: CONFIG_FILE
+              value: {{ .Values.deployment.alternativeConfig }}
+          {{- else }}
             - name: CONFIG_FILE
               value: /configs/server.yaml
+          {{- end }}
           {{- if .Values.deployment.additionalEnvVars }}
             {{- with .Values.deployment.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
