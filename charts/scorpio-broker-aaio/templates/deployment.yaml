@@ -28,6 +28,12 @@ spec:
       serviceAccountName: {{ include "scorpioBroker-aaio.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.initContainers }}
+      initContainers:
+        {{- with .Values.initContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -85,8 +91,25 @@ spec:
               value: {{ .Values.kafka.busport | quote }}
             - name: QUARKUS_LOG_LEVEL
               value: {{ .Values.logging.level | quote }}
+            {{- if .Values.additionalEnvVars }}
+            {{- with .Values.additionalEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- end }}
+          {{- if .Values.additionalVolumeMounts }}
+          volumeMounts:
+            {{- with .Values.additionalVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.additionalVolumes }}
+      volumes:
+      {{- with .Values.additionalVolumes }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
