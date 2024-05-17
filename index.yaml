@@ -1953,6 +1953,27 @@ entries:
   credentials-config-service:
   - apiVersion: v1
     appVersion: 0.0.1
+    created: "2024-05-17T10:39:46.028531283Z"
+    description: A Helm chart for running the credentials-config-service on kubernetes.
+    digest: 39f80a541b11a4badd309e9d19f7d71de93a2b2afd7778242a72d7a03b6ce1b1
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - credentials-config-service
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: credentials-config-service
+    sources:
+    - https://github.com/fiware/credentials-config-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/credentials-config-service-0.1.5/credentials-config-service-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v1
+    appVersion: 0.0.1
     created: "2024-05-02T13:32:35.129486435Z"
     description: A Helm chart for running the credentials-config-service on kubernetes.
     digest: ead9fd110f833183f2d56f5492d3759dcdc6390129d20ca53e5f0466ac2afe94
@@ -5992,4 +6013,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2024-05-17T07:35:44.146345725Z"
+generated: "2024-05-17T10:39:46.028963094Z"
