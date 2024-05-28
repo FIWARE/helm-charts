@@ -1,6 +1,6 @@
 # odrl-pap
 
-![Version: 0.0.12](https://img.shields.io/badge/Version-0.0.12-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.0.21](https://img.shields.io/badge/Version-0.0.21-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 A Helm chart for running the odrl-pap on kubernetes.
 
@@ -36,7 +36,11 @@ A Helm chart for running the odrl-pap on kubernetes.
 | database.username | string | `"user"` | username to conncet the db - ignored if existing secret is configured |
 | deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
+| deployment.additionalVolumeMounts | list | `[]` | additional volume mounts |
+| deployment.additionalVolumes | list | `[]` | additional volumes to be added for the containers |
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| deployment.args | list | `[]` | arguments to be set for the container |
+| deployment.command | list | `[]` | command to be used for starting the container |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/wi_stefan/odrl-pap"` | til image name ref: https://quay.io/repository/wistefan/odrl-pap |
 | deployment.image.tag | string | `"0.0.1"` | tag of the image to be used |
