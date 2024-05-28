@@ -117,6 +117,7 @@ spec:
             {{- with .Values.deployment.additionalVolumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+            {{- end }}
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
       volumes:
