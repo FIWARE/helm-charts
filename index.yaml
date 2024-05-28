@@ -4008,6 +4008,27 @@ entries:
   odrl-pap:
   - apiVersion: v1
     appVersion: 0.0.1
+    created: "2024-05-28T12:11:41.340662154Z"
+    description: A Helm chart for running the odrl-pap on kubernetes.
+    digest: 3cdc2b726439463516156de6ea6cda26c1f1705637e3ab04c98fd3297824d52d
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - Data Space Connector
+    - DSBA
+    - Authorization
+    - ODRL
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: Stefan Wiedemann
+    name: odrl-pap
+    sources:
+    - https://github.com/wistefan/odrl-pap
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/odrl-pap-0.0.17/odrl-pap-0.0.17.tgz
+    version: 0.0.17
+  - apiVersion: v1
+    appVersion: 0.0.1
     created: "2024-05-28T11:48:33.538127479Z"
     description: A Helm chart for running the odrl-pap on kubernetes.
     digest: 802c88f2b25dd998ce98149d65d19d7f9eb3c8d97cc62952244a25d0c7683df2
@@ -6052,4 +6073,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2024-05-28T11:48:33.538543913Z"
+generated: "2024-05-28T12:11:41.341148121Z"
