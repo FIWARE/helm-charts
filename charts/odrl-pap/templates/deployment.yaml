@@ -40,6 +40,12 @@ spec:
         - name: {{ .Chart.Name }}
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          {{- if .Values.deployment.command }}
+          command: {{ .Values.deployment.command }}
+          {{- end }}
+          {{- if .Values.deployment.args }}
+          command: {{ .Values.deployment.args }}
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.deployment.port}}
