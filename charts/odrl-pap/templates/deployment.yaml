@@ -50,7 +50,7 @@ spec:
           command: {{ .Values.deployment.command }}
           {{- end }}
           {{- if .Values.deployment.args }}
-          command: {{ .Values.deployment.args }}
+          args: {{ .Values.deployment.args }}
           {{- end }}
           ports:
             - name: http
