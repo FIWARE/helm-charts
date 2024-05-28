@@ -39,7 +39,7 @@ A Helm chart for running the credentials-config-service on kubernetes.
 | deployment.healthPort | int | `9090` | port to request health information at |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/credentials-config-service"` | til image name ref: https://quay.io/repository/fiware/credentials-config-service |
-| deployment.image.tag | string | `"0.0.1"` | tag of the image to be used |
+| deployment.image.tag | string | `"1.0.1"` | tag of the image to be used |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
