@@ -47,10 +47,16 @@ spec:
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
           {{- if .Values.deployment.command }}
-          command: {{ .Values.deployment.command }}
+          command:
+          {{- with .Values.deployment.command }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.deployment.args }}
-          args: {{ .Values.deployment.args }}
+          args: 
+          {{- with .Values.deployment.args }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- end }}
           ports:
             - name: http
