@@ -194,12 +194,40 @@ spec:
             - name: BAE_CB_CATALOG
               value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductCatalog
             {{- end }}
+            {{- if .Values.bizEcosystemApis.tmForum.services }}
+            - name: BAE_CB_SERVICE_CATALOG
+              value: http://{{ .Values.bizEcosystemApis.tmForum.services.host }}:{{ .Values.bizEcosystemApis.tmForum.services.port }}{{ .Values.bizEcosystemApis.tmForum.services.path }}
+            {{- else }}
+            - name: BAE_CB_SERVICE_CATALOG
+              value: http://{{ include "bizEcosystemApis.fullhostname" . }}
+            {{- end }}
+            {{- if .Values.bizEcosystemApis.tmForum.resources }}
+            - name: BAE_CB_RESOURCE_CATALOG
+              value: http://{{ .Values.bizEcosystemApis.tmForum.resources.host }}:{{ .Values.bizEcosystemApis.tmForum.resources.port }}{{ .Values.bizEcosystemApis.tmForum.resources.path }}
+            {{- else }}
+            - name: BAE_CB_RESOURCE_CATALOG
+              value: http://{{ include "bizEcosystemApis.fullhostname" . }}
+            {{- end }}
             {{- if .Values.bizEcosystemApis.tmForum.inventory }}
             - name: BAE_CB_INVENTORY
               value: http://{{ .Values.bizEcosystemApis.tmForum.inventory.host }}:{{ .Values.bizEcosystemApis.tmForum.inventory.port }}{{ .Values.bizEcosystemApis.tmForum.inventory.path }}
             {{- else }}
             - name: BAE_CB_INVENTORY
               value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductInventory
+            {{- end }}
+            {{- if .Values.bizEcosystemApis.tmForum.serviceInventory }}
+            - name: BAE_CB_SERVICE_INVENTORY
+              value: http://{{ .Values.bizEcosystemApis.tmForum.serviceInventory.host }}:{{ .Values.bizEcosystemApis.tmForum.serviceInventory.port }}{{ .Values.bizEcosystemApis.tmForum.serviceInventory.path }}
+            {{- else }}
+            - name: BAE_CB_SERVICE_INVENTORY
+              value: http://{{ include "bizEcosystemApis.fullhostname" . }}
+            {{- end }}
+            {{- if .Values.bizEcosystemApis.tmForum.resourceInventory }}
+            - name: BAE_CB_RESOURCE_INVENTORY
+              value: http://{{ .Values.bizEcosystemApis.tmForum.resourceInventory.host }}:{{ .Values.bizEcosystemApis.tmForum.resourceInventory.port }}{{ .Values.bizEcosystemApis.tmForum.resourceInventory.path }}
+            {{- else }}
+            - name: BAE_CB_RESOURCE_INVENTORY
+              value: http://{{ include "bizEcosystemApis.fullhostname" . }}
             {{- end }}
             {{- if .Values.bizEcosystemApis.tmForum.ordering }}
             - name: BAE_CB_ORDERING
