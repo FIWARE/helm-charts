@@ -56,9 +56,9 @@ deployment:
   # -- additional annotations for the deployment, if required
   additionalAnnotations: {}
   # -- additional volume mounts
-  additionalVolumeMounts: {}
+  additionalVolumeMounts: []
   # -- additional volumes to be added for the containers
-  additionalVolumes: {}
+  additionalVolumes: []
   ## pap resource requests and limits, we leave the default empty to make that a concious choice by the user.
   ## for the autoscaling to make sense, you should configure this.
   # resources:
