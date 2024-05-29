@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled -}}
-  {{- $fullName := include "scorpioBroker-aaio.fullname" . -}}
-  {{- $servicePort := .Values.service.port -}}
+{{- $fullName := include "scorpioBroker-aaio.fullname" . -}}
+{{- $servicePort := .Values.service.port -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
