@@ -55,6 +55,10 @@ deployment:
   additionalLabels: {}
   # -- additional annotations for the deployment, if required
   additionalAnnotations: {}
+  # -- additional volume mounts
+  additionalVolumeMounts: []
+  # -- additional volumes to be added for the containers
+  additionalVolumes: []
   ## pap resource requests and limits, we leave the default empty to make that a concious choice by the user.
   ## for the autoscaling to make sense, you should configure this.
   # resources:
@@ -85,6 +89,10 @@ deployment:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 30
+  # -- arguments to be set for the container
+  args: []
+  # -- command to be used for starting the container
+  command: []
 
 ## pod autoscaling configuration, use for automatic scaling of the broker pods
 autoscaling:
