@@ -57,7 +57,7 @@ ingress:
   # -- should there be an ingress to connect tmforum with the public internet
   enabled: false
   # -- class of the ingress controller to handle the ingress
-  className: nginx
+  className:
   # -- annotations to be added to the ingress
   annotations: {}
     # kubernetes.io/ingress.class: "ambassador"
