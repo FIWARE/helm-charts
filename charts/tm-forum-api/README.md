@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.9.2](https://img.shields.io/badge/Version-0.9.2-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
+![Version: 0.9.3](https://img.shields.io/badge/Version-0.9.3-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -148,7 +148,7 @@ For all untouched values, the customized deployement will still use the defaults
 | health.broker.path | string | `"/q/health"` | path to be used for broker health endpoint |
 | health.broker.urlOverride | string | `""` | to be set if the broker url differs from defaultConfig.ngsiLd.url |
 | ingress.annotations | object | `{}` | annotations to be added to the ingress |
-| ingress.className | string | `"nginx"` | class of the ingress controller to handle the ingress |
+| ingress.className | string | `nil` | class of the ingress controller to handle the ingress |
 | ingress.enabled | bool | `false` | should there be an ingress to connect tmforum with the public internet |
 | ingress.hosts | list | `[{"host":"localhost"}]` | all hosts to be provided |
 | ingress.hosts[0] | object | `{"host":"localhost"}` | provide a hosts and the paths that should be available |
