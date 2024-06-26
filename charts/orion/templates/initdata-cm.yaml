@@ -5,9 +5,40 @@ metadata:
   name: {{ include "orion.fullname" . }}-init-data-cm
 data:
   entrypoint.sh: |-
-    {{- range $d := .Values.initData.entities }}
-    curl -X POST ${ORION_HOST}:${ORION_PORT}/ngsi-ld/v1/entities --header "Content-Type: application/ld+json" -d @/data/{{ $d.name }}
-    {{- end }}
+    #!/bin/sh    
+    RC=-1
+    TRY=1
+    NFILES_DEPLOYED=0
+    NFILES_WITH_MSG=0
+    NFILES={{ len .Values.initData.entities | default 0 }}
+    while [ $TRY -lt 20 ]; do
+      IDX=0
+{{- range $d := .Values.initData.entities }}
+      IDX=$(( $IDX + 1));
+      echo -e "---\n(Try $TRY.$IDX) Deploying FILE /data/{{ $d.name }}..."
+      RESPONSE=$(curl --silent -X POST ${ORION_HOST}:${ORION_PORT}/ngsi-ld/v1/entities --header "Content-Type: application/ld+json" -d @/data/{{ $d.name }} )
+      RC=$?;
+      if [ "$RC" -eq 0 ]; then 
+        if [ ${#RESPONSE} -ne 0 ]; then
+          NFILES_WITH_MSG=$(( $NFILES_WITH_MSG + 1))
+        fi
+        NFILES_DEPLOYED=$(( $NFILES_DEPLOYED + 1));
+        echo "($NFILES_DEPLOYED/$NFILES) FILE /data/{{ $d.name }} posted with response [$RESPONSE]"
+        if [ "$NFILES" -eq "$NFILES_DEPLOYED" ]; then
+          break;
+        fi
+      else
+        echo "Error in Curl RC=$RC"
+        sleep 1
+      fi
+{{- end }}
+      TRY=$(( $TRY + 1));
+    done
+    echo -e "\n---\n$NFILES_DEPLOYED/$NFILES files posted"
+    if [ $NFILES_WITH_MSG -gt 0 ]; then
+      echo "$NFILES_WITH_MSG/$NFILES with message (review them for potential errors)"
+    fi
+    return $RC
   {{ range $d := .Values.initData.entities }}
   {{ $d.name }}: |
     {{- $d.data | nindent 4 }}
