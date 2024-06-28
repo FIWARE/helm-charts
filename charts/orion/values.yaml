@@ -56,12 +56,12 @@ deployment:
   # -- orion resource requests and limits, we leave the default empty to make that a concious choice by the user.
   # for the autoscaling to make sense, you should configure this.
   # resources:
-  # limits:
-  # cpu: 100m
-  # memory: 128Mi
-  # requests:
-  # cpu: 100m
-  # memory: 128Mi
+    # limits:
+      # cpu: 100m
+      # memory: 128Mi
+    # requests:
+      # cpu: 100m
+      # memory: 128Mi
   # -- selector template
   # ref: https://kubernetes.io/docs/user-guide/node-selection/
   nodeSelector: {}
@@ -132,25 +132,23 @@ ingress:
   # -- should there be an ingress to connect orion with the public internet
   enabled: false
   # -- annotations to be added to the ingress
-  annotations:
-    {}
+  annotations: {}
     # kubernetes.io/ingress.class: "ambassador"
     ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
     # kubernetes.io/tls-acme: "true"
     # ingress.kubernetes.io/ssl-redirect: "true"
   # -- all hosts to be provided
-  hosts:
-    []
+  hosts: []
     # -- provide a hosts and the paths that should be available
     # - host: localhost
-    # paths:
-    # - /
+      # paths:
+      # - /
   # -- configure the ingress' tls
-  tls:
-    []
+  tls: []
     # - secretName: orion-tls
-    # hosts:
-    # - orion.fiware.org
+      # hosts:
+        # - orion.fiware.org
+
 
 ## orion-broker specific configuration
 # see defaults of the unset values at:
@@ -242,7 +240,7 @@ broker:
     ## to make the traces to standard out formated for humans
     # forHumans: false
     ## log line maximum length
-    # lineMaxSize:
+    # lineMaxSize: 
     ## for those log traces at INFO level that print request and/or response payloads, this is the maximum allowed size for those payloads
     # infoPayloadMaxSize:
 
@@ -255,18 +253,18 @@ broker:
     name: orion
     # -- Database authentication (not needed if MongoDB doesn't use --auth)
     # auth:
-    # --user for connecting mongo
-    # user:
-    # -- password to be used on mongo
-    # password:
-    # -- the MongoDB authentication mechanism to use in the case user and password is set
-    # mech: SCRAM-SHA-1
+      # --user for connecting mongo
+      # user:
+      # -- password to be used on mongo
+      # password:
+      # -- the MongoDB authentication mechanism to use in the case user and password is set
+      # mech: SCRAM-SHA-1
     # -- name of the replicaset
     #replicaSet: rs0
     # -- enable SSL in the connection to MongoDB. needs to correspond with the mongoDB setting
     # sslEnabled: true
     # -- specifies the timeout in milliseconds for connections to the replica set
-    # timeout:
+    # timeout: 
     # -- database connection pool
     # poolSize: 10
     # -- write concern for MongoDB write operations: acknowledged (1) or unacknowledged (0)
