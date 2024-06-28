@@ -314,8 +314,15 @@ initData:
   initEnabled: false
   # -- Annotation value for the Hook
   hook: post-install,post-upgrade
+  # -- Annotation value for the Hook hook-delete-policy.
+  # hook-succeeded removes the job on success, leaving it (and its pods) in case of error for perusal
+  # hookDeletePolicy: before-hook-creation, hook-succeeded
+  hookDeletePolicy: before-hook-creation
   # -- Number of retries before considering a Job as failed
   backoffLimit: 1
+  # initData.numberDeploymentTries customizes the number of tries before deployment of initial data fails.
+  # This solves the issue in low resourced k8s environments that some pods can take some time to be fully deployed
+  numberDeploymentTries: 20
   # -- Array of entities to be created
   entities: []
   #  - name: entity001.json
