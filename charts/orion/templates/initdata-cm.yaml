@@ -11,7 +11,8 @@ data:
     NFILES_DEPLOYED=0
     NFILES_WITH_MSG=0
     NFILES={{ len .Values.initData.entities | default 0 }}
-    while [ $TRY -lt 20 ]; do
+    NTRIES={{ .Values.initData.numberDeploymentTries | default 20 }}
+    while [ $TRY -lt $NTRIES ]; do
       IDX=0
 {{- range $d := .Values.initData.entities }}
       IDX=$(( $IDX + 1));
