@@ -201,10 +201,11 @@ spec:
               {{- end }}
             - name: {{ .Values.broker.envPrefix }}MONGO_DB
               value: {{ .Values.broker.db.name }}
-            {{- if .Values.broker.db.replicaSetEnabled }}
+            {{ $numHosts := len .Values.broker.db.hosts }}
+            {{- if gt $numHosts 1 -}}
             - name: {{ .Values.broker.envPrefix }}MONGO_REPLICA_SET
               value: {{ .Values.broker.db.replicaSet }}
-             {{- end }}
+            {{- end }}
             {{- if .Values.broker.db.auth }}
             - name: {{ .Values.broker.envPrefix }}MONGO_USER
               value: {{ .Values.broker.db.auth.user }}
