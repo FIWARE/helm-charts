@@ -259,6 +259,8 @@ broker:
       # password:
       # -- the MongoDB authentication mechanism to use in the case user and password is set
       # mech: SCRAM-SHA-1
+    # -- if replicaSetEnabled is true, replicaset name is included for connection with MongoDB
+    #replicaSetEnabled: false
     # -- name of the replicaset
     #replicaSet: rs0
     # -- enable SSL in the connection to MongoDB. needs to correspond with the mongoDB setting
