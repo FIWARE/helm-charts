@@ -243,7 +243,7 @@ spec:
             {{- end }}
             {{- if .Values.broker.multiserviceEnabled }}
             - name: {{ .Values.broker.envPrefix }}MONGO_AUTH_SOURCE
-              value: {{ .Values.broker.tenancy.mongoAuthSource | default "admin" }}
+              value: admin
             {{- end }}
             
             # metrics
