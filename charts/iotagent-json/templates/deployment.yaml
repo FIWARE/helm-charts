@@ -72,6 +72,15 @@ spec:
             successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
           env:
+            {{- if .Values.mqtt.broker.auth -}}
+            - name: MQTT_USER
+              valueFrom:
+                secretKeyRef: {{ include "iota-json.fullname" . }}
+                  key: mqttUsername
+            - name: MQTT_PW
+              valueFrom:
+                secretKeyRef: {{ include "iota-json.fullname" . }}
+                  key: mqttPassword
             {{- if .Values.iota.authentication -}}
             {{- if eq .Values.iota.authentication.identityManager.type "keystone" -}}
             - name: IOTA_AUTH_USER
