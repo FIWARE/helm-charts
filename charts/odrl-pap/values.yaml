@@ -48,7 +48,7 @@ deployment:
     # ref: https://quay.io/repository/wistefan/odrl-pap
     repository: quay.io/wi_stefan/odrl-pap
     # -- tag of the image to be used
-    tag: 0.0.1
+    tag: 0.1.4
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
