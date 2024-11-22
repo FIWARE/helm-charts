@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "bizEcosystemRss.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{- include "bizEcosystemRss.labels" . | nindent 4 }}
 spec:

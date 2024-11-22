@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "bizEcosystemLogicProxy.fullname" . }}-ccs
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{- include "bizEcosystemLogicProxy.labels" . | nindent 4 }}
 data:
