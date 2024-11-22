@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "bizEcosystemChargingBackend.fullname" . }}-plugins
+  namespace: {{ $.Release.Namespace | quote }}
   {{- with .Values.bizEcosystemChargingBackend.plugins.annotations  }}
   annotations:
   {{ toYaml . | indent 4 }}

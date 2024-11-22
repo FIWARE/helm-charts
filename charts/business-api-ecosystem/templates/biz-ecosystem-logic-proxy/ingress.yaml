@@ -5,6 +5,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{ include "bizEcosystemLogicProxy.labels" . | nindent 4 }}
   {{- if .Values.bizEcosystemLogicProxy.ingress.annotations }}
