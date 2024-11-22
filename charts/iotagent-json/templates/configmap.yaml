@@ -30,17 +30,6 @@ data:
          */
         protocol: '{{ .Values.mqtt.broker.protocol }}',
 
-        {{- if .Values.mqtt.broker.auth -}}
-        /**
-         * User name for the IoTAgent in the MQTT broker, if authentication is activated.
-         */
-        username: '{{ .Values.mqtt.broker.auth.username }}',
-
-        /**
-         * Password for the IoTAgent in the MQTT broker, if authentication is activated.
-         */
-        password: '{{ .Values.mqtt.broker.auth.password }}',
-        {{- end }}
         /**
          * Set to `false` if using a self-signed certificate.
          * Beware that you are exposing yourself to man in the middle attacks
