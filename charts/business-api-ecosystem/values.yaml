@@ -760,6 +760,8 @@ bizEcosystemLogicProxy:
     user: root
     # -- password for connecting the database
     password: pass
+    # -- key of the password inside the secret
+    secretKey: dbPassword
 
   ## -- elasticsearch configuration
   elastic:
