@@ -148,7 +148,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "bizEcosystemLogicProxy.secretName" . }}
-                  key: dbPassword
+                  key: {{ .Values.bizEcosystemLogicProxy.db.secretKey | quote }}
             {{- if .Values.oauth.server }}
             - name: BAE_LP_OAUTH2_SERVER
               value: {{ .Values.oauth.server | quote }}
