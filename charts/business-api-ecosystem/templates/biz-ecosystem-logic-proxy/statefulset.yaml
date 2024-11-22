@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{- include "bizEcosystemLogicProxy.labels" . | nindent 4 }}
 spec:
