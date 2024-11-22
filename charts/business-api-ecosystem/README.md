@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.11.4](https://img.shields.io/badge/Version-0.11.4-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
+![Version: 0.11.5](https://img.shields.io/badge/Version-0.11.5-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -133,6 +133,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.db.host | string | `"mongo"` | host of the database to be used |
 | bizEcosystemLogicProxy.db.password | string | `"pass"` | password for connecting the database |
 | bizEcosystemLogicProxy.db.port | int | `27017` | port of the database to be used |
+| bizEcosystemLogicProxy.db.secretKey | string | `"dbPassword"` | key of the password inside the secret |
 | bizEcosystemLogicProxy.db.user | string | `"root"` | username for connecting the database |
 | bizEcosystemLogicProxy.elastic.engine | string | `"elasticsearch"` | indexing engine of logic proxy |
 | bizEcosystemLogicProxy.elastic.url | string | `"elasticsearch:9200"` | URL of elasticsearch service |
