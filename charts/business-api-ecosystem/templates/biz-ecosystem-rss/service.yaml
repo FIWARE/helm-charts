@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "bizEcosystemRss.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
   {{- if .Values.bizEcosystemRss.service.annotations }}
   annotations:
     {{ toYaml .Values.bizEcosystemRss.service.annotations | nindent 4 }}

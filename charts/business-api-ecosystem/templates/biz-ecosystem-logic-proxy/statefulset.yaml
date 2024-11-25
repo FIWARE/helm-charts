@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "bizEcosystemLogicProxy.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{- include "bizEcosystemLogicProxy.labels" . | nindent 4 }}
 spec:
@@ -147,9 +148,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "bizEcosystemLogicProxy.secretName" . }}
-                  key: dbPassword
+                  key: {{ .Values.bizEcosystemLogicProxy.db.secretKey | quote }}
+            {{- if .Values.oauth.server }}
             - name: BAE_LP_OAUTH2_SERVER
               value: {{ .Values.oauth.server | quote }}
+            {{- end }}
+            {{- if .Values.oauth.clientId }}
             - name: BAE_LP_OAUTH2_CLIENT_ID
               value: {{ .Values.oauth.clientId | quote }}
             - name: BAE_LP_OAUTH2_CLIENT_SECRET
@@ -157,8 +161,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "bizEcosystemLogicProxy.secretName" . }}
                   key: oauthClientSecret
+            {{- end }}
+            {{- if .Values.oauth.cliencallbackPath }}
             - name: BAE_LP_OAUTH2_CALLBACK
               value: {{ .Values.externalUrl }}{{ .Values.oauth.callbackPath }}
+            {{- end }}
             - name: BAE_LP_OAUTH2_ADMIN_ROLE
               value: {{ .Values.oauth.adminrole | quote }}
             - name: BAE_LP_OAUTH2_SELLER_ROLE

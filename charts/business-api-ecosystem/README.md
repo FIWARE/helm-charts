@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.11.0](https://img.shields.io/badge/Version-0.11.0-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
+![Version: 0.11.5](https://img.shields.io/badge/Version-0.11.5-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -133,6 +133,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.db.host | string | `"mongo"` | host of the database to be used |
 | bizEcosystemLogicProxy.db.password | string | `"pass"` | password for connecting the database |
 | bizEcosystemLogicProxy.db.port | int | `27017` | port of the database to be used |
+| bizEcosystemLogicProxy.db.secretKey | string | `"dbPassword"` | key of the password inside the secret |
 | bizEcosystemLogicProxy.db.user | string | `"root"` | username for connecting the database |
 | bizEcosystemLogicProxy.elastic.engine | string | `"elasticsearch"` | indexing engine of logic proxy |
 | bizEcosystemLogicProxy.elastic.url | string | `"elasticsearch:9200"` | URL of elasticsearch service |
@@ -259,9 +260,6 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | nameOverride | string | `""` |  |
 | oauth.adminrole | string | `"admin"` | Admin role |
 | oauth.aggregatorrole | string | `"Aggregator"` | Aggregator role |
-| oauth.callbackPath | string | `"/auth/fiware/callback"` | Callback URL path of frontend logic proxy for receiving the access tokens (callback URL would be e.g. externalUrl/auth/fiware/callback) |
-| oauth.clientId | string | `"market-clientId"` | OAuth2 Client ID of the BAE application |
-| oauth.clientSecret | string | `"market-clientSecret"` | OAuth2 Client Secret of the BAE application |
 | oauth.customerrole | string | `"customer"` | Customer role |
 | oauth.grantedrole | string | `"admin"` | Granted role |
 | oauth.isLegacy | bool | `false` | Whether the used FIWARE IDM is version 6 or lower |
@@ -269,7 +267,6 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | oauth.orgadminrole | string | `"orgAdmin"` | Role defined in the IDM client app for organization admins of the BAE  |
 | oauth.provider | string | `"fiware"` | IDP provider for passport strategy (fiware, keycloak, github, ...) |
 | oauth.sellerrole | string | `"seller"` | Seller role |
-| oauth.server | string | `"http://accounts.fiware.org"` | External URL of the FIWARE IDM used for user authentication |
 | siop.allowedRoles[0] | string | `"seller"` |  |
 | siop.allowedRoles[1] | string | `"customer"` |  |
 | siop.callbackPath | string | `"/auth/vc/callback"` |  |

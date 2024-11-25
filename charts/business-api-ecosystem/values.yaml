@@ -12,14 +12,14 @@ fullnameOverride: ""
 ##
 oauth:
   # -- External URL of the FIWARE IDM used for user authentication
-  server: http://accounts.fiware.org
+  # server: http://accounts.fiware.org
   # -- OAuth2 Client ID of the BAE application
-  clientId: market-clientId
+  # clientId: market-clientId
   # -- OAuth2 Client Secret of the BAE application
-  clientSecret: market-clientSecret
+  # clientSecret: market-clientSecret
   # -- Callback URL path of frontend logic proxy for receiving the access tokens
   # (callback URL would be e.g. externalUrl/auth/fiware/callback)
-  callbackPath: /auth/fiware/callback
+  # callbackPath: /auth/fiware/callback
   # -- Set to true if OpenID Connect protocol should be used
   oidc: false
   # -- Granted role
@@ -760,6 +760,8 @@ bizEcosystemLogicProxy:
     user: root
     # -- password for connecting the database
     password: pass
+    # -- key of the password inside the secret
+    secretKey: dbPassword
 
   ## -- elasticsearch configuration
   elastic:
