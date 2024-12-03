@@ -1,6 +1,6 @@
 
 {{- if .Values.autoscaling.enabled -}}
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/{{ .Values.autoscaling.apiVersion | default "v1" }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "iota-json.fullname" . }}
