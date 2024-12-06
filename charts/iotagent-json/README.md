@@ -21,7 +21,6 @@ A Helm chart for running the fiware iotagent-json on kubernetes.
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | autoscaling.enabled | bool | `false` | should autoscaling be enabled |
-| autoscaling.apiVersion | string | `v1` | overwrite autoscaling API Version |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |
 | autoscaling.minReplicas | int | `1` | minimum number of running pods |
