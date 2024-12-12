@@ -136,7 +136,9 @@ defaultConfig:
     timeoutSeconds: 30
    
   # -- a list of additional env vars to be set, check the tm-forum api docu for all available options
-  additionalEnvVars: []
+  additionalEnvVars: 
+    - name: API_EXTENSION_ENABLED
+      value: true
 
   # -- configuration to be used for the image of the container
   image:
