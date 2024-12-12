@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.9.12](https://img.shields.io/badge/Version-0.9.12-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
+![Version: 0.9.14](https://img.shields.io/badge/Version-0.9.14-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -89,7 +89,7 @@ For all untouched values, the customized deployement will still use the defaults
 | apiProxy.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | apiProxy.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
 | apiProxy.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
-| apis | list | `[{"basePath":"/tmf-api/party/v4","image":"tmforum-party-catalog","name":"party-catalog"},{"basePath":"/tmf-api/customerBillManagement/v4","image":"tmforum-customer-bill-management","name":"customer-bill-management"},{"basePath":"/tmf-api/customerManagement/v4","image":"tmforum-customer-management","name":"customer-management"},{"basePath":"/tmf-api/productCatalogManagement/v4","image":"tmforum-product-catalog","name":"product-catalog"},{"basePath":"/tmf-api/productInventory/v4","image":"tmforum-product-inventory","name":"product-inventory"},{"basePath":"/tmf-api/productOrderingManagement/v4","image":"tmforum-product-ordering-management","name":"product-ordering-management"},{"basePath":"/tmf-api/resourceCatalog/v4","image":"tmforum-resource-catalog","name":"resource-catalog"},{"basePath":"/tmf-api/resourceFunctionActivation/v4","image":"tmforum-resource-function-activation","name":"resource-function-activation"},{"basePath":"/tmf-api/resourceInventoryManagement/v4","image":"tmforum-resource-inventory","name":"resource-inventory"},{"basePath":"/tmf-api/serviceCatalogManagement/v4","image":"tmforum-service-catalog","name":"service-catalog"}]` | be aware: when you change the image repositrory or the tag for an api, you have to provide both values for the changes to take effect |
+| apis | list | `[{"basePath":"/tmf-api/party/v4","image":"tmforum-party-catalog","name":"party-catalog"},{"basePath":"/tmf-api/customerBillManagement/v4","image":"tmforum-customer-bill-management","name":"customer-bill-management"},{"basePath":"/tmf-api/customerManagement/v4","image":"tmforum-customer-management","name":"customer-management"},{"basePath":"/tmf-api/productCatalogManagement/v4","image":"tmforum-product-catalog","name":"product-catalog"},{"basePath":"/tmf-api/productInventory/v4","image":"tmforum-product-inventory","name":"product-inventory"},{"basePath":"/tmf-api/productOrderingManagement/v4","image":"tmforum-product-ordering-management","name":"product-ordering-management"},{"basePath":"/tmf-api/resourceCatalog/v4","image":"tmforum-resource-catalog","name":"resource-catalog"},{"basePath":"/tmf-api/resourceFunctionActivation/v4","image":"tmforum-resource-function-activation","name":"resource-function-activation"},{"basePath":"/tmf-api/resourceInventoryManagement/v4","image":"tmforum-resource-inventory","name":"resource-inventory"},{"basePath":"/tmf-api/serviceCatalogManagement/v4","image":"tmforum-service-catalog","name":"service-catalog"},{"basePath":"/tmf-api/serviceInventory/v4","image":"tmforum-service-inventory","name":"service-inventory"},{"basePath":"/tmf-api/accountManagement/v4","image":"tmforum-account","name":"account-management"},{"basePath":"/tmf-api/agreementManagement/v4","image":"tmforum-agreement","name":"agreement-management"},{"basePath":"/tmf-api/partyRoleManagement/v4","image":"tmforum-party-role","name":"party-role"},{"basePath":"/tmf-api/usageManagement/v4","image":"tmforum-usage-management","name":"usage-management"}]` | be aware: when you change the image repositrory or the tag for an api, you have to provide both values for the changes to take effect |
 | autoscaling.enabled | bool | `false` | should autoscaling be enabled for the context broker |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |
@@ -109,10 +109,10 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.cache.subscriptions.maximumSize | int | `1000` | maximum size of the cache |
 | defaultConfig.contextUrl | string | `"https://smartdatamodels.org/context.jsonld"` | default context to be used when contacting the context broker |
 | defaultConfig.endpointsPort | int | `9090` | metrics and health port |
-| defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/fiware","tag":"0.29.0"}` | configuration to be used for the image of the container |
+| defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/fiware","tag":"0.29.2"}` | configuration to be used for the image of the container |
 | defaultConfig.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used |
 | defaultConfig.image.repository | string | `"quay.io/fiware"` | repository to get the container from |
-| defaultConfig.image.tag | string | `"0.29.0"` | tag to be used, most of the time the apis will use the same version |
+| defaultConfig.image.tag | string | `"0.29.2"` | tag to be used, most of the time the apis will use the same version |
 | defaultConfig.livenessProbe.healthPath | string | `"/health/liveness"` | path to be used for the health check |
 | defaultConfig.livenessProbe.initialDelaySeconds | int | `30` |  |
 | defaultConfig.livenessProbe.periodSeconds | int | `10` |  |
