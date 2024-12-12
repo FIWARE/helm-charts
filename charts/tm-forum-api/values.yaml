@@ -143,7 +143,7 @@ defaultConfig:
     # -- repository to get the container from
     repository: quay.io/fiware
     # -- tag to be used, most of the time the apis will use the same version
-    tag: 0.29.0
+    tag: 0.29.2
     # -- pull policy to be used
     pullPolicy: IfNotPresent
   # -- log level of the api
@@ -306,6 +306,26 @@ apis:
   - name: service-catalog
     image: tmforum-service-catalog
     basePath: /tmf-api/serviceCatalogManagement/v4
+
+  - name: service-inventory
+    image: tmforum-service-inventory
+    basePath: /tmf-api/serviceInventory/v4
+
+  - name: account-management
+    image: tmforum-account
+    basePath: /tmf-api/accountManagement/v4
+
+  - name: agreement-management
+    image: tmforum-agreement
+    basePath: /tmf-api/agreementManagement/v4
+
+  - name: party-role
+    image: tmforum-party-role
+    basePath: /tmf-api/partyRoleManagement/v4
+
+  - name: usage-management
+    image: tmforum-usage-management
+    basePath: /tmf-api/usageManagement/v4
 
 ## configuration of redis caching. If it's disabled, the default in-memory cache will be used
 redis:
