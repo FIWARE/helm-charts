@@ -145,7 +145,7 @@ defaultConfig:
     # -- repository to get the container from
     repository: quay.io/fiware
     # -- tag to be used, most of the time the apis will use the same version
-    tag: 0.29.2
+    tag: 0.30.0
     # -- pull policy to be used
     pullPolicy: IfNotPresent
   # -- log level of the api
