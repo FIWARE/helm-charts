@@ -138,14 +138,14 @@ defaultConfig:
   # -- a list of additional env vars to be set, check the tm-forum api docu for all available options
   additionalEnvVars: 
     - name: API_EXTENSION_ENABLED
-      value: true
+      value: "true"
 
   # -- configuration to be used for the image of the container
   image:
     # -- repository to get the container from
     repository: quay.io/fiware
     # -- tag to be used, most of the time the apis will use the same version
-    tag: 0.30.0
+    tag: 0.30.1
     # -- pull policy to be used
     pullPolicy: IfNotPresent
   # -- log level of the api

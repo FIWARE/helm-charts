@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.10.0](https://img.shields.io/badge/Version-0.10.0-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
+![Version: 0.10.4](https://img.shields.io/badge/Version-0.10.4-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -95,7 +95,7 @@ For all untouched values, the customized deployement will still use the defaults
 | autoscaling.metrics | list | `[]` | metrics to react on |
 | autoscaling.minReplicas | int | `1` | minimum number of running pods |
 | defaultConfig.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
-| defaultConfig.additionalEnvVars | list | `[{"name":"API_EXTENSION_ENABLED","value":true}]` | a list of additional env vars to be set, check the tm-forum api docu for all available options |
+| defaultConfig.additionalEnvVars | list | `[{"name":"API_EXTENSION_ENABLED","value":"true"}]` | a list of additional env vars to be set, check the tm-forum api docu for all available options |
 | defaultConfig.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | defaultConfig.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | defaultConfig.cache | object | `{"entities":{"expireAfterAccess":"2s","expireAfterWrite":"2s","maximumSize":1000},"subscriptions":{"expireAfterAccess":"14d","expireAfterWrite":"14d","maximumSize":1000}}` | cache config for connecting the broker |
@@ -109,10 +109,10 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.cache.subscriptions.maximumSize | int | `1000` | maximum size of the cache |
 | defaultConfig.contextUrl | string | `"https://smartdatamodels.org/context.jsonld"` | default context to be used when contacting the context broker |
 | defaultConfig.endpointsPort | int | `9090` | metrics and health port |
-| defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/fiware","tag":"0.30.0"}` | configuration to be used for the image of the container |
+| defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/fiware","tag":"0.30.1"}` | configuration to be used for the image of the container |
 | defaultConfig.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used |
 | defaultConfig.image.repository | string | `"quay.io/fiware"` | repository to get the container from |
-| defaultConfig.image.tag | string | `"0.30.0"` | tag to be used, most of the time the apis will use the same version |
+| defaultConfig.image.tag | string | `"0.30.1"` | tag to be used, most of the time the apis will use the same version |
 | defaultConfig.livenessProbe.healthPath | string | `"/health/liveness"` | path to be used for the health check |
 | defaultConfig.livenessProbe.initialDelaySeconds | int | `30` |  |
 | defaultConfig.livenessProbe.periodSeconds | int | `10` |  |
