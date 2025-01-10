@@ -1,0 +1,16 @@
+apiVersion: v1
+name: dss-validation-service
+version: 0.0.4
+appVersion: 0.0.1
+description: A Helm chart for running the dss-validation-service on kubernetes.
+icon: https://fiware.github.io/catalogue/img/fiware.png
+keywords:
+  - FIWARE
+  - Data Space Connector
+  - Digital Signature Service
+  - JAdES Validation
+sources:
+  - https://github.com/wistefan/dss-validation-service
+maintainers:
+  - name: Stefan Wiedemann
+    email: wistefan@googlemail.com
