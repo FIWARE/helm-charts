@@ -1,0 +1,16 @@
+{{- if .Values.trust.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "dss.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{ include "dss.labels" . | nindent 4 }}
+data:
+  application.yaml: |
+    trust:
+      lists:
+        {{- toYaml .Values.trust.lists | nindent 8 }}
+      stores:
+        {{- toYaml .Values.trust.stores | nindent 8 }}
+{{- end }}
