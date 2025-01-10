@@ -137,3 +137,6 @@ trust:
       # - path:
       #   type: 
       #   password: 
+
+# -- keystores to be provided as secret
+# keystores:
