@@ -136,14 +136,16 @@ defaultConfig:
     timeoutSeconds: 30
    
   # -- a list of additional env vars to be set, check the tm-forum api docu for all available options
-  additionalEnvVars: []
+  additionalEnvVars: 
+    - name: API_EXTENSION_ENABLED
+      value: "true"
 
   # -- configuration to be used for the image of the container
   image:
     # -- repository to get the container from
     repository: quay.io/fiware
     # -- tag to be used, most of the time the apis will use the same version
-    tag: 0.29.2
+    tag: 0.30.5
     # -- pull policy to be used
     pullPolicy: IfNotPresent
   # -- log level of the api
