@@ -106,6 +106,11 @@ spec:
             {{- end }}
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
+        {{- if .Values.deployment.additionalContainers }}
+        {{- with .Values.deployment.additionalContainers }}
+        {{- toYaml . | nindent 6 }}
+        {{- end }}
+        {{- end }}
       volumes:
         {{- if .Values.trust.enabled }}
         - name: trust
