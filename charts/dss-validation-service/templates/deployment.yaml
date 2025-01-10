@@ -58,7 +58,7 @@ spec:
               containerPort: {{ .Values.deployment.port}}
               protocol: TCP
             - name: http-health
-              containerPort: {{ .Values.management.port }}
+              containerPort: {{ .Values.health.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
