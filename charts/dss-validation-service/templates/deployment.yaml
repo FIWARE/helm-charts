@@ -95,6 +95,10 @@ spec:
             - name: trust
               mountPath: /trust-config
             {{- end }}
+            {{- if .Values.keystores }}
+            - name: keystores
+              mountPath: /keystores
+            {{- end }}
             {{- if .Values.deployment.additionalVolumeMounts }}
             {{- with .Values.deployment.additionalVolumeMounts }}
             {{- toYaml . | nindent 12 }}
@@ -107,6 +111,11 @@ spec:
         - name: trust
           configMap:
             name: {{ include "dss.fullname" . }}
+        {{- end }}
+        {{- if .Values.keystores }}
+        - name: keystores
+          secret:
+            secretName: {{ include "dss.fullname" . }}
         {{- end }}
         {{- if .Values.deployment.additionalVolumes }}
         {{- with .Values.deployment.additionalVolumes }}
