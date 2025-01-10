@@ -2543,6 +2543,27 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/dsba-pdp-0.0.1/dsba-pdp-0.0.1.tgz
     version: 0.0.1
+  dss-validation-service:
+  - apiVersion: v1
+    appVersion: 0.0.1
+    created: "2025-01-10T09:18:41.420024991Z"
+    description: A Helm chart for running the dss-validation-service on kubernetes.
+    digest: 512665523315cecda3c81ebb36aee8604c92f2ab667345ce823b38515804856f
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - Data Space Connector
+    - Digital Signature Service
+    - JAdES Validation
+    maintainers:
+    - email: wistefan@googlemail.com
+      name: Stefan Wiedemann
+    name: dss-validation-service
+    sources:
+    - https://github.com/wistefan/dss-validation-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/dss-validation-service-0.0.4/dss-validation-service-0.0.4.tgz
+    version: 0.0.4
   endpoint-auth-service:
   - apiVersion: v1
     appVersion: 0.4.4
@@ -6900,4 +6921,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2025-01-03T12:37:33.01234703Z"
+generated: "2025-01-10T09:18:41.420721499Z"
