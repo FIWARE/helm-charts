@@ -106,7 +106,7 @@ spec:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
         {{- if .Values.deployment.additionalContainers }}
         {{- with .Values.deployment.additionalContainers }}
-        {{- toYaml . | nindent 6 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
         {{- end }}
       volumes:
