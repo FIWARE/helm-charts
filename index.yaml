@@ -2546,6 +2546,26 @@ entries:
   dss-validation-service:
   - apiVersion: v1
     appVersion: 0.0.1
+    created: "2025-01-13T08:30:09.152000824Z"
+    description: A Helm chart for running the dss-validation-service on kubernetes.
+    digest: ce1c621eb8b6903a9a292fb15a7d3fb922a16fd3a51cf5a9fbf0684ea9c32364
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - Data Space Connector
+    - Digital Signature Service
+    - JAdES Validation
+    maintainers:
+    - email: wistefan@googlemail.com
+      name: Stefan Wiedemann
+    name: dss-validation-service
+    sources:
+    - https://github.com/wistefan/dss-validation-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/dss-validation-service-0.0.14/dss-validation-service-0.0.14.tgz
+    version: 0.0.14
+  - apiVersion: v1
+    appVersion: 0.0.1
     created: "2025-01-13T08:25:02.022711586Z"
     description: A Helm chart for running the dss-validation-service on kubernetes.
     digest: f7cd9e0bbd51b774b1c5fa72dd139ddce32e6737994f9a12f0b2764ae9adb6fd
@@ -7061,4 +7081,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2025-01-13T08:25:02.023280216Z"
+generated: "2025-01-13T08:30:09.152774878Z"
