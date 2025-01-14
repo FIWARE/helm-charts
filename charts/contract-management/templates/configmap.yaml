@@ -7,6 +7,9 @@ metadata:
     {{ include "contract.labels" . | nindent 4 }}
 data:
   application.yaml: |
+    {{- if .Values.config }}
+    {{- toYaml .Values.config | nindent 4 }}
+    {{- else }}
     micronaut:
       http:
         services:
@@ -18,3 +21,4 @@ data:
       port: {{ .Values.port}}
       til:
         {{- toYaml .Values.til | nindent 8 }}
+    {{- end }}
