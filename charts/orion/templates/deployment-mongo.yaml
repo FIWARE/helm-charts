@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "orion.fullname" . }}-mongo
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     app.kubernetes.io/name: {{ include "orion.name" . }}-mongo
     helm.sh/chart: {{ include "orion.chart" . }}

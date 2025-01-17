@@ -4,6 +4,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "orion.fullname" . }}-init-data
+  namespace: {{ $.Release.Namespace | quote }}
   annotations:
     "helm.sh/hook": {{ .Values.initData.hook }}
     "helm.sh/hook-delete-policy": {{ .Values.initData.hookDeletePolicy | default "before-hook-creation" }}
