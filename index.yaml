@@ -4657,6 +4657,29 @@ entries:
       charts.openshift.io/name: orion-ld
     apiVersion: v2
     appVersion: 1.0.1
+    created: "2025-01-17T14:12:38.23667217Z"
+    description: A Helm chart for running the fiware orion-ld context broker on kubernetes.
+    digest: 298a0f7524d58a4aa755cfef358afff305a879cf3d210bc6799bc169d57b286e
+    home: https://github.com/FIWARE/context.Orion-LD
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion-ld
+    - orion
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: orion
+    sources:
+    - https://github.com/FIWARE/context.Orion-LD
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/orion-1.5.0/orion-1.5.0.tgz
+    version: 1.5.0
+  - annotations:
+      charts.openshift.io/name: orion-ld
+    apiVersion: v2
+    appVersion: 1.0.1
     created: "2024-07-03T08:17:32.185355229Z"
     description: A Helm chart for running the fiware orion-ld context broker on kubernetes.
     digest: d8763c821bd21758d61e46c7b29aa0846e6cc209b90c40aa5d005561475fc256
@@ -7159,4 +7182,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2025-01-15T13:38:06.231170532Z"
+generated: "2025-01-17T14:12:38.237312301Z"
