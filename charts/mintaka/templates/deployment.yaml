@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "mintaka.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{ include "mintaka.labels" . | nindent 4 }}
 spec:
