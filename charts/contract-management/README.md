@@ -1,6 +1,6 @@
 # contract-management
 
-![Version: 0.6.4](https://img.shields.io/badge/Version-0.6.4-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![AppVersion: 2.0.0](https://img.shields.io/badge/AppVersion-2.0.0-informational?style=flat-square)
 
 A Helm chart for running the contract-management on kubernetes.
 
@@ -29,7 +29,7 @@ A Helm chart for running the contract-management on kubernetes.
 | deployment.healthPort | int | `9090` | port to request health information at |
 | deployment.image.pullPolicy | string | `"Always"` | specification of the image pull policy pullPolicy: IfNotPresent |
 | deployment.image.repository | string | `"quay.io/fiware/contract-management"` | til image name ref: https://quay.io/repository/fiware/contract-management |
-| deployment.image.tag | string | `"1.0.0"` | tag of the image to be used |
+| deployment.image.tag | string | `"2.0.0"` | tag of the image to be used |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
@@ -60,12 +60,24 @@ A Helm chart for running the contract-management on kubernetes.
 | services.party.path | string | `"/tmf-api/party/v4"` |  |
 | services.party.read-timeout | int | `30` |  |
 | services.party.url | string | `"http://tm-forum-api-party-catalog:8080"` |  |
-| services.product.path | string | `"/tmf-api/productOrderingManagement/v4"` |  |
-| services.product.read-timeout | int | `30` |  |
-| services.product.url | string | `"http://tm-forum-api-product-ordering-management:8080"` |  |
-| services.til.path | string | `""` |  |
-| services.til.read-timeout | int | `30` |  |
-| services.til.url | string | `"http://trusted-issuers-list:8080"` |  |
+| services.product-catalog.path | string | `"/tmf-api/productCatalogManagement/v4"` |  |
+| services.product-catalog.read-timeout | int | `30` |  |
+| services.product-catalog.url | string | `"http://tm-forum-api-product-catalog:8080"` |  |
+| services.product-order.path | string | `"/tmf-api/productOrderingManagement/v4"` |  |
+| services.product-order.read-timeout | int | `30` |  |
+| services.product-order.url | string | `"http://tm-forum-api-product-ordering-management:8080"` |  |
+| services.rainbow.path | string | `"/"` |  |
+| services.rainbow.read-timeout | int | `30` |  |
+| services.rainbow.url | string | `"http://rainbow:8080"` |  |
+| services.service-catalog.path | string | `"/tmf-api/serviceCatalogManagement/v4"` |  |
+| services.service-catalog.read-timeout | int | `30` |  |
+| services.service-catalog.url | string | `"http://tm-forum-api-service-catalog:8080"` |  |
+| services.tmforum-agreement-api.path | string | `"/tmf-api/agreementManagement/v4"` |  |
+| services.tmforum-agreement-api.read-timeout | int | `30` |  |
+| services.tmforum-agreement-api.url | string | `"http://tm-forum-api-agreement:8080"` |  |
+| services.trusted-issuers-list.path | string | `""` |  |
+| services.trusted-issuers-list.read-timeout | int | `30` |  |
+| services.trusted-issuers-list.url | string | `"http://trusted-issuers-list:8080"` |  |
 | til.claims[0].roles[0] | string | `"Consumer"` |  |
 | til.claims[0].roles[1] | string | `"Admin"` |  |
 | til.claims[0].target | string | `"did:some:service"` |  |

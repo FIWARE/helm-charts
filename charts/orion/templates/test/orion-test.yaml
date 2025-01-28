@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: "{{ .Release.Name }}-orion-test"
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{ include "orion.labels" . | nindent 4 }}
   annotations:

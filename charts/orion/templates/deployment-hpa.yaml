@@ -3,6 +3,7 @@ apiVersion: autoscaling/{{ .Values.autoscaling.apiVersion }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "orion.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{ include "orion.labels" . | nindent 4 }}
 spec:

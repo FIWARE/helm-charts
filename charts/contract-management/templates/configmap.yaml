@@ -1,3 +1,5 @@
+{{- $productOrder := index .Values.services "product-order" }}
+{{- $productCatalog := index .Values.services "product-catalog" }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -7,14 +9,30 @@ metadata:
     {{ include "contract.labels" . | nindent 4 }}
 data:
   application.yaml: |
+    {{- if .Values.config }}
+    {{- toYaml .Values.config | nindent 4 }}
+    {{- else }}
     micronaut:
       http:
         services:
           read-timeout: 30s
           {{- toYaml .Values.services | nindent 10 }}
     general:
-      name: {{ include "contract.fullname" . }}
-      basepath: "/callback"
+      host: {{ include "contract.fullname" . }}
       port: {{ .Values.port}}
       til:
         {{- toYaml .Values.til | nindent 8 }}
+      
+    notification:
+      entities:
+        - entityType: "ProductOrder"
+          eventTypes: [ "CREATE", "STATE_CHANGE", "DELETE" ]
+          apiAddress: "{{ $productOrder.url}}{{ $productOrder.path}}"
+        - entityType: "ProductOffering"
+          eventTypes: [ "CREATE", "STATE_CHANGE", "DELETE" ]
+          apiAddress: "{{ $productCatalog.url}}{{ $productCatalog.path}}"
+        - entityType: "Catalog"
+          eventTypes: [ "CREATE", "DELETE", "STATE_CHANGE" ]
+          apiAddress: "{{ $productCatalog.url}}{{ $productCatalog.path}}"
+
+    {{- end }}

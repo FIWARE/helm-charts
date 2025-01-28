@@ -31,3 +31,9 @@ data:
       {{- with .Values.deployment.configRepo }}
       {{- toYaml . | nindent 6 }}
       {{- end }}
+
+    elsi:
+      {{- with .Values.deployment.elsi }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+    
