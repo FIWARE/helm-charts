@@ -44,7 +44,7 @@ deployment:
     # ref: https://quay.io/repository/fiware/contract-management
     repository: quay.io/fiware/contract-management
     # -- tag of the image to be used
-    tag: 1.0.0
+    tag: 2.0.0
     # -- specification of the image pull policy
     #pullPolicy: IfNotPresent
     pullPolicy: Always
@@ -142,7 +142,7 @@ til:
 ## Configuration needed for accessing other services
 services:
   ## Config for Trusted Issuers List
-  til:
+  trusted-issuers-list:
     ## Path to be used
     path: ""
     ## URL of the Trusted Issuers List Service
@@ -150,7 +150,7 @@ services:
     ## Read timeout in sec
     read-timeout: 30
   ## Config for the TM Forum Service hosting the Product Ordering API
-  product:
+  product-order:
     ## Path to be used
     path: "/tmf-api/productOrderingManagement/v4"
     ## URL of the TM Forum Service hosting the Product Ordering API
@@ -163,5 +163,37 @@ services:
     path: "/tmf-api/party/v4"
     ## URL of the TM Forum Service hosting the Party API
     url: http://tm-forum-api-party-catalog:8080
+    ## Read timeout in sec
+    read-timeout: 30
+  ## Config for the TM Forum Service hosting the Product Catalog API
+  product-catalog:
+    ## Path to be used
+    path: "/tmf-api/productCatalogManagement/v4"
+    ## URL of the TM Forum Service hosting the Product Catalog API
+    url: http://tm-forum-api-product-catalog:8080
+    ## Read timeout in sec
+    read-timeout: 30
+  ## Config for the TM Forum Service hosting the Service Catalog API
+  service-catalog:
+    ## Path to be used
+    path: "/tmf-api/serviceCatalogManagement/v4"
+    ## URL of the TM Forum Service hosting the Service Catalog API
+    url: http://tm-forum-api-service-catalog:8080
+    ## Read timeout in sec
+    read-timeout: 30
+  ## Config for the TM Forum Service hosting the Agreement API
+  tmforum-agreement-api:
+    ## Path to be used
+    path: "/tmf-api/agreementManagement/v4"
+    ## URL of the TM Forum Service hosting the Agreement API
+    url: http://tm-forum-api-agreement:8080
+    ## Read timeout in sec
+    read-timeout: 30
+  ## Config for the Rainbow service
+  rainbow:
+    ## Path to be used
+    path: "/"
+    ## URL of Rainbow
+    url: http://rainbow:8080
     ## Read timeout in sec
     read-timeout: 30
