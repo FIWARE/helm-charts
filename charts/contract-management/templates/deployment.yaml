@@ -66,9 +66,11 @@ spec:
           env:
             - name: ENDPOINTS_ALL_PORT
               value: {{ .Values.deployment.healthPort | quote }}
+            - name: ENDPOINTS_HEALTH_ENABLED
+              value: "true"
             - name: MICRONAUT_SERVER_PORT
               value: {{ .Values.port | quote }}
-            - name: MICRONAUT_METRICS_ENABLED
+            - name: ENDPOINTS_METRICS_ENABLED
               value: {{ .Values.prometheus.enabled | quote }}
             - name: MICRONAUT_CONFIG_FILES
               value: "/application.yaml"
