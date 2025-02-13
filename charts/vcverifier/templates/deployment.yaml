@@ -31,6 +31,12 @@ spec:
       {{- end }}
     spec: 
       serviceAccountName: {{ include "vcverifier.serviceAccountName" . }}
+      {{- if .Values.deployment.hostAliases }}
+      hostAliases:
+        {{- with .Values.deployment.hostAliases }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
       {{- if .Values.deployment.initContainers }}
       initContainers:
         {{- with .Values.deployment.initContainers }}
