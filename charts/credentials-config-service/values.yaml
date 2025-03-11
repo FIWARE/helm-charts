@@ -44,7 +44,7 @@ deployment:
     # ref: https://quay.io/repository/fiware/credentials-config-service
     repository: quay.io/fiware/credentials-config-service
     # -- tag of the image to be used
-    tag: 1.1.0
+    tag: 2.0.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
