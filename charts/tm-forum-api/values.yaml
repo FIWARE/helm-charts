@@ -145,7 +145,7 @@ defaultConfig:
     # -- repository to get the container from
     repository: quay.io/fiware
     # -- tag to be used, most of the time the apis will use the same version
-    tag: 0.31.2
+    tag: 1.2.5
     # -- pull policy to be used
     pullPolicy: IfNotPresent
   # -- log level of the api
@@ -328,6 +328,10 @@ apis:
   - name: usage-management
     image: tmforum-usage-management
     basePath: /tmf-api/usageManagement/v4
+
+  - name: quote
+    image: tmforum-quote
+    basePath: /tmf-api/quote/v4
 
 ## configuration of redis caching. If it's disabled, the default in-memory cache will be used
 redis:
