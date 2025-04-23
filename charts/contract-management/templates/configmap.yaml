@@ -1,5 +1,6 @@
 {{- $productOrder := index .Values.services "product-order" }}
 {{- $productCatalog := index .Values.services "product-catalog" }}
+{{- $quote := index .Values.services "quote" }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -34,5 +35,8 @@ data:
         - entityType: "Catalog"
           eventTypes: [ "CREATE", "DELETE", "STATE_CHANGE" ]
           apiAddress: "{{ $productCatalog.url}}{{ $productCatalog.path}}"
+        - entityType: "Quote"
+          eventTypes: [ "CREATE", "DELETE", "STATE_CHANGE", "ATTRIBUTE_CHANGE" ]
+          apiAddress: "{{ $quote.url}}{{ $quote.path}}"
 
     {{- end }}
