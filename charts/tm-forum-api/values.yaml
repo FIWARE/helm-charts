@@ -7,7 +7,7 @@ nameOverride: ""
 # -- option to override the fullname config in the _helpers.tpl
 fullnameOverride: ""
 
-# -- if a tmforum specific service account should be used, it can be configured here
+# -- if a tmforum specific service account should be used, it can be configured here 
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
   # -- specifies if the account should be created
