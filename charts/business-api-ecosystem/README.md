@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.11.8](https://img.shields.io/badge/Version-0.11.8-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
+![Version: 0.11.9](https://img.shields.io/badge/Version-0.11.9-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -141,10 +141,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.enabled | bool | `true` |  |
 | bizEcosystemLogicProxy.externalIdp.enabled | bool | `false` | Enable usage of external IDPs |
 | bizEcosystemLogicProxy.externalIdp.showLocalLogin | bool | `false` | Show login button for local IDP on login modal dialog with list of external IDPs |
-| bizEcosystemLogicProxy.extraContainerVolumes | object | `{}` | additional volumes to be added for the container |
-| bizEcosystemLogicProxy.extraContainers | object | `{}` | additional containers to be added for the belp |
-| bizEcosystemLogicProxy.extraInitContainers | object | `{}` | additional init-containers to be added for the belp |
-| bizEcosystemLogicProxy.extraVolumeMounts | object | `{}` | additional volumes to be mounted by the container |
+| bizEcosystemLogicProxy.extraVolumeMounts | object | `{}` |  |
 | bizEcosystemLogicProxy.fullnameOverride | string | `""` |  |
 | bizEcosystemLogicProxy.ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | bizEcosystemLogicProxy.ingress.enabled | bool | `false` | should there be an ingress to connect the logic proxy with the public internet |
