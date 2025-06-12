@@ -39,8 +39,8 @@ spec:
       serviceAccountName: {{ include "bizEcosystemLogicProxy.serviceAccountName" . }}
       {{- end }}
       initContainers:
-        {{- if .Values.bizEcosystemLogicProxy.extraInitContainers }}
-        {{ toYaml .Value.bizEcosystemLogicProxy.extraInitContainers | nindent 8 }}
+        {{- with .Values.bizEcosystemLogicProxy.extraInitContainers }}
+        {{- toYaml .Value.bizEcosystemLogicProxy.extraInitContainers | nindent 8 }}
         {{- end }}
         {{- include "business-api-ecosystem.initContainer.mongodb" ( dict "ctx" . "name" .Values.bizEcosystemLogicProxy.name "host" .Values.bizEcosystemLogicProxy.db.host ) | nindent 8 }}
         {{- if .Values.bizEcosystemLogicProxy.initContainers }}
@@ -72,8 +72,8 @@ spec:
               subPath: init.sh
         {{- end }}
       containers:
-        {{- if .Values.bizEcosystemLogicProxy.extraContainers }}
-        {{ toYaml .Value.bizEcosystemLogicProxy.extraContainers | nindent 8 }}
+        {{- with .Values.bizEcosystemLogicProxy.extraInitContainers }}
+        {{- toYaml .Value.bizEcosystemLogicProxy.extraContainers | nindent 8 }}
         {{- end }}
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemLogicProxy.name }}
           imagePullPolicy: {{ .Values.bizEcosystemLogicProxy.statefulset.image.pullPolicy }}
@@ -410,8 +410,8 @@ spec:
       {{- if or .Values.bizEcosystemLogicProxy.token.enabled .Values.bizEcosystemLogicProxy.extraContainerVolumes
         .Values.bizEcosystemLogicProxy.theme.enabled .Values.siop.enabled }}
       volumes:
-      {{- if .Values.bizEcosystemLogicProxy.extraContainerVolumes }}
-      {{ toYaml .Values.bizEcosystemLogicProxy.extraContainerVolumes | nindent 8 }}
+      {{- with .Values.bizEcosystemLogicProxy.extraContainerVolumes }}
+      {{- toYaml .Values.bizEcosystemLogicProxy.extraContainerVolumes | nindent 8 }}
       {{- end }}
       {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
         - name: themes
