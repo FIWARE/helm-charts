@@ -823,6 +823,8 @@ bizEcosystemLogicProxy:
   initContainers: true
   # -- additional init-containers to be added for the belp
   extraInitContainers: {}
+  # -- additional containers to be added for the belp
+  extraContainers: {}
   # -- additional volumes to be added for the container
   extraContainerVolumes: {}
   # -- additional volumes to be mounted by the container
