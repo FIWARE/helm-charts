@@ -72,6 +72,9 @@ spec:
               subPath: init.sh
         {{- end }}
       containers:
+        {{- if .Values.bizEcosystemLogicProxy.extraContainers }}
+        {{ toYaml .Value.bizEcosystemLogicProxy.extraContainers | nindent 8 }}
+        {{- end }}
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemLogicProxy.name }}
           imagePullPolicy: {{ .Values.bizEcosystemLogicProxy.statefulset.image.pullPolicy }}
           image: "{{ .Values.bizEcosystemLogicProxy.statefulset.image.repository }}:{{ .Values.bizEcosystemLogicProxy.statefulset.image.tag }}"
