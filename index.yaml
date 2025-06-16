@@ -7496,6 +7496,24 @@ entries:
     version: 0.0.1
   vcverifier:
   - apiVersion: v1
+    appVersion: 6.0.0
+    created: "2025-06-16T09:52:33.200335068Z"
+    description: A Helm chart for running the FIWARE VCVerifier.
+    digest: e118d55355ba38a4480b4eb963be2a48b4aa58e4dc98f721fe091eb6802566da
+    home: https://github.com/fiware/vcverifier
+    keywords:
+    - FIWARE Data Space Connector
+    - FIWARE
+    - Verifiable Credentials
+    - OID4VP
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: vcverifier
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-4.0.0/vcverifier-4.0.0.tgz
+    version: 4.0.0
+  - apiVersion: v1
     appVersion: 2.0.1
     created: "2025-03-10T10:33:15.326255075Z"
     description: A Helm chart for running the FIWARE VCVerifier.
@@ -7729,4 +7747,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2025-06-12T13:00:51.863486323Z"
+generated: "2025-06-16T09:52:33.200883121Z"
