@@ -1,0 +1,27 @@
+{{- if and (eq .Values.registration.enabled true) (.Values.registration) }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "ccs.fullname" . }}-job
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{ include "ccs.labels" . | nindent 4 }}
+spec:
+  template:
+    spec:
+      containers:
+        - name: register-credential-config
+          image: quay.io/curl/curl:8.1.2
+          command: [ "/bin/sh", "-c", "/bin/init.sh" ]
+          volumeMounts:
+            - name: registration
+              mountPath: /bin/init.sh
+              subPath: init.sh
+      volumes:
+        - name: registration
+          configMap:
+            name: {{ include "ccs.fullname" . }}-registration
+            defaultMode: 0755
+      restartPolicy: Never
+  backoffLimit: {{ .Values.registration.backoffLimit }}
+{{- end }}
