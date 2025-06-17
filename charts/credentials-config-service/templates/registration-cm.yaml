@@ -19,7 +19,6 @@ data:
       "id": {{ .id | quote }},
       "defaultOidcScope": {{ .defaultOidcScope | quote }},
       "oidcScopes": {{- toJson .oidcScopes }}
-      {{- end }}
     }'
 
     {{- end }}
