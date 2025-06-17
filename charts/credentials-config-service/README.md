@@ -1,6 +1,6 @@
 # credentials-config-service
 
-![Version: 2.0.0](https://img.shields.io/badge/Version-2.0.0-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 2.1.0](https://img.shields.io/badge/Version-2.1.0-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 A Helm chart for running the credentials-config-service on kubernetes.
 
@@ -66,6 +66,9 @@ A Helm chart for running the credentials-config-service on kubernetes.
 | prometheus.enabled | bool | `true` | should prometheus scrape be enabled |
 | prometheus.path | string | `"/prometheus"` | path for prometheus scrape |
 | prometheus.port | int | `9090` | port prometheus scrape is available at |
+| registration.backoffLimit | int | `10` | how often should the job be executed before failing |
+| registration.enabled | bool | `true` | should automatic registration be enabled |
+| registration.services | string | `nil` | configuration of the services (and scopes) to be registred |
 | route.annotations | object | `{}` | annotations to be added to the route |
 | route.certificate | object | `{}` |  |
 | route.enabled | bool | `false` |  |
