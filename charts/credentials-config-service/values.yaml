@@ -192,7 +192,7 @@ database:
 ## configure automatic registration of credentials and services on deploy
 registration:
   # -- should automatic registration be enabled
-  enabled: true
+  enabled: false
   # -- how often should the job be executed before failing
   backoffLimit: 10
   # -- configuration of the services (and scopes) to be registred
