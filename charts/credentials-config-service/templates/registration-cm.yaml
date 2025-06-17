@@ -12,7 +12,7 @@ data:
     {{- range .Values.registration.services }}
 
     curl -X 'POST' \
-      'http://{{ include "ccs.fullname" . }}:{{ $.Values.service.port }}/service' \
+      'http://{{ include "ccs.fullname" $ }}:{{ $.Values.service.port }}/service' \
       -H 'accept: */*' \
       -H 'Content-Type: application/json' \
       -d '{
