@@ -515,6 +515,28 @@ entries:
   business-api-ecosystem:
   - apiVersion: v2
     appVersion: 9.0.1
+    created: "2025-06-18T13:52:38.844370609Z"
+    description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
+      Marketplace) on Kubernetes
+    digest: 1050f97a718c32f88cd2bdba95346151da9a58c8fce726a7ffd62d48cbb1f702
+    home: https://business-api-ecosystem.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - marketplace
+    - bae
+    - tmforum
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: business-api-ecosystem
+    sources:
+    - https://github.com/FIWARE-TMForum/Business-API-Ecosystem
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-0.11.17/business-api-ecosystem-0.11.17.tgz
+    version: 0.11.17
+  - apiVersion: v2
+    appVersion: 9.0.1
     created: "2025-06-18T13:32:10.261485022Z"
     description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
       Marketplace) on Kubernetes
@@ -7907,4 +7929,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2025-06-18T13:32:10.262052702Z"
+generated: "2025-06-18T13:52:38.844995092Z"
