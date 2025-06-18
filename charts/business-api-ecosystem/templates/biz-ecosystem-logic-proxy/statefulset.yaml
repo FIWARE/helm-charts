@@ -202,7 +202,7 @@ spec:
             {{- if .Values.bizEcosystemApis.tmForum.catalog }}
             - name: BAE_LP_ENDPOINT_CATALOG_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.catalog.host }}
-            - name: BAE_LP_ENDPOINT_CATALOG_APIPATH
+            - name: BAE_LP_ENDPOINT_CATALOG_PATH
               value: {{ .Values.bizEcosystemApis.tmForum.catalog.path }}
             - name: BAE_LP_ENDPOINT_CATALOG_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.catalog.port | quote }}
@@ -215,7 +215,7 @@ spec:
             {{- if .Values.bizEcosystemApis.tmForum.inventory }}
             - name: BAE_LP_ENDPOINT_INVENTORY_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.inventory.host }}
-            - name: BAE_LP_ENDPOINT_INVENTORY_APIPATH
+            - name: BAE_LP_ENDPOINT_INVENTORY_PATH
               value: {{ .Values.bizEcosystemApis.tmForum.inventory.path }}
             - name: BAE_LP_ENDPOINT_INVENTORY_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.inventory.port | quote }}
@@ -228,7 +228,7 @@ spec:
             {{- if .Values.bizEcosystemApis.tmForum.serviceInventory }}
             - name: BAE_LP_ENDPOINT_SERVICE_INVENTORY_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.serviceInventory.host }}
-            - name: BAE_LP_ENDPOINT_SERVICE_INVENTORY_APIPATH
+            - name: BAE_LP_ENDPOINT_SERVICE_INVENTORY_PATH
               value: {{ .Values.bizEcosystemApis.tmForum.serviceInventory.path }}
             - name: BAE_LP_ENDPOINT_SERVICE_INVENTORY_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.serviceInventory.port | quote }}
@@ -241,7 +241,7 @@ spec:
             {{- if .Values.bizEcosystemApis.tmForum.resourceInventory }}
             - name: BAE_LP_ENDPOINT_RESOURCE_INVENTORY_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.resourceInventory.host }}
-            - name: BAE_LP_ENDPOINT_RESOURCE_INVENTORY_APIPATH
+            - name: BAE_LP_ENDPOINT_RESOURCE_INVENTORY_PATH
               value: {{ .Values.bizEcosystemApis.tmForum.resourceInventory.path }}
             - name: BAE_LP_ENDPOINT_RESOURCE_INVENTORY_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.resourceInventory.port | quote }}
@@ -254,7 +254,7 @@ spec:
             {{- if .Values.bizEcosystemApis.tmForum.ordering }}
             - name: BAE_LP_ENDPOINT_ORDERING_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.ordering.host }}
-            - name: BAE_LP_ENDPOINT_ORDERING_APIPATH
+            - name: BAE_LP_ENDPOINT_ORDERING_PATH
               value: {{ .Values.bizEcosystemApis.tmForum.ordering.path }}
             - name: BAE_LP_ENDPOINT_ORDERING_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.ordering.port | quote }}
@@ -267,7 +267,7 @@ spec:
             {{- if .Values.bizEcosystemApis.tmForum.billing }}
             - name: BAE_LP_ENDPOINT_BILLING_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.billing.host }}
-            - name: BAE_LP_ENDPOINT_BILLING_APIPATH
+            - name: BAE_LP_ENDPOINT_BILLING_PATH
               value: {{ .Values.bizEcosystemApis.tmForum.billing.path }}
             - name: BAE_LP_ENDPOINT_BILLING_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.billing.port | quote }}
@@ -280,7 +280,7 @@ spec:
             {{- if .Values.bizEcosystemApis.tmForum.resources }}
             - name: BAE_LP_ENDPOINT_RESOURCE_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.resources.host }}
-            - name: BAE_LP_ENDPOINT_RESOURCE_APIPATH
+            - name: BAE_LP_ENDPOINT_RESOURCE_PATH
               value: {{ .Values.bizEcosystemApis.tmForum.resources.path }}
             - name: BAE_LP_ENDPOINT_RESOURCE_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.resources.port | quote }}
@@ -293,7 +293,7 @@ spec:
             {{- if .Values.bizEcosystemApis.tmForum.services }}
             - name: BAE_LP_ENDPOINT_SERVICE_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.services.host }}
-            - name: BAE_LP_ENDPOINT_SERVICE_APIPATH
+            - name: BAE_LP_ENDPOINT_SERVICE_PATH
               value: {{ .Values.bizEcosystemApis.tmForum.services.path }}
             - name: BAE_LP_ENDPOINT_SERVICE_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.services.port | quote }}
@@ -310,7 +310,7 @@ spec:
             {{- if .Values.bizEcosystemApis.tmForum.usage }}
             - name: BAE_LP_ENDPOINT_USAGE_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.usage.host }}
-            - name: BAE_LP_ENDPOINT_USAGE_APIPATH
+            - name: BAE_LP_ENDPOINT_USAGE_PATH
               value: {{ .Values.bizEcosystemApis.tmForum.usage.path }}
             - name: BAE_LP_ENDPOINT_USAGE_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.usage.port | quote }}
@@ -323,7 +323,7 @@ spec:
             {{- if .Values.bizEcosystemApis.tmForum.party }}
             - name: BAE_LP_ENDPOINT_PARTY_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.party.host }}
-            - name: BAE_LP_ENDPOINT_PARTY_APIPATH
+            - name: BAE_LP_ENDPOINT_PARTY_PATH
               value: {{ .Values.bizEcosystemApis.tmForum.party.path }}
             - name: BAE_LP_ENDPOINT_PARTY_PORT
               value: {{ .Values.bizEcosystemApis.tmForum.party.port | quote }}
@@ -336,7 +336,7 @@ spec:
             {{- if .Values.bizEcosystemApis.tmForum.customer }}  
             - name: BAE_LP_ENDPOINT_CUSTOMER_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.customer.host }}
-            - name: BAE_LP_ENDPOINT_CUSTOMER_APIPATH
+            - name: BAE_LP_ENDPOINT_CUSTOMER_PATH
               value: {{ .Values.bizEcosystemApis.tmForum.customer.path }}
             - name: BAE_LP_ENDPOINT_CUSTOMER_PORT
               value: {{  .Values.bizEcosystemApis.tmForum.customer.port | quote }}
