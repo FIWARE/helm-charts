@@ -195,6 +195,8 @@ registration:
   enabled: false
   # -- how often should the job be executed before failing
   backoffLimit: 10
+  # -- optional prepariation script
+  prepScript: 
   # -- configuration of the services (and scopes) to be registred
   services:
     # - id: data-service
