@@ -8,6 +8,11 @@ metadata:
     {{ include "ccs.labels" . | nindent 4 }}
 data:
   init.sh: |-
+    {{- if .Values.registration.prepScript }}
+    # Prep script
+    {{ .Values.registration.prepScript }} 
+    {{- end }}
+  
     # credentials config service registration
     {{- range .Values.registration.services }}
 
