@@ -17,17 +17,17 @@ data:
     # credentials config service registration
     {{- range .Values.registration.services }}
 
-    curl -v -f -X 'POST' \
+    curl -f -X 'POST' \
       'http://{{ include "ccs.fullname" $ }}:{{ $.Values.service.port }}/service' \
       -H 'accept: */*' \
       -H 'Content-Type: application/json' \
       -d @- <<EOF
-      {
-        "id": {{ .id | quote }},
-        "defaultOidcScope": "{{ .defaultOidcScope }}",
-        "oidcScopes": {{ .oidcScopes | toJson }}
-      }
-      EOF
+    {
+      "id": "{{ .id }}",
+      "defaultOidcScope": "{{ .defaultOidcScope }}",
+      "oidcScopes": {{ .oidcScopes | toJson }}
+    }
+    EOF
     {{- end }}
 
 {{- end }}
