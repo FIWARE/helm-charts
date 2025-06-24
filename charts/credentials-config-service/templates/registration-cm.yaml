@@ -17,7 +17,7 @@ data:
     # credentials config service registration
     {{- range .Values.registration.services }}
 
-    curl -f -X 'POST' \
+    curl -v -f -X 'POST' \
       'http://{{ include "ccs.fullname" $ }}:{{ $.Values.service.port }}/service' \
       -H 'accept: */*' \
       -H 'Content-Type: application/json' \
