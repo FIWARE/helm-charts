@@ -8,6 +8,7 @@ metadata:
     {{ include "ccs.labels" . | nindent 4 }}
 data:
   init.sh: |-
+    set -e  # Exit on error
     {{- if .Values.registration.prepScript }}
     # Prep script
     {{ .Values.registration.prepScript }} 
@@ -16,7 +17,7 @@ data:
     # credentials config service registration
     {{- range .Values.registration.services }}
 
-    curl -X 'POST' \
+    curl -f -X 'POST' \
       'http://{{ include "ccs.fullname" $ }}:{{ $.Values.service.port }}/service' \
       -H 'accept: */*' \
       -H 'Content-Type: application/json' \
