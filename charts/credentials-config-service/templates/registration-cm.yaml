@@ -20,12 +20,13 @@ data:
       'http://{{ include "ccs.fullname" $ }}:{{ $.Values.service.port }}/service' \
       -H 'accept: */*' \
       -H 'Content-Type: application/json' \
-      -d '{
-      "id": {{ .id | quote }},
-      "defaultOidcScope": {{ .defaultOidcScope | quote }},
-      "oidcScopes": {{- toJson .oidcScopes }}
-    }'
-
+      -d @- <<EOF
+      {
+        "id": {{ .id | quote }},
+        "defaultOidcScope": "{{ .defaultOidcScope }}",
+        "oidcScopes": {{ .oidcScopes | toJson }}
+      }
+      EOF
     {{- end }}
 
 {{- end }}
