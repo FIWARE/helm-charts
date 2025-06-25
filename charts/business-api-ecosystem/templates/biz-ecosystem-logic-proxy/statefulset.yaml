@@ -64,7 +64,7 @@ spec:
             - name: themes
               mountPath: /themes
         {{- end }}
-        {{- if .Values.siop.enabled}}
+        {{- if and (.Values.siop.ccs) (eq .Values.siop.ccs.enabled true)}}
         - name: register-credential-config
           image: quay.io/curl/curl:8.1.2
           command: [ "/bin/sh", "-c", "/bin/init.sh" ]

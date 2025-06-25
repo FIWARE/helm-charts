@@ -1,4 +1,4 @@
-{{- if .Values.siop.enabled}}
+{{- if and (.Values.siop.ccs) (eq .Values.siop.ccs.enabled true)}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
