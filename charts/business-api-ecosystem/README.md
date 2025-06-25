@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.11.17](https://img.shields.io/badge/Version-0.11.17-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
+![Version: 0.11.18](https://img.shields.io/badge/Version-0.11.18-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -269,6 +269,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | siop.allowedRoles[1] | string | `"customer"` |  |
 | siop.callbackPath | string | `"/auth/vc/callback"` |  |
 | siop.ccs.defaultOidcScope | string | `"defaultScope"` | Default scope to be used from scopes below, if none is provided |
+| siop.ccs.enabeld | bool | `false` | is automatic credentials config registration enabled |
 | siop.ccs.endpoint | string | `"http://credentials-config-service:8080"` | Endpoint of the CCS |
 | siop.clientId | string | `"marketplace-client"` |  |
 | siop.enabled | bool | `false` |  |
