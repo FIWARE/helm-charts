@@ -56,6 +56,8 @@ siop:
     - customer
   # Configuration for the Credential Config Service initiation
   ccs:
+    # -- is automatic credentials config registration enabled
+    enabeld: false
     # -- Endpoint of the CCS
     endpoint: "http://credentials-config-service:8080"
     # -- Default scope to be used from scopes below, if none is provided
