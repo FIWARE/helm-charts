@@ -152,10 +152,10 @@ host: http://localhost
 ## Regex for for debug output
 debug: adapter:*
 
-user-context: 
+userContext: 
   # for the fixed JSON-LD @context to be supplied
   url: https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld
-core-context:
+coreContext:
   #  or the fixed core NGSI-LD @context to be supplied 
   url: https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.9.jsonld
 lepus:
@@ -166,7 +166,7 @@ lepus:
   #  for the location of Lepus itself
   url: https://adapter:3000
   # whether to use multiple cores
-  multi-core: true
+  multiCore: true
 orion:
   # maximum length of time to access the NGSI-v2 Orion Context Broker URL in milliseconds
   timeout: 1000

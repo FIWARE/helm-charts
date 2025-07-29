@@ -19,7 +19,7 @@ spec:
       app.kubernetes.io/name: {{ include "lepus.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
-     metadata:
+    metadata:
       labels:
         {{ include "lepus.labels" . | nindent 8 }}
         {{- with .Values.deployment.additionalLabels }}
@@ -59,9 +59,9 @@ spec:
             timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
           env:
             - name: USER_CONTEXT_URL
-              value: {{ .Values.user-context.url | quote }}
+              value: {{ .Values.userContext.url | quote }}
             - name: CORE_CONTEXT_URL
-              value: {{ .Values.core-context.url | quote }}
+              value: {{ .Values.coreContext.url | quote }}
             - name: LEPUS_PORT
               value: {{ .Values.port | quote }}
             - name: LEPUS_ALIAS
@@ -71,7 +71,7 @@ spec:
             - name: LEPUS_URL
               value: {{ .Values.lepus.url | quote }}
             - name: LEPUS_MULTI_CORE
-              value: {{ .Values.debug | quote }}
+              value: {{ .Values.lepus.multiCore | quote }}
             - name: NGSI_V2_TIMEOUT
               value: {{ .Values.orion.timeout | quote }}
             - name: NGSI_V2_CONTEXT_BROKER
