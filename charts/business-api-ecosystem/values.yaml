@@ -823,6 +823,6 @@ bizEcosystemLogicProxy:
 
   # -- use initcontainers to wait for the apis to be deployed
   initContainers: true
-  extraVolumeMounts: {}
+  extraVolumeMounts: []
   # -- in case the startup command should be alterd
-  command: {}
+  command: []
