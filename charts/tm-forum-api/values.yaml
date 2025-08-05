@@ -56,8 +56,6 @@ route:
 ingress:
   # -- should there be an ingress to connect tmforum with the public internet
   enabled: false
-Conversation
-
   # -- class of the ingress controller to handle the ingress
   className:
   # -- annotations to be added to the ingress
