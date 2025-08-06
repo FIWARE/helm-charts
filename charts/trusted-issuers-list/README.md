@@ -1,6 +1,6 @@
 # trusted-issuers-list
 
-![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![AppVersion: 0.0.2](https://img.shields.io/badge/AppVersion-0.0.2-informational?style=flat-square)
+![Version: 0.7.1](https://img.shields.io/badge/Version-0.7.1-informational?style=flat-square) ![AppVersion: 0.0.2](https://img.shields.io/badge/AppVersion-0.0.2-informational?style=flat-square)
 
 A Helm chart for running the trusted-issuers-list on kubernetes.
 
@@ -39,7 +39,7 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 | deployment.healthPort | int | `9090` | port to request health information at |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/trusted-issuers-list"` | til image name ref: https://quay.io/repository/fiware/trusted-issuers-list |
-| deployment.image.tag | string | `"0.2.1"` | tag of the image to be used |
+| deployment.image.tag | string | `"0.2.2"` | tag of the image to be used |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
