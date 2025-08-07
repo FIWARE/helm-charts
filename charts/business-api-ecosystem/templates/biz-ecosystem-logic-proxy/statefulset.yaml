@@ -40,7 +40,9 @@ spec:
       {{- end }}
       initContainers:
         {{- if .Values.bizEcosystemLogicProxy.extraInitContainers }}
-        {{ toYaml .Value.bizEcosystemLogicProxy.extraInitContainers | nindent 8 }}
+        {{- with .Values.bizEcosystemLogicProxy.extraInitContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         {{- end }}
         {{- include "business-api-ecosystem.initContainer.mongodb" ( dict "ctx" . "name" .Values.bizEcosystemLogicProxy.name "host" .Values.bizEcosystemLogicProxy.db.host ) | nindent 8 }}
         {{- if .Values.bizEcosystemLogicProxy.initContainers }}
@@ -62,7 +64,7 @@ spec:
             - name: themes
               mountPath: /themes
         {{- end }}
-        {{- if .Values.siop.enabled}}
+        {{- if and (.Values.siop.ccs) (eq .Values.siop.ccs.enabled true)}}
         - name: register-credential-config
           image: quay.io/curl/curl:8.1.2
           command: [ "/bin/sh", "-c", "/bin/init.sh" ]
@@ -72,6 +74,11 @@ spec:
               subPath: init.sh
         {{- end }}
       containers:
+        {{- if .Values.bizEcosystemLogicProxy.extraContainers }}
+        {{- with .Values.bizEcosystemLogicProxy.extraContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- end }}
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemLogicProxy.name }}
           imagePullPolicy: {{ .Values.bizEcosystemLogicProxy.statefulset.image.pullPolicy }}
           image: "{{ .Values.bizEcosystemLogicProxy.statefulset.image.repository }}:{{ .Values.bizEcosystemLogicProxy.statefulset.image.tag }}"
@@ -408,7 +415,9 @@ spec:
         .Values.bizEcosystemLogicProxy.theme.enabled .Values.siop.enabled }}
       volumes:
       {{- if .Values.bizEcosystemLogicProxy.extraContainerVolumes }}
-      {{ toYaml .Values.bizEcosystemLogicProxy.extraContainerVolumes | nindent 8 }}
+      {{- with .Values.bizEcosystemLogicProxy.extraContainerVolumes }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- end }}
       {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
         - name: themes

@@ -1,6 +1,6 @@
 # contract-management
 
-![Version: 1.0.2](https://img.shields.io/badge/Version-1.0.2-informational?style=flat-square) ![AppVersion: 2.0.0](https://img.shields.io/badge/AppVersion-2.0.0-informational?style=flat-square)
+![Version: 1.0.8](https://img.shields.io/badge/Version-1.0.8-informational?style=flat-square) ![AppVersion: 2.0.0](https://img.shields.io/badge/AppVersion-2.0.0-informational?style=flat-square)
 
 A Helm chart for running the contract-management on kubernetes.
 
@@ -29,7 +29,7 @@ A Helm chart for running the contract-management on kubernetes.
 | deployment.healthPort | int | `9090` | port to request health information at |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/contract-management"` | til image name ref: https://quay.io/repository/fiware/contract-management |
-| deployment.image.tag | string | `"2.0.1"` | tag of the image to be used |
+| deployment.image.tag | string | `"2.1.2"` | tag of the image to be used |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
@@ -66,6 +66,9 @@ A Helm chart for running the contract-management on kubernetes.
 | services.product-order.path | string | `"/tmf-api/productOrderingManagement/v4"` |  |
 | services.product-order.read-timeout | int | `30` |  |
 | services.product-order.url | string | `"http://tm-forum-api-product-ordering-management:8080"` |  |
+| services.quote.path | string | `"/tmf-api/quote/v4"` |  |
+| services.quote.read-timeout | int | `30` |  |
+| services.quote.url | string | `"http://tm-forum-api-quote:8080"` |  |
 | services.rainbow.path | string | `"/"` |  |
 | services.rainbow.read-timeout | int | `30` |  |
 | services.rainbow.url | string | `"http://rainbow:8080"` |  |

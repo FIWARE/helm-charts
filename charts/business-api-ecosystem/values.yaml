@@ -56,6 +56,8 @@ siop:
     - customer
   # Configuration for the Credential Config Service initiation
   ccs:
+    # -- is automatic credentials config registration enabled
+    enabeld: false
     # -- Endpoint of the CCS
     endpoint: "http://credentials-config-service:8080"
     # -- Default scope to be used from scopes below, if none is provided
@@ -821,11 +823,6 @@ bizEcosystemLogicProxy:
 
   # -- use initcontainers to wait for the apis to be deployed
   initContainers: true
-  # -- additional init-containers to be added for the belp
-  extraInitContainers: {}
-  # -- additional volumes to be added for the container
-  extraContainerVolumes: {}
-  # -- additional volumes to be mounted by the container
-  extraVolumeMounts: {}
+  extraVolumeMounts: []
   # -- in case the startup command should be alterd
-  command: {}
+  command: []

@@ -44,7 +44,7 @@ deployment:
     # ref: https://quay.io/repository/fiware/contract-management
     repository: quay.io/fiware/contract-management
     # -- tag of the image to be used
-    tag: 2.0.1
+    tag: 2.1.2
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
@@ -186,6 +186,14 @@ services:
     path: "/tmf-api/agreementManagement/v4"
     ## URL of the TM Forum Service hosting the Agreement API
     url: http://tm-forum-api-agreement:8080
+    ## Read timeout in sec
+    read-timeout: 30
+  ## Config for the TM Forum Service hosting the Quote API
+  quote:
+    ## Path to be used
+    path: "/tmf-api/quote/v4"
+    ## URL of the TM Forum Service hosting the Quote API
+    url: http://tm-forum-api-quote:8080
     ## Read timeout in sec
     read-timeout: 30
   ## Config for the Rainbow service

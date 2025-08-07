@@ -46,7 +46,7 @@ deployment:
     # ref: https://quay.io/repository/fiware/trusted-issuers-list
     repository: quay.io/fiware/trusted-issuers-list
     # -- tag of the image to be used
-    tag: 0.2.1
+    tag: 0.2.2
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required

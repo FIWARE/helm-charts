@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.11.5](https://img.shields.io/badge/Version-0.11.5-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
+![Version: 0.11.20](https://img.shields.io/badge/Version-0.11.20-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -128,7 +128,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.allowLocalEORI | bool | `false` | Allow to use organisations from local IDP as participants when creating or acquiring offerings |
 | bizEcosystemLogicProxy.basePath | string | `"/business-ecosystem-logic-proxy"` | Base app path of logic proxy (for versions < 8.1.0: /business-ecosystem-logic-proxy, for versions >= 8.1.0: /opt/business-ecosystem-logic-proxy) |
 | bizEcosystemLogicProxy.collectStaticCommand | string | `"True"` | Execute the collect static command on startup |
-| bizEcosystemLogicProxy.command | object | `{}` | in case the startup command should be alterd |
+| bizEcosystemLogicProxy.command | list | `[]` | in case the startup command should be alterd |
 | bizEcosystemLogicProxy.db.database | string | `"belp_db"` | Database name for connecting the database |
 | bizEcosystemLogicProxy.db.host | string | `"mongo"` | host of the database to be used |
 | bizEcosystemLogicProxy.db.password | string | `"pass"` | password for connecting the database |
@@ -141,9 +141,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.enabled | bool | `true` |  |
 | bizEcosystemLogicProxy.externalIdp.enabled | bool | `false` | Enable usage of external IDPs |
 | bizEcosystemLogicProxy.externalIdp.showLocalLogin | bool | `false` | Show login button for local IDP on login modal dialog with list of external IDPs |
-| bizEcosystemLogicProxy.extraContainerVolumes | object | `{}` | additional volumes to be added for the container |
-| bizEcosystemLogicProxy.extraInitContainers | object | `{}` | additional init-containers to be added for the belp |
-| bizEcosystemLogicProxy.extraVolumeMounts | object | `{}` | additional volumes to be mounted by the container |
+| bizEcosystemLogicProxy.extraVolumeMounts | list | `[]` |  |
 | bizEcosystemLogicProxy.fullnameOverride | string | `""` |  |
 | bizEcosystemLogicProxy.ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | bizEcosystemLogicProxy.ingress.enabled | bool | `false` | should there be an ingress to connect the logic proxy with the public internet |
@@ -271,6 +269,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | siop.allowedRoles[1] | string | `"customer"` |  |
 | siop.callbackPath | string | `"/auth/vc/callback"` |  |
 | siop.ccs.defaultOidcScope | string | `"defaultScope"` | Default scope to be used from scopes below, if none is provided |
+| siop.ccs.enabeld | bool | `false` | is automatic credentials config registration enabled |
 | siop.ccs.endpoint | string | `"http://credentials-config-service:8080"` | Endpoint of the CCS |
 | siop.clientId | string | `"marketplace-client"` |  |
 | siop.enabled | bool | `false` |  |

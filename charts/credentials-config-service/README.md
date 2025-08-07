@@ -1,6 +1,6 @@
 # credentials-config-service
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 2.1.12](https://img.shields.io/badge/Version-2.1.12-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 A Helm chart for running the credentials-config-service on kubernetes.
 
@@ -39,7 +39,7 @@ A Helm chart for running the credentials-config-service on kubernetes.
 | deployment.healthPort | int | `9090` | port to request health information at |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/credentials-config-service"` | til image name ref: https://quay.io/repository/fiware/credentials-config-service |
-| deployment.image.tag | string | `"2.0.0"` | tag of the image to be used |
+| deployment.image.tag | string | `"3.2.3"` | tag of the image to be used |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
@@ -66,6 +66,10 @@ A Helm chart for running the credentials-config-service on kubernetes.
 | prometheus.enabled | bool | `true` | should prometheus scrape be enabled |
 | prometheus.path | string | `"/prometheus"` | path for prometheus scrape |
 | prometheus.port | int | `9090` | port prometheus scrape is available at |
+| registration.backoffLimit | int | `10` | how often should the job be executed before failing |
+| registration.enabled | bool | `false` | should automatic registration be enabled |
+| registration.prepScript | string | `nil` | optional prepariation script |
+| registration.services | string | `nil` | configuration of the services (and scopes) to be registred |
 | route.annotations | object | `{}` | annotations to be added to the route |
 | route.certificate | object | `{}` |  |
 | route.enabled | bool | `false` |  |
