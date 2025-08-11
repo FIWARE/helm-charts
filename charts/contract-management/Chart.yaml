@@ -1,7 +1,7 @@
 apiVersion: v1
 name: contract-management
-version: 1.0.8
-appVersion: 2.0.0
+version: 3.0.0
+appVersion: 3.0.0
 description: A Helm chart for running the contract-management on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
 keywords:
