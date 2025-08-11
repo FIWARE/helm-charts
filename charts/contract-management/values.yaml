@@ -44,7 +44,7 @@ deployment:
     # ref: https://quay.io/repository/fiware/contract-management
     repository: quay.io/fiware/contract-management
     # -- tag of the image to be used
-    tag: 2.1.2
+    tag: 3.0.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
