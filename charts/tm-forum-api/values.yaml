@@ -341,6 +341,10 @@ redis:
   cacheConfig:
     # -- uri of redis master
     uri: redis://tmforum-redis-master:6379
+  global:
+    security:
+      # allow the image from the legacy repo
+      allowInsecureImages: true
   image:
     repository: bitnamilegacy/redis
   # bitnami dependency values
