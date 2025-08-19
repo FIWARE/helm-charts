@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.14.6](https://img.shields.io/badge/Version-0.14.6-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
+![Version: 0.14.7](https://img.shields.io/badge/Version-0.14.7-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -160,6 +160,7 @@ For all untouched values, the customized deployement will still use the defaults
 | redis.cacheConfig.uri | string | `"redis://tmforum-redis-master:6379"` | uri of redis master |
 | redis.enabled | bool | `false` | enable redis caching? |
 | redis.fullnameOverride | string | `"tmforum-redis"` |  |
+| redis.image.repository | string | `"bitnamilegacy/redis"` |  |
 | redis.master.containerSecurityContext.enabled | bool | `false` |  |
 | redis.master.podSecurityContext.enabled | bool | `false` |  |
 | route.annotations | object | `{}` | annotations to be added to the route |
