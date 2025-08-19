@@ -341,7 +341,8 @@ redis:
   cacheConfig:
     # -- uri of redis master
     uri: redis://tmforum-redis-master:6379
-
+  image:
+    repository: bitnamilegacy/redis
   # bitnami dependency values
   fullnameOverride: tmforum-redis
   architecture: standalone

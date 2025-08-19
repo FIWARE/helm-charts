@@ -110,7 +110,7 @@ initContainer:
     ## -- Name
     name: wait-for-mongodb
     ## -- Image
-    image: "bitnami/mongodb"
+    image: "bitnamilegacy/mongodb"
     ## -- Tag
     imageTag: "3.6.21"
     ## -- Image pull policy
