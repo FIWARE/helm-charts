@@ -69,6 +69,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.db.host | string | `"mongo"` |  |
 | bizEcosystemChargingBackend.db.password | string | `"pass"` |  |
 | bizEcosystemChargingBackend.db.port | int | `27017` |  |
+| bizEcosystemChargingBackend.db.secretKey | string | `"dbPassword"` | key of the password inside the secret |
 | bizEcosystemChargingBackend.db.user | string | `"root"` |  |
 | bizEcosystemChargingBackend.deployment.additionalAnnotations | object | `{}` |  |
 | bizEcosystemChargingBackend.deployment.additionalLabels | object | `{}` |  |
