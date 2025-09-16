@@ -117,7 +117,7 @@ spec:
             {{- end }}
             {{- if .Values.additionalRego.enabled }}
             - name: rego
-              mountPath: /rego-packages
+              mountPath: /rego-packages/custom/
             {{- end }}
             {{- if .Values.deployment.additionalVolumeMounts }}
             {{- with .Values.deployment.additionalVolumeMounts }}
