@@ -215,7 +215,7 @@ additionalRego:
   # -- should additional packages be loaded
   enabled: false
   packages: |
-    custom/action.rego: |
+    action.rego: |
       package odrl.action
 
       import rego.v1
