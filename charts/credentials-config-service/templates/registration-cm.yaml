@@ -24,7 +24,10 @@ data:
       -d @- <<EOF
     {
       "id": "{{ .id }}",
-      "defaultOidcScope": "{{ .defaultOidcScope }}",
+      "defaultOidcScope": "{{ .defaultOidcScope }}",      
+      {{- if .authorizationPath }}
+      "authorizationPath": {{ .authorizationPath }}
+      {{- end }}
       "oidcScopes": {{ .oidcScopes | toJson }}
     }
     EOF
