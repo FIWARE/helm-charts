@@ -1,6 +1,6 @@
 # credentials-config-service
 
-![Version: 2.1.16](https://img.shields.io/badge/Version-2.1.16-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 2.1.17](https://img.shields.io/badge/Version-2.1.17-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 A Helm chart for running the credentials-config-service on kubernetes.
 
