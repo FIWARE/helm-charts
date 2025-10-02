@@ -437,7 +437,7 @@ spec:
               - key: cert.pem
                 path: cert.pem
       {{- end }}
-      {{- if .Values.siop.enabled}}
+      {{- if and (.Values.siop.ccs) (eq .Values.siop.ccs.enabled true)}}
         - name: ccs-init-volume
           configMap:
             name: {{ include "bizEcosystemLogicProxy.fullname" . }}-ccs
