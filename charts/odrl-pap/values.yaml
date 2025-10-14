@@ -48,9 +48,12 @@ deployment:
     # ref: https://quay.io/repository/wistefan/odrl-pap
     repository: quay.io/fiware/odrl-pap
     # -- tag of the image to be used
-    tag: 0.2.0
+    tag: 1.0.2
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
+  # -- secrets for pulling images from a private repository
+  # ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  imagePullSecrets: []    
   # -- additional labels for the deployment, if required
   additionalLabels: {}
   # -- additional annotations for the deployment, if required

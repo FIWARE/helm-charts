@@ -34,7 +34,13 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- end }}
-    spec: 
+    spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range .Values.imagePullSecrets }}
+        - name: {{ . }}
+        {{- end }}
+      {{- end }}
       serviceAccountName: {{ include "pap.serviceAccountName" . }}
       {{- if .Values.deployment.initContainers }}
       initContainers:
@@ -139,7 +145,7 @@ spec:
         {{- end }}
         {{- if .Values.deployment.additionalVolumes }}
         {{- with .Values.deployment.additionalVolumes }}
-        {{- toYaml . | nindent 6 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
         {{- end }}
       {{- with .Values.deployment.nodeSelector }}

@@ -148,7 +148,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                    name: {{ include "bizEcosystemChargingBackend.secretName" . }}
-                   key: dbPassword
+                   key: {{ .Values.bizEcosystemChargingBackend.db.secretKey | quote }}
             - name: BAE_LP_OAUTH2_ADMIN_ROLE
               value: {{ .Values.oauth.adminrole | quote }}
             - name: BAE_LP_OAUTH2_SELLER_ROLE

@@ -145,7 +145,7 @@ defaultConfig:
     # -- repository to get the container from
     repository: quay.io/fiware
     # -- tag to be used, most of the time the apis will use the same version
-    tag: 1.3.6
+    tag: 1.3.16
     # -- pull policy to be used
     pullPolicy: IfNotPresent
   # -- log level of the api
@@ -341,7 +341,12 @@ redis:
   cacheConfig:
     # -- uri of redis master
     uri: redis://tmforum-redis-master:6379
-
+  global:
+    security:
+      # allow the image from the legacy repo
+      allowInsecureImages: true
+  image:
+    repository: bitnamilegacy/redis
   # bitnami dependency values
   fullnameOverride: tmforum-redis
   architecture: standalone

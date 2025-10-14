@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.11.20](https://img.shields.io/badge/Version-0.11.20-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
+![Version: 0.11.21](https://img.shields.io/badge/Version-0.11.21-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -69,6 +69,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.db.host | string | `"mongo"` |  |
 | bizEcosystemChargingBackend.db.password | string | `"pass"` |  |
 | bizEcosystemChargingBackend.db.port | int | `27017` |  |
+| bizEcosystemChargingBackend.db.secretKey | string | `"dbPassword"` | key of the password inside the secret |
 | bizEcosystemChargingBackend.db.user | string | `"root"` |  |
 | bizEcosystemChargingBackend.deployment.additionalAnnotations | object | `{}` |  |
 | bizEcosystemChargingBackend.deployment.additionalLabels | object | `{}` |  |
@@ -238,7 +239,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | initContainer.apis.maxRetries | int | `60` |  |
 | initContainer.apis.name | string | `"wait-for-apis"` |  |
 | initContainer.apis.sleepInterval | int | `10` |  |
-| initContainer.mongodb.image | string | `"bitnami/mongodb"` |  |
+| initContainer.mongodb.image | string | `"bitnamilegacy/mongodb"` |  |
 | initContainer.mongodb.imagePullPolicy | string | `"IfNotPresent"` |  |
 | initContainer.mongodb.imageTag | string | `"3.6.21"` |  |
 | initContainer.mongodb.maxRetries | int | `60` |  |
