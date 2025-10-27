@@ -34,7 +34,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- end }}
-    spec: 
+    spec:
       serviceAccountName: {{ include "til.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
@@ -71,6 +71,23 @@ spec:
             - name: MICRONAUT_METRICS_ENABLED
               value: {{ .Values.prometheus.enabled | quote }}
             {{- if .Values.database.persistence }}
+            {{- if eq (.Values.database.dialect | upper) "POSTGRES" }}
+            - name: DATASOURCES_DEFAULT_URL
+              value: "jdbc:postgresql://{{ .Values.database.host }}:{{ .Values.database.port }}/{{ .Values.database.name }}"
+            - name: DATASOURCES_DEFAULT_DRIVER_CLASS_NAME
+              value: "org.postgresql.Driver"
+            - name: DATASOURCES_DEFAULT_USERNAME
+              value: {{ .Values.database.username | quote }}
+            - name: DATASOURCES_DEFAULT_DIALECT
+              value: "POSTGRES"
+            - name: FLYWAY_DATASOURCES_DEFAULT_LOCATIONS
+              value: "classpath:db/migration/postgresql"
+            - name: DATASOURCES_DEFAULT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "til.secretName" . }}
+                  key: {{ include "til.passwordKey" . }}
+            {{- else }}
             - name: DATASOURCES_DEFAULT_URL
               value: "jdbc:mysql://{{ .Values.database.host }}:{{ .Values.database.port }}/{{ .Values.database.name }}"
             - name: DATASOURCES_DEFAULT_DRIVER_CLASS_NAME
@@ -84,6 +101,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "til.secretName" . }}
                   key: {{ include "til.passwordKey" . }}
+            {{- end }}
             {{- else }}
             - name: DATASOURCES_DEFAULT_URL
               value: "jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
