@@ -85,6 +85,7 @@ deployment:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 30
+  resources: {}
 
 ## pod autoscaling configuration, use for automatic scaling of the broker pods
 autoscaling:
@@ -258,3 +259,7 @@ initData:
     #          from: "2022-07-21T17:32:28Z"
     #          to: "2040-07-21T17:32:28Z"
     #        credentialsType: "VerifiableCredential"
+## TIL configuration to be included in the application.yaml file
+config: {}
+
+additionalEnvVars: {}
