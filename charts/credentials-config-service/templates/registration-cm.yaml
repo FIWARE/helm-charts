@@ -25,8 +25,8 @@ data:
     {
       "id": "{{ .id }}",
       "defaultOidcScope": "{{ .defaultOidcScope }}",      
-      {{- if .authorizationPath }}
-      "authorizationPath": {{ .authorizationPath }}
+      {{- if .authorizationType }}
+      "authorizationType": "{{ .authorizationType }}",
       {{- end }}
       "oidcScopes": {{ .oidcScopes | toJson }}
     }
