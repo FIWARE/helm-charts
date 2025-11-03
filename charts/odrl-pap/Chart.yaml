@@ -1,6 +1,6 @@
 apiVersion: v1
 name: odrl-pap
-version: 2.0.7
+version: 2.1.0
 appVersion: 1.1.0
 description: A Helm chart for running the odrl-pap on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
