@@ -20,7 +20,7 @@ data:
           {{- toYaml .Values.services | nindent 10 }}
     general:
       did: {{ .Values.did }}
-      base-path: {{ .Values.baseBath }}
+      basePath: {{ .Values.basePath }}
       enableOdrlPap: {{ .Values.enableOdrlPap }}
       enableTrustedIssuersList: {{ .Values.enableTrustedIssuersList }}
       enableTmForum: {{ .Values.enableTmForum }}
