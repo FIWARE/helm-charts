@@ -1,6 +1,6 @@
 # odrl-pap
 
-![Version: 2.0.4](https://img.shields.io/badge/Version-2.0.4-informational?style=flat-square) ![AppVersion: 0.1.4](https://img.shields.io/badge/AppVersion-0.1.4-informational?style=flat-square)
+![Version: 2.0.7](https://img.shields.io/badge/Version-2.0.7-informational?style=flat-square) ![AppVersion: 0.1.4](https://img.shields.io/badge/AppVersion-0.1.4-informational?style=flat-square)
 
 A Helm chart for running the odrl-pap on kubernetes.
 
@@ -21,7 +21,7 @@ A Helm chart for running the odrl-pap on kubernetes.
 | additionalMapping.enabled | bool | `false` | should an additional mapping.json be loaded |
 | additionalMapping.json | string | `"{\n  \"action\": {\n    \"odrl\": {\n      \"use\" : {\n        \"regoPackage\": \"custom.action as custom_action\",\n        \"regoMethod\": \"custom_action.is_use(helper.http_part)\"\n      }\n    }\n  }\n}\n"` | mapping.json to merged with the defaults the example would overwrite the default odrl:use to be handled by a custom rego method provided with the additional rego  |
 | additionalRego.enabled | bool | `false` | should additional packages be loaded |
-| additionalRego.packages | string | `"custom/action.rego: |\n  package odrl.action\n\n  import rego.v1\n\n  ## odrl:use\n  # checks if the given request is a usage - in constrast to the default, this example would only consider modifications a \"use\"\n  is_use(request) if {\n      methods := [\"POST\", \"PUT\", \"PATCH\"]\n      request.method in methods\n  }\n"` |  |
+| additionalRego.packages | string | `"action.rego: |\n  package odrl.action\n\n  import rego.v1\n\n  ## odrl:use\n  # checks if the given request is a usage - in constrast to the default, this example would only consider modifications a \"use\"\n  is_use(request) if {\n      methods := [\"POST\", \"PUT\", \"PATCH\"]\n      request.method in methods\n  }\n"` |  |
 | additonalEnvVars | list | `[]` | a list of additional env vars to be set, check the til docu for all available options |
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |

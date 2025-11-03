@@ -18,11 +18,14 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| additionalEnvVars | object | `{}` |  |
 | additonalEnvVars | list | `[]` | a list of additional env vars to be set, check the til docu for all available options |
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |
 | autoscaling.minReplicas | int | `1` | minimum number of running pods |
+| config | object | `{}` |  |
+| database.dialect | string | `"mysql"` |  |
 | database.existingSecret | object | `{"enabled":false,"key":"password","name":"the-secret"}` | existing secret to retrieve the db password |
 | database.existingSecret.enabled | bool | `false` | should an existing secret be used |
 | database.existingSecret.key | string | `"password"` | key to retrieve the password from |
@@ -30,7 +33,7 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 | database.host | string | `"mysql"` | host of the database to be connected - will be ignored if persistence is disabled |
 | database.name | string | `"til-db"` | name of the database-schema to be accessed - will be ignored if persistence is disabled |
 | database.password | string | `"password"` | passowrd to connect the db - ignored if existing secret is configured |
-| database.persistence | bool | `false` | should the database support persistence? If disabled, a H2-InMemory-Database will be used.  |
+| database.persistence | bool | `false` | should the database support persistence? If disabled, a H2-InMemory-Database will be used. |
 | database.port | int | `3306` | port of the database to be connected - will be ignored if persistence is disabled |
 | database.username | string | `"user"` | username to conncet the db - ignored if existing secret is configured |
 | deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
@@ -50,6 +53,7 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 | deployment.readinessProbe.successThreshold | int | `1` |  |
 | deployment.readinessProbe.timeoutSeconds | int | `30` |  |
 | deployment.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
+| deployment.resources | object | `{}` |  |
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
