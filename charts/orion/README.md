@@ -24,6 +24,7 @@ Kubernetes: `>= 1.19-0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| autoscaling.apiVersion | string | `"v2beta2"` | version of the autoscaling API |
 | autoscaling.enabled | bool | `false` | should autoscaling be enabled for the context broker |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |
