@@ -19,12 +19,36 @@ data:
           read-timeout: 30s
           {{- toYaml .Values.services | nindent 10 }}
     general:
-      host: {{ include "contract.fullname" . }}
-      port: {{ .Values.port}}
-      til:
-        {{- toYaml .Values.til | nindent 8 }}
-      
+      did: {{ .Values.did }}
+      basePath: {{ .Values.baseBath }}
+      enableOdrlPap: {{ .Values.enableOdrlPap }}
+      enableTrustedIssuersList: {{ .Values.enableTrustedIssuersList }}
+      enableTmForum: {{ .Values.enableTmForum }}
+      enableRainbow: {{ .Values.enableRainbow }}
+      enableCentralMarketplace: {{ .Values.enableCentralMarketplace }}
+
+    {{- if eq .Values.oid4vp.enabled true }}
+    oid4vp:
+      enabled: {{ .Values.oid4vp.enabled }}
+      holder: 
+        holderId: {{ .Values.oid4vp.holder.holderId }} 
+        keyType: {{ .Values.oid4vp.holder.keyType }} 
+        keyPath: {{ .Values.oid4vp.holder.keyPath }} 
+        signatureAlgorithm: {{ .Values.oid4vp.holder.signatureAlgorithm }} 
+      {{- if eq .Values.oid4vp.proxyConfig.enabled true }}
+      proxyConfig:
+        useProxy: true
+        proxyHost: {{ .Values.oid4vp.proxyConfig.proxyHost }}
+        proxyPort: {{ .Values.oid4vp.proxyConfig.proxyPort }}
+      {{- end }}
+      credentialsFolder: {{ .Values.oid4vp.credentialsFolder }}
+      trustAnchors: {{ .Values.oid4vp.trustAnchors }}        
+    {{- end }}
+
+    {{- if eq .Values.notification.enabled true }}
     notification:
+      enabled: true
+      host: {{ .Values.notification.host }}
       entities:
         - entityType: "ProductOrder"
           eventTypes: [ "CREATE", "STATE_CHANGE", "DELETE" ]
@@ -38,5 +62,5 @@ data:
         - entityType: "Quote"
           eventTypes: [ "CREATE", "DELETE", "STATE_CHANGE", "ATTRIBUTE_CHANGE" ]
           apiAddress: "{{ $quote.url}}{{ $quote.path}}"
-
+    {{- end }}
     {{- end }}
