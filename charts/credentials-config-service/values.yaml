@@ -181,6 +181,8 @@ database:
   username: user
   # -- passowrd to connect the db - ignored if existing secret is configured
   password: password
+  # -- database dialect. Support mysql or postgres
+  dialect: mysql
   # -- existing secret to retrieve the db password
   existingSecret:
     # -- should an existing secret be used
@@ -238,3 +240,6 @@ registration:
     #           "jwt_vc":
     #             alg:
     #               - ES256
+
+# -- configuration to be included in the application.yaml file
+config: {}
