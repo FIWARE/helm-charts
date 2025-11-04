@@ -102,6 +102,8 @@ deployment:
 autoscaling:
   # -- should autoscaling be enabled
   enabled: false
+  # -- version of the autoscaling API
+  apiVersion: "v1"
   # -- minimum number of running pods
   minReplicas: 1
   # -- maximum number of running pods
