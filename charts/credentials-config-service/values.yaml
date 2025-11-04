@@ -43,7 +43,7 @@ deployment:
     # -- til image name
     # ref: https://quay.io/repository/fiware/credentials-config-service
     repository: quay.io/fiware/credentials-config-service
-    # -- tag of the image to be used
+    # -- tag of the image to be used. If empty, AppVersion is used
     tag: 3.3.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
