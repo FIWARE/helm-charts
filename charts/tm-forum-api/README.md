@@ -109,10 +109,10 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.cache.subscriptions.maximumSize | int | `1000` | maximum size of the cache |
 | defaultConfig.contextUrl | string | `"https://smartdatamodels.org/context.jsonld"` | default context to be used when contacting the context broker |
 | defaultConfig.endpointsPort | int | `9090` | metrics and health port |
-| defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/fiware","tag":"1.4.0"}` | configuration to be used for the image of the container |
+| defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/fiware","tag":"1.4.1"}` | configuration to be used for the image of the container |
 | defaultConfig.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used |
 | defaultConfig.image.repository | string | `"quay.io/fiware"` | repository to get the container from |
-| defaultConfig.image.tag | string | `"1.4.0"` | tag to be used, most of the time the apis will use the same version |
+| defaultConfig.image.tag | string | `"1.4.1"` | tag to be used, most of the time the apis will use the same version |
 | defaultConfig.livenessProbe.healthPath | string | `"/health/liveness"` | path to be used for the health check |
 | defaultConfig.livenessProbe.initialDelaySeconds | int | `30` |  |
 | defaultConfig.livenessProbe.periodSeconds | int | `10` |  |
