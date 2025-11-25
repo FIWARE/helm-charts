@@ -46,7 +46,7 @@ deployment:
     repository: quay.io/fiware/orion-ld
     #repository: fiware/orion
     # -- tag of the image to be used
-    tag: 1.1.0
+    tag: 1.10.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
@@ -251,6 +251,8 @@ broker:
     # - mongodb
     # -- the db to use. if running in multiservice mode, its used as a prefix.
     name: orion
+    # -- enable experimental implementation + turn off mongo legacy driver
+    mongocOnly: true
     # -- Database authentication (not needed if MongoDB doesn't use --auth)
     # auth:
       # --user for connecting mongo
