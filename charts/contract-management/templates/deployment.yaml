@@ -36,6 +36,12 @@ spec:
       {{- end }}
     spec: 
       serviceAccountName: {{ include "contract.serviceAccountName" . }}
+      {{- if .Values.deployment.initContainers }}
+      initContainers:
+        {{- with .Values.deployment.initContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
@@ -81,6 +87,11 @@ spec:
             - name: application-yaml
               mountPath: /application.yaml
               subPath: application.yaml
+            {{- if .Values.deployment.additionalVolumeMounts }}
+            {{- with .Values.deployment.additionalVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- end }}
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
       volumes:
@@ -90,6 +101,11 @@ spec:
             items:
               - key: application.yaml
                 path: application.yaml
+        {{- if .Values.deployment.additionalVolumes }}
+        {{- with .Values.deployment.additionalVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- end }}
       {{- with .Values.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

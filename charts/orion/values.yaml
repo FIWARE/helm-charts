@@ -92,6 +92,8 @@ deployment:
 autoscaling:
   # -- should autoscaling be enabled for the context broker
   enabled: false
+  # -- version of the autoscaling API
+  apiVersion: "v2beta2"
   # -- minimum number of running pods
   minReplicas: 1
   # -- maximum number of running pods
