@@ -26,6 +26,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/til-configmap.yaml") . | sha256sum }}
         {{- if or .Values.deployment.additionalAnnotations .Values.prometheus.enabled -}}
         {{- if .Values.prometheus.enabled }}
         prometheus.io/scrape: {{ .Values.prometheus.enabled | quote }}
