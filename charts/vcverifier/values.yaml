@@ -34,7 +34,7 @@ deployment:
     # -- image name
     repository: quay.io/fiware/vcverifier
     # -- tag of the image to be used
-    tag: 6.1.4
+    tag: 6.3.2
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- port to run the container at

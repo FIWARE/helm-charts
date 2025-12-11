@@ -4,7 +4,7 @@ metadata:
   name: {{ include "til.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{ include "til.labels" . | nindent 4 }}
+    {{- include "til.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.deployment.replicaCount }}
@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       labels:
-        {{ include "til.labels" . | nindent 8 }}
+        {{- include "til.labels" . | nindent 8 }}
         {{- with .Values.deployment.additionalLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -66,39 +66,32 @@ spec:
             successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
           env:
-            - name: ENDPOINTS_ALL_PORT
-              value: {{ .Values.deployment.healthPort | quote }}
-            - name: MICRONAUT_SERVER_PORT
-              value: {{ .Values.port | quote }}
-            - name: MICRONAUT_METRICS_ENABLED
-              value: {{ .Values.prometheus.enabled | quote }}
-            {{- if .Values.database.persistence }}
-            - name: DATASOURCES_DEFAULT_URL
-              value: "jdbc:mysql://{{ .Values.database.host }}:{{ .Values.database.port }}/{{ .Values.database.name }}"
-            - name: DATASOURCES_DEFAULT_DRIVER_CLASS_NAME
-              value: "com.mysql.cj.jdbc.Driver"
-            - name: DATASOURCES_DEFAULT_USERNAME
-              value: {{ .Values.database.username | quote }}
-            - name: DATASOURCES_DEFAULT_DIALECT
-              value: "MYSQL"
+            - name: MICRONAUT_CONFIG_FILES
+              value: /opt/application.yaml
+          {{- if .Values.database.persistence }}
             - name: DATASOURCES_DEFAULT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "til.secretName" . }}
                   key: {{ include "til.passwordKey" . }}
-            {{- else }}
-            - name: DATASOURCES_DEFAULT_URL
-              value: "jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
-            - name: DATASOURCES_DEFAULT_DRIVER_CLASS_NAME
-              value: "org.h2.Driver"
-            - name: DATASOURCES_DEFAULT_DIALECT
-              value: "H2"
-            {{- end }}
+          {{- end }}
             {{- with .Values.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
+          volumeMounts:
+          - name: config-vol
+            mountPath: /opt
+            readOnly: true
+      volumes:
+        - name: config-vol
+          configMap:
+            name: {{ printf "%s-cm" (include "til.fullname" .) }}
+            items:
+              - key: application.yaml
+                path: application.yaml
+            defaultMode: 0644
       {{- with .Values.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

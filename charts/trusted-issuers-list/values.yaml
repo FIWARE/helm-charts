@@ -46,7 +46,7 @@ deployment:
     # ref: https://quay.io/repository/fiware/trusted-issuers-list
     repository: quay.io/fiware/trusted-issuers-list
     # -- tag of the image to be used
-    tag: 0.3.4
+    tag: 0.4.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
@@ -85,6 +85,7 @@ deployment:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 30
+  resources: {}
 
 ## pod autoscaling configuration, use for automatic scaling of the broker pods
 autoscaling:
@@ -208,18 +209,19 @@ additonalEnvVars: []
 
 ## database configuration for the trusted-issuers-list
 database:
-  # -- should the database support persistence? If disabled, a H2-InMemory-Database will be used. 
+  # -- should the database support persistence? If disabled, a H2-InMemory-Database will be used.
   persistence: false
   # -- host of the database to be connected - will be ignored if persistence is disabled
   host: mysql
   # -- port of the database to be connected - will be ignored if persistence is disabled
   port: 3306
   # -- name of the database-schema to be accessed - will be ignored if persistence is disabled
-  name: til-db 
+  name: til-db
   # -- username to conncet the db - ignored if existing secret is configured
   username: user
   # -- passowrd to connect the db - ignored if existing secret is configured
   password: password
+  dialect: mysql
   # -- existing secret to retrieve the db password
   existingSecret:
     # -- should an existing secret be used
@@ -249,7 +251,7 @@ initData:
     #        credentialsType: "MyService"
     #        claims:
     #          - name: "roles"
-    #            allowedValues: 
+    #            allowedValues:
     #              - - names:
     #                  - "MY_ROLE"
     #                  target: "did:web:my-target:did"
@@ -257,3 +259,7 @@ initData:
     #          from: "2022-07-21T17:32:28Z"
     #          to: "2040-07-21T17:32:28Z"
     #        credentialsType: "VerifiableCredential"
+## TIL configuration to be included in the application.yaml file
+config: {}
+
+additionalEnvVars: {}
