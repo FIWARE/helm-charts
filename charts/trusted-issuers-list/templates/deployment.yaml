@@ -25,15 +25,17 @@ spec:
         {{- with .Values.deployment.additionalLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if .Values.deployment.additionalAnnotations -}}
       annotations:
+        {{- if or .Values.deployment.additionalAnnotations .Values.prometheus.enabled -}}
+        {{- if .Values.prometheus.enabled }}
         prometheus.io/scrape: {{ .Values.prometheus.enabled | quote }}
-        prometheus.io/path: {{ .Values.prometheus.path }}
-        prometheus.io/port: { { .Values.prometheus.port } }
+        prometheus.io/path: {{ .Values.prometheus.path | quote}}
+        prometheus.io/port: {{ .Values.prometheus.port | quote }}
+        {{- end }}
         {{- with .Values.deployment.additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- end }}
+        {{- end }}
     spec: 
       serviceAccountName: {{ include "til.serviceAccountName" . }}
       containers:
