@@ -1,6 +1,6 @@
 # trusted-issuers-list
 
-![Version: 0.10.5](https://img.shields.io/badge/Version-0.10.5-informational?style=flat-square) ![AppVersion: 0.4.0](https://img.shields.io/badge/AppVersion-0.4.0-informational?style=flat-square)
+![Version: 0.10.7](https://img.shields.io/badge/Version-0.10.7-informational?style=flat-square) ![AppVersion: 0.4.0](https://img.shields.io/badge/AppVersion-0.4.0-informational?style=flat-square)
 
 A Helm chart for running the trusted-issuers-list on kubernetes.
 
@@ -61,13 +61,15 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 | deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
 | deployment.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | fullnameOverride | string | `""` | option to override the fullname config in the _helpers.tpl |
-| ingress.til | object | `{"annotations":{},"enabled":false,"hosts":[],"tls":[]}` | route config for the trusted issuers list endpoint |
+| ingress.til | object | `{"annotations":{},"className":"","enabled":false,"hosts":[],"tls":[]}` | route config for the trusted issuers list endpoint |
 | ingress.til.annotations | object | `{}` | annotations to be added to the ingress |
+| ingress.til.className | string | `""` | ingress class name to be used |
 | ingress.til.enabled | bool | `false` | should there be an ingress to connect til with the public internet |
 | ingress.til.hosts | list | `[]` | all hosts to be provided |
 | ingress.til.tls | list | `[]` | configure the ingress' tls |
-| ingress.tir | object | `{"annotations":{},"enabled":false,"hosts":[],"tls":[]}` | route config for the trusted issuers registry endpoint |
+| ingress.tir | object | `{"annotations":{},"className":"","enabled":false,"hosts":[],"tls":[]}` | route config for the trusted issuers registry endpoint |
 | ingress.tir.annotations | object | `{}` | annotations to be added to the ingress |
+| ingress.tir.className | string | `""` | ingress class name to be used |
 | ingress.tir.enabled | bool | `false` | should there be an ingress to connect til with the public internet |
 | ingress.tir.hosts | list | `[]` | all hosts to be provided |
 | ingress.tir.tls | list | `[]` | configure the ingress' tls |
