@@ -86,7 +86,7 @@ Support for existing database secret
 {{- end -}}
 
 {{/*
-Base application configuration base on dialec and persistence
+Base application configuration base on dialect and persistence
  */}}
 {{- define "til.app.config" -}}
 endpoints:

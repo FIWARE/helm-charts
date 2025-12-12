@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-cm" (include "ccs.fullname" .) }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "ccs.labels" . | nindent 4 }}
+data:
+  application.yaml: |
+    {{- $dbConfig := include "ccs.app.config" . | fromYaml }}
+    {{- $config := mergeOverwrite $dbConfig .Values.config }}
+    {{- toYaml $config | nindent 4 }}

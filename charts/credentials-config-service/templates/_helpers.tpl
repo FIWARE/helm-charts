@@ -56,7 +56,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/*
-Support for existing database secret 
+Support for existing database secret
 */}}
 {{- define "ccs.secretName" -}}
     {{- if .Values.database.existingSecret.enabled -}}
@@ -73,3 +73,31 @@ Support for existing database secret
         {{- printf "password" -}}
     {{- end -}}
 {{- end -}}
+
+{{/*
+Base application configuration base on dialec and persistence
+ */}}
+{{- define "ccs.app.config" -}}
+endpoints:
+  all:
+    port: {{ .Values.deployment.healthPort }}
+  micronaut:
+    server:
+      port: {{ .Values.port }}
+    metrics:
+      enabled: {{ .Values.prometheus.enabled }}
+ {{- if .Values.database.persistence }}
+ {{- if eq (.Values.database.dialect | upper) "POSTGRES" }}
+datasources:
+  default:
+    url: jdbc:postgresql://{{ .Values.database.host }}:{{ .Values.database.port }}/{{ .Values.database.name }}
+    driverClassName: org.postgresql.Driver
+    dialect: POSTGRES
+ {{- else }}
+datasources:
+  default:
+    url: jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    dialect: H2
+ {{- end -}}
+ {{- end -}}
