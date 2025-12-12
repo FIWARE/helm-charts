@@ -5738,6 +5738,29 @@ entries:
       charts.openshift.io/name: orion-ld
     apiVersion: v2
     appVersion: 1.0.1
+    created: "2025-12-12T08:37:52.125436552Z"
+    description: A Helm chart for running the fiware orion-ld context broker on kubernetes.
+    digest: 35d72611bf79980c700606f4402e343dfd430c4c4bd5920a9105ec0bb5e270ea
+    home: https://github.com/FIWARE/context.Orion-LD
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion-ld
+    - orion
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: orion
+    sources:
+    - https://github.com/FIWARE/context.Orion-LD
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/orion-1.6.2/orion-1.6.2.tgz
+    version: 1.6.2
+  - annotations:
+      charts.openshift.io/name: orion-ld
+    apiVersion: v2
+    appVersion: 1.0.1
     created: "2025-09-03T05:12:55.999777282Z"
     description: A Helm chart for running the fiware orion-ld context broker on kubernetes.
     digest: 2c8c904c9539d8d085db526268366f9a93a658a09ec222e177f0708dd54257d3
@@ -7977,6 +8000,27 @@ entries:
   trusted-issuers-list:
   - apiVersion: v1
     appVersion: 0.4.0
+    created: "2025-12-12T08:37:52.265089343Z"
+    description: A Helm chart for running the trusted-issuers-list on kubernetes.
+    digest: 0ea8c4fc694cff6ae2b14bf28a8ab3b9edade2ccceceeea957601d5e63d9d15c
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - trusted-issuers-list
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: trusted-issuers-list
+    sources:
+    - https://github.com/fiware/trusted-issuers-list
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-list-0.10.7/trusted-issuers-list-0.10.7.tgz
+    version: 0.10.7
+  - apiVersion: v1
+    appVersion: 0.4.0
     created: "2025-11-03T14:02:37.98021306Z"
     description: A Helm chart for running the trusted-issuers-list on kubernetes.
     digest: 3443c206e3e43044a0f91235da62903b939632863839a38a0a75e55893e16699
@@ -9012,4 +9056,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2025-11-13T11:26:23.991858882Z"
+generated: "2025-12-12T08:37:52.26661166Z"
