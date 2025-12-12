@@ -157,6 +157,8 @@ ingress:
   til:
     # -- should there be an ingress to connect til with the public internet
     enabled: false
+    # -- ingress class name to be used
+    className: ""
     # -- annotations to be added to the ingress
     annotations: {}
       # kubernetes.io/ingress.class: "ambassador"
@@ -176,6 +178,8 @@ ingress:
   tir:
     # -- should there be an ingress to connect til with the public internet
     enabled: false
+    # -- ingress class name to be used
+    className: ""
     # -- annotations to be added to the ingress
     annotations: {}
       # kubernetes.io/ingress.class: "ambassador"
