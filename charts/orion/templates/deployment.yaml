@@ -241,6 +241,10 @@ spec:
             - name: {{ .Values.broker.envPrefix }}MONGO_WRITE_CONCERN
               value: {{ .Values.broker.db.writeConcern }}
             {{- end }}
+            {{- if .Values.broker.db.mongocOnly }}
+            - name: {{ .Values.broker.envPrefix }}MONGOCONLY
+              value: "TRUE"
+            {{- end }}
 
             # tenancy
             {{- if .Values.broker.multiserviceEnabled }}
