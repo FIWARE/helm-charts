@@ -1,6 +1,6 @@
 # orion
 
-![Version: 1.6.0](https://img.shields.io/badge/Version-1.6.0-informational?style=flat-square) ![AppVersion: 1.0.1](https://img.shields.io/badge/AppVersion-1.0.1-informational?style=flat-square)
+![Version: 1.6.1](https://img.shields.io/badge/Version-1.6.1-informational?style=flat-square) ![AppVersion: 1.0.1](https://img.shields.io/badge/AppVersion-1.0.1-informational?style=flat-square)
 
 A Helm chart for running the fiware orion-ld context broker on kubernetes.
 
@@ -31,6 +31,7 @@ Kubernetes: `>= 1.19-0`
 | autoscaling.minReplicas | int | `1` | minimum number of running pods |
 | broker.cachedContextFolder | string | `"/opt/orion/ldcontexts"` |  |
 | broker.db.hosts | list | `[]` | configuration of the mongo-db hosts. if multiple hosts are inserted, its assumed that mongo is running as a replica set |
+| broker.db.mongocOnly | bool | `true` | enable experimental implementation + turn off mongo legacy driver |
 | broker.db.name | string | `"orion"` | the db to use. if running in multiservice mode, its used as a prefix. |
 | broker.envPrefix | string | `"ORIONLD_"` | Prefix to be used for env-vars in orion. Must be ORION_ for orion and ORIONLD_ for orion-ld |
 | broker.ipv4enabled | bool | `false` | set to true if only ipv4 should be used, do not set both options to true |
@@ -52,7 +53,7 @@ Kubernetes: `>= 1.19-0`
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/orion-ld"` | orion image name ref: https://hub.docker.com/r/fiware/orion/ ref: https://quay.io/repository/fiware/orion-ld |
-| deployment.image.tag | string | `"1.1.0"` | tag of the image to be used |
+| deployment.image.tag | string | `"1.10.0"` | tag of the image to be used |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
