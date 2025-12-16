@@ -86,18 +86,22 @@ endpoints:
       port: {{ .Values.port }}
     metrics:
       enabled: {{ .Values.prometheus.enabled }}
- {{- if .Values.database.persistence }}
- {{- if eq (.Values.database.dialect | upper) "POSTGRES" }}
 datasources:
   default:
+    username: {{ .Values.database.username }}
+{{- if .Values.database.persistence }}
+  {{- if eq (.Values.database.dialect | upper) "POSTGRES" }}
     url: jdbc:postgresql://{{ .Values.database.host }}:{{ .Values.database.port }}/{{ .Values.database.name }}
     driverClassName: org.postgresql.Driver
     dialect: POSTGRES
- {{- else }}
-datasources:
-  default:
+  {{- else if eq (.Values.database.dialect | upper) "MYSQL" }}
+    url: jdbc:mysql://{{ .Values.database.host }}:{{ .Values.database.port }}/{{ .Values.database.name }}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    dialect: MYSQL
+  {{- end }}
+{{- else }}
     url: jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
     dialect: H2
- {{- end -}}
- {{- end -}}
+{{- end -}}
+{{- end -}}
