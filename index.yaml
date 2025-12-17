@@ -2576,6 +2576,27 @@ entries:
   credentials-config-service:
   - apiVersion: v1
     appVersion: 3.3.3
+    created: "2025-12-17T08:41:42.242139957Z"
+    description: A Helm chart for running the credentials-config-service on kubernetes.
+    digest: 6d9e2122273807600f68ed8465f6f8991fad4e45b4d05c38c55864ea1d174c84
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - credentials-config-service
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: credentials-config-service
+    sources:
+    - https://github.com/fiware/credentials-config-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/credentials-config-service-2.4.1/credentials-config-service-2.4.1.tgz
+    version: 2.4.1
+  - apiVersion: v1
+    appVersion: 3.3.3
     created: "2025-12-16T14:50:43.116079713Z"
     description: A Helm chart for running the credentials-config-service on kubernetes.
     digest: b3d2c64718d26d02eb8b5ea2d80730cf9183d73aa374ec25cec6aac73c5d3b4e
@@ -8021,6 +8042,27 @@ entries:
   trusted-issuers-list:
   - apiVersion: v1
     appVersion: 0.4.0
+    created: "2025-12-17T08:41:42.378506734Z"
+    description: A Helm chart for running the trusted-issuers-list on kubernetes.
+    digest: bc13ee2efe379676df9e73f4889a54689fdc3689fd5e6eb2f382dcb24b777881
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - trusted-issuers-list
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: trusted-issuers-list
+    sources:
+    - https://github.com/fiware/trusted-issuers-list
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-list-0.10.9/trusted-issuers-list-0.10.9.tgz
+    version: 0.10.9
+  - apiVersion: v1
+    appVersion: 0.4.0
     created: "2025-12-16T14:50:43.278670429Z"
     description: A Helm chart for running the trusted-issuers-list on kubernetes.
     digest: e81c864b6f163b6ef769cde3d76056c4444b8b5837916455624cb6907dff862f
@@ -9098,4 +9140,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2025-12-16T14:50:43.279461747Z"
+generated: "2025-12-17T08:41:42.379332699Z"
