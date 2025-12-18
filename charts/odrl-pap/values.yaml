@@ -48,12 +48,12 @@ deployment:
     # ref: https://quay.io/repository/wistefan/odrl-pap
     repository: quay.io/fiware/odrl-pap
     # -- tag of the image to be used
-    tag: 1.1.0
+    tag: 1.1.2
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- secrets for pulling images from a private repository
   # ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  imagePullSecrets: []    
+  imagePullSecrets: []
   # -- additional labels for the deployment, if required
   additionalLabels: {}
   # -- additional annotations for the deployment, if required
@@ -200,7 +200,7 @@ additionalMapping:
   # -- should an additional mapping.json be loaded
   enabled: false
   # -- mapping.json to merged with the defaults
-  # the example would overwrite the default odrl:use to be handled by a custom rego method provided with the additional rego 
+  # the example would overwrite the default odrl:use to be handled by a custom rego method provided with the additional rego
   json: |
     {
       "action": {
@@ -229,4 +229,3 @@ additionalRego:
           methods := ["POST", "PUT", "PATCH"]
           request.method in methods
       }
-

@@ -1,7 +1,7 @@
 apiVersion: v1
 name: credentials-config-service
-version: 2.3.0
-appVersion: 0.0.1
+version: 2.4.1
+appVersion: 3.3.3
 description: A Helm chart for running the credentials-config-service on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
 keywords:

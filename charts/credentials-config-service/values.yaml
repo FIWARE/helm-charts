@@ -1,5 +1,5 @@
 ## Default values for til.
-## This is a YAML-formatted file.
+## This is a YAML-formatted file. 
 ## Declare variables to be passed into your templates.
 
 # -- option to override the name config in the _helpers.tpl
@@ -43,8 +43,8 @@ deployment:
     # -- til image name
     # ref: https://quay.io/repository/fiware/credentials-config-service
     repository: quay.io/fiware/credentials-config-service
-    # -- tag of the image to be used
-    tag: 3.3.0
+    # -- tag of the image to be used. If empty, AppVersion is used
+    tag: 3.3.3
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
@@ -83,7 +83,8 @@ deployment:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 30
-
+  # -- resources assigned to the deployment pod
+  resources: {}
 ## pod autoscaling configuration, use for automatic scaling of the broker pods
 autoscaling:
   #  -- should autoscaling be enabled for til
@@ -164,22 +165,24 @@ prometheus:
   port: 9090
 
 # -- a list of additional env vars to be set, check the til docu for all available options
-additonalEnvVars: []
+additionalEnvVars: []
 
 ## database configuration for the credentials-config-service
 database:
-  # -- should the database support persistence? If disabled, a H2-InMemory-Database will be used. 
+  # -- should the database support persistence? If disabled, a H2-InMemory-Database will be used.
   persistence: false
   # -- host of the database to be connected - will be ignored if persistence is disabled
   host: mysql
   # -- port of the database to be connected - will be ignored if persistence is disabled
   port: 3306
   # -- name of the database-schema to be accessed - will be ignored if persistence is disabled
-  name: ccs-db 
+  name: ccs-db
   # -- username to conncet the db - ignored if existing secret is configured
   username: user
   # -- passowrd to connect the db - ignored if existing secret is configured
   password: password
+  # -- database dialect. Support mysql or postgres
+  dialect: mysql
   # -- existing secret to retrieve the db password
   existingSecret:
     # -- should an existing secret be used
@@ -196,11 +199,11 @@ registration:
   # -- how often should the job be executed before failing
   backoffLimit: 10
   # -- optional prepariation script
-  prepScript: 
+  prepScript:
   # -- configuration of the services (and scopes) to be registred
   services:
     # - id: data-service
-    #   defaultOidcScope: default 
+    #   defaultOidcScope: default
     #   oidcScopes:
     #     default:
     #       credentials:
@@ -216,7 +219,7 @@ registration:
     #         id: pd
     #         input_descriptors:
     #           - id: descriptor
-    #             constraints: 
+    #             constraints:
     #               fields:
     #                 - id: vct
     #                   path:
@@ -230,10 +233,13 @@ registration:
     #                   path:
     #                     - $.roles
     #             format:
-    #               "jwt_vc": 
-    #                 alg: 
+    #               "jwt_vc":
+    #                 alg:
     #                   - ES256
     #         format:
-    #           "jwt_vc": 
-    #             alg: 
+    #           "jwt_vc":
+    #             alg:
     #               - ES256
+
+# -- configuration to be included in the application.yaml file
+config: {}

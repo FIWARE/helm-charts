@@ -1,6 +1,6 @@
 # credentials-config-service
 
-![Version: 2.3.0](https://img.shields.io/badge/Version-2.3.0-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 2.4.1](https://img.shields.io/badge/Version-2.4.1-informational?style=flat-square) ![AppVersion: 3.3.3](https://img.shields.io/badge/AppVersion-3.3.3-informational?style=flat-square)
 
 A Helm chart for running the credentials-config-service on kubernetes.
 
@@ -18,11 +18,13 @@ A Helm chart for running the credentials-config-service on kubernetes.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| additonalEnvVars | list | `[]` | a list of additional env vars to be set, check the til docu for all available options |
+| additionalEnvVars | list | `[]` | a list of additional env vars to be set, check the til docu for all available options |
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |
 | autoscaling.minReplicas | int | `1` | minimum number of running pods |
+| config | object | `{}` | configuration to be included in the application.yaml file |
+| database.dialect | string | `"mysql"` | database dialect. Support mysql or postgres |
 | database.existingSecret | object | `{"enabled":false,"key":"password","name":"the-secret"}` | existing secret to retrieve the db password |
 | database.existingSecret.enabled | bool | `false` | should an existing secret be used |
 | database.existingSecret.key | string | `"password"` | key to retrieve the password from |
@@ -30,7 +32,7 @@ A Helm chart for running the credentials-config-service on kubernetes.
 | database.host | string | `"mysql"` | host of the database to be connected - will be ignored if persistence is disabled |
 | database.name | string | `"ccs-db"` | name of the database-schema to be accessed - will be ignored if persistence is disabled |
 | database.password | string | `"password"` | passowrd to connect the db - ignored if existing secret is configured |
-| database.persistence | bool | `false` | should the database support persistence? If disabled, a H2-InMemory-Database will be used.  |
+| database.persistence | bool | `false` | should the database support persistence? If disabled, a H2-InMemory-Database will be used. |
 | database.port | int | `3306` | port of the database to be connected - will be ignored if persistence is disabled |
 | database.username | string | `"user"` | username to conncet the db - ignored if existing secret is configured |
 | deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
@@ -39,7 +41,7 @@ A Helm chart for running the credentials-config-service on kubernetes.
 | deployment.healthPort | int | `9090` | port to request health information at |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/credentials-config-service"` | til image name ref: https://quay.io/repository/fiware/credentials-config-service |
-| deployment.image.tag | string | `"3.3.0"` | tag of the image to be used |
+| deployment.image.tag | string | `"3.3.3"` | tag of the image to be used. If empty, AppVersion is used |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
@@ -50,6 +52,7 @@ A Helm chart for running the credentials-config-service on kubernetes.
 | deployment.readinessProbe.successThreshold | int | `1` |  |
 | deployment.readinessProbe.timeoutSeconds | int | `30` |  |
 | deployment.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
+| deployment.resources | object | `{}` |  |
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
