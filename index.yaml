@@ -3099,6 +3099,17 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/credentials-config-service-0.0.1/credentials-config-service-0.0.1.tgz
     version: 0.0.1
+  did-helper:
+  - apiVersion: v2
+    appVersion: 0.4.1
+    created: "2025-12-19T07:42:49.491844697Z"
+    description: A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
+    digest: e9e3823b73c98b268ac61da4be5ead5867f7aedf67fbed7fee99ee98a6fa19b8
+    name: did-helper
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/did-helper-0.1.0/did-helper-0.1.0.tgz
+    version: 0.1.0
   dsba-pdp:
   - apiVersion: v1
     appVersion: 0.3.2
@@ -9161,4 +9172,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2025-12-18T07:01:50.338977358Z"
+generated: "2025-12-19T07:42:49.492524767Z"
