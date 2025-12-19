@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "did-helper.fullname" . }}
+  labels:
+    {{- include "did-helper.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "did-helper.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "did-helper.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.config.server.port }}
+              protocol: TCP
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- with .Values.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.config.provideKeystore.enabled }}
+            - name: keystore-volume
+              mountPath: "/etc/keystore/keystore.pfx"
+              subPath: "keystore.pfx"
+              readOnly: true
+            {{- end }}
+          env:
+            {{- range $key, $value := .Values.config.server }}
+            - name: {{ $key | snakecase | upper }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "did-helper.fullname" $ }}-cm
+                  key: {{ $key }}
+            {{- end }}
+            {{- if .Values.config.generateKey.enabled }}
+            {{- range $key, $value := omit .Values.config.generateKey "enabled" }}
+            - name: {{ $key | snakecase | upper }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "did-helper.fullname" $ }}-cm
+                  key: {{ $key }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.config.provideKeystore.enabled }}
+            - name: KEY_TYPE
+              value: {{ .Values.config.provideKeystore.keyType }}
+            - name: KEY_ALIAS
+              value: {{ .Values.config.provideKeystore.keyAlias }}
+            - name: STORE_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.provideKeystore.keystorePasswordSecretName }}
+                  key: {{ .Values.config.provideKeystore.keystorePasswordSecretKey }}
+            - name: KEYSTORE_PATH
+              value: "/etc/keystore/keystore.pfx"
+            {{- end }}
+      volumes:
+        {{- with .Values.volumes }}
+        {{- toYaml .Values.volumes | nindent 8 }}
+        {{- end }}
+        {{- if .Values.config.provideKeystore.enabled }}
+        - name: keystore-volume
+          secret:
+            secretName: {{ .Values.config.provideKeystore.keystoreSecretName }}
+            items:
+              - key: {{ .Values.config.provideKeystore.keystoreSecretKey }}
+                path: keystore.pfx
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
