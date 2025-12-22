@@ -3101,6 +3101,16 @@ entries:
     version: 0.0.1
   did-helper:
   - apiVersion: v2
+    appVersion: 0.4.2
+    created: "2025-12-22T14:23:35.046032038Z"
+    description: A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
+    digest: 252b2a710e6ed399ef82072f384a296cddc94e8a10405726abc59dc9d3822997
+    name: did-helper
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/did-helper-0.1.1/did-helper-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     appVersion: 0.4.1
     created: "2025-12-19T07:42:49.491844697Z"
     description: A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
@@ -9172,4 +9182,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2025-12-19T07:42:49.492524767Z"
+generated: "2025-12-22T14:23:35.04669294Z"
