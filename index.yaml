@@ -3102,6 +3102,16 @@ entries:
   did-helper:
   - apiVersion: v2
     appVersion: 0.4.2
+    created: "2025-12-23T11:07:36.864770306Z"
+    description: A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
+    digest: 5189ad525456fcea2a849179230f7df0b2161d72533780ce2ef59b330adf40af
+    name: did-helper
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/did-helper-0.1.3/did-helper-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: 0.4.2
     created: "2025-12-22T14:23:35.046032038Z"
     description: A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
     digest: 252b2a710e6ed399ef82072f384a296cddc94e8a10405726abc59dc9d3822997
@@ -5250,6 +5260,27 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/mintaka-0.0.1/mintaka-0.0.1.tgz
     version: 0.0.1
   odrl-pap:
+  - apiVersion: v1
+    appVersion: 1.1.2
+    created: "2025-12-23T11:07:37.02317562Z"
+    description: A Helm chart for running the odrl-pap on kubernetes.
+    digest: 9c21fb0e408c5136663bde1146b3b718995a9d43ea149cea538c2356eca1c5b7
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - Data Space Connector
+    - DSBA
+    - Authorization
+    - ODRL
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: Stefan Wiedemann
+    name: odrl-pap
+    sources:
+    - https://github.com/wistefan/odrl-pap
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/odrl-pap-2.3.2/odrl-pap-2.3.2.tgz
+    version: 2.3.2
   - apiVersion: v1
     appVersion: 1.1.2
     created: "2025-12-18T07:01:50.338182193Z"
@@ -9182,4 +9213,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2025-12-22T14:23:35.04669294Z"
+generated: "2025-12-23T11:07:37.024007912Z"
