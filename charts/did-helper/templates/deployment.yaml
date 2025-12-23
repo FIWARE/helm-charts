@@ -64,7 +64,14 @@ spec:
               readOnly: true
             {{- end }}
           env:
-            {{- range $key, $value := .Values.config.server }}
+            {{- if and .Values.config.server.keystorePasswordSecretName .Values.config.server.keystorePasswordSecretKey }}
+            - name: STORE_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.server.keystorePasswordSecretName }}
+                  key: {{ .Values.config.server.keystorePasswordSecretKey }}
+            {{- end }}
+            {{- range $key, $value := omit .Values.config.server "keystorePasswordSecretName" "keystorePasswordSecretKey"}}
             - name: {{ $key | snakecase | upper }}
               valueFrom:
                 configMapKeyRef:
@@ -85,11 +92,6 @@ spec:
               value: {{ .Values.config.provideKeystore.keyType }}
             - name: KEY_ALIAS
               value: {{ .Values.config.provideKeystore.keyAlias }}
-            - name: STORE_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.config.provideKeystore.keystorePasswordSecretName }}
-                  key: {{ .Values.config.provideKeystore.keystorePasswordSecretKey }}
             - name: KEYSTORE_PATH
               value: "/etc/keystore/keystore.pfx"
             {{- end }}
