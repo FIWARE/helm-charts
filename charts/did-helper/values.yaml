@@ -126,13 +126,17 @@ config:
     # URL to retrieve the public certificate
     # certUrl: ""
     # Name of the secret containing the keystore password. 
-    # If provideKeystore is used, this needs to be set with the corresponding secret name containing the actual keystore password
-    # If generateKey is used, this needs to be set with the secret name containing the password to be used for the created keystore
+    # If provideKeystore is used, this is mandatory and needs to be set with the corresponding secret name containing the actual keystore password
+    # If generateKey is used, this optional, but if provided it needs to be set with the secret name containing the password to be used for the created keystore
     keystorePasswordSecretName: ""
     # Key inside the secret containing the keystore password
-    # If provideKeystore is used, this needs to be set with the corresponding secret key containing the actual keystore password
-    # If generateKey is used, this needs to be set with the secret key containing the password to be used for the created keystore
+    # If provideKeystore is used, this is mandatory and needs to be set with the corresponding secret key containing the actual keystore password
+    # If generateKey is used, this optional, but if provided it needs to be set with the secret key containing the password to be used for the created keystore
     keystorePasswordSecretKey: ""
+    # Alias for the key inside the keystore
+    # If provideKeystore is used, this is mandatory and needs to be set with the corresponding alias of the keystore provided
+    # If generateKey is used, this is optional, but if provided, generated keystore will use this alias for the created key
+    keyAlias: "myAlias"
   generateKey:
     enabled: true
     # Type of the key to be generated. RSA is only supported for did:jwk
@@ -153,7 +157,5 @@ config:
     keystoreSecretName: ""
     # Key inside the secret containing the keystore
     keystoreSecretKey: ""
-    # Alias for the key inside the keystore
-    keyAlias: ""
     # Type of the key provided
     keyType: ""
