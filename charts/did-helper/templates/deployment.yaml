@@ -88,10 +88,13 @@ spec:
             {{- end }}
             {{- end }}
             {{- if .Values.config.provideKeystore.enabled }}
-            - name: KEY_TYPE
-              value: {{ .Values.config.provideKeystore.keyType }}
-            - name: KEY_ALIAS
-              value: {{ .Values.config.provideKeystore.keyAlias }}
+            {{- range $key, $value := omit .Values.config.provideKeystore "enabled" "keystoreSecretName" "keystoreSecretKey" }}
+            - name: {{ $key | snakecase | upper }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "did-helper.fullname" $ }}-cm
+                  key: {{ $key }}
+              {{- end }}
             - name: KEYSTORE_PATH
               value: "/etc/keystore/keystore.pfx"
             {{- end }}
