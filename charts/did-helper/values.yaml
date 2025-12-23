@@ -126,7 +126,7 @@ config:
     # URL to retrieve the public certificate
     # certUrl: ""
     # Name of the secret containing the keystore password. 
-    # If provideKeystore is used, this is mandatory andneeds to be set with the corresponding secret name containing the actual keystore password
+    # If provideKeystore is used, this is mandatory and needs to be set with the corresponding secret name containing the actual keystore password
     # If generateKey is used, this optional, but if provided it needs to be set with the secret name containing the password to be used for the created keystore
     keystorePasswordSecretName: ""
     # Key inside the secret containing the keystore password
