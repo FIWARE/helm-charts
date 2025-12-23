@@ -125,6 +125,14 @@ config:
     outputFormat: "json_jwk"
     # URL to retrieve the public certificate
     # certUrl: ""
+    # Name of the secret containing the keystore password. 
+    # If provideKeystore is used, this needs to be set with the corresponding secret name containing the actual keystore password
+    # If generateKey is used, this needs to be set with the secret name containing the password to be used for the created keystore
+    keystorePasswordSecretName: ""
+    # Key inside the secret containing the keystore password
+    # If provideKeystore is used, this needs to be set with the corresponding secret key containing the actual keystore password
+    # If generateKey is used, this needs to be set with the secret key containing the password to be used for the created keystore
+    keystorePasswordSecretKey: ""
   generateKey:
     enabled: true
     # Type of the key to be generated. RSA is only supported for did:jwk
@@ -145,10 +153,6 @@ config:
     keystoreSecretName: ""
     # Key inside the secret containing the keystore
     keystoreSecretKey: ""
-    # Name of the secret containing the keystore password
-    keystorePasswordSecretName: ""
-    # Key inside the secret containing the keystore password
-    keystorePasswordSecretKey: ""
     # Alias for the key inside the keystore
     keyAlias: ""
     # Type of the key provided

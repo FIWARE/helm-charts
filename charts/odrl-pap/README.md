@@ -1,6 +1,6 @@
 # odrl-pap
 
-![Version: 2.3.0](https://img.shields.io/badge/Version-2.3.0-informational?style=flat-square) ![AppVersion: 1.1.0](https://img.shields.io/badge/AppVersion-1.1.0-informational?style=flat-square)
+![Version: 2.3.2](https://img.shields.io/badge/Version-2.3.2-informational?style=flat-square) ![AppVersion: 1.1.2](https://img.shields.io/badge/AppVersion-1.1.2-informational?style=flat-square)
 
 A Helm chart for running the odrl-pap on kubernetes.
 
@@ -19,7 +19,7 @@ A Helm chart for running the odrl-pap on kubernetes.
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | additionalMapping.enabled | bool | `false` | should an additional mapping.json be loaded |
-| additionalMapping.json | string | `"{\n  \"action\": {\n    \"odrl\": {\n      \"use\" : {\n        \"regoPackage\": \"custom.action as custom_action\",\n        \"regoMethod\": \"custom_action.is_use(helper.http_part)\"\n      }\n    }\n  }\n}\n"` | mapping.json to merged with the defaults the example would overwrite the default odrl:use to be handled by a custom rego method provided with the additional rego  |
+| additionalMapping.json | string | `"{\n  \"action\": {\n    \"odrl\": {\n      \"use\" : {\n        \"regoPackage\": \"custom.action as custom_action\",\n        \"regoMethod\": \"custom_action.is_use(helper.http_part)\"\n      }\n    }\n  }\n}\n"` | mapping.json to merged with the defaults the example would overwrite the default odrl:use to be handled by a custom rego method provided with the additional rego |
 | additionalRego.enabled | bool | `false` | should additional packages be loaded |
 | additionalRego.packages | string | `"action.rego: |\n  package odrl.action\n\n  import rego.v1\n\n  ## odrl:use\n  # checks if the given request is a usage - in constrast to the default, this example would only consider modifications a \"use\"\n  is_use(request) if {\n      methods := [\"POST\", \"PUT\", \"PATCH\"]\n      request.method in methods\n  }\n"` |  |
 | additonalEnvVars | list | `[]` | a list of additional env vars to be set, check the til docu for all available options |
@@ -43,7 +43,7 @@ A Helm chart for running the odrl-pap on kubernetes.
 | deployment.command | list | `[]` | command to be used for starting the container |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/odrl-pap"` | til image name ref: https://quay.io/repository/wistefan/odrl-pap |
-| deployment.image.tag | string | `"1.1.0"` | tag of the image to be used |
+| deployment.image.tag | string | `"1.1.2"` | tag of the image to be used |
 | deployment.imagePullSecrets | list | `[]` | secrets for pulling images from a private repository ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
