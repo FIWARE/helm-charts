@@ -1,5 +1,5 @@
-## Default values for til. 
-## This is a YAML-formatted file. 
+## Default values for til.
+## This is a YAML-formatted file.
 ## Declare variables to be passed into your templates.
 
 # -- option to override the name config in the _helpers.tpl
@@ -46,7 +46,7 @@ deployment:
     # ref: https://quay.io/repository/fiware/trusted-issuers-list
     repository: quay.io/fiware/trusted-issuers-list
     # -- tag of the image to be used
-    tag: 0.4.0
+    tag: 0.6.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
