@@ -15,8 +15,8 @@ oauth:
   # server: http://accounts.fiware.org
   # -- OAuth2 Client ID of the BAE application
   # clientId: market-clientId
-  # -- OAuth2 Client Secret of the BAE application
-  # clientSecret: market-clientSecret
+  # -- OAuth2 Client Secret of the BAE application. E.G., market-clientSecret
+  clientSecret: ''
   # -- Callback URL path of frontend logic proxy for receiving the access tokens
   # (callback URL would be e.g. externalUrl/auth/fiware/callback)
   # callbackPath: /auth/fiware/callback
@@ -32,7 +32,7 @@ oauth:
   customerrole: customer
   # -- Aggregator role
   aggregatorrole: Aggregator
-  # -- Role defined in the IDM client app for organization admins of the BAE 
+  # -- Role defined in the IDM client app for organization admins of the BAE
   orgadminrole: orgAdmin
   # -- IDP provider for passport strategy (fiware, keycloak, github, ...)
   provider: fiware
@@ -81,13 +81,13 @@ siop:
     #        "https://til.fiware.dev"
     #      ]
 
-  
+
 ## -- External URL used to access the BAE frontend (logic proxy)
 ## Should match the host of the Ingress or Route of the Logic Proxy
 ##
 externalUrl: https://marketplace.fiware.org
 
-  
+
 ## -- initContainer images configuration needed to wait for dependant containers
 ##
 initContainer:
@@ -145,7 +145,7 @@ initContainer:
     sleepInterval: 10
 
 
-  
+
 ## -- Configuration for biz-ecosystem-apis component
 ##
 bizEcosystemApis:
@@ -154,47 +154,47 @@ bizEcosystemApis:
 
   ## -- in case the apis(or some of them) are available somwhere else, alternative paths to them can be provided.
   tmForum:
-  #   catalog:
-  #     host: 
-  #     port:
-  #     path:
-  #   inventory:
+    catalog: {}
   #     host:
   #     port:
   #     path:
-  #   ordering:
+    inventory: {}
   #     host:
   #     port:
   #     path:
-  #   billing:
+    ordering: {}
   #     host:
   #     port:
   #     path:
-  #   usage:
+    billing: {}
   #     host:
   #     port:
   #     path:
-  #   party:
+    usage: {}
   #     host:
   #     port:
   #     path:
-  #   customer:
+    party: {}
   #     host:
   #     port:
   #     path:
-  #   resources:
+    customer: {}
   #     host:
   #     port:
   #     path:
-  #   services:
+    resources: {}
   #     host:
   #     port:
   #     path:
-  #   serviceInventory:
+    services: {}
   #     host:
   #     port:
   #     path:
-  #   resourceInventory:
+    serviceInventory: {}
+  #     host:
+  #     port:
+  #     path:
+    resourceInventory: {}
   #     host:
   #     port:
   #     path:
@@ -243,7 +243,7 @@ bizEcosystemApis:
       rollingUpdate:
         ## -- number of pods that can be created above the desired amount while updating
         maxSurge: 1
-        ## -- number of pods that can be unavailable while updating 
+        ## -- number of pods that can be unavailable while updating
         maxUnavailable: 0
     ## -- configuration of the image to be used
     image:
@@ -254,11 +254,11 @@ bizEcosystemApis:
       tag: v8.0.0
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
-    ## -- additional labels for the deployment, if required  
+    ## -- additional labels for the deployment, if required
     additionalLabels: {}
     ## -- additional annotations for the deployment, if required
     additionalAnnotations: {}
-    ## -- selector template  
+    ## -- selector template
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
     nodeSelector: {}
     ## -- tolerations template
@@ -289,7 +289,7 @@ bizEcosystemApis:
     host: mysql
     ## -- password for connecting the database
     password: pass
-    
+
 
 
 ## -- Configuration for biz-ecosystem-rss component
@@ -340,7 +340,7 @@ bizEcosystemRss:
       rollingUpdate:
         ## -- number of pods that can be created above the desired amount while updating
         maxSurge: 1
-        ## -- number of pods that can be unavailable while updating 
+        ## -- number of pods that can be unavailable while updating
         maxUnavailable: 0
     ## -- configuration of the image to be used
     image:
@@ -351,11 +351,11 @@ bizEcosystemRss:
       tag: v8.0.0
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
-    ## -- additional labels for the deployment, if required  
+    ## -- additional labels for the deployment, if required
     additionalLabels: {}
     ## -- additional annotations for the deployment, if required
     additionalAnnotations: {}
-    ## -- selector template  
+    ## -- selector template
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
     nodeSelector: {}
     ## -- tolerations template
@@ -379,7 +379,7 @@ bizEcosystemRss:
 
   ## -- port that the RSS container uses
   port: 8080
-  
+
   ## -- database configuration for RSS
   db:
     ## -- host of the database to be used
@@ -416,7 +416,7 @@ bizEcosystemChargingBackend:
 
   # -- Name of existing Secret containing extra ENV vars to be set (in case of sensitive data)
   extraEnvVarsSecret: ""
-  
+
   ## -- Component name
   name: biz-ecosystem-charging-backend
 
@@ -460,7 +460,7 @@ bizEcosystemChargingBackend:
       rollingUpdate:
         ## -- number of pods that can be created above the desired amount while updating
         maxSurge: 1
-        ## -- number of pods that can be unavailable while updating 
+        ## -- number of pods that can be unavailable while updating
         maxUnavailable: 0
     ## -- configuration of the image to be used
     image:
@@ -471,11 +471,11 @@ bizEcosystemChargingBackend:
       tag: v8.0.0
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
-    ## -- additional labels for the deployment, if required  
+    ## -- additional labels for the deployment, if required
     additionalLabels: {}
     ## -- additional annotations for the deployment, if required
     additionalAnnotations: {}
-    ## -- selector template  
+    ## -- selector template
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
     nodeSelector: {}
     ## -- tolerations template
@@ -518,7 +518,7 @@ bizEcosystemChargingBackend:
     size: 8Gi
     # -- Annotations
     annotations: {}
-    
+
   # -- port that the charging backend container uses
   port: 8006
 
@@ -569,7 +569,7 @@ bizEcosystemChargingBackend:
 
   # -- Maximum asset upload size (in MB)
   maxUploadSize: 428800
-    
+
   # -- Whether or not the BAE validates SSL certificates on requests to external components
   verifyRequests: True
 
@@ -592,7 +592,7 @@ bizEcosystemChargingBackend:
 
   # -- Sets whether to expect the user access token in each request from the logic proxy
   propagateToken: true
-  
+
   ## -- Configuration for backing up the pvcs of the charging backend into a gcs-bucket
   backup:
     ## -- should the backup for file data be enabled
@@ -610,7 +610,7 @@ bizEcosystemChargingBackend:
     schedule: "* 1 *  *  *"
     ## -- name of the secret containing the service account to be used for accessing the bucket. The account should be provided in json format and have write permission on the referenced schema
     secretName: "gcs-secret"
-    
+
   # -- use initcontainers to wait for the apis to be deployed
   initContainers: true
 
@@ -671,11 +671,11 @@ bizEcosystemLogicProxy:
       tag: v8.0.0
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
-    ## -- additional labels for the deployment, if required  
+    ## -- additional labels for the deployment, if required
     additionalLabels: {}
     ## -- additional annotations for the deployment, if required
     additionalAnnotations: {}
-    ## -- selector template  
+    ## -- selector template
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
     nodeSelector: {}
     ## -- tolerations template
@@ -706,7 +706,7 @@ bizEcosystemLogicProxy:
       ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
       # kubernetes.io/ingress.class: "ambassador"
       # kubernetes.io/tls-acme: "true"
-      # ingress.kubernetes.io/ssl-redirect: "true"  
+      # ingress.kubernetes.io/ssl-redirect: "true"
     # -- all hosts to be provided
     hosts: []
       ## -- provide hosts and the paths that should be available
@@ -748,10 +748,10 @@ bizEcosystemLogicProxy:
 
   # -- Deployment in development or in production
   nodeEnvironment: development
-  
+
   # -- Execute the collect static command on startup
   collectStaticCommand: "True"
-  
+
   ## -- database configuration for Logic Proxy (MongoDB)
   db:
     # -- host of the database to be used
@@ -799,7 +799,7 @@ bizEcosystemLogicProxy:
     enabled: false
     # -- Show login button for local IDP on login modal dialog with list of external IDPs
     showLocalLogin: false
-    
+
   ## -- Configuration of local key and certificate for validation and generation of tokens
   token:
     # -- Enable storage of local key and certificate
