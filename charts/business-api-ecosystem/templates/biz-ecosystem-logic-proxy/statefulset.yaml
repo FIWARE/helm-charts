@@ -16,12 +16,10 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      app: {{ include "bizEcosystemLogicProxy.fullname" . }}
       {{- include "bizEcosystemLogicProxy.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ include "bizEcosystemLogicProxy.fullname" . }}
         {{ include "bizEcosystemLogicProxy.labels" . | nindent 8 }}
         {{- with .Values.bizEcosystemLogicProxy.statefulset.additionalLabels }}
         {{- toYaml . | nindent 8 }}
@@ -276,7 +274,7 @@ spec:
               value: {{ include "bizEcosystemApis.hostnameonly" . }}
             - name: BAE_LP_ENDPOINT_BILLING_PORT
               value: {{ .Values.bizEcosystemApis.service.port | quote }}
-            {{- end }}   
+            {{- end }}
             {{- if .Values.bizEcosystemApis.tmForum.resources }}
             - name: BAE_LP_ENDPOINT_RESOURCE_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.resources.host }}
@@ -289,7 +287,7 @@ spec:
               value: {{ include "bizEcosystemApis.hostnameonly" . }}
             - name: BAE_LP_ENDPOINT_RESOURCE_PORT
               value: {{ .Values.bizEcosystemApis.service.port | quote }}
-            {{- end }}   
+            {{- end }}
             {{- if .Values.bizEcosystemApis.tmForum.services }}
             - name: BAE_LP_ENDPOINT_SERVICE_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.services.host }}
@@ -302,7 +300,7 @@ spec:
               value: {{ include "bizEcosystemApis.hostnameonly" . }}
             - name: BAE_LP_ENDPOINT_SERVICE_PORT
               value: {{ .Values.bizEcosystemApis.service.port | quote }}
-            {{- end }}                   
+            {{- end }}
             - name: BAE_LP_ENDPOINT_RSS_HOST
               value: {{ include "bizEcosystemRss.hostnameonly" . }}
             - name: BAE_LP_ENDPOINT_RSS_PORT
@@ -319,7 +317,7 @@ spec:
               value: {{ include "bizEcosystemApis.hostnameonly" . }}
             - name: BAE_LP_ENDPOINT_USAGE_PORT
               value: {{ .Values.bizEcosystemApis.service.port | quote }}
-            {{- end }}           
+            {{- end }}
             {{- if .Values.bizEcosystemApis.tmForum.party }}
             - name: BAE_LP_ENDPOINT_PARTY_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.party.host }}
@@ -332,20 +330,20 @@ spec:
               value: {{ include "bizEcosystemApis.hostnameonly" . }}
             - name: BAE_LP_ENDPOINT_PARTY_PORT
               value: {{ .Values.bizEcosystemApis.service.port | quote }}
-            {{- end }}             
-            {{- if .Values.bizEcosystemApis.tmForum.customer }}  
+            {{- end }}
+            {{- if .Values.bizEcosystemApis.tmForum.customer }}
             - name: BAE_LP_ENDPOINT_CUSTOMER_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.customer.host }}
             - name: BAE_LP_ENDPOINT_CUSTOMER_PATH
               value: {{ .Values.bizEcosystemApis.tmForum.customer.path }}
             - name: BAE_LP_ENDPOINT_CUSTOMER_PORT
               value: {{  .Values.bizEcosystemApis.tmForum.customer.port | quote }}
-            {{- else }}       
+            {{- else }}
             - name: BAE_LP_ENDPOINT_CUSTOMER_HOST
               value: {{ include "bizEcosystemApis.hostnameonly" . }}
             - name: BAE_LP_ENDPOINT_CUSTOMER_PORT
               value: {{ .Values.bizEcosystemApis.service.port | quote }}
-            {{- end }}       
+            {{- end }}
             - name: BAE_LP_ENDPOINT_CHARGING_HOST
               value: {{ include "bizEcosystemChargingBackend.hostnameonly" . }}
             - name: BAE_LP_ENDPOINT_CHARGING_PORT

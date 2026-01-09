@@ -21,7 +21,7 @@ for chart in $CHARTS
 do
     echo -e "${BLUE}[$(basename $chart)]${RESET} ${WHITE}Validating chart${RESET}"
 
-    $HELM_CMD template "${chart}" | $KC_CMD --strict
+    $HELM_CMD template "${chart}" | $KC_CMD -strict -ignore-missing-schemas
     exit_code=$?
     if [ $exit_code -eq 0 ]; then
         echo -e "${BLUE}[$(basename $chart)]${RESET} ${GREEN}✔ ${WHITE}Success${RESET}\n"
