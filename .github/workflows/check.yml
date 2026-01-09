@@ -25,6 +25,10 @@ jobs:
       - uses: azure/setup-helm@v4
         with:
           version: '${{ env.HELM_VERSION }}'
+
+      - name: Update charts dependencies
+        run: ./build.sh
+
       - name: Lint
         run: ./lint.sh
 
@@ -40,6 +44,9 @@ jobs:
       - uses: azure/setup-helm@v4
         with:
           version: '${{ env.HELM_VERSION }}'
+
+      - name: Update charts dependencies
+        run: ./build.sh
 
       - name: Eval
         run: |
