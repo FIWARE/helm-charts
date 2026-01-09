@@ -3,4 +3,4 @@ name: did-helper
 description: A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
 type: application
 version: 0.1.8
-appVersion: "0.4.2"
+appVersion: "0.4.3"
