@@ -77,6 +77,7 @@ deployment:
   defaultAccount:
     # -- should a default account be used
     enabled: true
+    privateKey: ''
 
   ## canis-major resource requests and limits, we leave the default empty to make that a concious choice by the user.
   ## for the autoscaling to make sense, you should configure this.

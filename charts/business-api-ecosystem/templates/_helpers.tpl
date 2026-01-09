@@ -59,15 +59,18 @@ component: {{ .Values.bizEcosystemChargingBackend.name | quote }}
 {{- end -}}
 
 {{- define "bizEcosystemLogicProxy.labels" -}}
-{{ include "bizEcosystemLogicProxy.matchLabels" . }}
-{{ include "business-api-ecosystem.common.metaLabels" . }}
+{{- $match := include "bizEcosystemLogicProxy.matchLabels" . | fromYaml -}}
+{{- $meta := include "business-api-ecosystem.common.metaLabels" . | fromYaml -}}
+{{- $merged := merge $match $meta -}}
+{{- toYaml $merged -}}
 {{- end -}}
 
 {{- define "bizEcosystemLogicProxy.matchLabels" -}}
-component: {{ .Values.bizEcosystemLogicProxy.name | quote }}
-{{ include "business-api-ecosystem.common.matchLabels" . }}
+{{- $labels := include "business-api-ecosystem.common.matchLabels" . | fromYaml -}}
+{{- $_ := set $labels "component" .Values.bizEcosystemLogicProxy.name | quote -}}
+{{- $_ := set $labels "app" (include "bizEcosystemLogicProxy.fullname" .) -}}
+{{- toYaml $labels -}}
 {{- end -}}
-
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
@@ -309,7 +312,7 @@ Template for MySQL initContainer check
   image: '{{ .ctx.Values.initContainer.mysql.image }}:{{ .ctx.Values.initContainer.mysql.imageTag }}'
   imagePullPolicy: {{ .ctx.Values.initContainer.mysql.imagePullPolicy | quote }}
   command: ['sh', '-c',
-    'while ! mysqladmin ping -h{{ .host | quote }} --silent; do echo "Waiting for MySQL"; ((i++)) && ((i=={{ .ctx.Values.initContainer.mysql.maxRetries }})) && break; sleep {{ .ctx.Values.initContainer.mysql.sleepInterval }}; done;']        
+    'while ! mysqladmin ping -h{{ .host | quote }} --silent; do echo "Waiting for MySQL"; ((i++)) && ((i=={{ .ctx.Values.initContainer.mysql.maxRetries }})) && break; sleep {{ .ctx.Values.initContainer.mysql.sleepInterval }}; done;']
 {{- end }}
 
 {{/*
@@ -415,4 +418,3 @@ API secret
         {{- printf "%s" (include "bizEcosystemApis.fullname" .) -}}
     {{- end -}}
 {{- end -}}
-

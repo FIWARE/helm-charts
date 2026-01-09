@@ -217,9 +217,8 @@ ingress:
       # - secretName: iota-tls
       # hosts:
       # - iota-json.fiware.org
-
 ## configuration of the mqtt binding
-# mqtt:
+mqtt: {}
   ## configuration for the used mqtt broker
   # broker:
     ## mqtt broker host

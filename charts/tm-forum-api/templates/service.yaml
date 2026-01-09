@@ -1,4 +1,4 @@
-{{- range .Values.apis -}}
+{{- range .Values.apis }}
 apiVersion: v1
 kind: Service
 metadata:

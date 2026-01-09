@@ -149,7 +149,7 @@ umbrella:
 
   # -- iSHARE Satellite
   # Config for satellite - required if no root CA is provided in jws config
-  #satellite:
+  satellite: {}
      # Host
      #host: <SATELLITE_HOST>
      # Endpoint for /token requests (full URL)
@@ -162,7 +162,7 @@ umbrella:
 
   # -- JWS configuration
   # Provide information for signing and validating JWT when iSHARE-compliant authorization modes are used
-  #jws:
+  jws: {}
     # Identifier of local authority
     #identifier: <LOCAL_EORI>
     # x5c public certificate chain (array of base64 encoded certificates)
@@ -174,8 +174,8 @@ umbrella:
     #root_ca: <ROOTCACHAIN>
     # Private key (as PEM string)
     #private_key: <PRIVATE-KEY>
-    
-  
+
+
   # -- configuration of the umbrella. See https://github.com/Profirator/api-umbrella/tree/master/config and
   # https://api-umbrella.readthedocs.io/en/latest/ for more or use the out-commented part as a sane default
   config: {}
