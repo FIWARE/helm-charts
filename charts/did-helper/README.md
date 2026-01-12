@@ -1,6 +1,6 @@
 # did-helper
 
-![Version: 0.1.10](https://img.shields.io/badge/Version-0.1.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.4.3](https://img.shields.io/badge/AppVersion-0.4.3-informational?style=flat-square)
+![Version: 0.1.11](https://img.shields.io/badge/Version-0.1.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.4.3](https://img.shields.io/badge/AppVersion-0.4.3-informational?style=flat-square)
 
 A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
 
@@ -27,8 +27,8 @@ A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
 | config.server.keystorePasswordSecretName | string | `""` |  |
 | config.server.outputFile | string | `""` |  |
 | config.server.outputFormat | string | `"json_jwk"` |  |
-| config.server.port | string | `"8080"` |  |
 | config.server.runServer | string | `"true"` |  |
+| config.server.serverPort | string | `"8080"` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"quay.io/wi_stefan/did-helper"` |  |
