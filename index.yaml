@@ -8185,6 +8185,27 @@ entries:
     version: 0.0.1
   trusted-issuers-list:
   - apiVersion: v1
+    appVersion: 0.6.0
+    created: "2026-01-12T14:05:11.414344207Z"
+    description: A Helm chart for running the trusted-issuers-list on kubernetes.
+    digest: 059942d429fb354a78ee90fcac00a74e9357591ca7a85b044cfe4dfb1463ccd5
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - trusted-issuers-list
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: trusted-issuers-list
+    sources:
+    - https://github.com/fiware/trusted-issuers-list
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-list-0.11.0/trusted-issuers-list-0.11.0.tgz
+    version: 0.11.0
+  - apiVersion: v1
     appVersion: 0.4.0
     created: "2025-12-17T08:41:42.378506734Z"
     description: A Helm chart for running the trusted-issuers-list on kubernetes.
@@ -8731,6 +8752,27 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-list-0.0.1/trusted-issuers-list-0.0.1.tgz
     version: 0.0.1
   trusted-issuers-registry:
+  - apiVersion: v1
+    appVersion: 0.6.0
+    created: "2026-01-12T14:05:11.693143238Z"
+    description: A Helm chart for running the trusted-issuers-registry on kubernetes.
+    digest: 4a22f29d8fb5e89eca5d087773419d8f9b30130429a2e702275ade1b0534e0cc
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - trusted-issuers-registry
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: tim.smyth@fiware.org
+      name: pulledtim
+    name: trusted-issuers-registry
+    sources:
+    - https://github.com/fiware/trusted-issuers-registry
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-registry-0.7.0/trusted-issuers-registry-0.7.0.tgz
+    version: 0.7.0
   - apiVersion: v1
     appVersion: 0.3.0
     created: "2024-05-02T13:26:33.057086168Z"
@@ -9284,4 +9326,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-01-12T13:47:34.89612837Z"
+generated: "2026-01-12T14:05:11.694204571Z"
