@@ -7,7 +7,7 @@ metadata:
   name: {{ include "contract.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{ include "contract.labels" . | nindent 4 }}
+    {{- include "contract.labels" . | nindent 4 }}
 data:
   application.yaml: |
     {{- if .Values.config }}
@@ -19,21 +19,20 @@ data:
           read-timeout: 30s
           {{- toYaml .Values.services | nindent 10 }}
     general:
-      did: {{ .Values.did }}
+      did: {{ .Values.did | quote }}
       enableOdrlPap: {{ .Values.enableOdrlPap }}
       enableTrustedIssuersList: {{ .Values.enableTrustedIssuersList }}
       enableTmForum: {{ .Values.enableTmForum }}
       enableRainbow: {{ .Values.enableRainbow }}
       enableCentralMarketplace: {{ .Values.enableCentralMarketplace }}
-
     {{- if eq .Values.oid4vp.enabled true }}
     oid4vp:
       enabled: {{ .Values.oid4vp.enabled }}
-      holder: 
-        holderId: {{ .Values.oid4vp.holder.holderId }} 
-        keyType: {{ .Values.oid4vp.holder.keyType }} 
-        keyPath: {{ .Values.oid4vp.holder.keyPath }} 
-        signatureAlgorithm: {{ .Values.oid4vp.holder.signatureAlgorithm }} 
+      holder:
+        holderId: {{ .Values.oid4vp.holder.holderId }}
+        keyType: {{ .Values.oid4vp.holder.keyType }}
+        keyPath: {{ .Values.oid4vp.holder.keyPath }}
+        signatureAlgorithm: {{ .Values.oid4vp.holder.signatureAlgorithm }}
       {{- if eq .Values.oid4vp.proxyConfig.enabled true }}
       proxyConfig:
         useProxy: true
@@ -41,13 +40,12 @@ data:
         proxyPort: {{ .Values.oid4vp.proxyConfig.proxyPort }}
       {{- end }}
       credentialsFolder: {{ .Values.oid4vp.credentialsFolder }}
-      trustAnchors: {{ .Values.oid4vp.trustAnchors }}        
+      trustAnchors: {{ .Values.oid4vp.trustAnchors }}
     {{- end }}
-
     {{- if eq .Values.notification.enabled true }}
     notification:
       enabled: true
-      host: {{ .Values.notification.host }}
+      host: {{ .Values.notification.host | default (include "contract.fullname" . ) }}
       entities:
         - entityType: "ProductOrder"
           eventTypes: [ "CREATE", "STATE_CHANGE", "DELETE" ]
