@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "did-helper.fullname" . }}-cm
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{- include "did-helper.labels" . | nindent 4 }}
 data:
