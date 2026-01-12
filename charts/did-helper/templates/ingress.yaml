@@ -3,6 +3,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "did-helper.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels:
     {{- include "did-helper.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
