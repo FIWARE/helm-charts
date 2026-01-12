@@ -1,6 +1,6 @@
 # contract-management
 
-![Version: 3.5.7](https://img.shields.io/badge/Version-3.5.7-informational?style=flat-square) ![AppVersion: 3.0.0](https://img.shields.io/badge/AppVersion-3.0.0-informational?style=flat-square)
+![Version: 3.5.8](https://img.shields.io/badge/Version-3.5.8-informational?style=flat-square) ![AppVersion: 3.0.0](https://img.shields.io/badge/AppVersion-3.0.0-informational?style=flat-square)
 
 A Helm chart for running the contract-management on kubernetes.
 
@@ -24,6 +24,7 @@ A Helm chart for running the contract-management on kubernetes.
 | autoscaling.metrics | list | `[]` | metrics to react on |
 | autoscaling.minReplicas | int | `1` | minimum number of running pods |
 | basePath | string | `"/"` |  |
+| config | object | `{}` |  |
 | deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
@@ -47,6 +48,7 @@ A Helm chart for running the contract-management on kubernetes.
 | deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
 | deployment.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
+| did | string | `""` |  |
 | enableCentralMarketplace | bool | `false` |  |
 | enableOdrlPap | bool | `true` |  |
 | enableRainbow | bool | `true` |  |
