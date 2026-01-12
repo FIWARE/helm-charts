@@ -114,7 +114,7 @@ config:
     # Run a server with /did.json and /.well-known/tls.crt endpoints
     runServer: "true"
     # Server port
-    port: "8080"
+    serverPort: "8080"
     # Type of the did to generate
     didType: "web"
     # Base URL where the DID document will be located. Required for did:web

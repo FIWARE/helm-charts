@@ -1,6 +1,6 @@
 # trusted-issuers-registry
 
-![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![AppVersion: 0.6.0](https://img.shields.io/badge/AppVersion-0.6.0-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![AppVersion: 0.6.0](https://img.shields.io/badge/AppVersion-0.6.0-informational?style=flat-square)
 
 A Helm chart for running the trusted-issuers-registry on kubernetes.
 
@@ -77,7 +77,7 @@ A Helm chart for running the trusted-issuers-registry on kubernetes.
 | tir.ngsiBroker.timeout | string | `"30s"` | timeout to apply when communicating with broker |
 | tir.ngsiBroker.url | string | `"http://broker:1026"` | URL of the NGSI LD broker |
 | tir.satellite | string | `nil` | configuation needed for the iShare Satellite functionality |
-| tir.security | object | `{"enabled":false}` | Configuration of parties (trusted participants)       parties:  - id: "EU.EORI.NLPACKETDEL"    name: "Packet Delivery Company"    status: "Active"    start_date: "2021-09-27T00:00:00Z"    end_date: "2051-09-27T00:00:00Z"    crt: |      -----BEGIN CERTIFICATE-----      <Packet Delivery Company Certificate>      -----END CERTIFICATE-----    capability_url: "https://idp.packetdel.com/capabilities" # Optional    certifications: # Optional      - role: "IdentityProvider"        start_date: "2021-09-27T00:00:00Z"        end_date: "2051-09-27T00:00:00Z"        loa: 3 # auth config to be used for the tir |
+| tir.security | object | `{"enabled":false}` | Configuration of parties (trusted participants) parties:  - id: "EU.EORI.NLPACKETDEL"    name: "Packet Delivery Company"    status: "Active"    start_date: "2021-09-27T00:00:00Z"    end_date: "2051-09-27T00:00:00Z"    crt: |      -----BEGIN CERTIFICATE-----      <Packet Delivery Company Certificate>      -----END CERTIFICATE-----    capability_url: "https://idp.packetdel.com/capabilities" # Optional    certifications: # Optional      - role: "IdentityProvider"        start_date: "2021-09-27T00:00:00Z"        end_date: "2051-09-27T00:00:00Z"        loa: 3 # auth config to be used for the tir |
 | tir.security.enabled | bool | `false` | should auth be enabled |
 
 ----------------------------------------------
