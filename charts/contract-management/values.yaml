@@ -202,7 +202,7 @@ services:
     read-timeout: 30
 
 ## did of the organization running this instance.
-# did: 
+did: ''
 ## Basepath of all controllers
 basePath: /
 ## Enables integration with the (local) ODRL-PAP. http.services.odrl needs to be configured towards the ODRL-PAP.
@@ -222,7 +222,7 @@ oid4vp:
   enabled: false
   ## Identity of the credentials holder
   holder:
-    ## ID of the holder 
+    ## ID of the holder
     holderId:
     ## Type of the key to be used for signing verifiable presentations as the holder
     keyType:
@@ -239,7 +239,7 @@ oid4vp:
     ## port of the proxy to be used
     proxyPort:
   ## folder containing the credentials to be read
-  credentialsFolder: 
+  credentialsFolder:
   ## trust anchors to be used in addition to the system trust store
   trustAnchors: []
 
@@ -248,4 +248,7 @@ notification:
   ## should the contract management subscribe to notifications from the TMForum API
   enabled: true
   ## host of contract-management to receive the notifications at
-  host: 
+  host:
+
+#-- custom configuration
+config: {}
