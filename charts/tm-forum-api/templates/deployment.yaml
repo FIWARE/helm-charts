@@ -1,4 +1,5 @@
-{{- range .Values.apis -}}
+{{- range .Values.apis }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -47,10 +48,10 @@ spec:
         {{- end }}
         {{- end }}
       annotations:
-        {{- if .prometheus -}}
+        {{- if .prometheus }}
         prometheus.io/scrape: {{ .prometheus.enabled | quote }}
         prometheus.io/path: {{ .prometheus.path }}
-        {{- else if $.Values.defaultConfig.prometheus }} 
+        {{- else if $.Values.defaultConfig.prometheus }}
         prometheus.io/scrape: {{ $.Values.defaultConfig.prometheus.enabled | quote }}
         prometheus.io/path: {{ $.Values.defaultConfig.prometheus.path }}
         {{- end }}
@@ -59,7 +60,7 @@ spec:
         {{- else if $.Values.defaultConfig.endpointsPort }}
         prometheus.io/port: {{ $.Values.defaultConfig.endpointsPort | quote }}
         {{- end }}
-        {{- if .additionalAnnotations -}}
+        {{- if .additionalAnnotations }}
         {{- with .additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -68,7 +69,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
         {{- end }}
-    spec: 
+    spec:
       serviceAccountName: {{ include "tmforum.serviceAccountName" $ }}
       containers:
         - name: {{ .name }}
@@ -161,7 +162,7 @@ spec:
             {{- end }}
             - name: ENDPOINTS_HEALTH_ENABLED
               value: "true"
-            {{- if .logLevel -}}
+            {{- if .logLevel }}
             - name: LOGGER_LEVELS_ROOT
               value: {{ .logLevel | quote}}
             {{- else if $.Values.defaultConfig.logLevel }}
@@ -209,7 +210,7 @@ spec:
             - name: GENERAL_CONTEXT_URL
               value: {{ $.Values.defaultConfig.contextUrl | quote }}
             {{- end }}
-            
+
 
             {{- if .serverHost }}
             - name: GENERAL_SERVER_HOST
@@ -307,11 +308,10 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- else if $.Values.defaultConfig.tolerations }} 
+      {{- else if $.Values.defaultConfig.tolerations }}
       {{- with $.Values.defaultConfig.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- end }}
----
 {{- end }}
