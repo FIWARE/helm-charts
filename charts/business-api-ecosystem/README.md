@@ -54,7 +54,17 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemApis.serviceAccount.annotations | object | `{}` |  |
 | bizEcosystemApis.serviceAccount.create | bool | `false` |  |
 | bizEcosystemApis.serviceAccount.name | string | `"ssc"` |  |
-| bizEcosystemApis.tmForum | string | `nil` |  |
+| bizEcosystemApis.tmForum.billing | object | `{}` |  |
+| bizEcosystemApis.tmForum.catalog | object | `{}` |  |
+| bizEcosystemApis.tmForum.customer | object | `{}` |  |
+| bizEcosystemApis.tmForum.inventory | object | `{}` |  |
+| bizEcosystemApis.tmForum.ordering | object | `{}` |  |
+| bizEcosystemApis.tmForum.party | object | `{}` |  |
+| bizEcosystemApis.tmForum.resourceInventory | object | `{}` |  |
+| bizEcosystemApis.tmForum.resources | object | `{}` |  |
+| bizEcosystemApis.tmForum.serviceInventory | object | `{}` |  |
+| bizEcosystemApis.tmForum.services | object | `{}` |  |
+| bizEcosystemApis.tmForum.usage | object | `{}` |  |
 | bizEcosystemChargingBackend.authorizeServicePath | string | `"/authorizeService/apiKeys"` | Authorize service path of the logic proxy |
 | bizEcosystemChargingBackend.backup.bucketName | string | `"gs://my/bucket"` |  |
 | bizEcosystemChargingBackend.backup.enabled | bool | `false` |  |
@@ -259,11 +269,12 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | nameOverride | string | `""` |  |
 | oauth.adminrole | string | `"admin"` | Admin role |
 | oauth.aggregatorrole | string | `"Aggregator"` | Aggregator role |
+| oauth.clientSecret | string | `""` | OAuth2 Client Secret of the BAE application. E.G., market-clientSecret |
 | oauth.customerrole | string | `"customer"` | Customer role |
 | oauth.grantedrole | string | `"admin"` | Granted role |
 | oauth.isLegacy | bool | `false` | Whether the used FIWARE IDM is version 6 or lower |
 | oauth.oidc | bool | `false` | Set to true if OpenID Connect protocol should be used |
-| oauth.orgadminrole | string | `"orgAdmin"` | Role defined in the IDM client app for organization admins of the BAE  |
+| oauth.orgadminrole | string | `"orgAdmin"` | Role defined in the IDM client app for organization admins of the BAE |
 | oauth.provider | string | `"fiware"` | IDP provider for passport strategy (fiware, keycloak, github, ...) |
 | oauth.sellerrole | string | `"seller"` | Seller role |
 | siop.allowedRoles[0] | string | `"seller"` |  |

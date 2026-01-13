@@ -26,7 +26,7 @@ A Helm chart for running canis major on kubernetes.
 | deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-| deployment.defaultAccount | object | `{"enabled":true}` | configuration for the default account to be used in case no wallet information is provided |
+| deployment.defaultAccount | object | `{"enabled":true,"privateKey":""}` | configuration for the default account to be used in case no wallet information is provided |
 | deployment.defaultAccount.enabled | bool | `true` | should a default account be used |
 | deployment.ethereum | object | `{"contractAddress":"0x476059cd57800db8eb88f67c2aa38a6fcf8251e0","dltAddress":"http://15.236.0.91:22000","enabled":true,"gas":3000000,"gasPrice":0}` | configuration to be used when connecting with an ethereum compatible blockchain |
 | deployment.ethereum.contractAddress | string | `"0x476059cd57800db8eb88f67c2aa38a6fcf8251e0"` | address of the contract to be used |
