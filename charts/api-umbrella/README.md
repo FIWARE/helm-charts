@@ -54,11 +54,13 @@ A Helm chart for running api-umbrella on kubernetes.
 | service.type | string | `"ClusterIP"` | service type |
 | serviceAccount.create | bool | `false` | specifies if the account should be created, be aware that the chart needs to run as root and sets the corresponding security context |
 | umbrella.config | object | `{}` | configuration of the umbrella. See https://github.com/Profirator/api-umbrella/tree/master/config and https://api-umbrella.readthedocs.io/en/latest/ for more or use the out-commented part as a sane default |
+| umbrella.jws | object | `{}` | JWS configuration Provide information for signing and validating JWT when iSHARE-compliant authorization modes are used |
 | umbrella.mongodb.host | string | `"mongodb"` | host of the mongodb |
 | umbrella.mongodb.name | string | `"api_umbrella"` | name of the database, needs to exist on startup |
 | umbrella.mongodb.password | string | `"pass"` | password to authenticate with, if not set, we will create it |
 | umbrella.mongodb.port | int | `27017` | port of the mongodb |
 | umbrella.mongodb.username | string | `"umbrella"` | username to authenticate with. If the user does not exist, admin config is required and a user will be created |
+| umbrella.satellite | object | `{}` | iSHARE Satellite Config for satellite - required if no root CA is provided in jws config |
 | umbrella.services | list | `["router","web"]` | list services that should be run by api-umbrella. See https://github.com/Profirator/api-umbrella/tree/master/config and https://api-umbrella.readthedocs.io/en/latest/ for more |
 | umbrella.webHost | string | `"umbrella.fiware.dev"` | configure the host of the frontend here |
 

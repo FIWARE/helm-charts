@@ -90,6 +90,7 @@ A Helm chart for running the fiware iotagent-json on kubernetes.
 | iota.service | string | `"howtoService"` | Default service, for IoT Agent installations that won't require preregistration |
 | iota.subservice | string | `"/howto"` | Default subservice, for IoT Agent installations that won't require preregistration. |
 | iota.timestamp | bool | `true` | should a timestamp be added to every entity, metadata and attributecreated |
+| mqtt | object | `{}` |  |
 | nameOverride | string | `""` |  |
 | service.amqpPort | int | `5672` | port to be used by the service for amqp communication |
 | service.annotations | object | `{}` | addtional annotations, if required |

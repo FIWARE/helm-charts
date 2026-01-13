@@ -1,6 +1,6 @@
 # credentials-config-service
 
-![Version: 2.4.5](https://img.shields.io/badge/Version-2.4.5-informational?style=flat-square) ![AppVersion: 3.4.0](https://img.shields.io/badge/AppVersion-3.4.0-informational?style=flat-square)
+![Version: 2.4.6](https://img.shields.io/badge/Version-2.4.6-informational?style=flat-square) ![AppVersion: 3.4.0](https://img.shields.io/badge/AppVersion-3.4.0-informational?style=flat-square)
 
 A Helm chart for running the credentials-config-service on kubernetes.
 
@@ -41,7 +41,7 @@ A Helm chart for running the credentials-config-service on kubernetes.
 | deployment.healthPort | int | `9090` | port to request health information at |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/credentials-config-service"` | til image name ref: https://quay.io/repository/fiware/credentials-config-service |
-| deployment.image.tag | string | `''` | tag of the image to be used. If empty, AppVersion is used |
+| deployment.image.tag | string | `""` | tag of the image to be used. If empty, AppVersion is used |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
