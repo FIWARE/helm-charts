@@ -126,6 +126,7 @@ defaultConfig:
     initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
+    failureThreshold: 3
     timeoutSeconds: 30
   readinessProbe:
     # -- path to be used for the health check
@@ -133,6 +134,7 @@ defaultConfig:
     initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
+    failureThreshold: 3
     timeoutSeconds: 30
    
   # -- a list of additional env vars to be set, check the tm-forum api docu for all available options

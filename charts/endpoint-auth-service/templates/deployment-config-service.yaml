@@ -53,6 +53,7 @@ spec:
             initialDelaySeconds: {{ .Values.configService.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.configService.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.configService.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.configService.livenessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.configService.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
@@ -61,6 +62,7 @@ spec:
             initialDelaySeconds: {{ .Values.configService.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.configService.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.configService.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.configService.readinessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.configService.readinessProbe.timeoutSeconds }}
           env:
             - name: ENDPOINTS_ALL_PORT

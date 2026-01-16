@@ -1,6 +1,6 @@
 apiVersion: v1
 name: dsba-pdp
-version: 0.1.0
+version: 0.1.2
 appVersion: 0.3.2
 description: A Helm chart for running the dsba-pdp on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png

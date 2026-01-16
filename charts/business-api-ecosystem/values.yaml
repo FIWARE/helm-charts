@@ -273,11 +273,13 @@ bizEcosystemApis:
       initialDelaySeconds: 120
       periodSeconds: 30
       successThreshold: 1
+      failureThreshold: 3
       timeoutSeconds: 30
     readinessProbe:
       initialDelaySeconds: 61
       periodSeconds: 30
       successThreshold: 1
+      failureThreshold: 3
       timeoutSeconds: 30
 
   ## -- port that the APIs container uses
@@ -370,11 +372,13 @@ bizEcosystemRss:
       initialDelaySeconds: 120
       periodSeconds: 30
       successThreshold: 1
+      failureThreshold: 3
       timeoutSeconds: 30
     readinessProbe:
       initialDelaySeconds: 61
       periodSeconds: 30
       successThreshold: 1
+      failureThreshold: 3
       timeoutSeconds: 30
 
   ## -- port that the RSS container uses
@@ -490,11 +494,13 @@ bizEcosystemChargingBackend:
       initialDelaySeconds: 61
       periodSeconds: 30
       successThreshold: 1
+      failureThreshold: 3
       timeoutSeconds: 30
     readinessProbe:
       initialDelaySeconds: 60
       periodSeconds: 30
       successThreshold: 1
+      failureThreshold: 3
       timeoutSeconds: 30
 
   ## -- PVC configuration for charging backend plugins
@@ -690,11 +696,13 @@ bizEcosystemLogicProxy:
       initialDelaySeconds: 61
       periodSeconds: 30
       successThreshold: 1
+      failureThreshold: 3
       timeoutSeconds: 30
     readinessProbe:
       initialDelaySeconds: 60
       periodSeconds: 30
       successThreshold: 1
+      failureThreshold: 3
       timeoutSeconds: 30
 
   ## -- ingress configuration

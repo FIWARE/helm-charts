@@ -1,6 +1,6 @@
 apiVersion: v2
 name: orion
-version: 1.6.2
+version: 1.6.4
 appVersion: 1.0.1
 kubeVersion: '>= 1.19-0'
 home: https://github.com/FIWARE/context.Orion-LD

@@ -98,6 +98,7 @@ spec:
             initialDelaySeconds: {{ .Values.bizEcosystemChargingBackend.deployment.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bizEcosystemChargingBackend.deployment.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.bizEcosystemChargingBackend.deployment.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.bizEcosystemChargingBackend.deployment.livenessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.bizEcosystemChargingBackend.deployment.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
@@ -106,6 +107,7 @@ spec:
             initialDelaySeconds: {{ .Values.bizEcosystemChargingBackend.deployment.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bizEcosystemChargingBackend.deployment.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.bizEcosystemChargingBackend.deployment.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.bizEcosystemChargingBackend.deployment.readinessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.bizEcosystemChargingBackend.deployment.readinessProbe.timeoutSeconds }}
           volumeMounts:
             - name: plugins

@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.11.22](https://img.shields.io/badge/Version-0.11.22-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
+![Version: 0.11.24](https://img.shields.io/badge/Version-0.11.24-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -28,11 +28,13 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemApis.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemApis.deployment.image.repository | string | `"fiware/biz-ecosystem-apis"` |  |
 | bizEcosystemApis.deployment.image.tag | string | `"v8.0.0"` |  |
+| bizEcosystemApis.deployment.livenessProbe.failureThreshold | int | `3` |  |
 | bizEcosystemApis.deployment.livenessProbe.initialDelaySeconds | int | `120` |  |
 | bizEcosystemApis.deployment.livenessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemApis.deployment.livenessProbe.successThreshold | int | `1` |  |
 | bizEcosystemApis.deployment.livenessProbe.timeoutSeconds | int | `30` |  |
 | bizEcosystemApis.deployment.nodeSelector | object | `{}` |  |
+| bizEcosystemApis.deployment.readinessProbe.failureThreshold | int | `3` |  |
 | bizEcosystemApis.deployment.readinessProbe.initialDelaySeconds | int | `61` |  |
 | bizEcosystemApis.deployment.readinessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemApis.deployment.readinessProbe.successThreshold | int | `1` |  |
@@ -87,11 +89,13 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemChargingBackend.deployment.image.repository | string | `"fiware/biz-ecosystem-charging-backend"` |  |
 | bizEcosystemChargingBackend.deployment.image.tag | string | `"v8.0.0"` |  |
+| bizEcosystemChargingBackend.deployment.livenessProbe.failureThreshold | int | `3` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.initialDelaySeconds | int | `61` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.successThreshold | int | `1` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.timeoutSeconds | int | `30` |  |
 | bizEcosystemChargingBackend.deployment.nodeSelector | object | `{}` |  |
+| bizEcosystemChargingBackend.deployment.readinessProbe.failureThreshold | int | `3` |  |
 | bizEcosystemChargingBackend.deployment.readinessProbe.initialDelaySeconds | int | `60` |  |
 | bizEcosystemChargingBackend.deployment.readinessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemChargingBackend.deployment.readinessProbe.successThreshold | int | `1` |  |
@@ -182,11 +186,13 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.statefulset.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemLogicProxy.statefulset.image.repository | string | `"fiware/biz-ecosystem-logic-proxy"` |  |
 | bizEcosystemLogicProxy.statefulset.image.tag | string | `"v8.0.0"` |  |
+| bizEcosystemLogicProxy.statefulset.livenessProbe.failureThreshold | int | `3` |  |
 | bizEcosystemLogicProxy.statefulset.livenessProbe.initialDelaySeconds | int | `61` |  |
 | bizEcosystemLogicProxy.statefulset.livenessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemLogicProxy.statefulset.livenessProbe.successThreshold | int | `1` |  |
 | bizEcosystemLogicProxy.statefulset.livenessProbe.timeoutSeconds | int | `30` |  |
 | bizEcosystemLogicProxy.statefulset.nodeSelector | object | `{}` |  |
+| bizEcosystemLogicProxy.statefulset.readinessProbe.failureThreshold | int | `3` |  |
 | bizEcosystemLogicProxy.statefulset.readinessProbe.initialDelaySeconds | int | `60` |  |
 | bizEcosystemLogicProxy.statefulset.readinessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemLogicProxy.statefulset.readinessProbe.successThreshold | int | `1` |  |
@@ -216,11 +222,13 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemRss.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemRss.deployment.image.repository | string | `"fiware/biz-ecosystem-rss"` |  |
 | bizEcosystemRss.deployment.image.tag | string | `"v8.0.0"` |  |
+| bizEcosystemRss.deployment.livenessProbe.failureThreshold | int | `3` |  |
 | bizEcosystemRss.deployment.livenessProbe.initialDelaySeconds | int | `120` |  |
 | bizEcosystemRss.deployment.livenessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemRss.deployment.livenessProbe.successThreshold | int | `1` |  |
 | bizEcosystemRss.deployment.livenessProbe.timeoutSeconds | int | `30` |  |
 | bizEcosystemRss.deployment.nodeSelector | object | `{}` |  |
+| bizEcosystemRss.deployment.readinessProbe.failureThreshold | int | `3` |  |
 | bizEcosystemRss.deployment.readinessProbe.initialDelaySeconds | int | `61` |  |
 | bizEcosystemRss.deployment.readinessProbe.periodSeconds | int | `30` |  |
 | bizEcosystemRss.deployment.readinessProbe.successThreshold | int | `1` |  |

@@ -1,6 +1,6 @@
 # canis-major
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![AppVersion: 1.5.15](https://img.shields.io/badge/AppVersion-1.5.15-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![AppVersion: 1.5.15](https://img.shields.io/badge/AppVersion-1.5.15-informational?style=flat-square)
 
 A Helm chart for running canis major on kubernetes.
 
@@ -38,6 +38,7 @@ A Helm chart for running canis major on kubernetes.
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/canis-major"` | canis-major image name ref: https://quay.io/repository/fiware/canis-major |
 | deployment.image.tag | string | `"1.5.15"` | tag of the image to be used |
+| deployment.livenessProbe.failureThreshold | int | `3` |  |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
@@ -47,6 +48,7 @@ A Helm chart for running canis major on kubernetes.
 | deployment.ngsi.tenant | string | `"default"` | tenant to be used with the api |
 | deployment.ngsi.url | string | `"http://ngsi-ld-broker:1026"` | url that ngsi-ld is available at |
 | deployment.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| deployment.readinessProbe.failureThreshold | int | `3` |  |
 | deployment.readinessProbe.initialDelaySeconds | int | `31` |  |
 | deployment.readinessProbe.periodSeconds | int | `10` |  |
 | deployment.readinessProbe.successThreshold | int | `1` |  |

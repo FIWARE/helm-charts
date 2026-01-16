@@ -1,6 +1,6 @@
 # endpoint-auth-service
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![AppVersion: 0.4.4](https://img.shields.io/badge/AppVersion-0.4.4-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![AppVersion: 0.4.4](https://img.shields.io/badge/AppVersion-0.4.4-informational?style=flat-square)
 A Helm chart for running the endpoint-auth-service on kubernetes.
 
 ## Maintainers
@@ -134,6 +134,7 @@ for that.
 | configService.ingress.enabled | bool | `false` | should there be an ingress to connect configService with the public internet |
 | configService.ingress.hosts | list | `[]` | all hosts to be provided |
 | configService.ingress.tls | list | `[]` | configure the ingress' tls |
+| configService.livenessProbe.failureThreshold | int | `3` |  |
 | configService.livenessProbe.initialDelaySeconds | int | `30` |  |
 | configService.livenessProbe.periodSeconds | int | `10` |  |
 | configService.livenessProbe.successThreshold | int | `1` |  |
@@ -152,6 +153,7 @@ for that.
 | configService.prometheus.enabled | bool | `true` | should prometheus scrape be enabled |
 | configService.prometheus.path | string | `"/prometheus"` | path for prometheus scrape |
 | configService.prometheus.port | int | `9090` | port prometheus scrape is available at |
+| configService.readinessProbe.failureThreshold | int | `3` |  |
 | configService.readinessProbe.initialDelaySeconds | int | `31` |  |
 | configService.readinessProbe.periodSeconds | int | `10` |  |
 | configService.readinessProbe.successThreshold | int | `1` |  |
@@ -250,6 +252,7 @@ for that.
 | sidecarInjector.image.repository | string | `"expediagroup/kubernetes-sidecar-injector"` | sidecar-injector image name ref: https://hub.docker.com/r/mayankkr/sidecarinjector |
 | sidecarInjector.image.tag | string | `"1.0.1"` | tag of the image to be used |
 | sidecarInjector.labelNamespace | string | `"sidecar.k8s.fiware.org"` | namespace of the label to find the configmap to inject. |
+| sidecarInjector.livenessProbe.failureThreshold | int | `3` |  |
 | sidecarInjector.livenessProbe.initialDelaySeconds | int | `30` |  |
 | sidecarInjector.livenessProbe.periodSeconds | int | `10` |  |
 | sidecarInjector.livenessProbe.successThreshold | int | `1` |  |
@@ -259,6 +262,7 @@ for that.
 | sidecarInjector.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | sidecarInjector.overrideSidecarconfig | object | `{}` | override the generated config for the sidecar, if not sufficient |
 | sidecarInjector.port | int | `8443` | port that the injector listens to |
+| sidecarInjector.readinessProbe.failureThreshold | int | `3` |  |
 | sidecarInjector.readinessProbe.initialDelaySeconds | int | `31` |  |
 | sidecarInjector.readinessProbe.periodSeconds | int | `10` |  |
 | sidecarInjector.readinessProbe.successThreshold | int | `1` |  |

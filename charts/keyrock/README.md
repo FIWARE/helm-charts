@@ -1,6 +1,6 @@
 # keyrock
 
-![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![AppVersion: 8.3.3](https://img.shields.io/badge/AppVersion-8.3.3-informational?style=flat-square)
+![Version: 0.8.2](https://img.shields.io/badge/Version-0.8.2-informational?style=flat-square) ![AppVersion: 8.3.3](https://img.shields.io/badge/AppVersion-8.3.3-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -82,11 +82,13 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | statefulset.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | statefulset.image.repository | string | `"fiware/idm"` | keyrock image name ref: https://hub.docker.com/r/fiware/idm |
 | statefulset.image.tag | string | `"8.3.3"` | tag of the image to be used |
+| statefulset.livenessProbe.failureThreshold | int | `3` |  |
 | statefulset.livenessProbe.initialDelaySeconds | int | `30` |  |
 | statefulset.livenessProbe.periodSeconds | int | `10` |  |
 | statefulset.livenessProbe.successThreshold | int | `1` |  |
 | statefulset.livenessProbe.timeoutSeconds | int | `30` |  |
 | statefulset.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| statefulset.readinessProbe.failureThreshold | int | `3` |  |
 | statefulset.readinessProbe.initialDelaySeconds | int | `31` |  |
 | statefulset.readinessProbe.periodSeconds | int | `10` |  |
 | statefulset.readinessProbe.successThreshold | int | `1` |  |

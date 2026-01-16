@@ -77,11 +77,13 @@ deployment:
     initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
+    failureThreshold: 3
     timeoutSeconds: 30
   readinessProbe:
     initialDelaySeconds: 31
     periodSeconds: 10
     successThreshold: 1
+    failureThreshold: 3
     timeoutSeconds: 30
   # -- resources assigned to the deployment pod
   resources: {}

@@ -65,6 +65,7 @@ spec:
             initialDelaySeconds: {{ .Values.bizEcosystemRss.deployment.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bizEcosystemRss.deployment.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.bizEcosystemRss.deployment.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.bizEcosystemRss.deployment.livenessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.bizEcosystemRss.deployment.livenessProbe.timeoutSeconds }}
           readinessProbe:
             exec:
@@ -75,6 +76,7 @@ spec:
             initialDelaySeconds: {{ .Values.bizEcosystemRss.deployment.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bizEcosystemRss.deployment.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.bizEcosystemRss.deployment.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.bizEcosystemRss.deployment.readinessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.bizEcosystemRss.deployment.readinessProbe.timeoutSeconds }}
           env:
             - name: MYSQL_HOST
