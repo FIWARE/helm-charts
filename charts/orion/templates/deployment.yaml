@@ -77,6 +77,7 @@ spec:
             initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
           {{ end }}
           # special handling for the health check of telefonica/orion
@@ -90,6 +91,7 @@ spec:
             initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
           livenessProbe:
             exec:
@@ -100,6 +102,7 @@ spec:
             initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
           {{ end }}
           env:

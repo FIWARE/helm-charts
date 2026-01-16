@@ -73,6 +73,7 @@ spec:
             initialDelaySeconds: {{ .Values.statefulset.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.statefulset.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.statefulset.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.statefulset.livenessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.statefulset.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
@@ -81,6 +82,7 @@ spec:
             initialDelaySeconds: {{ .Values.statefulset.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.statefulset.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.statefulset.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.statefulset.readinessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.statefulset.readinessProbe.timeoutSeconds }}
           startupProbe:
             httpGet:

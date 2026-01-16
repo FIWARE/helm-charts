@@ -89,11 +89,13 @@ configService:
     initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
+    failureThreshold: 3
     timeoutSeconds: 30
   readinessProbe:
     initialDelaySeconds: 31
     periodSeconds: 10
     successThreshold: 1
+    failureThreshold: 3
     timeoutSeconds: 30
 
   ## pod autoscaling configuration, use for automatic scaling
@@ -399,11 +401,13 @@ sidecarInjector:
     initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
+    failureThreshold: 3
     timeoutSeconds: 30
   readinessProbe:
     initialDelaySeconds: 31
     periodSeconds: 10
     successThreshold: 1
+    failureThreshold: 3
     timeoutSeconds: 30
 
 ## configuration to be used fo the ishare-auth-provider

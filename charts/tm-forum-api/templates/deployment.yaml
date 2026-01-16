@@ -106,6 +106,7 @@ spec:
             initialDelaySeconds: {{ .livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .livenessProbe.periodSeconds }}
             successThreshold: {{ .livenessProbe.successThreshold }}
+            failureThreshold: {{ .livenessProbe.failureThreshold }}
             timeoutSeconds: {{ .livenessProbe.timeoutSeconds }}
           {{- else if $.Values.defaultConfig.livenessProbe }}
           livenessProbe:
@@ -115,6 +116,7 @@ spec:
             initialDelaySeconds: {{ $.Values.defaultConfig.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ $.Values.defaultConfig.livenessProbe.periodSeconds }}
             successThreshold: {{ $.Values.defaultConfig.livenessProbe.successThreshold }}
+            failureThreshold: {{ $.Values.defaultConfig.livenessProbe.failureThreshold }}
             timeoutSeconds: {{ $.Values.defaultConfig.livenessProbe.timeoutSeconds }}
           {{- end }}
           {{- if .readinessProbe }}
@@ -125,6 +127,7 @@ spec:
             initialDelaySeconds: {{ .readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .readinessProbe.periodSeconds }}
             successThreshold: {{ .readinessProbe.successThreshold }}
+            failureThreshold: {{ .readinessProbe.failureThreshold }}
             timeoutSeconds: {{ .readinessProbe.timeoutSeconds }}
           {{- else if $.Values.defaultConfig.readinessProbe }}
           readinessProbe:
@@ -134,6 +137,7 @@ spec:
             initialDelaySeconds: {{ $.Values.defaultConfig.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ $.Values.defaultConfig.readinessProbe.periodSeconds }}
             successThreshold: {{ $.Values.defaultConfig.readinessProbe.successThreshold }}
+            failureThreshold: {{ $.Values.defaultConfig.readinessProbe.failureThreshold }}
             timeoutSeconds: {{ $.Values.defaultConfig.readinessProbe.timeoutSeconds }}
           {{- end }}
           env:

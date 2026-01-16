@@ -101,6 +101,7 @@ spec:
             initialDelaySeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.bizEcosystemLogicProxy.statefulset.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.bizEcosystemLogicProxy.statefulset.livenessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
@@ -109,6 +110,7 @@ spec:
             initialDelaySeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.bizEcosystemLogicProxy.statefulset.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.bizEcosystemLogicProxy.statefulset.readinessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.bizEcosystemLogicProxy.statefulset.readinessProbe.timeoutSeconds }}
           {{- if or .Values.bizEcosystemLogicProxy.theme.enabled .Values.bizEcosystemLogicProxy.token.enabled .Values.bizEcosystemLogicProxy.extraVolumeMounts }}
           volumeMounts:

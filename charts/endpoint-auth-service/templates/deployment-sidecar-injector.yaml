@@ -54,6 +54,7 @@ spec:
             initialDelaySeconds: {{ .Values.sidecarInjector.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sidecarInjector.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.sidecarInjector.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.sidecarInjector.livenessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.sidecarInjector.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
@@ -63,6 +64,7 @@ spec:
             initialDelaySeconds: {{ .Values.sidecarInjector.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sidecarInjector.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.sidecarInjector.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.sidecarInjector.readinessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.sidecarInjector.readinessProbe.timeoutSeconds }}
           {{- with .Values.sidecarInjector.resources }}
           resources:

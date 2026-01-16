@@ -77,11 +77,13 @@ deployment:
     initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
+    failureThreshold: 3
     timeoutSeconds: 30
   readinessProbe:
     initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
+    failureThreshold: 3
     timeoutSeconds: 30
   # -- additional sidepods for the deployment, if required
   sidecars: []

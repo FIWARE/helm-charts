@@ -77,11 +77,13 @@ deployment:
     initialDelaySeconds: 30
     periodSeconds: 10
     successThreshold: 1
+    failureThreshold: 3
     timeoutSeconds: 30
   readinessProbe:
     initialDelaySeconds: 31
     periodSeconds: 10
     successThreshold: 1
+    failureThreshold: 3
     timeoutSeconds: 30
 
 ## pod autoscaling configuration, use for automatic scaling of the broker pods
