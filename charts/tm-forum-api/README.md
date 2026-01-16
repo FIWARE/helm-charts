@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.15.0](https://img.shields.io/badge/Version-0.15.0-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
+![Version: 0.15.1](https://img.shields.io/badge/Version-0.15.1-informational?style=flat-square) ![AppVersion: 0.13.2](https://img.shields.io/badge/AppVersion-0.13.2-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -113,6 +113,7 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used |
 | defaultConfig.image.repository | string | `"quay.io/fiware"` | repository to get the container from |
 | defaultConfig.image.tag | string | `"1.4.3"` | tag to be used, most of the time the apis will use the same version |
+| defaultConfig.livenessProbe.failureThreshold | int | `3` |  |
 | defaultConfig.livenessProbe.healthPath | string | `"/health/liveness"` | path to be used for the health check |
 | defaultConfig.livenessProbe.initialDelaySeconds | int | `30` |  |
 | defaultConfig.livenessProbe.periodSeconds | int | `10` |  |
@@ -128,6 +129,7 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.prometheus | object | `{"enabled":true,"path":"/prometheus"}` | configuration for proemtheus metrics |
 | defaultConfig.prometheus.enabled | bool | `true` | should it be enabled |
 | defaultConfig.prometheus.path | string | `"/prometheus"` | path to get the metrics from |
+| defaultConfig.readinessProbe.failureThreshold | int | `3` |  |
 | defaultConfig.readinessProbe.initialDelaySeconds | int | `30` |  |
 | defaultConfig.readinessProbe.periodSeconds | int | `10` |  |
 | defaultConfig.readinessProbe.readinessPath | string | `"/health/readiness"` | path to be used for the health check |

@@ -1,6 +1,6 @@
 # dsba-pdp
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![AppVersion: 0.3.2](https://img.shields.io/badge/AppVersion-0.3.2-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![AppVersion: 0.3.2](https://img.shields.io/badge/AppVersion-0.3.2-informational?style=flat-square)
 
 A Helm chart for running the dsba-pdp on kubernetes.
 
@@ -58,6 +58,7 @@ A Helm chart for running the dsba-pdp on kubernetes.
 | deployment.ishare.trustedList | bool | `true` | should the iShare compliant authorization registry be used as trusted-list provider? |
 | deployment.ishare.trustedVerifiers | list | `[]` | jwk-endpoints from trusted verifiers. Needs to provide RFC-7517 compatible JWKS, wich will be used to validate incoming JWT. |
 | deployment.ishare.updateRate | int | `5` | frequency of updates to the trusted list. In s |
+| deployment.livenessProbe.failureThreshold | int | `3` |  |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
@@ -65,6 +66,7 @@ A Helm chart for running the dsba-pdp on kubernetes.
 | deployment.logLevel | string | `"INFO"` | loglevel to be used |
 | deployment.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | deployment.providerId | string | `"did:my:pdp"` | id of pdp as a dataprovider to verify on roles targeting the pdp |
+| deployment.readinessProbe.failureThreshold | int | `3` |  |
 | deployment.readinessProbe.initialDelaySeconds | int | `31` |  |
 | deployment.readinessProbe.periodSeconds | int | `10` |  |
 | deployment.readinessProbe.successThreshold | int | `1` |  |
