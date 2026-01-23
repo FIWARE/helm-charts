@@ -1,5 +1,5 @@
 ## Default values for canis-major.
-## This is a YAML-formatted file.
+## This is a YAML-formatted file. 
 ## Declare variables to be passed into your templates.
 
 # -- option to override the name config in the _helpers.tpl
