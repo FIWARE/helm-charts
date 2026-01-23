@@ -1,6 +1,6 @@
 apiVersion: v2
 name: tm-forum-api
-version: 0.15.2
+version: 0.15.3
 appVersion: 0.13.2
 kubeVersion: '>= 1.19-0'
 home: https://github.com/FIWARE/tmforum-api
