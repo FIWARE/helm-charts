@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "onboarding.fullname" . }}-cm
+  labels:
+    {{- include "onboarding.labels" . | nindent 4 }}
+data:
+  application.yaml: |-
+  {{- .Values.config | toYaml | nindent 4 }}
