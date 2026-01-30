@@ -1,0 +1,188 @@
+# -- Number of replicas for the deployment
+replicaCount: 1
+
+image:
+  # -- Repository for the application image
+  repository: quay.io/seamware/onboarding
+  # -- Image pull policy
+  pullPolicy: IfNotPresent
+  # -- Overrides the image tag (defaults to appVersion in Chart.yaml)
+  tag: ''
+
+# -- Image pull secrets for private repositories
+imagePullSecrets: []
+# -- String to partially override the chart name
+nameOverride: ''
+# -- String to fully override the chart name
+fullnameOverride: ''
+
+# -- Annotations to add to the pod
+podAnnotations: {}
+# -- Labels to add to the pod
+podLabels: {}
+
+# -- Pod-level security context
+podSecurityContext: {}
+
+# -- Container-level security context
+securityContext: {}
+
+service:
+  # -- Kubernetes Service type
+  type: ClusterIP
+  # -- Service port
+  port: 80
+
+ingress:
+  # -- Enable ingress resource
+  enabled: false
+  # -- Ingress class name
+  className: ''
+  # -- Ingress annotations
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 8m
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
+  # -- Ingress host configuration
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  # -- Ingress TLS configuration
+  tls: []
+
+# -- Resource limits and requests for the pod
+resources: {}
+
+# -- Liveness probe configuration
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: http
+# -- Readiness probe configuration
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: http
+
+# -- Additional volumes to mount
+volumes: []
+
+# -- Additional volume mounts
+volumeMounts: []
+
+# -- Node selector for pod scheduling
+nodeSelector: {}
+
+# -- Tolerations for pod scheduling
+tolerations: []
+
+# -- Affinity rules for pod scheduling
+affinity: {}
+
+# -- Extra environment variables to pass to the container
+extraEnvVars: []
+
+# -- External secrets mapping configuration
+secrets:
+  # -- Database secrets
+  database:
+    secretName: ''
+    usernameKey: ''
+    passwordKey: ''
+  # -- Admin login secrets
+  login:
+    secretName: ''
+    clientIdKey: ''
+    clientSecretKey: ''
+  # -- Onboarding keycloak secrets
+  keycloak:
+    secretName: ''
+    usernameKey: ''
+    passwordKey: ''
+
+# -- Internal application configuration
+config:
+  server:
+    # -- Server running port
+    port: 8080
+    storage:
+      # -- Local folder to store pdf
+      destFolder: files
+      # -- Max pdf file size
+      maxSizeMB: 5
+    # -- CORS configuration
+    cors:
+      origin: "*"
+      methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+        - X-Organization
+      credentials: true
+      optionsSuccessStatus: 204
+      maxAge: 600
+  logging:
+    level: info
+  app:
+    # -- URL that contains the pdf to be signed
+    documentToSignUrl: ''
+    login:
+      # -- URL of the OpenID server (e.g: keycloak)
+      openIdUrl: ''
+      # -- ClientId of the OpenID server
+      clientId: ${APP_CLIENT_ID}
+      # -- ClientSecret of the OpenID server
+      clientSecret: "${APP_CLIENT_SECRET}"
+      # -- Scopes required in the openid request
+      scope: openid
+      # -- Type of codeChallenge
+      codeChallenge: true
+    keycloak:
+      # -- URL of the keycloak where new realms will be created
+      baseUrl: ''
+      # -- Authentication information needed to create new realms
+      auth:
+        username: ${APP_KEYCLOAK_USERNAME}
+        password: "${APP_KEYCLOAK_PASSWORD}"
+        grantType: password
+        clientId: "admin-cli"
+    # -- Trust Issuer Register where DID's will be registered
+    tir:
+      url: ''
+  # -- Database configuration. See [TypeORM documentation](https://typeorm.io/docs/data-source/data-source-options)
+  database:
+    type: postgres
+    host: ''
+    port: 5432
+    username: ${APP_DB_USERNAME}
+    password: ${APP_DB_PASSWORD}
+    database: ''
+    synchronize: true
+    logging: false
+  # -- Email configuration using [Nodemailer](https://nodemailer.com/)
+  email:
+    enabled: false
+    type: nodemailer
+
+persistence:
+  # -- Enable persistence using PVC
+  enabled: false
+  # -- Create a new PVC
+  create: false
+  # -- Storage class for the PVC
+  storageClass: ''
+  # -- Annotations for the PVC
+  annotations: {}
+  # -- Size of the PVC
+  size: 1Gi
+  # -- Access modes for the PVC
+  accessModes:
+    - ReadWriteOnce
+  # -- Existing PVC to use
+  existingClaim: ''

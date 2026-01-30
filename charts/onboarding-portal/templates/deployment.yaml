@@ -1,0 +1,145 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "onboarding.fullname" . }}
+  labels:
+    {{- include "onboarding.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "onboarding.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "onboarding.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.config.server.port }}
+              protocol: TCP
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: app-config-volume
+              mountPath: /app/config
+              readOnly: true
+            - name: data
+              mountPath: /app/files
+          env:
+            {{- if .Values.secrets.database.secretName }}
+            {{- if .Values.secrets.database.usernameKey }}
+            - name: APP_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.database.secretName }}
+                  key: {{ .Values.secrets.database.usernameKey }}
+            {{- end }}
+            {{- if .Values.secrets.database.passwordKey }}
+            - name: APP_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.database.secretName }}
+                  key: {{ .Values.secrets.database.passwordKey }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.secrets.login.secretName }}
+            {{- if .Values.secrets.login.clientIdKey }}
+            - name: APP_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.login.secretName }}
+                  key: {{ .Values.secrets.login.clientIdKey }}
+            {{- end }}
+            {{- if .Values.secrets.login.clientSecretKey }}
+            - name: APP_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.login.secretName }}
+                  key: {{ .Values.secrets.login.clientSecretKey }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.secrets.keycloak.secretName }}
+            {{- if .Values.secrets.keycloak.usernameKey }}
+            - name: APP_KEYCLOAK_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.keycloak.secretName }}
+                  key: {{ .Values.secrets.keycloak.usernameKey }}
+            {{- end }}
+            {{- if .Values.secrets.keycloak.passwordKey }}
+            - name: APP_KEYCLOAK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.keycloak.secretName }}
+                  key: {{ .Values.secrets.keycloak.passwordKey }}
+            {{- end }}
+            {{- end }}
+            {{- with .Values.extraEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: app-config-volume
+          configMap:
+            name: {{ include "onboarding.fullname" . }}-cm
+            defaultMode: 0644
+        {{- if and .Values.persistence.enabled }}
+        {{- if .Values.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim }}
+        {{- else if .Values.persistence.create }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "onboarding.fullname" . }}-pvc
+        {{- end }}
+        {{- else }}
+        - name: data
+          emptyDir: {}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
