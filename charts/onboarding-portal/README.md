@@ -1,6 +1,6 @@
 # onboarding-portal
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 A Helm chart for the OnBoarding Portal
 
@@ -20,10 +20,10 @@ A Helm chart for the OnBoarding Portal
 | config.app.keycloak.auth | object | `{"clientId":"admin-cli","grantType":"password","password":"${APP_KEYCLOAK_PASSWORD}","username":"${APP_KEYCLOAK_USERNAME}"}` | Authentication information needed to create new realms |
 | config.app.keycloak.baseUrl | string | `""` | URL of the keycloak where new realms will be created |
 | config.app.login.clientId | string | `"${APP_CLIENT_ID}"` | ClientId of the OpenID server |
-| config.app.login.clientSecret | string | `"${APP_CLIENT_SECRET}"` | CLientSecret of the OpenID server |
+| config.app.login.clientSecret | string | `"${APP_CLIENT_SECRET}"` | ClientSecret of the OpenID server |
 | config.app.login.codeChallenge | bool | `true` | Type of codeChallenge |
 | config.app.login.openIdUrl | string | `""` | URL of the OpenID server (e.g: keycloak) |
-| config.app.login.scope | string | `"openid"` | Scopes required en el openid request |
+| config.app.login.scope | string | `"openid"` | Scopes required in the openid request |
 | config.app.tir | object | `{"url":""}` | Trust Issuer Register where DID's will be registered |
 | config.database | object | `{"database":"","host":"","logging":false,"password":"${APP_DB_PASSWORD}","port":5432,"synchronize":true,"type":"postgres","username":"${APP_DB_USERNAME}"}` | Database configuration. See [TypeORM documentation](https://typeorm.io/docs/data-source/data-source-options) |
 | config.email | object | `{"enabled":false,"type":"nodemailer"}` | Email configuration using [Nodemailer](https://nodemailer.com/) |
