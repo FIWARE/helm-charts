@@ -51,7 +51,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
-          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag | default .Chart.AppVersion}}"
           {{- if .Values.deployment.command }}
           command:
           {{- with .Values.deployment.command }}
