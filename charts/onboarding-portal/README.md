@@ -1,6 +1,6 @@
 # onboarding-portal
 
-![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 A Helm chart for the OnBoarding Portal
 
@@ -34,7 +34,7 @@ A Helm chart for the OnBoarding Portal
 | extraEnvVars | list | `[]` | Extra environment variables to pass to the container |
 | fullnameOverride | string | `""` | String to fully override the chart name |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
-| image.repository | string | `"seamware/onboarding"` | Repository for the application image |
+| image.repository | string | `"quay.io/seamware/onboarding"` | Repository for the application image |
 | image.tag | string | `""` | Overrides the image tag (defaults to appVersion in Chart.yaml) |
 | imagePullSecrets | list | `[]` | Image pull secrets for private repositories |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/proxy-body-size":"8m","nginx.ingress.kubernetes.io/proxy-buffer-size":"16k"}` | Ingress annotations |
