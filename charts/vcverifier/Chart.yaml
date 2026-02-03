@@ -1,7 +1,7 @@
 apiVersion: v1
 name: vcverifier
-version: 4.4.0
-appVersion: 6.1.1
+version: 4.7.0
+appVersion: 6.3.5
 home: https://github.com/fiware/vcverifier
 description: A Helm chart for running the FIWARE VCVerifier.
 keywords:

@@ -1,6 +1,6 @@
 # vcverifier
 
-![Version: 4.4.0](https://img.shields.io/badge/Version-4.4.0-informational?style=flat-square) ![AppVersion: 6.1.1](https://img.shields.io/badge/AppVersion-6.1.1-informational?style=flat-square)
+![Version: 4.7.0](https://img.shields.io/badge/Version-4.7.0-informational?style=flat-square) ![AppVersion: 6.3.5](https://img.shields.io/badge/AppVersion-6.3.5-informational?style=flat-square)
 
 A Helm chart for running the FIWARE VCVerifier.
 
@@ -22,7 +22,7 @@ A Helm chart for running the FIWARE VCVerifier.
 | deployment.configRepo | object | `{"configEndpoint":"http://credentials-config:8080/"}` | config repo configuration |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/vcverifier"` | image name |
-| deployment.image.tag | string | `"6.3.5"` | tag of the image to be used |
+| deployment.image.tag | string | `""` | tag of the image to be used |
 | deployment.livenessProbe.failureThreshold | int | `3` |  |
 | deployment.livenessProbe.initialDelaySeconds | int | `3` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |

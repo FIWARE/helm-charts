@@ -1,6 +1,6 @@
 # odrl-pap
 
-![Version: 2.3.8](https://img.shields.io/badge/Version-2.3.8-informational?style=flat-square) ![AppVersion: 1.1.2](https://img.shields.io/badge/AppVersion-1.1.2-informational?style=flat-square)
+![Version: 2.7.0](https://img.shields.io/badge/Version-2.7.0-informational?style=flat-square) ![AppVersion: 1.3.5](https://img.shields.io/badge/AppVersion-1.3.5-informational?style=flat-square)
 
 A Helm chart for running the odrl-pap on kubernetes.
 
@@ -43,7 +43,7 @@ A Helm chart for running the odrl-pap on kubernetes.
 | deployment.command | list | `[]` | command to be used for starting the container |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/odrl-pap"` | til image name ref: https://quay.io/repository/wistefan/odrl-pap |
-| deployment.image.tag | string | `"1.2.0"` | tag of the image to be used |
+| deployment.image.tag | string | `""` | overrides the image tag whose default is the chart appVersion |
 | deployment.imagePullSecrets | list | `[]` | secrets for pulling images from a private repository ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | deployment.livenessProbe.failureThreshold | int | `3` |  |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
