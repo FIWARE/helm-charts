@@ -5676,6 +5676,27 @@ entries:
     version: 0.0.1
   odrl-pap:
   - apiVersion: v1
+    appVersion: 1.3.5
+    created: "2026-02-03T10:37:09.291319159Z"
+    description: A Helm chart for running the odrl-pap on kubernetes.
+    digest: 49fea25d6ab775a90fa4b5cb22da5e0ac51036bafb6eaf6e9b4c7e934fe064b3
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - Data Space Connector
+    - DSBA
+    - Authorization
+    - ODRL
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: Stefan Wiedemann
+    name: odrl-pap
+    sources:
+    - https://github.com/wistefan/odrl-pap
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/odrl-pap-2.7.0/odrl-pap-2.7.0.tgz
+    version: 2.7.0
+  - apiVersion: v1
     appVersion: 1.1.2
     created: "2026-01-23T10:06:33.623324938Z"
     description: A Helm chart for running the odrl-pap on kubernetes.
@@ -8667,6 +8688,27 @@ entries:
     version: 0.0.1
   trusted-issuers-list:
   - apiVersion: v1
+    appVersion: 0.7.0
+    created: "2026-02-03T10:37:09.528113502Z"
+    description: A Helm chart for running the trusted-issuers-list on kubernetes.
+    digest: b01e9fad371231cbf5cd125bb7dbddbd494dcbcb1ea927bb46dc61e15ee3f322
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - trusted-issuers-list
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: trusted-issuers-list
+    sources:
+    - https://github.com/fiware/trusted-issuers-list
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-list-0.15.0/trusted-issuers-list-0.15.0.tgz
+    version: 0.15.0
+  - apiVersion: v1
     appVersion: 0.6.0
     created: "2026-01-23T10:06:34.212640776Z"
     description: A Helm chart for running the trusted-issuers-list on kubernetes.
@@ -9256,6 +9298,27 @@ entries:
     version: 0.0.1
   trusted-issuers-registry:
   - apiVersion: v1
+    appVersion: 0.7.0
+    created: "2026-02-03T10:37:09.745716142Z"
+    description: A Helm chart for running the trusted-issuers-registry on kubernetes.
+    digest: 0d74bf1838bc5a597b377588ba87f0b36b7750ebdac902508affbbe8a572415f
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - trusted-issuers-registry
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: tim.smyth@fiware.org
+      name: pulledtim
+    name: trusted-issuers-registry
+    sources:
+    - https://github.com/fiware/trusted-issuers-registry
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-registry-0.11.0/trusted-issuers-registry-0.11.0.tgz
+    version: 0.11.0
+  - apiVersion: v1
     appVersion: 0.6.0
     created: "2026-01-23T10:06:34.426569059Z"
     description: A Helm chart for running the trusted-issuers-registry on kubernetes.
@@ -9508,6 +9571,24 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-registry-0.0.1/trusted-issuers-registry-0.0.1.tgz
     version: 0.0.1
   vcverifier:
+  - apiVersion: v1
+    appVersion: 6.3.5
+    created: "2026-02-03T10:37:09.964300049Z"
+    description: A Helm chart for running the FIWARE VCVerifier.
+    digest: 01ad6ce6bdb7b360ab16433886a673417e3bc337bf07fa43085ec1100a4bf043
+    home: https://github.com/fiware/vcverifier
+    keywords:
+    - FIWARE Data Space Connector
+    - FIWARE
+    - Verifiable Credentials
+    - OID4VP
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: vcverifier
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-4.7.0/vcverifier-4.7.0.tgz
+    version: 4.7.0
   - apiVersion: v1
     appVersion: 6.1.1
     created: "2026-02-03T08:01:40.07048064Z"
@@ -9904,4 +9985,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-02-03T08:01:40.071220426Z"
+generated: "2026-02-03T10:37:09.965518521Z"
