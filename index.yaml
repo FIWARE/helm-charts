@@ -6305,6 +6305,25 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/odrl-pap-0.0.3/odrl-pap-0.0.3.tgz
     version: 0.0.3
+  onboarding-portal:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2026-02-03T08:01:39.878742018Z"
+    description: A Helm chart for the OnBoarding Portal
+    digest: 39f810e004dcbee39d74098c3238cf9e336076afae1d1bf577eb9072ecda7b8f
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - onboarding
+    - FIWARE
+    - Data Space Connector
+    maintainers:
+    - email: miguel.ortega@seamware.com
+      name: Miguel Ortega
+    name: onboarding-portal
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/onboarding-portal-1.2.0/onboarding-portal-1.2.0.tgz
+    version: 1.2.0
   orion:
   - annotations:
       charts.openshift.io/name: orion-ld
@@ -9491,6 +9510,24 @@ entries:
   vcverifier:
   - apiVersion: v1
     appVersion: 6.1.1
+    created: "2026-02-03T08:01:40.07048064Z"
+    description: A Helm chart for running the FIWARE VCVerifier.
+    digest: 889971de725307c24d416ff8f15419058a883e81dbfb1727b2bc06c20eb6a356
+    home: https://github.com/fiware/vcverifier
+    keywords:
+    - FIWARE Data Space Connector
+    - FIWARE
+    - Verifiable Credentials
+    - OID4VP
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: vcverifier
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-4.4.0/vcverifier-4.4.0.tgz
+    version: 4.4.0
+  - apiVersion: v1
+    appVersion: 6.1.1
     created: "2026-01-23T13:58:17.782953462Z"
     description: A Helm chart for running the FIWARE VCVerifier.
     digest: a2e7b0e366e37f251f48a67e36a6f5e459cb9e80906a702fc63d4a3460116120
@@ -9867,4 +9904,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-01-23T13:58:17.784101699Z"
+generated: "2026-02-03T08:01:40.071220426Z"
