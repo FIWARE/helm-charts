@@ -1,0 +1,14 @@
+apiVersion: v2
+name: onboarding-portal
+version: 1.2.0
+appVersion: 0.0.1
+type: application
+description: A Helm chart for the OnBoarding Portal
+icon: https://fiware.github.io/catalogue/img/fiware.png
+maintainers:
+  - name: "Miguel Ortega"
+    email: "miguel.ortega@seamware.com"
+keywords:
+  - onboarding
+  - FIWARE
+  - Data Space Connector
