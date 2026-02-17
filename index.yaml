@@ -2278,6 +2278,27 @@ entries:
     version: 0.0.1
   contract-management:
   - apiVersion: v1
+    appVersion: 3.3.3
+    created: "2026-02-17T13:37:23.314020837Z"
+    description: A Helm chart for running the contract-management on kubernetes.
+    digest: 351b42875229e6cfd2d547ddea1ff86e0335e49dc9e87f1a2c54dbbe26af2a31
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - contract-management
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: tim.smyth@fiware.org
+      name: pulledtim
+    name: contract-management
+    sources:
+    - https://github.com/fiware/contract-management
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/contract-management-3.5.13/contract-management-3.5.13.tgz
+    version: 3.5.13
+  - apiVersion: v1
     appVersion: 3.0.0
     created: "2026-01-23T10:06:31.56625268Z"
     description: A Helm chart for running the contract-management on kubernetes.
@@ -3308,6 +3329,16 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/credentials-config-service-0.0.1/credentials-config-service-0.0.1.tgz
     version: 0.0.1
   did-helper:
+  - apiVersion: v2
+    appVersion: 0.4.5
+    created: "2026-02-17T13:37:23.523547977Z"
+    description: A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
+    digest: ce75e26120947131fc42412884ef126f09e153026afe73868a3d8efa88ddda05
+    name: did-helper
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/did-helper-0.1.13/did-helper-0.1.13.tgz
+    version: 0.1.13
   - apiVersion: v2
     appVersion: 0.4.3
     created: "2026-01-12T14:21:11.882647824Z"
@@ -7541,6 +7572,33 @@ entries:
   - annotations:
       charts.openshift.io/name: tm-forum-api
     apiVersion: v2
+    appVersion: 1.4.3
+    created: "2026-02-17T13:37:23.736854176Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 18.1.2
+    description: A Helm chart for running the FIWARE TMForum-APIs
+    digest: fef57fba84e48bacebea4e46fcc2ec749f793514959b5f28e88611ce12a9dc16
+    home: https://github.com/FIWARE/tmforum-api
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - tmforum
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: tm-forum-api
+    sources:
+    - https://github.com/FIWARE/tmforum-api
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/tm-forum-api-0.15.5/tm-forum-api-0.15.5.tgz
+    version: 0.15.5
+  - annotations:
+      charts.openshift.io/name: tm-forum-api
+    apiVersion: v2
     appVersion: 0.13.2
     created: "2026-01-23T10:06:34.024448163Z"
     dependencies:
@@ -10027,4 +10085,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-02-03T10:54:19.541176805Z"
+generated: "2026-02-17T13:37:23.737733852Z"
