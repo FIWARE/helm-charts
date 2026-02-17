@@ -1,6 +1,6 @@
 # contract-management
 
-![Version: 3.5.12](https://img.shields.io/badge/Version-3.5.12-informational?style=flat-square) ![AppVersion: 3.0.0](https://img.shields.io/badge/AppVersion-3.0.0-informational?style=flat-square)
+![Version: 3.5.13](https://img.shields.io/badge/Version-3.5.13-informational?style=flat-square) ![AppVersion: 3.3.3](https://img.shields.io/badge/AppVersion-3.3.3-informational?style=flat-square)
 
 A Helm chart for running the contract-management on kubernetes.
 
@@ -31,7 +31,7 @@ A Helm chart for running the contract-management on kubernetes.
 | deployment.healthPort | int | `9090` | port to request health information at |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/contract-management"` | til image name ref: https://quay.io/repository/fiware/contract-management |
-| deployment.image.tag | string | `"3.3.0"` | tag of the image to be used |
+| deployment.image.tag | string | `""` | overrides the image tag whose default is the chart appVersion |
 | deployment.livenessProbe.failureThreshold | int | `3` |  |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
