@@ -81,7 +81,7 @@ spec:
           {{- if .repository }}
           image: "{{ .repository }}/{{ .image }}:{{ .tag }}"
           {{- else }}
-          image: "{{ $.Values.defaultConfig.image.repository }}/{{ .image }}:{{ $.Values.defaultConfig.image.tag }}"
+          image: "{{ $.Values.defaultConfig.image.repository }}/{{ .image }}:{{ $.Values.defaultConfig.image.tag | default $.Chart.AppVersion }}"
           {{- end }}
           ports:
             - name: http
