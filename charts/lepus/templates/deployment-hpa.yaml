@@ -1,0 +1,20 @@
+{{- if .Values.autoscaling.enabled -}}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "lepus.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{ include "lepus.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "lepus.fullname" . }}
+  minReplicas: {{ .Values.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+{{- with .Values.autoscaling.metrics }}
+  metrics: 
+    {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- end }}
