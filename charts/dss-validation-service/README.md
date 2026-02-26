@@ -1,6 +1,6 @@
 # dss-validation-service
 
-![Version: 0.0.18](https://img.shields.io/badge/Version-0.0.18-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.0.19](https://img.shields.io/badge/Version-0.0.19-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 A Helm chart for running the dss-validation-service on kubernetes.
 
@@ -28,7 +28,7 @@ A Helm chart for running the dss-validation-service on kubernetes.
 | deployment.command | list | `[]` | command to be used for starting the container |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/wi_stefan/dss-validation-service"` | dss image name ref: https://quay.io/wi_stefan/dss-validation-service |
-| deployment.image.tag | string | `"0.0.1"` | tag of the image to be used |
+| deployment.image.tag | string | `""` | overrides the image tag whose default is the chart appVersion |
 | deployment.livenessProbe.failureThreshold | int | `3` |  |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
