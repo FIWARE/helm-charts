@@ -1,4 +1,4 @@
-# Default values for vcverifier. 
+# Default values for vcverifier.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -40,7 +40,7 @@ deployment:
   # -- port to run the container at
   port: 3000
   # -- configuration for server
-  server: 
+  server:
     # -- host of the verifier
     host: my-verifier.org
     # -- directory to be used for static content, f.e. images referenced from the templates
@@ -58,7 +58,7 @@ deployment:
     # -- should requests be logged
     logRequests: true
     # -- list of paths to be excluded from the request logging
-    pathsToSkip: 
+    pathsToSkip:
       - /metrics
       - /health
   # -- m2m related config
@@ -94,7 +94,7 @@ deployment:
     # * `baseContext`: validates that only the fields and values (when applicable)are present in the document. No extra fields are allowed (outside of credentialSubject).
     # Default is set to `none` to ensure backwards compatibility
     validationMode: none
-  
+  else: {}
   # -- config repo configuration
   configRepo:
     configEndpoint: http://credentials-config:8080/
@@ -151,7 +151,7 @@ route:
   # -- host to be used
   # host: localhost
   # -- tls configuration for the route
-  tls: 
+  tls:
     termination: edge
   # -- configuration for certificate generation.
   # -- see: https://github.com/FIWARE-Ops/fiware-gitops/blob/master/doc/ROUTES.md
@@ -183,17 +183,17 @@ ingress:
         # - vcverifier.fiware.org
 
 # -- if the style of the login-page should be altered, templates can be provided here.
-templates: 
+templates:
   # for example:
   # verifier_present_qr.html:
   #   <!doctype html>
   #   <html>
   #      <head> My Custom Template </head>
-  #   <body> 
+  #   <body>
   #   <main>
   #         <h3>Scan the qr to login</h3>
   #         <img src="data:{{.qrcode}}" alt="The qr should be here.">
   #   </main>
 
-static: 
+static:
   enabled: false

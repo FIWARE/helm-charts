@@ -1,6 +1,6 @@
 # vcverifier
 
-![Version: 4.7.1](https://img.shields.io/badge/Version-4.7.1-informational?style=flat-square) ![AppVersion: 6.3.7](https://img.shields.io/badge/AppVersion-6.3.7-informational?style=flat-square)
+![Version: 4.7.3](https://img.shields.io/badge/Version-4.7.3-informational?style=flat-square) ![AppVersion: 6.4.1](https://img.shields.io/badge/AppVersion-6.4.1-informational?style=flat-square)
 
 A Helm chart for running the FIWARE VCVerifier.
 
@@ -20,6 +20,7 @@ A Helm chart for running the FIWARE VCVerifier.
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | deployment.configRepo | object | `{"configEndpoint":"http://credentials-config:8080/"}` | config repo configuration |
+| deployment.else | object | `{}` |  |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/vcverifier"` | image name |
 | deployment.image.tag | string | `""` | tag of the image to be used |
