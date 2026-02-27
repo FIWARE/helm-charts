@@ -16,7 +16,7 @@ data:
       {{- with .Values.deployment.m2m }}
       {{- toYaml . | nindent 6 }}
       {{- end }}
-      
+
     logging:
       {{- with .Values.deployment.logging }}
       {{- toYaml . | nindent 6 }}
@@ -26,7 +26,7 @@ data:
       {{- with .Values.deployment.verifier }}
       {{- toYaml . | nindent 6 }}
       {{- end }}
-    
+
     configRepo:
       {{- with .Values.deployment.configRepo }}
       {{- toYaml . | nindent 6 }}
@@ -36,4 +36,3 @@ data:
       {{- with .Values.deployment.elsi }}
       {{- toYaml . | nindent 6 }}
       {{- end }}
-    
