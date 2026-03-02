@@ -47,8 +47,8 @@ deployment:
     # -- dss image name
     # ref: https://quay.io/wi_stefan/dss-validation-service
     repository: quay.io/wi_stefan/dss-validation-service
-    # -- tag of the image to be used
-    tag: 0.0.1
+    # -- overrides the image tag whose default is the chart appVersion
+    tag: ""
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
