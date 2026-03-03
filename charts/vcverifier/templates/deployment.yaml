@@ -4,7 +4,7 @@ metadata:
   name: {{ include "vcverifier.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{ include "vcverifier.labels" . | nindent 4 }}
+    {{- include "vcverifier.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.deployment.replicaCount }}
   revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       labels:
-        {{ include "vcverifier.labels" . | nindent 8 }}
+        {{- include "vcverifier.labels" . | nindent 8 }}
         {{- with .Values.deployment.additionalLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -29,7 +29,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- end }}
-    spec: 
+    spec:
       serviceAccountName: {{ include "vcverifier.serviceAccountName" . }}
       {{- if .Values.deployment.hostAliases }}
       hostAliases:
@@ -39,6 +39,19 @@ spec:
       {{- end }}
       {{- if .Values.deployment.initContainers }}
       initContainers:
+        {{- if .Values.deployment.serverCertificates.caCert.enabled}}
+        {{- with .Values.deployment.serverCertificates.caCert }}
+        - name: add-root-ca
+          image: {{ .bundleImage.repository }}:{{ .bundleImage.tag }}
+          command: ["sh", "-c", "cat {{.bundleImage.bundlePath }} /tmp/ca.crt > /root-ca/cert.pem"]
+          volumeMounts:
+            - name: ca-bundle
+              mountPath: /root-ca
+            - name: custom-ca-volume
+              mountPath: /tmp/ca.crt
+              subPath: {{ .key }}
+        {{- end }}
+        {{- end }}
         {{- with .Values.deployment.initContainers }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -87,6 +100,26 @@ spec:
           volumeMounts:
             - mountPath: /configs/
               name: config-volume
+            {{- if and .Values.deployment.serverCertificates.signingKey.secretName .Values.deployment.verifier.keyPath }}
+            - mountPath: {{ .Values.deployment.verifier.keyPath }}
+              name: signing-certs-volume
+              subPath: {{ .Values.deployment.serverCertificates.signingKey.key }}
+            {{- end }}
+            {{- if and .Values.deployment.serverCertificates.clientKey.secretName }}
+            {{- if .Values.deployment.verifier.clientIdentification.keyPath }}
+            - mountPath: {{ .Values.deployment.verifier.clientIdentification.keyPath }}
+              name: certs-volume
+              subPath: {{ .Values.deployment.serverCertificates.clientKey.privateKey }}
+            {{- end }}
+            {{- if .Values.deployment.verifier.clientIdentification.certificatePath }}
+            - mountPath: {{ .Values.deployment.verifier.clientIdentification.certificatePath }}
+              name: certs-volume
+              subPath: {{ .Values.deployment.serverCertificates.clientKey.publicKey }}
+            - name: ca-bundle
+              mountPath: /etc/ssl/cert.pem
+              subPath: cert.pem
+            {{- end }}
+            {{- end }}
             {{- if .Values.templates }}
             - mountPath: /templates/
               name: template-volume
@@ -104,6 +137,23 @@ spec:
       - name: config-volume
         configMap:
           name: {{ include "vcverifier.fullname" . }}
+      {{- if .Values.deployment.serverCertificates.caCert.enabled }}
+      - name: custom-ca-volume
+        secret:
+          secretName: {{ .Values.deployment.serverCertificates.caCert.secretName }}
+      - name: ca-bundle
+        emptyDir: {}
+      {{- end }}
+      {{- if .Values.deployment.serverCertificates.signingKey.secretName  }}
+      - name: signing-certs-volume
+        secret:
+          secretName: {{ .Values.deployment.serverCertificates.signingKey.secretName }}
+      {{- end }}
+      {{- if .Values.deployment.serverCertificates.clientKey.secretName  }}
+      - name: certs-volume
+        secret:
+          secretName: {{ .Values.deployment.serverCertificates.clientKey.secretName }}
+      {{- end }}
       {{- if .Values.deployment.additionalVolumes }}
       {{- with .Values.deployment.additionalVolumes }}
       {{- toYaml . | nindent 6 }}
