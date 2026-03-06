@@ -4469,6 +4469,26 @@ entries:
   fdsc-edc:
   - apiVersion: v1
     appVersion: 0.0.2
+    created: "2026-03-06T09:58:17.169067593Z"
+    description: A Helm chart for running the fdsc-edc on kubernetes.
+    digest: 1366d1b06517eb9c20ef943335b58e97f0d37a60b086c35855c0f03ea76e4397
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - data-space-connector
+    - dataspace
+    - dataspace-protocol
+    maintainers:
+    - email: stefan.wiedemann@seamware.org
+      name: wistefan
+    name: fdsc-edc
+    sources:
+    - https://github.com/SEAMWARE/fdsc-edc
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/fdsc-edc-0.0.12/fdsc-edc-0.0.12.tgz
+    version: 0.0.12
+  - apiVersion: v1
+    appVersion: 0.0.2
     created: "2026-03-06T09:41:15.713248866Z"
     description: A Helm chart for running the fdsc-edc on kubernetes.
     digest: eb814b926c76fc83fe8fc3995eb2c34ad961cc9099c2a20a32dc86d9b96f33c6
@@ -10266,4 +10286,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-03-06T09:41:15.713907849Z"
+generated: "2026-03-06T09:58:17.170471583Z"
