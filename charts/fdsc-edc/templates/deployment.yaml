@@ -90,7 +90,7 @@ spec:
             periodSeconds: {{ $cfg.deployment.livenessProbe.periodSeconds }}
             successThreshold: {{ $cfg.deployment.livenessProbe.successThreshold }}
             timeoutSeconds: {{ $cfg.deployment.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
+            failureThreshold: {{ $cfg.deployment.livenessProbe.failureThreshold }}
 
           readinessProbe:
             httpGet:
@@ -100,7 +100,7 @@ spec:
             periodSeconds: {{ $cfg.deployment.readinessProbe.periodSeconds }}
             successThreshold: {{ $cfg.deployment.readinessProbe.successThreshold }}
             timeoutSeconds: {{ $cfg.deployment.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+            failureThreshold: {{ $cfg.deployment.readinessProbe.failureThreshold }}
 
           env:
             - name: EDC_FS_CONFIG
