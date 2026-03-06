@@ -4466,6 +4466,27 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/endpoint-auth-service-0.0.1/endpoint-auth-service-0.0.1.tgz
     version: 0.0.1
+  fdsc-edc:
+  - apiVersion: v1
+    appVersion: 0.0.2
+    created: "2026-03-06T09:06:49.723227253Z"
+    description: A Helm chart for running the fdsc-edc on kubernetes.
+    digest: 2e3ba389013ec8b42a21b95720c43d598e7072705de78b06be16489d30c0fea8
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - data-space-connector
+    - dataspace
+    - dataspace-protocol
+    maintainers:
+    - email: stefan.wiedemann@seamware.org
+      name: wistefan
+    name: fdsc-edc
+    sources:
+    - https://github.com/SEAMWARE/fdsc-edc
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/fdsc-edc-0.0.10/fdsc-edc-0.0.10.tgz
+    version: 0.0.10
   iotagent-json:
   - apiVersion: v1
     appVersion: 1.14.0
@@ -10225,4 +10246,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-03-05T15:38:13.4410331Z"
+generated: "2026-03-06T09:06:49.724018859Z"
