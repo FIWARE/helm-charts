@@ -1,3 +1,4 @@
+{{- $fullName := include "fdsc-edc.fullname" . -}}
 {{- range $name, $deployment := .Values.deployment }}
 {{- $cfg := mergeOverwrite (deepCopy $.Values.common) $deployment }}
 
@@ -5,11 +6,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "fdsc-edc.fullname" . }}-{{ $name }}
+  name: {{ $fullName }}-{{ $name }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    app.kubernetes.io/name: {{ include "fdsc-edc.fullname" . }}-{{ $name }}
-    app.kubernetes.io/component: {{ include "fdsc-edc.fullname" . }}-{{ $name }}
+    app.kubernetes.io/name: {{ $fullName }}-{{ $name }}
+    app.kubernetes.io/component: {{ $fullName }}-{{ $name }}
     app.kubernetes.io/instance: {{ $.Release.Name }}
 
 data:
