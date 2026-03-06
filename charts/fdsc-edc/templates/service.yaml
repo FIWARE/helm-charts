@@ -63,4 +63,3 @@ spec:
       app.kubernetes.io/component: {{ include "fdsc-edc.fullname" . }}-{{ $name }}
 
 {{- end }}
-{{- end }}
