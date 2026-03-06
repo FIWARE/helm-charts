@@ -50,7 +50,7 @@ spec:
       {{- end }}
       containers:
         - name: dsp-controlplane
-          image: "{{ $cfg.deployment.image.repository }}:{{ $cfg.deployment.image.tag }}"
+          image: "{{ $cfg.deployment.image.repository }}:{{ $cfg.deployment.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ $cfg.deployment.image.pullPolicy }}
 
           {{- with $cfg.deployment.command }}

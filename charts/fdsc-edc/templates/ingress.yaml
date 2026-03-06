@@ -18,6 +18,9 @@ metadata:
       {{- end }}
   {{- end }}
 spec:
+  {{- if $cfg.ingress.className }}
+  ingressClassName: {{ $cfg.ingress.className }}
+  {{- end }}
   {{- if $cfg.ingress.tls }}
   tls:
     {{- range $cfg.ingress.tls }}
