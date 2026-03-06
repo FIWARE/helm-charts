@@ -168,7 +168,7 @@ common:
       # -- client id to be used
       clientId:
       # -- alias of the secret used to access the token service
-      secretAlias
+      secretAlias:
     # -- configuration for the OID4VP extension
     oid4vp:
       # -- should the extension be enabled
