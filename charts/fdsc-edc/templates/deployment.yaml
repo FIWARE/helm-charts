@@ -1,4 +1,5 @@
 {{- $fullName := include "fdsc-edc.fullname" . -}}
+{{- $serviceAccount := include "fdsc-edc.serviceAccountName" . }}
 {{- range $name, $deployment := .Values.deployment }}
 {{- $cfg := mergeOverwrite (deepCopy $.Values.common) $deployment }}
 
@@ -38,7 +39,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      serviceAccountName: {{ include "apollo.serviceAccountName" . }}
+      serviceAccountName: {{ $serviceAccount }}
       {{- with $cfg.imagePullSecrets }}
       imagePullSecrets:
         {{- range . }}
