@@ -1,4 +1,5 @@
 {{- $fullName := include "fdsc-edc.fullname" . -}}
+{{- $appVersion := .Chart.AppVersion }}
 {{- $serviceAccount := include "fdsc-edc.serviceAccountName" . }}
 {{- range $name, $deployment := .Values.deployment }}
 {{- $cfg := mergeOverwrite (deepCopy $.Values.common) $deployment }}
@@ -52,7 +53,7 @@ spec:
       {{- end }}
       containers:
         - name: dsp-controlplane
-          image: "{{ $cfg.deployment.image.repository }}:{{ $cfg.deployment.image.tag | default .Chart.AppVersion }}"
+          image: "{{ $cfg.deployment.image.repository }}:{{ $cfg.deployment.image.tag | default $appVersion }}"
           imagePullPolicy: {{ $cfg.deployment.image.pullPolicy }}
 
           {{- with $cfg.deployment.command }}
