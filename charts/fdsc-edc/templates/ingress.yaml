@@ -3,11 +3,11 @@
 {{- if (eq  $cfg.ingress.enabled true) -}}
 ---
 {{- $servicePort := $cfg.service.port -}}
-{{- $fullname := include "fdsc-edc.fullname" . -}}
+{{- $fullName := include "fdsc-edc.fullname" . -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "fdsc-edc.fullname" . }}-{{ $name }}
+  name: {{ $fullName }}-{{ $name }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{ include "fdsc-edc.labels" . | nindent 4 }}
