@@ -1,7 +1,7 @@
 {{- $fullName := include "fdsc-edc.fullname" . -}}
 {{- range $name, $deployment := .Values.deployment }}
 {{- $cfg := mergeOverwrite (deepCopy $.Values.common) $deployment }}
-{{- if (eq  $cfg.ingress.enabled true) -}}
+{{- if $cfg.ingress.enabled -}}
 ---
 {{- $servicePort := $cfg.service.port -}}
 apiVersion: networking.k8s.io/v1

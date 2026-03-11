@@ -109,9 +109,9 @@ common:
     additionalAnnotations: { }
     
     # -- additional volume
-    additionalVolumeMounts: {}
+    additionalVolumeMounts: []
     # -- additional volumes to be added for the containers
-    additionalVolumes: {}
+    additionalVolumes: []
     ## cp resource requests and limits, we leave the default empty to make that a concious choice by the user.
     ## for the autoscaling to make sense, you should configure this.
     # resources:
