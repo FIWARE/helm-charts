@@ -111,4 +111,8 @@ data:
     edc.vault.hashicorp.api.health.check.path={{ $cfg.config.vault.hashicorp.paths.health }}
     {{- end }}
 
+    {{- if $cfg.config.additionalProperties }}
+    {{ $cfg.config.additionalProperties }}
+    {{- end }}
+
 {{- end }}
