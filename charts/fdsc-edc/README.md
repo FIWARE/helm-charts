@@ -1,6 +1,6 @@
 # fdsc-edc
 
-![Version: 0.0.9](https://img.shields.io/badge/Version-0.0.9-informational?style=flat-square) ![AppVersion: 0.0.2](https://img.shields.io/badge/AppVersion-0.0.2-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![AppVersion: 0.0.2](https://img.shields.io/badge/AppVersion-0.0.2-informational?style=flat-square)
 
 A Helm chart for running the fdsc-edc on kubernetes.
 
@@ -111,8 +111,8 @@ A Helm chart for running the fdsc-edc on kubernetes.
 | common.config.web.http.version.port | int | `8084` |  |
 | common.deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | common.deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
-| common.deployment.additionalVolumeMounts | object | `{}` | additional volume |
-| common.deployment.additionalVolumes | object | `{}` | additional volumes to be added for the containers |
+| common.deployment.additionalVolumeMounts | list | `[]` | additional volume |
+| common.deployment.additionalVolumes | list | `[]` | additional volumes to be added for the containers |
 | common.deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | common.deployment.args | list | `[]` | arguments to be set for the container |
 | common.deployment.command | list | `[]` | command to be used for starting the container |
