@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.15.5](https://img.shields.io/badge/Version-0.15.5-informational?style=flat-square) ![AppVersion: 1.4.3](https://img.shields.io/badge/AppVersion-1.4.3-informational?style=flat-square)
+![Version: 0.16.0](https://img.shields.io/badge/Version-0.16.0-informational?style=flat-square) ![AppVersion: 1.4.3](https://img.shields.io/badge/AppVersion-1.4.3-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -67,6 +67,10 @@ For all untouched values, the customized deployement will still use the defaults
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| allInOne.enabled | bool | `false` |  |
+| allInOne.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used |
+| allInOne.image.repository | string | `"quay.io/fiware/tmforum-all-in-one"` | repository to get the container from |
+| allInOne.image.tag | string | `""` | overrides the image tag whose default is the chart appVersion |
 | apiProxy.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | apiProxy.additionalLabels | object | `{}` |  |
 | apiProxy.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
@@ -136,8 +140,9 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.readinessProbe.successThreshold | int | `1` |  |
 | defaultConfig.readinessProbe.timeoutSeconds | int | `30` |  |
 | defaultConfig.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
+| defaultConfig.resources | object | `{}` | tmforum resource requests and limits, we leave the default empty to make that a concious choice by the user. for the autoscaling to make sense, you should configure this. |
 | defaultConfig.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
-| defaultConfig.serverHost | string | `"http://tmf-api:8080"` | host that the tm-forum api can be reached at |
+| defaultConfig.serverHost | string | `"http://tm-forum-api-svc:8080"` | host that the tm-forum api can be reached at |
 | defaultConfig.sidecars | list | `[]` | additional sidecars for the deployment, if required |
 | defaultConfig.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | defaultConfig.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
