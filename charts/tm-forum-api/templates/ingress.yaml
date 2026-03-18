@@ -1,5 +1,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- $servicePort := .Values.service.port -}}
+{{- $allInOneEnabled := .Values.allInOne.enabled -}}
+{{- $serverHost := $.Values.defaultConfig.serverHost -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -32,6 +34,21 @@ spec:
   - host: {{ .host | quote }}
     http:
       paths:
+      {{- if $allInOneEnabled }}
+      {{- range .paths }}
+      - path: {{ . }}
+        pathType: Prefix
+        backend:
+          service:
+            {{- if contains "tm-forum-api-svc" $serverHost }}
+            name: tm-forum-api-svc
+            {{- else }}
+            name: {{ include "tmforum.fullname" $ }}-svc
+            {{- end }}
+            port:
+              number: {{ $servicePort }}
+      {{- end }}
+      {{- else }}
       {{- range $.Values.apis }}
       - path: {{ .basePath }}
         pathType: Prefix
@@ -40,6 +57,7 @@ spec:
             name: {{ include "tmforum.fullname" $ }}-{{ .name }}
             port:
               number: {{ $servicePort }}
+      {{- end }}
       {{- end }}
   {{- end }}
 {{- end }}
