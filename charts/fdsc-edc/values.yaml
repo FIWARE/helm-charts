@@ -97,7 +97,7 @@ common:
       # -- image name
       repository: quay.io/seamware/fdsc-edc-controlplane-oid4vc
       # -- tag of the image to be used
-      tag: 0.0.2
+      # tag: 0.0.2
       # -- specification of the image pull policy
       pullPolicy: Always
     # -- secrets for pulling images from a private repository
