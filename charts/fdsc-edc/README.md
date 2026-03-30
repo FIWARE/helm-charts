@@ -1,6 +1,6 @@
 # fdsc-edc
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![AppVersion: 0.0.2](https://img.shields.io/badge/AppVersion-0.0.2-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![AppVersion: 0.1.4](https://img.shields.io/badge/AppVersion-0.1.4-informational?style=flat-square)
 
 A Helm chart for running the fdsc-edc on kubernetes.
 
@@ -118,7 +118,6 @@ A Helm chart for running the fdsc-edc on kubernetes.
 | common.deployment.command | list | `[]` | command to be used for starting the container |
 | common.deployment.image.pullPolicy | string | `"Always"` | specification of the image pull policy |
 | common.deployment.image.repository | string | `"quay.io/seamware/fdsc-edc-controlplane-oid4vc"` | image name |
-| common.deployment.image.tag | string | `"0.0.2"` | tag of the image to be used |
 | common.deployment.imagePullSecrets | list | `[]` | secrets for pulling images from a private repository ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | common.deployment.livenessProbe.failureThreshold | int | `3` |  |
 | common.deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
