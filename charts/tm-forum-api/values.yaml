@@ -334,6 +334,18 @@ apis:
     image: tmforum-quote
     basePath: /tmf-api/quote/v4
 
+  - name: resource-order-management
+    image: tmforum-resource-order-management
+    basePath: /tmf-api/resourceOrderingManagement/v4
+
+  - name: service-ordering-management
+    image: tmforum-service-order-management
+    basePath: /tmf-api/serviceOrdering/v4
+
+  - name: software-management
+    image: tmforum-software-management
+    basePath: /tmf-api/softwareCompute/v4
+
 ## deploy all the apis in a single container. Use all defaultConfig properties
 allInOne:
   enabled: false
