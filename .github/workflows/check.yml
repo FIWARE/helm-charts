@@ -94,56 +94,36 @@ jobs:
       - name: Install yq
         run: |
           go install github.com/mikefarah/yq/v4@latest
-          yq --version
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Update versions
+      - name: Collect changed charts
+        id: charts
         shell: bash
         run: |
           declare -A changedCharts
-
           for file in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}; do
-
-              echo "$file was changed"
-              baseFolder=$(cut -d'/' -f1 <<< "$file")
-              if [ $baseFolder = "charts" ]; then
-                  chartName=$(cut -d'/' -f2 <<< "$file")
-                  changedCharts[$chartName]=$chartName
-              fi
+            baseFolder=$(cut -d'/' -f1 <<< "$file")
+            if [ "$baseFolder" = "charts" ]; then
+              chartName=$(cut -d'/' -f2 <<< "$file")
+              changedCharts[$chartName]=$chartName
+            fi
           done
-
+          CHARTS=""
           for c in "${changedCharts[@]}"; do
-              # get version from chart yaml
-              version=$(yq e '.version' "charts/$c/Chart.yaml")
-              major=$(cut -d'.' -f1 <<< "$version")
-              minor=$(cut -d'.' -f2 <<< "$version")
-              patch=$(cut -d'.' -f3 <<< "$version")
-
-              prType=${{ steps.bump.outputs.match }}
-              echo Update version $version with type $prType
-              if [ $prType = "major" ]; then
-                  echo Update major
-                  major=$((major+1))
-                  minor=0
-                  patch=0
-              elif [ $prType = "minor" ]; then
-                  echo Update minor
-                  minor=$((minor+1))
-                  patch=0
-              elif [ $prType = "patch" ]; then
-                  echo Update patch
-                  patch=$((patch+1))
-              fi
-              echo Update version to $major.$minor.$patch for $c
-              yq e -i '.version = "'$major.$minor.$patch'"' charts/$c/Chart.yaml
+            CHARTS="$CHARTS $c"
           done
+          echo "list=${CHARTS# }" >> $GITHUB_OUTPUT
 
-      - name: generate docs
-        run:
-          docker run --rm --volume "$(pwd):/helm-docs" -u $(id -u) jnorwood/helm-docs:latest
+      - name: Bump chart versions
+        if: steps.charts.outputs.list != ''
+        uses: ./.github/actions/bump-chart-version
+        with:
+          charts: ${{ steps.charts.outputs.list }}
+          bump-type: ${{ steps.bump.outputs.match }}
 
       - name: Commit files
         continue-on-error: true

@@ -1,0 +1,42 @@
+name: Bump Chart Version
+description: >
+  Increments the version field of one or more Helm charts and regenerates helm docs.
+  Requires yq to be installed and available in PATH before calling this action.
+
+inputs:
+  charts:
+    description: Space-separated list of chart directory names under charts/
+    required: true
+  bump-type:
+    description: Version bump type — major, minor, or patch
+    required: true
+    default: patch
+
+runs:
+  using: composite
+  steps:
+    - name: Bump versions
+      shell: bash
+      run: |
+        for chart in ${{ inputs.charts }}; do
+          version=$(yq e '.version' "charts/$chart/Chart.yaml")
+          major=$(cut -d'.' -f1 <<< "$version")
+          minor=$(cut -d'.' -f2 <<< "$version")
+          patch=$(cut -d'.' -f3 <<< "$version")
+
+          if [ "${{ inputs.bump-type }}" = "major" ]; then
+            major=$((major+1)); minor=0; patch=0
+          elif [ "${{ inputs.bump-type }}" = "minor" ]; then
+            minor=$((minor+1)); patch=0
+          elif [ "${{ inputs.bump-type }}" = "patch" ]; then
+            patch=$((patch+1))
+          fi
+
+          new_version="$major.$minor.$patch"
+          yq e -i ".version = \"$new_version\"" "charts/$chart/Chart.yaml"
+          echo "Bumped $chart: $version -> $new_version"
+        done
+
+    - name: Generate helm docs
+      shell: bash
+      run: docker run --rm --volume "$(pwd):/helm-docs" -u $(id -u) jnorwood/helm-docs:latest
