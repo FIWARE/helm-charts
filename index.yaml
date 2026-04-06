@@ -3394,6 +3394,18 @@ entries:
   did-helper:
   - apiVersion: v2
     appVersion: 0.4.5
+    created: "2026-04-06T11:50:38.581734324Z"
+    description: A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
+    digest: 3e4b5fa51b2931a2fe22a9c6b35ae95e8cb7a71b07f40e47612c8e79a8a10d51
+    name: did-helper
+    sources:
+    - https://github.com/SEAMWARE/did-helper
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/did-helper-0.1.15/did-helper-0.1.15.tgz
+    version: 0.1.15
+  - apiVersion: v2
+    appVersion: 0.4.5
     created: "2026-02-17T13:37:23.523547977Z"
     description: A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
     digest: ce75e26120947131fc42412884ef126f09e153026afe73868a3d8efa88ddda05
@@ -6685,6 +6697,26 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/odrl-pap-0.0.3/odrl-pap-0.0.3.tgz
     version: 0.0.3
   onboarding-portal:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2026-04-06T11:50:38.698756506Z"
+    description: A Helm chart for the OnBoarding Portal
+    digest: 019938c49fabcf09426663a92f680187c82e36daad531f3604ff30588faabbbe
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - onboarding
+    - FIWARE
+    - Data Space Connector
+    maintainers:
+    - email: miguel.ortega@seamware.com
+      name: Miguel Ortega
+    name: onboarding-portal
+    sources:
+    - https://github.com/SEAMWARE/On-Boarding-Portal
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/onboarding-portal-1.2.2/onboarding-portal-1.2.2.tgz
+    version: 1.2.2
   - apiVersion: v2
     appVersion: 0.0.1
     created: "2026-02-03T08:01:39.878742018Z"
@@ -10162,6 +10194,26 @@ entries:
   vcverifier:
   - apiVersion: v1
     appVersion: 6.7.0
+    created: "2026-04-06T11:50:38.822401897Z"
+    description: A Helm chart for running the FIWARE VCVerifier.
+    digest: e1086b4a1f6713355fb1f17aa6d9540882d1fbcb09641afd17d52998cee39604
+    home: https://github.com/fiware/vcverifier
+    keywords:
+    - FIWARE Data Space Connector
+    - FIWARE
+    - Verifiable Credentials
+    - OID4VP
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: vcverifier
+    sources:
+    - https://github.com/fiware/vcverifier
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-4.7.6/vcverifier-4.7.6.tgz
+    version: 4.7.6
+  - apiVersion: v1
+    appVersion: 6.7.0
     created: "2026-03-13T11:44:23.90355306Z"
     description: A Helm chart for running the FIWARE VCVerifier.
     digest: 4c66a8bd08323e068384c2eb6f30a50075fc1dc5f358c2853b615f485aa81a14
@@ -10628,4 +10680,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-04-01T06:36:15.04777745Z"
+generated: "2026-04-06T11:50:38.823252811Z"
