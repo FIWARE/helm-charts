@@ -4,6 +4,8 @@ version: 4.7.4
 appVersion: 6.7.0
 home: https://github.com/fiware/vcverifier
 description: A Helm chart for running the FIWARE VCVerifier.
+sources:
+  - https://github.com/fiware/vcverifier
 keywords:
   - FIWARE Data Space Connector
   - FIWARE
