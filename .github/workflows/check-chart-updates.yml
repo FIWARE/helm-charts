@@ -129,7 +129,7 @@ jobs:
           | Previous | \`${{ steps.current.outputs.version }}\` |
           | New | \`${{ steps.latest.outputs.version }}\` |
 
-          Upstream release: https://github.com/${{ steps.upstream.outputs.repo }}/releases/tag/v${{ steps.latest.outputs.version }}
+          Upstream release: https://github.com/${{ steps.upstream.outputs.repo }}/releases/tag/${{ steps.latest.outputs.version }}
           EOF
           )" \
             --label "patch" \
