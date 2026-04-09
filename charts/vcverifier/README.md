@@ -1,6 +1,6 @@
 # vcverifier
 
-![Version: 4.7.11](https://img.shields.io/badge/Version-4.7.11-informational?style=flat-square) ![AppVersion: 6.10.2](https://img.shields.io/badge/AppVersion-6.10.2-informational?style=flat-square)
+![Version: 4.7.12](https://img.shields.io/badge/Version-4.7.12-informational?style=flat-square) ![AppVersion: 6.10.2](https://img.shields.io/badge/AppVersion-6.10.2-informational?style=flat-square)
 
 A Helm chart for running the FIWARE VCVerifier.
 
