@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.15.5](https://img.shields.io/badge/Version-0.15.5-informational?style=flat-square) ![AppVersion: 1.4.3](https://img.shields.io/badge/AppVersion-1.4.3-informational?style=flat-square)
+![Version: 0.16.10](https://img.shields.io/badge/Version-0.16.10-informational?style=flat-square) ![AppVersion: 1.10.1](https://img.shields.io/badge/AppVersion-1.10.1-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -67,6 +67,10 @@ For all untouched values, the customized deployement will still use the defaults
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| allInOne.enabled | bool | `false` |  |
+| allInOne.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used |
+| allInOne.image.repository | string | `"quay.io/fiware/tmforum-all-in-one"` | repository to get the container from |
+| allInOne.image.tag | string | `""` | overrides the image tag whose default is the chart appVersion |
 | apiProxy.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | apiProxy.additionalLabels | object | `{}` |  |
 | apiProxy.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
@@ -89,7 +93,7 @@ For all untouched values, the customized deployement will still use the defaults
 | apiProxy.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | apiProxy.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
 | apiProxy.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
-| apis | list | `[{"basePath":"/tmf-api/party/v4","image":"tmforum-party-catalog","name":"party-catalog"},{"basePath":"/tmf-api/customerBillManagement/v4","image":"tmforum-customer-bill-management","name":"customer-bill-management"},{"basePath":"/tmf-api/customerManagement/v4","image":"tmforum-customer-management","name":"customer-management"},{"basePath":"/tmf-api/productCatalogManagement/v4","image":"tmforum-product-catalog","name":"product-catalog"},{"basePath":"/tmf-api/productInventory/v4","image":"tmforum-product-inventory","name":"product-inventory"},{"basePath":"/tmf-api/productOrderingManagement/v4","image":"tmforum-product-ordering-management","name":"product-ordering-management"},{"basePath":"/tmf-api/resourceCatalog/v4","image":"tmforum-resource-catalog","name":"resource-catalog"},{"basePath":"/tmf-api/resourceFunctionActivation/v4","image":"tmforum-resource-function-activation","name":"resource-function-activation"},{"basePath":"/tmf-api/resourceInventoryManagement/v4","image":"tmforum-resource-inventory","name":"resource-inventory"},{"basePath":"/tmf-api/serviceCatalogManagement/v4","image":"tmforum-service-catalog","name":"service-catalog"},{"basePath":"/tmf-api/serviceInventory/v4","image":"tmforum-service-inventory","name":"service-inventory"},{"basePath":"/tmf-api/accountManagement/v4","image":"tmforum-account","name":"account-management"},{"basePath":"/tmf-api/agreementManagement/v4","image":"tmforum-agreement","name":"agreement-management"},{"basePath":"/tmf-api/partyRoleManagement/v4","image":"tmforum-party-role","name":"party-role"},{"basePath":"/tmf-api/usageManagement/v4","image":"tmforum-usage-management","name":"usage-management"},{"basePath":"/tmf-api/quote/v4","image":"tmforum-quote","name":"quote"}]` | be aware: when you change the image repositrory or the tag for an api, you have to provide both values for the changes to take effect |
+| apis | list | `[{"basePath":"/tmf-api/party/v4","image":"tmforum-party-catalog","name":"party-catalog"},{"basePath":"/tmf-api/customerBillManagement/v4","image":"tmforum-customer-bill-management","name":"customer-bill-management"},{"basePath":"/tmf-api/customerManagement/v4","image":"tmforum-customer-management","name":"customer-management"},{"basePath":"/tmf-api/productCatalogManagement/v4","image":"tmforum-product-catalog","name":"product-catalog"},{"basePath":"/tmf-api/productInventory/v4","image":"tmforum-product-inventory","name":"product-inventory"},{"basePath":"/tmf-api/productOrderingManagement/v4","image":"tmforum-product-ordering-management","name":"product-ordering-management"},{"basePath":"/tmf-api/resourceCatalog/v4","image":"tmforum-resource-catalog","name":"resource-catalog"},{"basePath":"/tmf-api/resourceFunctionActivation/v4","image":"tmforum-resource-function-activation","name":"resource-function-activation"},{"basePath":"/tmf-api/resourceInventoryManagement/v4","image":"tmforum-resource-inventory","name":"resource-inventory"},{"basePath":"/tmf-api/serviceCatalogManagement/v4","image":"tmforum-service-catalog","name":"service-catalog"},{"basePath":"/tmf-api/serviceInventory/v4","image":"tmforum-service-inventory","name":"service-inventory"},{"basePath":"/tmf-api/accountManagement/v4","image":"tmforum-account","name":"account-management"},{"basePath":"/tmf-api/agreementManagement/v4","image":"tmforum-agreement","name":"agreement-management"},{"basePath":"/tmf-api/partyRoleManagement/v4","image":"tmforum-party-role","name":"party-role"},{"basePath":"/tmf-api/usageManagement/v4","image":"tmforum-usage-management","name":"usage-management"},{"basePath":"/tmf-api/quote/v4","image":"tmforum-quote","name":"quote"},{"basePath":"/tmf-api/resourceOrderingManagement/v4","image":"tmforum-resource-order-management","name":"resource-order-management"},{"basePath":"/tmf-api/serviceOrdering/v4","image":"tmforum-service-order-management","name":"service-ordering-management"},{"basePath":"/tmf-api/softwareCompute/v4","image":"tmforum-software-management","name":"software-management"}]` | be aware: when you change the image repositrory or the tag for an api, you have to provide both values for the changes to take effect |
 | autoscaling.enabled | bool | `false` | should autoscaling be enabled for the context broker |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |
@@ -136,8 +140,9 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.readinessProbe.successThreshold | int | `1` |  |
 | defaultConfig.readinessProbe.timeoutSeconds | int | `30` |  |
 | defaultConfig.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
+| defaultConfig.resources | object | `{}` | tmforum resource requests and limits, we leave the default empty to make that a concious choice by the user. for the autoscaling to make sense, you should configure this. |
 | defaultConfig.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
-| defaultConfig.serverHost | string | `"http://tmf-api:8080"` | host that the tm-forum api can be reached at |
+| defaultConfig.serverHost | string | `"http://tm-forum-api-svc:8080"` | host that the tm-forum api can be reached at |
 | defaultConfig.sidecars | list | `[]` | additional sidecars for the deployment, if required |
 | defaultConfig.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | defaultConfig.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |

@@ -1,0 +1,138 @@
+name: Check Chart Updates
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+
+jobs:
+  check-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        chart:
+          - contract-management
+          - credentials-config-service
+          - did-helper
+          - dss-validation-service
+          - fdsc-edc
+          - odrl-pap
+          - onboarding-portal
+          - tm-forum-api
+          - trusted-issuers-list
+          - trusted-issuers-registry
+          - vcverifier
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-go@v4
+
+      - name: Install yq
+        run: |
+          go install github.com/mikefarah/yq/v4@latest
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+
+      - name: Get upstream repo from Chart.yaml sources
+        id: upstream
+        run: |
+          SOURCE_URL=$(yq e '.sources[0]' charts/${{ matrix.chart }}/Chart.yaml)
+          if [ -z "$SOURCE_URL" ] || [ "$SOURCE_URL" = "null" ]; then
+            echo "::error::No sources field found in charts/${{ matrix.chart }}/Chart.yaml"
+            exit 1
+          fi
+          UPSTREAM=$(echo "$SOURCE_URL" | sed 's|https://github.com/||')
+          echo "repo=$UPSTREAM" >> $GITHUB_OUTPUT
+
+      - name: Get latest upstream release
+        id: latest
+        run: |
+          LATEST=$(gh api repos/${{ steps.upstream.outputs.repo }}/releases/latest --jq '.tag_name' 2>/dev/null || true)
+          if [ -z "$LATEST" ] || [ "$LATEST" = "null" ]; then
+            echo "::warning::No releases found for ${{ steps.upstream.outputs.repo }}, skipping."
+            echo "skip=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          # Strip leading 'v' prefix
+          LATEST="${LATEST#v}"
+          echo "version=$LATEST" >> $GITHUB_OUTPUT
+          echo "skip=false" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get current appVersion
+        id: current
+        if: steps.latest.outputs.skip != 'true'
+        run: |
+          CURRENT=$(yq e '.appVersion' charts/${{ matrix.chart }}/Chart.yaml)
+          echo "version=$CURRENT" >> $GITHUB_OUTPUT
+
+      - name: Check if update needed
+        id: check
+        if: steps.latest.outputs.skip != 'true'
+        run: |
+          if [ "${{ steps.latest.outputs.version }}" = "${{ steps.current.outputs.version }}" ]; then
+            echo "Chart ${{ matrix.chart }} is already up to date (${{ steps.current.outputs.version }})"
+            echo "update=false" >> $GITHUB_OUTPUT
+          else
+            echo "Update available: ${{ steps.current.outputs.version }} → ${{ steps.latest.outputs.version }}"
+            echo "update=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check if branch already exists
+        id: branch
+        if: steps.check.outputs.update == 'true'
+        run: |
+          BRANCH="chore/update-${{ matrix.chart }}-${{ steps.latest.outputs.version }}"
+          if git ls-remote --exit-code --heads origin "$BRANCH" > /dev/null 2>&1; then
+            echo "Branch $BRANCH already exists, skipping."
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+          echo "name=$BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Create branch and update appVersion
+        if: steps.check.outputs.update == 'true' && steps.branch.outputs.exists == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "${{ steps.branch.outputs.name }}"
+          yq e -i '.appVersion = "${{ steps.latest.outputs.version }}"' charts/${{ matrix.chart }}/Chart.yaml
+
+      - name: Bump chart version
+        if: steps.check.outputs.update == 'true' && steps.branch.outputs.exists == 'false'
+        uses: ./.github/actions/bump-chart-version
+        with:
+          charts: ${{ matrix.chart }}
+          bump-type: patch
+
+      - name: Commit, push and open PR
+        if: steps.check.outputs.update == 'true' && steps.branch.outputs.exists == 'false'
+        run: |
+          git add charts/${{ matrix.chart }}/
+          git commit -m "chore(${{ matrix.chart }}): update appVersion from ${{ steps.current.outputs.version }} to ${{ steps.latest.outputs.version }}"
+          git push origin "${{ steps.branch.outputs.name }}"
+
+          gh pr create \
+            --title "chore(${{ matrix.chart }}): update appVersion to ${{ steps.latest.outputs.version }}" \
+            --body "$(cat <<EOF
+          Automated appVersion update for \`${{ matrix.chart }}\`.
+
+          | | Version |
+          |---|---|
+          | Previous | \`${{ steps.current.outputs.version }}\` |
+          | New | \`${{ steps.latest.outputs.version }}\` |
+
+          Upstream release: https://github.com/${{ steps.upstream.outputs.repo }}/releases/tag/${{ steps.latest.outputs.version }}
+          EOF
+          )" \
+            --label "patch" \
+            --base main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

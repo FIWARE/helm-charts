@@ -1,0 +1,50 @@
+{{- $fullName := include "fdsc-edc.fullname" . -}}
+{{- range $name, $deployment := .Values.deployment }}
+{{- $cfg := mergeOverwrite (deepCopy $.Values.common) $deployment }}
+{{- if $cfg.ingress.enabled -}}
+---
+{{- $servicePort := $cfg.service.port -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}-{{ $name }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{ include "fdsc-edc.labels" . | nindent 4 }}
+  {{- if $cfg.ingress.annotations }}
+  annotations:
+    {{- with $cfg.ingress.annotations }}
+      {{- toYaml . | nindent 4 }}
+      {{- end }}
+  {{- end }}
+spec:
+  {{- if $cfg.ingress.className }}
+  ingressClassName: {{ $cfg.ingress.className }}
+  {{- end }}
+  {{- if $cfg.ingress.tls }}
+  tls:
+    {{- range $cfg.ingress.tls }}
+    - hosts:
+      {{- range .hosts }}
+      - {{ . | quote }}
+      {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+  {{- range $cfg.ingress.hosts }}
+  - host: {{ .host | quote }}
+    http:
+      paths:
+      {{- range .paths }}
+      - path: {{ . }}
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ $fullName }}-{{ $name }}
+            port:
+              number: {{ $servicePort }}
+      {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}
