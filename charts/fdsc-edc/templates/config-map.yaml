@@ -83,6 +83,10 @@ data:
     {{- if $cfg.config.edc.hostname }}
     edc.hostname={{ $cfg.config.edc.hostname }}
     {{- end }}
+    {{- if $cfg.config.edc.dspCallback }}
+    edc.dsp.callback.address={{ $cfg.config.edc.dspCallback }}
+    {{- end }}
+
 
     web.http.port={{ $cfg.config.web.http.port }}
     web.http.management.path={{ $cfg.config.web.http.management.path }}

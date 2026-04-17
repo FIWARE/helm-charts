@@ -324,6 +324,10 @@ common:
           enabled: true
         http: 
           enabled: trusted
+      # -- hostname that the edc is available at
+      # hostname:
+      # -- address to be published for callbacks to the data space protocol
+      # dspCallback: 
     ## -- endpoints to be provided by the edc
     web:
       http:
