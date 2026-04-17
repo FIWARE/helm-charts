@@ -252,6 +252,8 @@ common:
       enabled: true
       # -- host to be used for offering the transfer processes
       transferHost: 
+      # -- protocol to be used for offering the transfer processes
+      transferProtocol: https
       # -- configuration to be used in case provisioning of DCP secured resources is supported
       dcp:
         # -- should it be enabled
