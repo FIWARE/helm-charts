@@ -1,4 +1,5 @@
 {{- if .Values.route.enabled -}}
+{{ if not .Values.allInOne.enabled }}
 {{- range .Values.apis -}}
 apiVersion: route.openshift.io/v1
 kind: Route
@@ -31,5 +32,37 @@ spec:
     {{- end }}
   {{- end }}
 ---
+{{- end }}
+{{- else }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "tmforum.fullname" $ }}-svc
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{ include "tmforum.labels" $  | nindent 4 }}
+  {{- if or $.Values.route.annotations $.Values.route.certificate }}
+  annotations:
+    {{- if $.Values.route.certificate }}
+    cert-utils-operator.redhat-cop.io/certs-from-secret: {{ include "tmforum.fullname" $  }}-tls-sec
+    {{- end }}
+    {{- with $.Values.route.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  {{- if $.Values.route.host }}
+  host: {{ $.Values.route.host}}
+  {{- end }}
+  path: "/"
+  to:
+    kind: Service
+    name: {{ include "tmforum.fullname" $  }}-svc
+  {{- if $.Values.route.tls }}
+  tls:
+  {{- with $.Values.route.tls }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
 {{- end }}
 {{- end }}

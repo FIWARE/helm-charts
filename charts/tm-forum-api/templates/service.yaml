@@ -1,3 +1,4 @@
+{{ if not .Values.allInOne.enabled }}
 {{- range .Values.apis }}
 apiVersion: v1
 kind: Service
@@ -6,10 +7,10 @@ metadata:
   namespace: {{ $.Release.Namespace | quote }}
   {{- if $.Values.service.annotations }}
   annotations:
-    {{ toYaml $.Values.service.annotations | nindent 4 }}
+    {{- toYaml $.Values.service.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{ include "tmforum.labels" $ | nindent 4 }}
+    {{- include "tmforum.labels" $ | nindent 4 }}
 spec:
   type: {{ $.Values.service.type }}
   ports:
@@ -21,4 +22,31 @@ spec:
     app.kubernetes.io/name: {{ include "tmforum.name" $ }}-{{ .name }}
     app.kubernetes.io/instance: {{ $.Release.Name }}
 ---
+{{- end }}
+{{- else }}
+apiVersion: v1
+kind: Service
+metadata:
+  {{- if contains "tm-forum-api-svc" $.Values.defaultConfig.serverHost }}
+  name: tm-forum-api-svc
+  {{- else }}
+  name: {{ include "tmforum.fullname" $ }}-svc
+  {{- end }}
+  namespace: {{ $.Release.Namespace | quote }}
+  {{- if $.Values.service.annotations }}
+  annotations:
+    {{- toYaml $.Values.service.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "tmforum.labels" $ | nindent 4 }}
+spec:
+  type: {{ $.Values.service.type }}
+  ports:
+    - port: {{ $.Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "tmforum.name" $ }}-all-in-one
+    app.kubernetes.io/instance: {{ $.Release.Name }}
 {{- end }}

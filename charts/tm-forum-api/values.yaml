@@ -110,7 +110,7 @@ defaultConfig:
 
   # -- tmforum resource requests and limits, we leave the default empty to make that a concious choice by the user.
   # for the autoscaling to make sense, you should configure this.
-  # resources:
+  resources: {}
     # limits:
       # cpu: 100m
       # memory: 128Mi
@@ -136,7 +136,6 @@ defaultConfig:
     successThreshold: 1
     failureThreshold: 3
     timeoutSeconds: 30
-   
   # -- a list of additional env vars to be set, check the tm-forum api docu for all available options
   additionalEnvVars: 
     - name: API_EXTENSION_ENABLED
@@ -155,7 +154,7 @@ defaultConfig:
   # -- default context to be used when contacting the context broker
   contextUrl: https://smartdatamodels.org/context.jsonld
   # -- host that the tm-forum api can be reached at
-  serverHost: http://tmf-api:8080
+  serverHost: http://tm-forum-api-svc:8080
   # -- port to be used for the app
   port: 8080
   # -- cache config for connecting the broker
@@ -334,6 +333,29 @@ apis:
   - name: quote
     image: tmforum-quote
     basePath: /tmf-api/quote/v4
+
+  - name: resource-order-management
+    image: tmforum-resource-order-management
+    basePath: /tmf-api/resourceOrderingManagement/v4
+
+  - name: service-ordering-management
+    image: tmforum-service-order-management
+    basePath: /tmf-api/serviceOrdering/v4
+
+  - name: software-management
+    image: tmforum-software-management
+    basePath: /tmf-api/softwareCompute/v4
+
+## deploy all the apis in a single container. Use all defaultConfig properties
+allInOne:
+  enabled: false
+  image:
+    # -- repository to get the container from
+    repository: quay.io/fiware/tmforum-all-in-one
+    # -- overrides the image tag whose default is the chart appVersion
+    tag: ""
+    # -- pull policy to be used
+    pullPolicy: IfNotPresent
 
 ## configuration of redis caching. If it's disabled, the default in-memory cache will be used
 redis:

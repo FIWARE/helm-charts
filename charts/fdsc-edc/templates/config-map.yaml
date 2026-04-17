@@ -105,7 +105,7 @@ data:
     edc.iam.sts.oauth.client.secret.alias={{ $cfg.config.oauth.secretAlias }}
     edc.iam.issuer.id={{ $cfg.config.issuerId }}
 
-    {{- if (eq $cfg.config.vault.hashicorp.enabled true) }}
+    {{- if $cfg.config.vault.hashicorp.enabled }}
     edc.vault.hashicorp.url={{ tpl $cfg.config.vault.hashicorp.url $ }}
     edc.vault.hashicorp.token={{ $cfg.config.vault.hashicorp.token }}
     edc.vault.hashicorp.timeout.seconds={{ $cfg.config.vault.hashicorp.timeout }}
