@@ -1,6 +1,6 @@
 # fdsc-edc
 
-![Version: 0.1.6](https://img.shields.io/badge/Version-0.1.6-informational?style=flat-square) ![AppVersion: 0.1.6](https://img.shields.io/badge/AppVersion-0.1.6-informational?style=flat-square)
+![Version: 0.1.7](https://img.shields.io/badge/Version-0.1.7-informational?style=flat-square) ![AppVersion: 0.1.7](https://img.shields.io/badge/AppVersion-0.1.7-informational?style=flat-square)
 
 A Helm chart for running the fdsc-edc on kubernetes.
 
@@ -30,7 +30,7 @@ A Helm chart for running the fdsc-edc on kubernetes.
 | common.config.edc.jsonld | object | `{"http":{"enabled":"trusted"},"https":{"enabled":true}}` | handling of edc internal json-ld resolution  |
 | common.config.edc.log.level | string | `"DEBUG"` |  |
 | common.config.edc.participant.id | string | `nil` |  |
-| common.config.fdscTransfer | object | `{"apisix":{"address":null,"httpsProxy":null,"token":null},"dcp":{"enabled":false,"oid":{"host":null,"jwksPath":"/.well-known/jwks","openIdPath":"/.well-known/openid-configuration"}},"enabled":true,"oid4vc":{"credentialsConfigAddress":null,"enabled":false,"odrlPapHost":"http://odrl-pap:8080","opaHost":"http://localhost:8181","verifierHost":null,"verifierInternalHost":null},"transferHost":null}` | configuration of the transfer process extension |
+| common.config.fdscTransfer | object | `{"apisix":{"address":null,"httpsProxy":null,"token":null},"dcp":{"enabled":false,"oid":{"host":null,"jwksPath":"/.well-known/jwks","openIdPath":"/.well-known/openid-configuration"}},"enabled":true,"oid4vc":{"credentialsConfigAddress":null,"enabled":false,"odrlPapHost":"http://odrl-pap:8080","opaHost":"http://localhost:8181","verifierHost":null,"verifierInternalHost":null},"transferHost":null,"transferProtocol":"https"}` | configuration of the transfer process extension |
 | common.config.fdscTransfer.apisix | object | `{"address":null,"httpsProxy":null,"token":null}` | configuration of the apisix to be confiugured for serving the process |
 | common.config.fdscTransfer.apisix.address | string | `nil` | address of the management api of apisix |
 | common.config.fdscTransfer.apisix.httpsProxy | string | `nil` | in case the route should use a proxy, configure it here |
@@ -50,6 +50,7 @@ A Helm chart for running the fdsc-edc on kubernetes.
 | common.config.fdscTransfer.oid4vc.verifierHost | string | `nil` | external host of the verifier to be used for OID4VP on transfers |
 | common.config.fdscTransfer.oid4vc.verifierInternalHost | string | `nil` | internal host of the verifier to be used for OID4VP on transfers, the external one can also be reused here |
 | common.config.fdscTransfer.transferHost | string | `nil` | host to be used for offering the transfer processes |
+| common.config.fdscTransfer.transferProtocol | string | `"https"` | protocol to be used for offering the transfer processes |
 | common.config.oauth | object | `{"clientId":null,"secretAlias":null,"tokenUrl":null}` | configuration of the oauht integration with the identity-services |
 | common.config.oauth.clientId | string | `nil` | client id to be used |
 | common.config.oauth.secretAlias | string | `nil` | alias of the secret used to access the token service |
