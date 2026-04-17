@@ -7,7 +7,7 @@ metadata:
   name: {{ include "vcverifier.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{ include "vcverifier.labels" . | nindent 4 }}
+    {{- include "vcverifier.labels" . | nindent 4 }}
   {{- if .Values.ingress.annotations }}
   annotations:
     {{- with .Values.ingress.annotations }}
@@ -39,7 +39,7 @@ spec:
           backend:
             service:
               name: {{ $fullName }}
-              port: 
+              port:
                 number: {{ $servicePort }}
         {{- end }}
   {{- end }}
