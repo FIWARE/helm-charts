@@ -51,6 +51,7 @@ data:
 
     fdscTransfer.enabled={{ $cfg.config.fdscTransfer.enabled }}
     fdscTransfer.transferHost={{ $cfg.config.fdscTransfer.transferHost }}
+    fdscTransfer.transferProtocol={{ $cfg.config.fdscTransfer.transferProtocol }}
     fdscTransfer.dcp.enabled={{ $cfg.config.fdscTransfer.dcp.enabled }}
     fdscTransfer.dcp.oid.host={{ $cfg.config.fdscTransfer.dcp.oid.host }}
     fdscTransfer.dcp.oid.openIdPath={{ $cfg.config.fdscTransfer.dcp.oid.openIdPath }}
