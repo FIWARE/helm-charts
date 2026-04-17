@@ -8,7 +8,7 @@ metadata:
     {{ toYaml .Values.service.annotations | nindent 4 }}
   {{- end }}
   labels:
-    {{ include "vcverifier.labels" . | nindent 4 }}
+    {{- include "vcverifier.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:

@@ -82,10 +82,32 @@ deployment:
   verifier:
     # -- did to be used for the verifier
     did: did:key:myverifier
+    # -- Identification to be used for the verifier.
+    clientIdentification:
+      # -- path to the did signing key(in pem format) for request object mode
+      keyPath:
+      # -- algorithm used for the request signing key
+      keyAlgorithm:
+      # -- identification used by the verifier when requesting authorization. Can be a did, but also methods like x509_san_dns
+      id:
+      # -- optional path to the certifcate to embed in the jwt header
+      certificatePath:
+      # -- Kid used when key certificate does not include it. If both are missing, id is used
+      kid:
+    # -- supported request modes - currently 'urlEncoded', 'byValue' and 'byReference' are available. In case of byValue, the keyPath has to be set.
+    supportedModes: ["urlEncoded"]
     # -- address of the trusted issuers registry to be used for verification
     tirAddress: http://my-tir.org
+    # -- expiry of the tir-cache entries
+    tirCacheExpiry: 30
+    # -- expiry of the til-cache entries
+    tilCacheExpiry: 30
     # -- expiry of a login-session in seconds
     sessionExpiry: 30
+    # -- policies that shall be checked
+    policyConfig: {}
+    # -- path of the authorizationEndpoint to be provided in the .well-known/openid-configuration
+    authorizationEndpoint:
     # -- validation mode for validation the vcs (dont get confused, its just about validation, verfication happens anyways)
     # applicable modes:
     # * `none`: No validation, just swallow everything
@@ -94,11 +116,49 @@ deployment:
     # * `baseContext`: validates that only the fields and values (when applicable)are present in the document. No extra fields are allowed (outside of credentialSubject).
     # Default is set to `none` to ensure backwards compatibility
     validationMode: none
+    # -- algorithm to be used for the jwt signatures - currently supported: RS256 and ES256
+    keyAlgorithm: RS256
+    # -- when set to true, the private key is generated on startup. Its not persisted and just kept in memory.
+    generateKey: true
+    # -- path to the private key for jwt signatures
+    keyPath:
+    # -- expiration time in minutes for JWT tokens
+    jwtExpiration: 30
   else: {}
   # -- config repo configuration
   configRepo:
     configEndpoint: http://credentials-config:8080/
 
+  # -- Configuration for certificates used by the verifier
+  serverCertificates:
+    # -- Private key used by the verifier to sign credentials.
+    signingKey:
+      # -- Name of the Kubernetes Secret that contains the signing key.
+      secretName:
+      # -- Key name inside the Secret containing the PEM
+      key:
+    # -- Private key used by the verifier
+    clientKey:
+      # -- Name of the Kubernetes Secret that contains the client key.
+      secretName:
+      # -- key name inside the Secret containing the private key PEM
+      privateKey:
+      # -- key name inside the Secret containing the public key PEM
+      publicKey:
+    # -- Certificate Authority bundle to add/trust for the application.
+    caCert:
+      enabled: false
+      # -- Container image used to extract base CA bundle.
+      bundleImage:
+        # -- Image repository
+        repository: alpine
+        # -- Image tag to use for the bundle reader image.
+        tag: 3.23.3
+        bundlePath: /etc/ssl/cert.pem
+      # -- Kubernetes Secret that contains the CA bundle.
+      secretName:
+      # -- Key name inside the Secret containing the CA PEM
+      key:
   # -- additional labels for the deployment, if required
   additionalLabels: {}
   # -- additional annotations for the deployment, if required
