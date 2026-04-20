@@ -1,0 +1,11 @@
+# Deterministic values for the common-tests fixture chart. These values
+# are chosen so the rendered helper outputs can be asserted exactly
+# against golden files in `charts/common/tests/expected/`.
+#
+# The fixture exists only to prove that the `common.*` helpers produce
+# output byte-identical to the canonical orion/keyrock helpers. It is
+# not published.
+
+nameOverride: ""
+fullnameOverride: ""
+namespaceOverride: ""

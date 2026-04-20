@@ -53,6 +53,16 @@ If you are searching for some configurations that can be used in a production en
 
 An easy to use deployment of a FIWARE Platform(including a SmartCity-Application) based on the Helm-Charts can be found in the [FIWARE-Ops/marinera](https://github.com/FIWARE-Ops/marinera) Repository.
 
+## `common` library chart
+
+The repository ships a [`common` library chart](./charts/common/README.md)
+that centralises the helpers (names, labels, service account, secrets,
+images, and resource bodies) previously duplicated across every FIWARE
+chart. Consumer charts depend on it via `file://../common`. See
+[`docs/common-chart-proposal.md`](./docs/common-chart-proposal.md) for the
+design and [`docs/common-chart-audit.md`](./docs/common-chart-audit.md)
+for the duplication baseline.
+
 ---
 
 ## License

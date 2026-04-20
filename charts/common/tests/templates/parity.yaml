@@ -1,0 +1,68 @@
+{{/*
+Parity fixture: renders the output of each `common.*` helper and of the
+inlined legacy helper for the same input, so `helm template` + `diff`
+can assert they match byte-for-byte. Rendered as a ConfigMap so the
+output is self-contained YAML that kubeconform can validate.
+
+Scenarios covered by different data keys:
+  default        - release name does not contain chart name
+  overrideName   - .Values.nameOverride set
+  overrideFull   - .Values.fullnameOverride set
+  componentForm  - multi-component dict-form call (additive, only
+                   affects the common.* side)
+*/}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-parity
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+data:
+  # ---- common.names.name ---------------------------------------------
+  common_names_name: {{ include "common.names.name" . | quote }}
+  legacy_names_name: {{ include "legacy.name" . | quote }}
+
+  # ---- common.names.fullname -----------------------------------------
+  common_names_fullname: {{ include "common.names.fullname" . | quote }}
+  legacy_names_fullname: {{ include "legacy.fullname" . | quote }}
+
+  # ---- common.names.chart --------------------------------------------
+  common_names_chart: {{ include "common.names.chart" . | quote }}
+  legacy_names_chart: {{ include "legacy.chart" . | quote }}
+
+  # ---- common.names.namespace ----------------------------------------
+  common_names_namespace: {{ include "common.names.namespace" . | quote }}
+
+  # ---- common.labels.standard ----------------------------------------
+  common_labels_standard: |
+    {{- include "common.labels.standard" . | nindent 4 }}
+  legacy_labels: |
+    {{- include "legacy.labels" . | nindent 4 }}
+
+  # ---- common.labels.matchLabels -------------------------------------
+  common_labels_matchLabels: |
+    {{- include "common.labels.matchLabels" . | nindent 4 }}
+  legacy_matchLabels: |
+    {{- include "legacy.matchLabels" . | nindent 4 }}
+
+  # ---- component (dict) form -----------------------------------------
+  # Additive: when component is empty the dict form equals the plain
+  # form; when non-empty it adds `-<component>` to the name and
+  # `app.kubernetes.io/component: <component>` to the labels. Only the
+  # common.* side is exercised here (legacy charts don't use this
+  # variant yet).
+  common_names_name_with_component: {{ include "common.names.name" (dict "context" . "component" "worker") | quote }}
+  common_names_fullname_with_component: {{ include "common.names.fullname" (dict "context" . "component" "worker") | quote }}
+  common_labels_standard_with_component: |
+    {{- include "common.labels.standard" (dict "context" . "component" "worker") | nindent 4 }}
+  common_labels_matchLabels_with_component: |
+    {{- include "common.labels.matchLabels" (dict "context" . "component" "worker") | nindent 4 }}
+
+  # ---- component (dict) form with empty component --------------------
+  # Verifies that dict-form with empty component is byte-identical to
+  # plain form.
+  common_names_name_dict_empty: {{ include "common.names.name" (dict "context" .) | quote }}
+  common_names_fullname_dict_empty: {{ include "common.names.fullname" (dict "context" .) | quote }}
+  common_labels_standard_dict_empty: |
+    {{- include "common.labels.standard" (dict "context" .) | nindent 4 }}

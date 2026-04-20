@@ -19,6 +19,15 @@ failed_charts=()
 
 for chart in $CHARTS
 do
+    # Library charts are not installable (`helm template` errors out on
+    # them), so they cannot be fed to kubeconform. Skip them — they are
+    # covered indirectly by rendering the consumer charts that depend on
+    # them.
+    if [ -f "${chart}/Chart.yaml" ] && grep -q '^type:[[:space:]]*library' "${chart}/Chart.yaml"; then
+        echo -e "${BLUE}[$(basename $chart)]${RESET} ${WHITE}Skipping library chart${RESET}\n"
+        continue
+    fi
+
     echo -e "${BLUE}[$(basename $chart)]${RESET} ${WHITE}Validating chart${RESET}"
 
     $HELM_CMD template "${chart}" | $KC_CMD -strict -ignore-missing-schemas

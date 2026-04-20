@@ -1,0 +1,82 @@
+---
+# Source: common-tests/templates/parity.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-release-common-tests-parity
+  namespace: "test-ns"
+  labels:
+    app.kubernetes.io/name: common-tests
+    helm.sh/chart: common-tests-0.0.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/version: "1.0.1"
+    app.kubernetes.io/managed-by: Helm
+data:
+  # ---- common.names.name ---------------------------------------------
+  common_names_name: "common-tests"
+  legacy_names_name: "common-tests"
+
+  # ---- common.names.fullname -----------------------------------------
+  common_names_fullname: "test-release-common-tests"
+  legacy_names_fullname: "test-release-common-tests"
+
+  # ---- common.names.chart --------------------------------------------
+  common_names_chart: "common-tests-0.0.0"
+  legacy_names_chart: "common-tests-0.0.0"
+
+  # ---- common.names.namespace ----------------------------------------
+  common_names_namespace: "test-ns"
+
+  # ---- common.labels.standard ----------------------------------------
+  common_labels_standard: |
+    app.kubernetes.io/name: common-tests
+    helm.sh/chart: common-tests-0.0.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/version: "1.0.1"
+    app.kubernetes.io/managed-by: Helm
+  legacy_labels: |
+    app.kubernetes.io/name: common-tests
+    helm.sh/chart: common-tests-0.0.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/version: "1.0.1"
+    app.kubernetes.io/managed-by: Helm
+
+  # ---- common.labels.matchLabels -------------------------------------
+  common_labels_matchLabels: |
+    app.kubernetes.io/name: common-tests
+    app.kubernetes.io/instance: test-release
+  legacy_matchLabels: |
+    app.kubernetes.io/name: common-tests
+    app.kubernetes.io/instance: test-release
+
+  # ---- component (dict) form -----------------------------------------
+  # Additive: when component is empty the dict form equals the plain
+  # form; when non-empty it adds `-<component>` to the name and
+  # `app.kubernetes.io/component: <component>` to the labels. Only the
+  # common.* side is exercised here (legacy charts don't use this
+  # variant yet).
+  common_names_name_with_component: "common-tests-worker"
+  common_names_fullname_with_component: "test-release-common-tests-worker"
+  common_labels_standard_with_component: |
+    app.kubernetes.io/name: common-tests-worker
+    helm.sh/chart: common-tests-0.0.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/version: "1.0.1"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: worker
+  common_labels_matchLabels_with_component: |
+    app.kubernetes.io/name: common-tests-worker
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/component: worker
+
+  # ---- component (dict) form with empty component --------------------
+  # Verifies that dict-form with empty component is byte-identical to
+  # plain form.
+  common_names_name_dict_empty: "common-tests"
+  common_names_fullname_dict_empty: "test-release-common-tests"
+  common_labels_standard_dict_empty: |
+    app.kubernetes.io/name: common-tests
+    helm.sh/chart: common-tests-0.0.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/version: "1.0.1"
+    app.kubernetes.io/managed-by: Helm
