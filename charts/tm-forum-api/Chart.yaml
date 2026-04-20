@@ -1,7 +1,7 @@
 apiVersion: v2
 name: tm-forum-api
-version: 0.16.10
-appVersion: 1.10.1
+version: 0.16.11
+appVersion: 1.10.2
 kubeVersion: '>= 1.19-0'
 home: https://github.com/FIWARE/tmforum-api
 description: A Helm chart for running the FIWARE TMForum-APIs
