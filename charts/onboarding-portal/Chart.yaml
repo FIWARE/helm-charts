@@ -1,7 +1,7 @@
 apiVersion: v2
 name: onboarding-portal
-version: 1.2.3
-appVersion: 0.0.3
+version: 1.2.6
+appVersion: 0.0.5
 type: application
 description: A Helm chart for the OnBoarding Portal
 icon: https://fiware.github.io/catalogue/img/fiware.png
