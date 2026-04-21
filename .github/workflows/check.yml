@@ -158,6 +158,10 @@ jobs:
           charts: ${{ steps.charts.outputs.list }}
           bump-type: ${{ steps.bump.outputs.match }}
 
+      - name: Generate helm docs
+        shell: bash
+        run: docker run --rm --volume "$(pwd):/helm-docs" -u $(id -u) jnorwood/helm-docs:latest
+
       - name: Commit files
         continue-on-error: true
         run: |
