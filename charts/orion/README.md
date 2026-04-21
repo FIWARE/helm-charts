@@ -1,6 +1,6 @@
 # orion
 
-![Version: 1.6.6](https://img.shields.io/badge/Version-1.6.6-informational?style=flat-square) ![AppVersion: 1.0.1](https://img.shields.io/badge/AppVersion-1.0.1-informational?style=flat-square)
+![Version: 1.7.1](https://img.shields.io/badge/Version-1.7.1-informational?style=flat-square) ![AppVersion: 1.0.1](https://img.shields.io/badge/AppVersion-1.0.1-informational?style=flat-square)
 
 A Helm chart for running the fiware orion-ld context broker on kubernetes.
 
@@ -19,6 +19,10 @@ A Helm chart for running the fiware orion-ld context broker on kubernetes.
 ## Requirements
 
 Kubernetes: `>= 1.19-0`
+
+| Repository | Name | Version |
+|------------|------|---------|
+| file://../common | common | 0.1.0 |
 
 ## Values
 

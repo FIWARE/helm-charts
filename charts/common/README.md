@@ -1,229 +1,24 @@
-# FIWARE `common` library chart
+# common
 
-A [Helm library chart](https://helm.sh/docs/topics/library_charts/) that
-centralises the template helpers duplicated across every FIWARE Helm
-chart (names, labels, service account, secret, image, and resource
-bodies).
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
-Library charts render nothing on their own. Consumer charts depend on
-`common` locally and `include` its `common.*` helpers in place of the
-boilerplate previously copied into every chart's `_helpers.tpl` and
-resource templates.
+FIWARE common library chart. Bundles the template helpers (names, labels, service account, secret, image, and resource bodies) that are currently duplicated across every FIWARE Helm chart. Consumer charts depend on it locally and include its `common.*` templates instead of re-implementing the same boilerplate per chart.
 
-See [`docs/common-chart-proposal.md`](../../docs/common-chart-proposal.md)
-for the full design and the list of explicit (minimal) breaking changes
-that the migration will introduce, and
-[`docs/common-chart-audit.md`](../../docs/common-chart-audit.md) for the
-pre-migration duplication baseline.
+**Homepage:** <https://github.com/FIWARE/helm-charts/tree/main/charts/common>
 
-## Dependency snippet
+## Maintainers
 
-Consumer charts depend on `common` via a `file://` path so the library is
-shipped together with the repository:
+| Name | Email | Url |
+| ---- | ------ | --- |
+| wistefan | <stefan.wiedemann@fiware.org> |  |
 
-```yaml
-# charts/<chart>/Chart.yaml
-dependencies:
-  - name: common
-    repository: "file://../common"
-    version: "0.1.x"
-```
+## Source Code
 
-After editing `Chart.yaml`, run `helm dependency update charts/<chart>`
-to refresh `Chart.lock` and pull the library into
-`charts/<chart>/charts/`.
+* <https://github.com/FIWARE/helm-charts>
 
-## Helper surface
+## Requirements
 
-The helpers are added across Steps 3–5 of
-[`IMPLEMENTATION_PLAN.md`](../../IMPLEMENTATION_PLAN.md). The table
-below mirrors the proposal and is updated as each batch lands.
+Kubernetes: `>= 1.19-0`
 
-### Names (`templates/_names.tpl`)
-
-| Helper                   | Replaces                                             | Behaviour                                                                                                                                              |
-| ------------------------ | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `common.names.name`      | `<chart>.name`                                       | `default .Chart.Name .Values.nameOverride \| trunc 63 \| trimSuffix "-"`                                                                               |
-| `common.names.fullname`  | `<chart>.fullname`                                   | Honours `.Values.fullnameOverride`; otherwise `.Release.Name` when it already contains the chart name, else `<release>-<name>` truncated to 63 chars. |
-| `common.names.chart`     | `<chart>.chart`                                      | `Chart.Name-Chart.Version` with `+` replaced by `_`, truncated to 63 chars.                                                                             |
-| `common.names.namespace` | raw `.Release.Namespace` references across templates | `.Release.Namespace`, overridable via `.Values.namespaceOverride`.                                                                                     |
-
-### Labels (`templates/_labels.tpl`)
-
-| Helper                      | Replaces                                                        | Body                                                                                                                                        |
-| --------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `common.labels.standard`    | `<chart>.labels`                                                | 5-label set: `app.kubernetes.io/name`, `helm.sh/chart`, `app.kubernetes.io/instance`, optional `app.kubernetes.io/version`, `app.kubernetes.io/managed-by`. |
-| `common.labels.matchLabels` | `<chart>.selectorLabels` (or inlined `matchLabels:` fragments)  | `app.kubernetes.io/name` + `app.kubernetes.io/instance`.                                                                                     |
-
-Both label helpers accept an optional dict with a `component` key that
-adds `app.kubernetes.io/component: <component>` — used by the
-multi-component scorpio-broker chart in Step 10.
-
-### Service account (`templates/_serviceaccount.tpl`)
-
-| Helper                       | Replaces                  | Behaviour                                                                                                                                                                                             |
-| ---------------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `common.serviceAccount.name` | `<chart>.serviceAccountName` | When `.Values.serviceAccount.create` is `true`, returns `.Values.serviceAccount.name` if set, otherwise `common.names.fullname`. When `create` is `false`, returns `.Values.serviceAccount.name` or `default`. |
-
-Accepts either the root context (`.`) or a dict
-`(dict "context" $ "component" "<component>")` — the component form adds
-a `-<component>` suffix to the default name for multi-component charts
-(Step 10).
-
-### Secrets (`templates/_secrets.tpl`)
-
-| Helper               | Replaces                                                                                        | Behaviour                                                                                                                                                                                                                                                              |
-| -------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `common.secrets.name` | `keyrock.secretName`, `keyrock.certSecretName`, `orion.secretName`, other per-chart equivalents | Returns the `tpl`-expanded user-supplied secret name when `existingSecret` is set (accepts a bare string *or* a map with `.name`); otherwise falls back to `<fullname><suffix>`. Takes an optional `suffix` (e.g. `-certs`) and an optional `component`. |
-| `common.secrets.key`  | `orion.secretKey` and similar                                                                   | Returns the `tpl`-expanded `.key` field of a map-shaped `existingSecret` when set, otherwise the caller-supplied `defaultKey`.                                                                                                                                         |
-
-Both helpers always take a dict, because there is no single
-`.Values.existingSecret` in every chart — the caller has to pass the
-specific values path it wants.
-
-### Images (`templates/_images.tpl`)
-
-| Helper                     | Replaces                                                     | Behaviour                                                                                                                                              |
-| -------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `common.images.image`       | inlined `"{{ .repository }}:{{ .tag \| default .Chart.AppVersion }}"` | Returns `<repository>:<tag>` with `.Chart.AppVersion` fallback when `tag` is empty.                                                                    |
-| `common.images.pullPolicy`  | inlined `{{ default "IfNotPresent" .pullPolicy }}`           | Returns the pull policy with the Kubernetes default `IfNotPresent` fallback.                                                                           |
-| `common.images.pullSecrets` | per-chart `imagePullSecrets` fragments                        | Renders the `imagePullSecrets:` block when a non-empty list is provided. Accepts both bare strings and `{name: ...}` maps; normalises to canonical form; renders nothing when empty. |
-
-### Resource bodies (`templates/_service.tpl`, `_ingress.tpl`, `_route.tpl`, `_hpa.tpl`, `_secret.tpl`, extended `_serviceaccount.tpl`)
-
-Each helper below renders a complete Kubernetes manifest matching the
-canonical shape currently copy-pasted across FIWARE charts. All of them
-take a single dict argument with a `context` key (the root `$`) plus the
-sub-values the caller needs to pass. They are designed so a consumer
-chart can replace an entire per-resource `templates/*.yaml` file with a
-one-line `include` wrapping the appropriate helper.
-
-| Helper                        | Replaces                                                                                   | Gate                          | Key dict args                                                         |
-| ----------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------- | -------------------------------------------------------------------- |
-| `common.service.tpl`          | per-chart `templates/service.yaml` (orion, keyrock, mintaka, …)                            | always renders                 | `context`, `service`, optional `ports` list, optional `component`    |
-| `common.ingress.tpl`          | per-chart `templates/ingress.yaml`                                                         | `.ingress.enabled`             | `context`, `ingress`, `servicePort`, optional `component`            |
-| `common.route.tpl`            | orion / mintaka `templates/route.yaml` (OpenShift `route.openshift.io/v1`)                 | `.route.enabled`               | `context`, `route`, optional `component`                             |
-| `common.hpa.tpl`              | orion / mintaka `deployment-hpa.yaml` and keyrock `statefulset-hpa.yaml`                   | `.autoscaling.enabled`         | `context`, `autoscaling`, optional `kind` (`Deployment`/`StatefulSet`), optional `component` |
-| `common.serviceAccount.tpl`   | per-chart `templates/serviceaccount.yaml`                                                  | `.Values.serviceAccount.create` | `context`, optional `component`                                      |
-| `common.secret.tpl`           | per-chart `templates/secret.yaml` (orion db Secret, keyrock token Secret, …)               | renders unless `existingSecret` resolves to a user-supplied name | `context`, `existingSecret`, `data` map, optional `type`, `suffix`, `component` |
-
-See the header of each `_*.tpl` file under `charts/common/templates/`
-for the full argument contract and a usage example. The one documented
-behavioural delta vs. legacy templates is that `common.ingress.tpl`
-always emits `networking.k8s.io/v1` (keyrock's `semverCompare ">=1.14-0"`
-branch is dropped); see
-[`docs/common-chart-proposal.md`](../../docs/common-chart-proposal.md)
-for the full list of explicit breaking changes.
-
-### Status
-
-| Area               | File              | Step | Status         |
-| ------------------ | ----------------- | ---- | -------------- |
-| Names              | `_names.tpl`      | 3    | done           |
-| Labels             | `_labels.tpl`     | 3    | done           |
-| Service account    | `_serviceaccount.tpl` | 4 | done           |
-| Secrets (helpers)  | `_secrets.tpl`    | 4    | done           |
-| Images             | `_images.tpl`     | 4    | done           |
-| Service body       | `_service.tpl`    | 5    | done           |
-| Ingress body       | `_ingress.tpl`    | 5    | done           |
-| Route body         | `_route.tpl`      | 5    | done           |
-| HPA body           | `_hpa.tpl`        | 5    | done           |
-| Secret body        | `_secret.tpl`     | 5    | done           |
-| ServiceAccount body | `_serviceaccount.tpl` | 5 | done           |
-| Test harness       | `scripts/test-common.sh` + `charts/common/tests/` | 6 | done |
-
-## Testing
-
-The `charts/common/tests/` directory holds a fixture consumer chart used
-to verify that the rendered output of each helper matches the current
-orion / keyrock bodies byte-for-byte. The fixture is a regular Helm
-chart with `type: application` that depends on `common` via
-`file://..`, includes every `common.*` helper in
-`charts/common/tests/templates/`, and pins a set of deterministic
-values in `charts/common/tests/values.yaml`.
-
-### Running the tests
-
-```console
-bash scripts/test-common.sh
-```
-
-The script:
-
-1. Runs `helm dependency update charts/common/tests` so the fixture
-   picks up the latest `charts/common` sources through its `file://..`
-   dependency.
-2. Runs `helm template test-release charts/common/tests --namespace
-   test-ns`. The release name and namespace are fixed because they are
-   baked into the golden files via the helpers under test.
-3. `diff -u`s the rendered output against every `.yaml` file under
-   `charts/common/tests/expected/` (one file per scenario).
-
-A non-empty diff — whether from a helper change, a whitespace
-regression, or a reordered YAML field — fails the script with exit
-code `1` and prints the diff so the cause is obvious.
-
-### Updating a golden file
-
-After an intentional behavioural change to a helper, refresh the
-relevant `expected/*.yaml` file:
-
-```console
-helm dependency update charts/common/tests
-helm template test-release charts/common/tests \
-    --namespace test-ns \
-    > charts/common/tests/expected/default.yaml
-```
-
-The new golden file must be reviewed in the same PR as the helper
-change so the diff is auditable.
-
-### CI wiring
-
-`.github/workflows/check.yml` runs `scripts/test-common.sh` in a
-dedicated `common-tests` job on every pull request against `main`
-(after the existing `lint` job). The job depends only on `helm` being
-on `PATH`; kubeconform is not required, because the fixture
-specifically targets helper parity, and the rendered output's schema
-is exercised by the existing `eval.sh` job once consumer charts start
-depending on `common`.
-
-### Why `charts/common/tests` is not a published chart
-
-`charts/common/tests` lives under `charts/` only so the fixture can
-resolve `common` via a relative `file://..` path; it is explicitly
-excluded from both publication and linting:
-
-- `lint.sh` contains a `SKIP_CHARTS` list with `./charts/common/tests`
-  so `helm lint` ignores it.
-- `eval.sh` already skips library charts and is invoked via the
-  `./charts/*` glob which expands to direct children only (the
-  fixture sits one level deeper at `./charts/common/tests` and is
-  never reached).
-- `build.sh` iterates the same `./charts/*` glob; the fixture's own
-  `helm dependency update` is driven by `scripts/test-common.sh`.
-
-### One-off sanity check
-
-If you want to inspect the rendered manifests without running the
-diff harness:
-
-```console
-helm lint charts/common
-helm dependency update charts/common/tests
-helm template test-release charts/common/tests --namespace test-ns
-```
-
-## Versioning
-
-`common` follows semver. Helper additions are minor bumps, behavioural
-changes to an existing helper are major bumps. Consumer charts pin with
-a caret (`0.1.x`) so additive changes flow in automatically while a
-major change forces a deliberate migration.
-
-## Publishing
-
-`common` is **not** published to the public `fiware` Helm repository. It
-is consumed only via `file://../common` from other charts in this
-monorepo. Releases of dependent charts embed a tarball of the library in
-their `charts/` directory, so end users install exactly one chart.
+----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)
