@@ -9,3 +9,55 @@
 nameOverride: ""
 fullnameOverride: ""
 namespaceOverride: ""
+
+# Service-account block — consumed by common.serviceAccount.name.
+# Exercises both branches (`create: true` default, `create: false`,
+# and the `.name` override) via separate keys in parity.yaml below.
+serviceAccount:
+  create: true
+  name: ""
+
+# Image block — consumed by common.images.{image,pullPolicy}. The
+# fixture chart's .Chart.AppVersion is "1.0.1" so `tag: ""` verifies
+# the AppVersion fallback matches the legacy
+# `.Values.image.tag | default .Chart.AppVersion` idiom.
+image:
+  repository: quay.io/fiware/common-tests
+  tag: ""
+  pullPolicy: ""
+
+# Image block with every field explicitly set — verifies the helpers
+# do not override caller-supplied values.
+imagePinned:
+  repository: quay.io/fiware/common-tests
+  tag: "2.0.0"
+  pullPolicy: "Always"
+
+# Pull-secrets — consumed by common.images.pullSecrets. A mix of the
+# two accepted shapes (bare string + map) so the normalisation path is
+# exercised.
+imagePullSecrets:
+  - name: registry-a
+  - registry-b
+
+# Secret inputs — consumed by common.secrets.{name,key}. The keys
+# mirror the two idioms in the codebase:
+#   * keyrockStyle  — `.Values.existingSecret` is a plain string
+#   * keyrockCert   — same shape, exercised with suffix="-certs"
+#   * orionStyle    — `.Values.broker.db.existingSecret` is a map
+#                     with optional `.name` and `.key`
+#   * orionNoName   — orion-style map without `.name` (falls back)
+#   * orionDefaults - orion-style absent (nil) → falls back
+existingSecret: "my-keyrock-secret"
+existingCertSecret: "my-keyrock-cert-secret"
+broker:
+  db:
+    existingSecret:
+      name: "my-orion-db-secret"
+      key: "myDbPasswordKey"
+brokerNoName:
+  db:
+    existingSecret:
+      key: "myDbPasswordKey"
+brokerDefaults:
+  db: {}

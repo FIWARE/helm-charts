@@ -59,20 +59,50 @@ Both label helpers accept an optional dict with a `component` key that
 adds `app.kubernetes.io/component: <component>` — used by the
 multi-component scorpio-broker chart in Step 10.
 
+### Service account (`templates/_serviceaccount.tpl`)
+
+| Helper                       | Replaces                  | Behaviour                                                                                                                                                                                             |
+| ---------------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `common.serviceAccount.name` | `<chart>.serviceAccountName` | When `.Values.serviceAccount.create` is `true`, returns `.Values.serviceAccount.name` if set, otherwise `common.names.fullname`. When `create` is `false`, returns `.Values.serviceAccount.name` or `default`. |
+
+Accepts either the root context (`.`) or a dict
+`(dict "context" $ "component" "<component>")` — the component form adds
+a `-<component>` suffix to the default name for multi-component charts
+(Step 10).
+
+### Secrets (`templates/_secrets.tpl`)
+
+| Helper               | Replaces                                                                                        | Behaviour                                                                                                                                                                                                                                                              |
+| -------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `common.secrets.name` | `keyrock.secretName`, `keyrock.certSecretName`, `orion.secretName`, other per-chart equivalents | Returns the `tpl`-expanded user-supplied secret name when `existingSecret` is set (accepts a bare string *or* a map with `.name`); otherwise falls back to `<fullname><suffix>`. Takes an optional `suffix` (e.g. `-certs`) and an optional `component`. |
+| `common.secrets.key`  | `orion.secretKey` and similar                                                                   | Returns the `tpl`-expanded `.key` field of a map-shaped `existingSecret` when set, otherwise the caller-supplied `defaultKey`.                                                                                                                                         |
+
+Both helpers always take a dict, because there is no single
+`.Values.existingSecret` in every chart — the caller has to pass the
+specific values path it wants.
+
+### Images (`templates/_images.tpl`)
+
+| Helper                     | Replaces                                                     | Behaviour                                                                                                                                              |
+| -------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `common.images.image`       | inlined `"{{ .repository }}:{{ .tag \| default .Chart.AppVersion }}"` | Returns `<repository>:<tag>` with `.Chart.AppVersion` fallback when `tag` is empty.                                                                    |
+| `common.images.pullPolicy`  | inlined `{{ default "IfNotPresent" .pullPolicy }}`           | Returns the pull policy with the Kubernetes default `IfNotPresent` fallback.                                                                           |
+| `common.images.pullSecrets` | per-chart `imagePullSecrets` fragments                        | Renders the `imagePullSecrets:` block when a non-empty list is provided. Accepts both bare strings and `{name: ...}` maps; normalises to canonical form; renders nothing when empty. |
+
 ### Planned in later steps
 
-| Area               | File              | Step | Status  |
-| ------------------ | ----------------- | ---- | ------- |
-| Names              | `_names.tpl`      | 3    | **this step** |
-| Labels             | `_labels.tpl`     | 3    | **this step** |
-| Service account    | `_serviceaccount.tpl` | 4    | pending |
-| Secrets (helpers)  | `_secrets.tpl`    | 4    | pending |
-| Images             | `_images.tpl`     | 4    | pending |
-| Service body       | `_service.tpl`    | 5    | pending |
-| Ingress body       | `_ingress.tpl`    | 5    | pending |
-| Route body         | `_route.tpl`      | 5    | pending |
-| HPA body           | `_hpa.tpl`        | 5    | pending |
-| Secret body        | `_secret.tpl`     | 5    | pending |
+| Area               | File              | Step | Status         |
+| ------------------ | ----------------- | ---- | -------------- |
+| Names              | `_names.tpl`      | 3    | done           |
+| Labels             | `_labels.tpl`     | 3    | done           |
+| Service account    | `_serviceaccount.tpl` | 4 | **this step**  |
+| Secrets (helpers)  | `_secrets.tpl`    | 4    | **this step**  |
+| Images             | `_images.tpl`     | 4    | **this step**  |
+| Service body       | `_service.tpl`    | 5    | pending        |
+| Ingress body       | `_ingress.tpl`    | 5    | pending        |
+| Route body         | `_route.tpl`      | 5    | pending        |
+| HPA body           | `_hpa.tpl`        | 5    | pending        |
+| Secret body        | `_secret.tpl`     | 5    | pending        |
 
 ## Testing
 
