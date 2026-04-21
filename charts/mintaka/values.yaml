@@ -90,6 +90,11 @@ deployment:
 autoscaling:
   #  -- should autoscaling be enabled for mintaka
   enabled: false
+  # -- apiVersion of the HorizontalPodAutoscaler resource emitted by the
+  # `common.hpa.tpl` helper. Matches the value previously hard-coded in
+  # the chart's HPA template; users on Kubernetes 1.26+ may wish to
+  # override this to "v2".
+  apiVersion: "v2beta2"
   # -- minimum number of running pods
   minReplicas: 1
   # -- maximum number of running pods
