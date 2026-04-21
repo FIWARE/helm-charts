@@ -103,8 +103,10 @@ jobs:
         id: already-bumped
         run: |
           if git log --oneline | grep -q "Update helm documentation"; then
+            echo Bumped
             echo "bumped=true" >> $GITHUB_OUTPUT
           else
+            echo Not bumped
             echo "bumped=false" >> $GITHUB_OUTPUT
           fi
 
