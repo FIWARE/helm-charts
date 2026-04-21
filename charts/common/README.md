@@ -89,20 +89,47 @@ specific values path it wants.
 | `common.images.pullPolicy`  | inlined `{{ default "IfNotPresent" .pullPolicy }}`           | Returns the pull policy with the Kubernetes default `IfNotPresent` fallback.                                                                           |
 | `common.images.pullSecrets` | per-chart `imagePullSecrets` fragments                        | Renders the `imagePullSecrets:` block when a non-empty list is provided. Accepts both bare strings and `{name: ...}` maps; normalises to canonical form; renders nothing when empty. |
 
-### Planned in later steps
+### Resource bodies (`templates/_service.tpl`, `_ingress.tpl`, `_route.tpl`, `_hpa.tpl`, `_secret.tpl`, extended `_serviceaccount.tpl`)
+
+Each helper below renders a complete Kubernetes manifest matching the
+canonical shape currently copy-pasted across FIWARE charts. All of them
+take a single dict argument with a `context` key (the root `$`) plus the
+sub-values the caller needs to pass. They are designed so a consumer
+chart can replace an entire per-resource `templates/*.yaml` file with a
+one-line `include` wrapping the appropriate helper.
+
+| Helper                        | Replaces                                                                                   | Gate                          | Key dict args                                                         |
+| ----------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------- | -------------------------------------------------------------------- |
+| `common.service.tpl`          | per-chart `templates/service.yaml` (orion, keyrock, mintaka, …)                            | always renders                 | `context`, `service`, optional `ports` list, optional `component`    |
+| `common.ingress.tpl`          | per-chart `templates/ingress.yaml`                                                         | `.ingress.enabled`             | `context`, `ingress`, `servicePort`, optional `component`            |
+| `common.route.tpl`            | orion / mintaka `templates/route.yaml` (OpenShift `route.openshift.io/v1`)                 | `.route.enabled`               | `context`, `route`, optional `component`                             |
+| `common.hpa.tpl`              | orion / mintaka `deployment-hpa.yaml` and keyrock `statefulset-hpa.yaml`                   | `.autoscaling.enabled`         | `context`, `autoscaling`, optional `kind` (`Deployment`/`StatefulSet`), optional `component` |
+| `common.serviceAccount.tpl`   | per-chart `templates/serviceaccount.yaml`                                                  | `.Values.serviceAccount.create` | `context`, optional `component`                                      |
+| `common.secret.tpl`           | per-chart `templates/secret.yaml` (orion db Secret, keyrock token Secret, …)               | renders unless `existingSecret` resolves to a user-supplied name | `context`, `existingSecret`, `data` map, optional `type`, `suffix`, `component` |
+
+See the header of each `_*.tpl` file under `charts/common/templates/`
+for the full argument contract and a usage example. The one documented
+behavioural delta vs. legacy templates is that `common.ingress.tpl`
+always emits `networking.k8s.io/v1` (keyrock's `semverCompare ">=1.14-0"`
+branch is dropped); see
+[`docs/common-chart-proposal.md`](../../docs/common-chart-proposal.md)
+for the full list of explicit breaking changes.
+
+### Status
 
 | Area               | File              | Step | Status         |
 | ------------------ | ----------------- | ---- | -------------- |
 | Names              | `_names.tpl`      | 3    | done           |
 | Labels             | `_labels.tpl`     | 3    | done           |
-| Service account    | `_serviceaccount.tpl` | 4 | **this step**  |
-| Secrets (helpers)  | `_secrets.tpl`    | 4    | **this step**  |
-| Images             | `_images.tpl`     | 4    | **this step**  |
-| Service body       | `_service.tpl`    | 5    | pending        |
-| Ingress body       | `_ingress.tpl`    | 5    | pending        |
-| Route body         | `_route.tpl`      | 5    | pending        |
-| HPA body           | `_hpa.tpl`        | 5    | pending        |
-| Secret body        | `_secret.tpl`     | 5    | pending        |
+| Service account    | `_serviceaccount.tpl` | 4 | done           |
+| Secrets (helpers)  | `_secrets.tpl`    | 4    | done           |
+| Images             | `_images.tpl`     | 4    | done           |
+| Service body       | `_service.tpl`    | 5    | done           |
+| Ingress body       | `_ingress.tpl`    | 5    | done           |
+| Route body         | `_route.tpl`      | 5    | done           |
+| HPA body           | `_hpa.tpl`        | 5    | done           |
+| Secret body        | `_secret.tpl`     | 5    | done           |
+| ServiceAccount body | `_serviceaccount.tpl` | 5 | done           |
 
 ## Testing
 

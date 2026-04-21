@@ -1,4 +1,35 @@
 ---
+# Source: common-tests/templates/resources.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: test-release-common-tests
+  namespace: "test-ns"
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::000000000000:role/common-tests
+  labels:
+    app.kubernetes.io/name: common-tests
+    helm.sh/chart: common-tests-0.0.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/version: "1.0.1"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: common-tests/templates/resources.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: test-release-common-tests
+  namespace: "test-ns"
+  labels:
+    app.kubernetes.io/name: common-tests
+    helm.sh/chart: common-tests-0.0.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/version: "1.0.1"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  dbPassword: c2VjcmV0LXBhc3N3b3Jk
+---
 # Source: common-tests/templates/parity.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -149,3 +180,110 @@ data:
   # Empty input renders nothing (empty string), so the consumer's
   # deployment template can `include` this unconditionally.
   common_pullSecrets_empty: ""
+---
+# Source: common-tests/templates/resources.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-release-common-tests
+  namespace: "test-ns"
+  annotations:
+    service.beta.kubernetes.io/topology-aware-hints: auto
+  labels:
+    app.kubernetes.io/name: common-tests
+    helm.sh/chart: common-tests-0.0.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/version: "1.0.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 1026
+      targetPort: 1026
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: common-tests
+    app.kubernetes.io/instance: test-release
+---
+# Source: common-tests/templates/resources.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: test-release-common-tests
+  namespace: "test-ns"
+  labels:
+    app.kubernetes.io/name: common-tests
+    helm.sh/chart: common-tests-0.0.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/version: "1.0.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: test-release-common-tests
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 80
+          type: Utilization
+      type: Resource
+---
+# Source: common-tests/templates/resources.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: test-release-common-tests
+  namespace: "test-ns"
+  labels:
+    app.kubernetes.io/name: common-tests
+    helm.sh/chart: common-tests-0.0.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/version: "1.0.1"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - "common.example.org"
+      secretName: common-tls
+  rules:
+    - host: "common.example.org"
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: test-release-common-tests
+              port:
+                number: 1026
+---
+# Source: common-tests/templates/resources.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: test-release-common-tests
+  namespace: "test-ns"
+  labels:
+    app.kubernetes.io/name: common-tests
+    helm.sh/chart: common-tests-0.0.0
+    app.kubernetes.io/instance: test-release
+    app.kubernetes.io/version: "1.0.1"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    haproxy.router.openshift.io/timeout: 30s
+spec:
+  host: common.apps.example.org
+  to:
+    kind: Service
+    name: test-release-common-tests
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge

@@ -64,3 +64,47 @@ When called in the dict form with a non-empty `component`, the default
 {{- default "default" $ctx.Values.serviceAccount.name -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+common.serviceAccount.tpl
+
+Render a complete `v1/ServiceAccount` manifest gated on
+`.Values.serviceAccount.create`. Mirrors the bodies in
+charts/orion/templates/serviceaccount.yaml and
+charts/keyrock/templates/serviceaccount.yaml.
+
+Call convention — always dict form:
+
+  {{ include "common.serviceAccount.tpl" (dict "context" $) }}
+
+  {{ include "common.serviceAccount.tpl" (dict "context" $ "component" "db") }}
+
+Arguments (dict):
+  context   - root context (`$`), required. Reads
+              `.Values.serviceAccount.{create,name,annotations}`.
+  component - optional component name, forwarded to the name / label
+              helpers for multi-component charts (scorpio-broker, Step
+              10 of IMPLEMENTATION_PLAN.md).
+
+The helper renders nothing when `.Values.serviceAccount.create` is
+false, so the consumer chart can `include` it unconditionally from a
+dedicated serviceaccount.yaml file.
+*/}}
+{{- define "common.serviceAccount.tpl" -}}
+{{- $ctx := .context -}}
+{{- $component := default "" .component -}}
+{{- $labelArgs := dict "context" $ctx "component" $component -}}
+{{- if $ctx.Values.serviceAccount.create -}}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "common.serviceAccount.name" $labelArgs }}
+  namespace: {{ include "common.names.namespace" (dict "context" $ctx) | quote }}
+  {{- with $ctx.Values.serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "common.labels.standard" $labelArgs | nindent 4 }}
+{{- end -}}
+{{- end -}}
