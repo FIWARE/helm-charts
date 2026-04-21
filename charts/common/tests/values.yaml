@@ -3,19 +3,22 @@
 # against golden files in `charts/common/tests/expected/`.
 #
 # The fixture exists only to prove that the `common.*` helpers produce
-# output byte-identical to the canonical orion/keyrock helpers. It is
-# not published.
+# output byte-identical (modulo whitespace tolerated by kubeconform) to
+# the canonical orion/keyrock/mintaka helpers. It is not published.
 
 nameOverride: ""
 fullnameOverride: ""
 namespaceOverride: ""
 
-# Service-account block — consumed by common.serviceAccount.name.
-# Exercises both branches (`create: true` default, `create: false`,
-# and the `.name` override) via separate keys in parity.yaml below.
+# Service-account block — consumed by common.serviceAccount.name and
+# common.serviceAccount.tpl. Exercises both branches (`create: true`
+# default, `create: false`, and the `.name` override) via separate keys
+# in parity.yaml and resources.yaml below.
 serviceAccount:
   create: true
   name: ""
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::000000000000:role/common-tests
 
 # Image block — consumed by common.images.{image,pullPolicy}. The
 # fixture chart's .Chart.AppVersion is "1.0.1" so `tag: ""` verifies
@@ -40,8 +43,8 @@ imagePullSecrets:
   - name: registry-a
   - registry-b
 
-# Secret inputs — consumed by common.secrets.{name,key}. The keys
-# mirror the two idioms in the codebase:
+# Secret inputs — consumed by common.secrets.{name,key} and
+# common.secret.tpl. The keys mirror the two idioms in the codebase:
 #   * keyrockStyle  — `.Values.existingSecret` is a plain string
 #   * keyrockCert   — same shape, exercised with suffix="-certs"
 #   * orionStyle    — `.Values.broker.db.existingSecret` is a map
@@ -61,3 +64,63 @@ brokerNoName:
       key: "myDbPasswordKey"
 brokerDefaults:
   db: {}
+
+# Password material used by common.secret.tpl. The `brokerDefaults`
+# branch has no existingSecret set, so the helper must render a real
+# Secret object; base64-encoded "secret-password" is the expected
+# ciphertext.
+brokerSecretData:
+  dbPassword: "secret-password"
+
+# Service block — consumed by common.service.tpl. Matches the orion
+# service.yaml shape (type, port, targetPort via .broker.port).
+service:
+  type: ClusterIP
+  port: 1026
+  annotations:
+    service.beta.kubernetes.io/topology-aware-hints: auto
+brokerTargetPort: 1026
+
+# Ingress block — consumed by common.ingress.tpl. `enabled: true` so
+# the helper renders a full Ingress manifest. Matches the orion/mintaka
+# shape (hosts with paths list, tls list, annotations map).
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: common.example.org
+      paths:
+        - /
+  tls:
+    - hosts:
+        - common.example.org
+      secretName: common-tls
+
+# Route block — consumed by common.route.tpl. `enabled: true` so the
+# helper renders a full OpenShift Route manifest.
+route:
+  enabled: true
+  host: common.apps.example.org
+  annotations:
+    haproxy.router.openshift.io/timeout: 30s
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+
+# Autoscaling block — consumed by common.hpa.tpl. `enabled: true` so
+# the helper renders an HPA manifest. `apiVersion` exercises the
+# interpolated autoscaling/<version> path used by orion/mintaka today.
+autoscaling:
+  enabled: true
+  apiVersion: v2
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
