@@ -3,8 +3,7 @@
 A [Helm library chart](https://helm.sh/docs/topics/library_charts/) that
 centralises the template helpers duplicated across every FIWARE Helm
 chart (names, labels, service account, secret, image, and resource
-bodies). It is modelled after
-[`bitnami/common`](https://github.com/bitnami/charts/tree/main/bitnami/common).
+bodies).
 
 Library charts render nothing on their own. Consumer charts depend on
 `common` locally and `include` its `common.*` helpers in place of the
