@@ -98,6 +98,8 @@ jobs:
     steps:
 
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Check if already bumped
         id: already-bumped
@@ -109,11 +111,7 @@ jobs:
             echo Not bumped
             echo "bumped=false" >> $GITHUB_OUTPUT
           fi
-
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
+          
       - id: bump
         uses: zwaldowski/match-label-action@v4
         with:
