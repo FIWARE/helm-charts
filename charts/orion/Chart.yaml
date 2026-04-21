@@ -14,7 +14,7 @@ sources:
   - https://github.com/FIWARE/context.Orion-LD
 maintainers:
   - name: wistefan
-    email: stefan.wiedemann@fiware.org
+    email: stefan.wiedemann@seamware.com
 annotations:
   charts.openshift.io/name: orion-ld
 # The `common` library chart ships every shared helper
@@ -27,4 +27,4 @@ annotations:
 dependencies:
   - name: common
     repository: "file://../common"
-    version: "0.1.0"
+    version: "0.1.1"

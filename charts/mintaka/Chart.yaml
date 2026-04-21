@@ -14,7 +14,7 @@ sources:
   - https://github.com/fiware/mintaka
 maintainers:
   - name: wistefan
-    email: stefan.wiedemann@fiware.org
+    email: stefan.wiedemann@seamware.com
 # The `common` library chart ships every shared helper
 # (names, labels, service-account resolution, existing-secret
 # resolution, service/ingress/route/HPA/secret/serviceaccount
@@ -25,4 +25,4 @@ maintainers:
 dependencies:
   - name: common
     repository: "file://../common"
-    version: "0.1.0"
+    version: "0.1.1"
