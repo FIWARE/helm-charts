@@ -36,7 +36,3 @@ runs:
           yq e -i ".version = \"$new_version\"" "charts/$chart/Chart.yaml"
           echo "Bumped $chart: $version -> $new_version"
         done
-
-    - name: Generate helm docs
-      shell: bash
-      run: docker run --rm --volume "$(pwd):/helm-docs" -u $(id -u) jnorwood/helm-docs:latest
