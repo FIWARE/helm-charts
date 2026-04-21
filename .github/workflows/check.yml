@@ -139,8 +139,17 @@ jobs:
           done
           echo "list=${CHARTS# }" >> $GITHUB_OUTPUT
 
+      - name: Check if already bumped
+        id: already-bumped
+        run: |
+          if git log --oneline | grep -q "Update helm documentation"; then
+            echo "bumped=true" >> $GITHUB_OUTPUT
+          else
+            echo "bumped=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Bump chart versions
-        if: steps.charts.outputs.list != ''
+        if: steps.charts.outputs.list != '' && steps.already-bumped.outputs.bumped == 'false'
         uses: ./.github/actions/bump-chart-version
         with:
           charts: ${{ steps.charts.outputs.list }}
