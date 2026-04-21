@@ -130,20 +130,88 @@ for the full list of explicit breaking changes.
 | HPA body           | `_hpa.tpl`        | 5    | done           |
 | Secret body        | `_secret.tpl`     | 5    | done           |
 | ServiceAccount body | `_serviceaccount.tpl` | 5 | done           |
+| Test harness       | `scripts/test-common.sh` + `charts/common/tests/` | 6 | done |
 
 ## Testing
 
 The `charts/common/tests/` directory holds a fixture consumer chart used
 to verify that the rendered output of each helper matches the current
-orion / keyrock bodies byte-for-byte. `scripts/test-common.sh` (added in
-Step 6) drives the comparison.
+orion / keyrock bodies byte-for-byte. The fixture is a regular Helm
+chart with `type: application` that depends on `common` via
+`file://..`, includes every `common.*` helper in
+`charts/common/tests/templates/`, and pins a set of deterministic
+values in `charts/common/tests/values.yaml`.
 
-For a one-off sanity check:
+### Running the tests
+
+```console
+bash scripts/test-common.sh
+```
+
+The script:
+
+1. Runs `helm dependency update charts/common/tests` so the fixture
+   picks up the latest `charts/common` sources through its `file://..`
+   dependency.
+2. Runs `helm template test-release charts/common/tests --namespace
+   test-ns`. The release name and namespace are fixed because they are
+   baked into the golden files via the helpers under test.
+3. `diff -u`s the rendered output against every `.yaml` file under
+   `charts/common/tests/expected/` (one file per scenario).
+
+A non-empty diff — whether from a helper change, a whitespace
+regression, or a reordered YAML field — fails the script with exit
+code `1` and prints the diff so the cause is obvious.
+
+### Updating a golden file
+
+After an intentional behavioural change to a helper, refresh the
+relevant `expected/*.yaml` file:
+
+```console
+helm dependency update charts/common/tests
+helm template test-release charts/common/tests \
+    --namespace test-ns \
+    > charts/common/tests/expected/default.yaml
+```
+
+The new golden file must be reviewed in the same PR as the helper
+change so the diff is auditable.
+
+### CI wiring
+
+`.github/workflows/check.yml` runs `scripts/test-common.sh` in a
+dedicated `common-tests` job on every pull request against `main`
+(after the existing `lint` job). The job depends only on `helm` being
+on `PATH`; kubeconform is not required, because the fixture
+specifically targets helper parity, and the rendered output's schema
+is exercised by the existing `eval.sh` job once consumer charts start
+depending on `common`.
+
+### Why `charts/common/tests` is not a published chart
+
+`charts/common/tests` lives under `charts/` only so the fixture can
+resolve `common` via a relative `file://..` path; it is explicitly
+excluded from both publication and linting:
+
+- `lint.sh` contains a `SKIP_CHARTS` list with `./charts/common/tests`
+  so `helm lint` ignores it.
+- `eval.sh` already skips library charts and is invoked via the
+  `./charts/*` glob which expands to direct children only (the
+  fixture sits one level deeper at `./charts/common/tests` and is
+  never reached).
+- `build.sh` iterates the same `./charts/*` glob; the fixture's own
+  `helm dependency update` is driven by `scripts/test-common.sh`.
+
+### One-off sanity check
+
+If you want to inspect the rendered manifests without running the
+diff harness:
 
 ```console
 helm lint charts/common
 helm dependency update charts/common/tests
-helm template charts/common/tests
+helm template test-release charts/common/tests --namespace test-ns
 ```
 
 ## Versioning
