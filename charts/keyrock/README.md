@@ -1,6 +1,6 @@
 # keyrock
 
-![Version: 0.10.7](https://img.shields.io/badge/Version-0.10.7-informational?style=flat-square) ![AppVersion: 8.3.3](https://img.shields.io/badge/AppVersion-8.3.3-informational?style=flat-square)
+![Version: 0.10.8](https://img.shields.io/badge/Version-0.10.8-informational?style=flat-square) ![AppVersion: 8.3.3](https://img.shields.io/badge/AppVersion-8.3.3-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -22,7 +22,7 @@ Kubernetes: `>= 1.19-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| file://../common | common | 0.1.1 |
+| file://../common | common | 0.0.0 |
 
 ## Values
 
