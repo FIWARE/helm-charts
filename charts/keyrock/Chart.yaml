@@ -1,6 +1,6 @@
 apiVersion: v2
 name: keyrock
-version: 0.10.8
+version: 0.10.9
 appVersion: 8.3.3
 kubeVersion: '>= 1.19-0'
 home: https://fiware-idm.readthedocs.io/en/latest/
