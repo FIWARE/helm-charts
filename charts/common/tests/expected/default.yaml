@@ -80,3 +80,72 @@ data:
     app.kubernetes.io/instance: test-release
     app.kubernetes.io/version: "1.0.1"
     app.kubernetes.io/managed-by: Helm
+
+  # ---- common.serviceAccount.name ------------------------------------
+  # Default branch: `serviceAccount.create: true`, `serviceAccount.name: ""`
+  # → fullname; same as the legacy body.
+  common_sa_name_default: "test-release-common-tests"
+  legacy_sa_name_default: "test-release-common-tests"
+
+  # Component variant: `create: true`, no override, component="worker"
+  # → fullname-worker. Additive: legacy has no equivalent to compare
+  # against, so this line is only on the common.* side.
+  common_sa_name_component: "test-release-common-tests-worker"
+
+  # ---- common.secrets.name (keyrock-style, string override) ----------
+  common_secret_keyrock: "my-keyrock-secret"
+  legacy_secret_keyrock: "my-keyrock-secret"
+
+  # ---- common.secrets.name (keyrock cert, string override + suffix) --
+  common_secret_keyrock_cert: "my-keyrock-cert-secret"
+  legacy_secret_keyrock_cert: "my-keyrock-cert-secret"
+
+  # ---- common.secrets.name (orion-style, map with name) --------------
+  common_secret_orion: "my-orion-db-secret"
+  legacy_secret_orion: "my-orion-db-secret"
+
+  # ---- common.secrets.name (orion-style, map without name) -----------
+  # Falls back to fullname because the map lacks a `name` key.
+  common_secret_orion_noname: "test-release-common-tests"
+
+  # ---- common.secrets.name (no existingSecret) -----------------------
+  # Both nil (absent) and empty fall back to fullname.
+  common_secret_orion_absent: "test-release-common-tests"
+
+  # ---- common.secrets.key (orion-style, key set) ---------------------
+  common_secret_key_orion: "myDbPasswordKey"
+  legacy_secret_key_orion: "myDbPasswordKey"
+
+  # ---- common.secrets.key (map without key → default) ----------------
+  common_secret_key_default: "dbPassword"
+
+  # ---- common.images.image -------------------------------------------
+  # `image.tag: ""` with .Chart.AppVersion="1.0.1" → repository:1.0.1;
+  # matches the `tag | default .Chart.AppVersion` idiom used in
+  # onboarding-portal / did-helper / odrl-pap / etc.
+  common_image_appversion: "quay.io/fiware/common-tests:1.0.1"
+  legacy_image_appversion: "quay.io/fiware/common-tests:1.0.1"
+
+  # Explicit tag — verifies the helper does not override a caller-set
+  # value (orion / keyrock / mintaka path).
+  common_image_pinned: "quay.io/fiware/common-tests:2.0.0"
+  legacy_image_pinned: "quay.io/fiware/common-tests:2.0.0"
+
+  # ---- common.images.pullPolicy --------------------------------------
+  # Empty → IfNotPresent (Kubernetes default).
+  common_pullPolicy_default: "IfNotPresent"
+
+  # Explicit → passthrough.
+  common_pullPolicy_pinned: "Always"
+
+  # ---- common.images.pullSecrets -------------------------------------
+  # Mix of `- name: ...` and bare strings in the input; both normalise
+  # to canonical `- name: ...` form.
+  common_pullSecrets: |
+    imagePullSecrets:
+      - name: registry-a
+      - name: registry-b
+
+  # Empty input renders nothing (empty string), so the consumer's
+  # deployment template can `include` this unconditionally.
+  common_pullSecrets_empty: ""

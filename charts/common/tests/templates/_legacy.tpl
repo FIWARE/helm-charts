@@ -44,3 +44,66 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/name: {{ include "legacy.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
+
+{{/*
+Legacy copies of the serviceAccount / secret helpers. Same purpose as
+the name/labels copies above — the parity ConfigMap renders them
+side-by-side with the `common.*` output so `diff` catches divergence.
+
+`legacy.serviceAccountName` matches charts/orion/templates/_helpers.tpl
+and charts/keyrock/templates/_helpers.tpl verbatim.
+
+`legacy.keyrockSecretName` / `legacy.keyrockCertSecretName` match
+charts/keyrock/templates/_helpers.tpl.
+
+`legacy.orionSecretName` / `legacy.orionSecretKey` match
+charts/orion/templates/_helpers.tpl.
+*/}}
+
+{{- define "legacy.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "legacy.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{- define "legacy.keyrockSecretName" -}}
+    {{- if .Values.existingSecret -}}
+        {{- printf "%s" (tpl .Values.existingSecret $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "legacy.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "legacy.keyrockCertSecretName" -}}
+    {{- if .Values.existingCertSecret -}}
+        {{- printf "%s" (tpl .Values.existingCertSecret $) -}}
+    {{- else -}}
+        {{- printf "%s-certs" (include "legacy.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "legacy.orionSecretName" -}}
+    {{- if .Values.broker.db.existingSecret -}}
+        {{- if .Values.broker.db.existingSecret.name -}}
+            {{- printf "%s" (tpl .Values.broker.db.existingSecret.name $) -}}
+        {{- else -}}
+            {{- printf "%s" (include "legacy.fullname" .) -}}
+        {{- end -}}
+    {{- else -}}
+        {{- printf "%s" (include "legacy.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "legacy.orionSecretKey" -}}
+    {{- if .Values.broker.db.existingSecret -}}
+        {{- if .Values.broker.db.existingSecret.key -}}
+            {{- printf "%s" (tpl .Values.broker.db.existingSecret.key $) -}}
+        {{- else -}}
+            {{- printf "dbPassword" -}}
+        {{- end -}}
+    {{- else -}}
+        {{- printf "dbPassword" -}}
+    {{- end -}}
+{{- end -}}

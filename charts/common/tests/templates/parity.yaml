@@ -66,3 +66,70 @@ data:
   common_names_fullname_dict_empty: {{ include "common.names.fullname" (dict "context" .) | quote }}
   common_labels_standard_dict_empty: |
     {{- include "common.labels.standard" (dict "context" .) | nindent 4 }}
+
+  # ---- common.serviceAccount.name ------------------------------------
+  # Default branch: `serviceAccount.create: true`, `serviceAccount.name: ""`
+  # → fullname; same as the legacy body.
+  common_sa_name_default: {{ include "common.serviceAccount.name" . | quote }}
+  legacy_sa_name_default: {{ include "legacy.serviceAccountName" . | quote }}
+
+  # Component variant: `create: true`, no override, component="worker"
+  # → fullname-worker. Additive: legacy has no equivalent to compare
+  # against, so this line is only on the common.* side.
+  common_sa_name_component: {{ include "common.serviceAccount.name" (dict "context" . "component" "worker") | quote }}
+
+  # ---- common.secrets.name (keyrock-style, string override) ----------
+  common_secret_keyrock: {{ include "common.secrets.name" (dict "context" . "existingSecret" .Values.existingSecret) | quote }}
+  legacy_secret_keyrock: {{ include "legacy.keyrockSecretName" . | quote }}
+
+  # ---- common.secrets.name (keyrock cert, string override + suffix) --
+  common_secret_keyrock_cert: {{ include "common.secrets.name" (dict "context" . "existingSecret" .Values.existingCertSecret "suffix" "-certs") | quote }}
+  legacy_secret_keyrock_cert: {{ include "legacy.keyrockCertSecretName" . | quote }}
+
+  # ---- common.secrets.name (orion-style, map with name) --------------
+  common_secret_orion: {{ include "common.secrets.name" (dict "context" . "existingSecret" .Values.broker.db.existingSecret) | quote }}
+  legacy_secret_orion: {{ include "legacy.orionSecretName" . | quote }}
+
+  # ---- common.secrets.name (orion-style, map without name) -----------
+  # Falls back to fullname because the map lacks a `name` key.
+  common_secret_orion_noname: {{ include "common.secrets.name" (dict "context" . "existingSecret" .Values.brokerNoName.db.existingSecret) | quote }}
+
+  # ---- common.secrets.name (no existingSecret) -----------------------
+  # Both nil (absent) and empty fall back to fullname.
+  common_secret_orion_absent: {{ include "common.secrets.name" (dict "context" . "existingSecret" .Values.brokerDefaults.db.existingSecret) | quote }}
+
+  # ---- common.secrets.key (orion-style, key set) ---------------------
+  common_secret_key_orion: {{ include "common.secrets.key" (dict "context" . "existingSecret" .Values.broker.db.existingSecret "defaultKey" "dbPassword") | quote }}
+  legacy_secret_key_orion: {{ include "legacy.orionSecretKey" . | quote }}
+
+  # ---- common.secrets.key (map without key → default) ----------------
+  common_secret_key_default: {{ include "common.secrets.key" (dict "context" . "existingSecret" .Values.brokerDefaults.db.existingSecret "defaultKey" "dbPassword") | quote }}
+
+  # ---- common.images.image -------------------------------------------
+  # `image.tag: ""` with .Chart.AppVersion="1.0.1" → repository:1.0.1;
+  # matches the `tag | default .Chart.AppVersion` idiom used in
+  # onboarding-portal / did-helper / odrl-pap / etc.
+  common_image_appversion: {{ include "common.images.image" (dict "context" . "image" .Values.image) | quote }}
+  legacy_image_appversion: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+
+  # Explicit tag — verifies the helper does not override a caller-set
+  # value (orion / keyrock / mintaka path).
+  common_image_pinned: {{ include "common.images.image" (dict "context" . "image" .Values.imagePinned) | quote }}
+  legacy_image_pinned: "{{ .Values.imagePinned.repository }}:{{ .Values.imagePinned.tag }}"
+
+  # ---- common.images.pullPolicy --------------------------------------
+  # Empty → IfNotPresent (Kubernetes default).
+  common_pullPolicy_default: {{ include "common.images.pullPolicy" (dict "image" .Values.image) | quote }}
+
+  # Explicit → passthrough.
+  common_pullPolicy_pinned: {{ include "common.images.pullPolicy" (dict "image" .Values.imagePinned) | quote }}
+
+  # ---- common.images.pullSecrets -------------------------------------
+  # Mix of `- name: ...` and bare strings in the input; both normalise
+  # to canonical `- name: ...` form.
+  common_pullSecrets: |
+    {{- include "common.images.pullSecrets" (dict "pullSecrets" .Values.imagePullSecrets) | nindent 4 }}
+
+  # Empty input renders nothing (empty string), so the consumer's
+  # deployment template can `include` this unconditionally.
+  common_pullSecrets_empty: {{ include "common.images.pullSecrets" (dict "pullSecrets" list) | quote }}
