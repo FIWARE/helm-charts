@@ -1,82 +1,76 @@
 
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
+Orion-specific helpers.
+
+Every helper in this file is now a thin wrapper around the matching
+`common.*` helper from the `common` library chart (see
+charts/common/templates/*.tpl). The wrappers exist so that:
+
+  * Any external umbrella chart that already imports e.g.
+    `include "orion.fullname" .` keeps working — no external breaking
+    change.
+  * The bodies below stay in lock-step with the rest of the FIWARE
+    charts, because there is exactly one implementation of each
+    helper (in `common`).
+
+See docs/common-chart-proposal.md for the migration rationale and the
+planned deprecation window. Removal of the wrappers is scheduled as a
+future major version bump (see charts/common/DEPRECATIONS.md in Step
+11 of the plan).
+*/}}
+
+{{/*
+Expand the name of the chart. Delegates to `common.names.name`.
 */}}
 {{- define "orion.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.name" . -}}
 {{- end -}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
+Create a default fully qualified app name. Delegates to
+`common.names.fullname`.
 */}}
 {{- define "orion.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.fullname" . -}}
 {{- end -}}
-{{- end -}}
-{{- end -}}
+
 {{/*
-Create chart name and version as used by the chart label.
+Create chart name and version as used by the chart label. Delegates to
+`common.names.chart`.
 */}}
 {{- define "orion.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.chart" . -}}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use
+Create the name of the service account to use. Delegates to
+`common.serviceAccount.name`.
 */}}
 {{- define "orion.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "orion.fullname" .) .Values.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
-{{- end -}}
+{{- include "common.serviceAccount.name" . -}}
 {{- end -}}
 
 {{/*
-orion secrets
+Resolve the name of the Secret holding the mongo DB password.
+Delegates to `common.secrets.name` with the orion-specific
+`.Values.broker.db.existingSecret` key.
 */}}
 {{- define "orion.secretName" -}}
-    {{- if .Values.broker.db.existingSecret -}}
-        {{- if .Values.broker.db.existingSecret.name -}}
-            {{- printf "%s" (tpl .Values.broker.db.existingSecret.name $) -}}
-        {{- else -}}
-            {{- printf "%s" (include "orion.fullname" .) -}}
-        {{- end -}}
-    {{- else -}}
-        {{- printf "%s" (include "orion.fullname" .) -}}
-    {{- end -}}
+{{- include "common.secrets.name" (dict "context" . "existingSecret" .Values.broker.db.existingSecret) -}}
 {{- end -}}
 
-{{- define "orion.secretKey" -}}
-    {{- if .Values.broker.db.existingSecret -}}
-        {{- if .Values.broker.db.existingSecret.key -}}
-            {{- printf "%s" (tpl .Values.broker.db.existingSecret.key $) -}}
-        {{- else -}}
-            {{- printf "dbPassword" -}}
-        {{- end -}}
-    {{- else -}}
-        {{- printf "dbPassword" -}}
-    {{- end -}}
-{{- end -}}
 {{/*
-Common labels
+Resolve the key within the DB secret. Delegates to
+`common.secrets.key`; orion's canonical default key is `dbPassword`.
+*/}}
+{{- define "orion.secretKey" -}}
+{{- include "common.secrets.key" (dict "context" . "existingSecret" .Values.broker.db.existingSecret "defaultKey" "dbPassword") -}}
+{{- end -}}
+
+{{/*
+Common labels. Delegates to `common.labels.standard`.
 */}}
 {{- define "orion.labels" -}}
-app.kubernetes.io/name: {{ include "orion.name" . }}
-helm.sh/chart: {{ include "orion.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{ include "common.labels.standard" . }}
 {{- end -}}
