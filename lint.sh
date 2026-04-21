@@ -14,7 +14,31 @@ failed_charts=()
 
 CHARTS=./charts/*
 
+# Fixture chart paths (relative to repo root) that are NOT first-class
+# published charts and must be excluded from `helm lint`. They live
+# under `charts/<chart>/tests/` so they are already below the `./charts/*`
+# glob expansion, but we keep an explicit skip list in case a future
+# refactor widens the glob (e.g. `find ./charts -name Chart.yaml`). Each
+# entry is an absolute-from-repo path without a trailing slash.
+SKIP_CHARTS=(
+    "./charts/common/tests"
+)
+
+is_skipped() {
+    local candidate="$1"
+    for skip in "${SKIP_CHARTS[@]}"; do
+        if [[ "$candidate" == "$skip" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
 for chart in $CHARTS; do
+    if is_skipped "$chart"; then
+        echo -e "${BLUE}[${chart}]${WHITE} ⇢ Skipping fixture (not a published chart)${RESET}"
+        continue
+    fi
     if helm lint "$chart"; then
         echo -e "${BLUE}[${chart}]${GREEN} ✔ Lint passed for $chart${RESET}"
     else
