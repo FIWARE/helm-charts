@@ -216,33 +216,109 @@ dependency without changing any rendered manifests.
   `charts/keyrock/templates/serviceaccount.yaml`, `charts/keyrock/templates/secret.yaml`,
   `charts/keyrock/templates/statefulset-hpa.yaml`, `charts/keyrock/CHANGELOG.md`.
 
-### Step 9: Batch migration — single-component charts
-**Goal.** Migrate the remaining straightforward, single-deployment charts using
-the pattern established by orion/keyrock.
+### Step 9: Migration — `mintaka`
+**Goal.** Third pilot migration — the first of the "simple" single-deployment
+charts, exercising the orion/keyrock pattern on a chart without bespoke helpers
+but with an HPA template.
+
+**Work.**
+- Add `dependencies:` entry in `charts/mintaka/Chart.yaml` pointing at
+  `file://../common`, bump `apiVersion` v1→v2 (required to declare
+  dependencies), bump `version` minor (0.4.2 → 0.6.0), add
+  `kubeVersion: '>= 1.19-0'`.
+- In `charts/mintaka/templates/_helpers.tpl`, replace every helper body with a
+  thin wrapper over the matching `common.*` helper (same pattern as
+  orion/keyrock).
+- Replace `templates/service.yaml`, `ingress.yaml`, `route.yaml`,
+  `serviceaccount.yaml`, `secret.yaml`, `deployment-hpa.yaml` with one-line
+  `include` calls to the corresponding `common.*.tpl` helpers. Leave
+  `deployment.yaml` and `NOTES.txt` untouched (they reference
+  mintaka-specific env / probe config that has no counterpart in `common`).
+- Add `autoscaling.apiVersion: "v2beta2"` to `values.yaml` so `common.hpa.tpl`
+  reproduces the previous HPA apiVersion exactly. Document this as a
+  non-behavioural "breaking change" in `charts/mintaka/CHANGELOG.md`.
+- Add `charts/mintaka/.gitignore` excluding `Chart.lock` and the `charts/`
+  sub-directory (matches orion / keyrock).
+- **Acceptance:** `helm template charts/mintaka` before vs. after the migration
+  differs only by whitespace + the documented version bump + the cosmetic labels-
+  block whitespace change. `./lint.sh` and `./eval.sh` pass with every other
+  chart, kubeconform is clean under default / existingSecret / full-values
+  profiles.
+- **Files:** `charts/mintaka/Chart.yaml`, `charts/mintaka/.gitignore`,
+  `charts/mintaka/templates/_helpers.tpl`,
+  `charts/mintaka/templates/service.yaml`,
+  `charts/mintaka/templates/ingress.yaml`,
+  `charts/mintaka/templates/route.yaml`,
+  `charts/mintaka/templates/serviceaccount.yaml`,
+  `charts/mintaka/templates/secret.yaml`,
+  `charts/mintaka/templates/deployment-hpa.yaml`,
+  `charts/mintaka/values.yaml`, `charts/mintaka/CHANGELOG.md`.
+
+### Step 10: Batch migration A — `api-umbrella`, `apollo`, `bae-activation-service`, `business-api-ecosystem`, `canis-major`
+**Goal.** Migrate the first batch of the remaining straightforward,
+single-deployment charts using the pattern established by orion/keyrock/mintaka.
 
 **Scope.** `api-umbrella`, `apollo`, `bae-activation-service`,
-`business-api-ecosystem`, `canis-major`, `contract-management`,
-`credentials-config-service`, `did-helper`, `dsba-pdp`, `dss-validation-service`,
-`endpoint-auth-service`, `fdsc-edc`, `iotagent-json`, `iotagent-ul`,
-`ishare-satellite`, `mintaka`, `odrl-pap`, `onboarding-portal`, `tm-forum-api`,
-`trusted-issuers-list`, `trusted-issuers-registry`, `vcverifier`.
+`business-api-ecosystem`, `canis-major`.
 
 **Work per chart.**
-- Same procedure as Step 7: add `common` dependency, wrap helpers, replace
-  duplicated template bodies with `include` calls, bump chart version, add a
-  `CHANGELOG.md` entry.
+- Same procedure as Step 9: add `common` dependency, wrap helpers, replace
+  duplicated template bodies with `include` calls, bump `apiVersion`/`version`,
+  add `kubeVersion`, add `autoscaling.apiVersion` to values (where an HPA
+  template exists), add `.gitignore`, add `CHANGELOG.md`.
 - For charts that render additional resources not covered by `common` (envoy
-  configmap in tm-forum-api, certificates in vcverifier/keyrock, configmaps in
+  configmap in tm-forum-api, certificates in vcverifier, configmaps in
   various), leave those templates unchanged.
 - Each chart is a separate commit within this step's PR so reverts remain cheap.
-- **Acceptance:** for every migrated chart, `helm template` output before vs. after
-  differs only in whitespace (or in documented breaking changes listed in that
-  chart's `CHANGELOG.md`); `./lint.sh` and `./eval.sh` pass.
-- **Files:** `charts/<chart>/Chart.yaml`, `charts/<chart>/Chart.lock`,
-  `charts/<chart>/templates/_helpers.tpl`, plus the resource templates each chart
-  actually had.
+- **Acceptance:** for every migrated chart, `helm template` output before vs.
+  after differs only in whitespace (or in documented breaking changes listed in
+  that chart's `CHANGELOG.md`); `./lint.sh` and `./eval.sh` pass.
+- **Files:** `charts/<chart>/Chart.yaml`, `charts/<chart>/.gitignore`,
+  `charts/<chart>/templates/_helpers.tpl`, plus the resource templates each
+  chart actually had, `charts/<chart>/values.yaml`,
+  `charts/<chart>/CHANGELOG.md`.
 
-### Step 10: Migration — `scorpio-broker` and `scorpio-broker-aaio` (multi-component)
+### Step 11: Batch migration B — `contract-management`, `credentials-config-service`, `did-helper`, `dsba-pdp`, `dss-validation-service`
+**Goal.** Second batch, same pattern as Step 10.
+
+**Scope.** `contract-management`, `credentials-config-service`, `did-helper`,
+`dsba-pdp`, `dss-validation-service`.
+
+**Work per chart.** Identical to Step 10.
+
+**Acceptance.** Same as Step 10.
+
+**Files.** Same shape as Step 10, scoped to the five charts listed above.
+
+### Step 12: Batch migration C — `endpoint-auth-service`, `fdsc-edc`, `iotagent-json`, `iotagent-ul`, `ishare-satellite`
+**Goal.** Third batch, same pattern as Step 10.
+
+**Scope.** `endpoint-auth-service`, `fdsc-edc`, `iotagent-json`, `iotagent-ul`,
+`ishare-satellite`.
+
+**Work per chart.** Identical to Step 10.
+
+**Acceptance.** Same as Step 10.
+
+**Files.** Same shape as Step 10, scoped to the five charts listed above.
+
+### Step 13: Batch migration D — `odrl-pap`, `onboarding-portal`, `tm-forum-api`, `trusted-issuers-list`, `trusted-issuers-registry`, `vcverifier`
+**Goal.** Fourth and final batch of single-component charts, same pattern as
+Step 10.
+
+**Scope.** `odrl-pap`, `onboarding-portal`, `tm-forum-api`,
+`trusted-issuers-list`, `trusted-issuers-registry`, `vcverifier`.
+
+**Work per chart.** Identical to Step 10. `tm-forum-api` and `vcverifier` have
+chart-specific extra templates (envoy configmap, certificates) — leave those
+unchanged; only migrate the duplicated service/ingress/route/HPA/SA/secret
+bodies.
+
+**Acceptance.** Same as Step 10.
+
+**Files.** Same shape as Step 10, scoped to the six charts listed above.
+
+### Step 14: Migration — `scorpio-broker` and `scorpio-broker-aaio` (multi-component)
 **Goal.** Handle the only charts that render many services per release; they need
 helper variants that accept a component name.
 
@@ -263,7 +339,7 @@ helper variants that accept a component name.
   `charts/common/templates/_labels.tpl`, `charts/common/tests/**`,
   `charts/scorpio-broker/**`, `charts/scorpio-broker-aaio/**`.
 
-### Step 11: Remove legacy per-chart helper bodies (optional, deferred)
+### Step 15: Remove legacy per-chart helper bodies (optional, deferred)
 **Goal.** Document — but do not execute — the eventual cleanup where the
 per-chart `<chart>.*` wrapper helpers are dropped. This is intentionally the LAST
 step and is scheduled for a future major version bump of each chart.
@@ -276,7 +352,7 @@ step and is scheduled for a future major version bump of each chart.
 - **Acceptance:** doc is present; no chart behaviour changes.
 - **Files:** `charts/common/DEPRECATIONS.md`.
 
-### Step 12: Final verification and documentation sweep
+### Step 16: Final verification and documentation sweep
 **Goal.** Make sure the repo is coherent before hand-off.
 
 **Work.**
