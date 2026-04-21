@@ -1,0 +1,11 @@
+# The `common` chart is a Helm library chart (see `type: library` in
+# Chart.yaml). Library charts do not render any manifests themselves; they
+# exist only to provide named templates that consumer charts can `include`.
+#
+# As a result this values.yaml is intentionally empty: the `common.*`
+# helpers operate on the values tree passed in by the consumer chart
+# (typically via `(dict "context" $ "values" .Values.<x>)`).
+#
+# If you are looking for defaults consumers can opt into, see
+# `charts/common/README.md` and the individual `_*.tpl` files under
+# `charts/common/templates/`.
