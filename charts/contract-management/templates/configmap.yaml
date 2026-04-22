@@ -25,6 +25,10 @@ data:
       enableTmForum: {{ .Values.enableTmForum }}
       enableRainbow: {{ .Values.enableRainbow }}
       enableCentralMarketplace: {{ .Values.enableCentralMarketplace }}
+      {{- with .Values.organization }}
+      organization:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     {{- if eq .Values.oid4vp.enabled true }}
     oid4vp:
       enabled: {{ .Values.oid4vp.enabled }}
