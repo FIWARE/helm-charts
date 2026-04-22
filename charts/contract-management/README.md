@@ -1,6 +1,6 @@
 # contract-management
 
-![Version: 3.5.18](https://img.shields.io/badge/Version-3.5.18-informational?style=flat-square) ![AppVersion: 3.3.7](https://img.shields.io/badge/AppVersion-3.3.7-informational?style=flat-square)
+![Version: 3.5.20](https://img.shields.io/badge/Version-3.5.20-informational?style=flat-square) ![AppVersion: 3.3.8](https://img.shields.io/badge/AppVersion-3.3.8-informational?style=flat-square)
 
 A Helm chart for running the contract-management on kubernetes.
 
@@ -70,6 +70,7 @@ A Helm chart for running the contract-management on kubernetes.
 | oid4vp.proxyConfig.proxyHost | string | `nil` |  |
 | oid4vp.proxyConfig.proxyPort | string | `nil` |  |
 | oid4vp.trustAnchors | list | `[]` |  |
+| organization.provider.role | string | `"provider"` |  |
 | port | int | `8080` | port that the til container uses |
 | prometheus.enabled | bool | `true` | should prometheus scrape be enabled |
 | prometheus.path | string | `"/prometheus"` | path for prometheus scrape |
