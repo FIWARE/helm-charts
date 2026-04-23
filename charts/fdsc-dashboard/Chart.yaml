@@ -1,0 +1,29 @@
+apiVersion: v2
+name: fdsc-dashboard
+version: 0.1.0
+appVersion: 0.1.0
+kubeVersion: '>= 1.19-0'
+description: A Helm chart for running the fdsc-dashboard on kubernetes.
+icon: https://fiware.github.io/catalogue/img/fiware.png
+keywords:
+  - fiware
+  - data-space-connector
+  - dataspace
+  - dashboard
+  - ui
+sources:
+  - https://github.com/wistefan/fdsc-dashboard
+maintainers:
+  - name: wistefan
+    email: stefan.wiedemann@seamware.org
+# The `common` library chart ships every shared helper
+# (names, labels, service-account resolution, existing-secret
+# resolution, service/ingress/route/HPA/secret/serviceaccount
+# bodies). It is consumed via a local `file://` dependency so
+# publishing workflows do not need a separate repository entry —
+# Helm packages the library alongside fdsc-dashboard in the resulting
+# `fdsc-dashboard-<version>.tgz`. See charts/common/README.md.
+dependencies:
+  - name: common
+    repository: "file://../common"
+    version: "0.0.1"
