@@ -34,10 +34,12 @@ Arguments (dict):
                    renders nothing (the consumer references the
                    existing secret by its resolved name).
   data           - map of {key: rawValue}. Values are base64-encoded
-                   with Sprig's `b64enc`. Required and non-empty;
-                   callers that only want the `existingSecret` check
-                   semantics (no Secret rendered) should use
-                   `common.secrets.name` directly.
+                   with Sprig's `b64enc`. Required only when no
+                   `existingSecret` is supplied — when the helper
+                   renders nothing (user-supplied existing secret) the
+                   `data` argument may be omitted. Callers that only
+                   want the `existingSecret` check semantics can also
+                   use `common.secrets.name` directly.
   type           - string, defaults to "Opaque".
   suffix         - optional name suffix (e.g. "-certs") — used by
                    keyrock for its certificate Secret.
@@ -51,7 +53,6 @@ no-op; the consumer's deployment continues to reference the resolved
 {{- define "common.secret.tpl" -}}
 {{- $ctx := .context -}}
 {{- $existing := .existingSecret -}}
-{{- $data := required "common.secret.tpl: data is required" .data -}}
 {{- $type := default "Opaque" .type -}}
 {{- $suffix := default "" .suffix -}}
 {{- $component := default "" .component -}}
@@ -65,6 +66,7 @@ no-op; the consumer's deployment continues to reference the resolved
   {{- end -}}
 {{- end -}}
 {{- if not $userSupplied -}}
+{{- $data := required "common.secret.tpl: data is required" .data -}}
 {{- $fullName := include "common.names.fullname" $labelArgs -}}
 apiVersion: v1
 kind: Secret

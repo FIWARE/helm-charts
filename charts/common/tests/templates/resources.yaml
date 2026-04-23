@@ -42,3 +42,15 @@ diff against the golden file and fail `scripts/test-common.sh`.
      "context"        $
      "existingSecret" .Values.brokerDefaults.db.existingSecret
      "data"           .Values.brokerSecretData) }}
+{{/*
+Regression test: when `existingSecret` resolves to a user-supplied
+name the helper must render nothing — and it must not evaluate the
+`required` guard on `data`. If the guard ever moves back above the
+no-op short-circuit, `helm template` fails with
+"common.secret.tpl: data is required" and the whole render aborts,
+which the golden-file diff cannot see. The simple act of rendering
+this call without error is the assertion.
+*/}}
+{{ include "common.secret.tpl" (dict
+     "context"        $
+     "existingSecret" "externally-managed-secret") }}

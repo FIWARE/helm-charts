@@ -1,6 +1,6 @@
 # keyrock changelog
 
-## 0.10.0
+## 0.8.3
 
 ### Common library chart migration
 
