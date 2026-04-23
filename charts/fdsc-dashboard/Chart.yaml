@@ -25,5 +25,5 @@ maintainers:
 # `fdsc-dashboard-<version>.tgz`. See charts/common/README.md.
 dependencies:
   - name: common
-    repository: "file://../common"
+    repository: "https://fiware.github.io/helm-charts"
     version: "0.0.1"
