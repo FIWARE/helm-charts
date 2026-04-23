@@ -1,7 +1,8 @@
-apiVersion: v1
+apiVersion: v2
 name: keyrock
-version: 0.8.2
+version: 0.8.3
 appVersion: 8.3.3
+kubeVersion: '>= 1.19-0'
 home: https://fiware-idm.readthedocs.io/en/latest/
 description: A Helm chart for running the fiware idm keyrock on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
@@ -13,6 +14,15 @@ sources:
   - https://github.com/ging/fiware-idm
 maintainers:
   - name: wistefan
-    email: stefan.wiedemann@fiware.org
-  - name: dwendland
-    email: dennis.wendland@fiware.org
+    email: stefan.wiedemann@seamware.com
+# The `common` library chart ships every shared helper
+# (names, labels, service-account resolution, existing-secret
+# resolution, service/ingress/HPA/secret/serviceaccount bodies).
+# It is consumed via a local `file://` dependency so publishing
+# workflows do not need a separate repository entry — Helm
+# packages the library alongside keyrock in the resulting
+# `keyrock-<version>.tgz`. See charts/common/README.md.
+dependencies:
+  - name: common
+    repository: "file://../common"
+    version: "0.0.1"

@@ -1,27 +1,3 @@
-{{- if .Values.route.enabled -}}
-{{- $fullName := include "mintaka.fullname" . -}}
-apiVersion: route.openshift.io/v1
-kind: Route
-metadata:
-  name: {{ include "mintaka.fullname" . }}
-  namespace: {{ $.Release.Namespace | quote }}
-  labels:
-    {{ include "mintaka.labels" . | nindent 4 }}
-  {{- if .Values.route.annotations }}
-  annotations:
-    {{- with .Values.route.annotations }}
-      {{- toYaml . | nindent 4 }}
-      {{- end }}
-  {{- end }}
-spec:
-  host: {{ .Values.route.host}}
-  to:
-    kind: Service
-    name: {{ $fullName }}
-  {{- if .Values.route.tls }}
-  tls:
-  {{- with .Values.route.tls }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
-  {{- end }}
-{{- end }}
+{{- include "common.route.tpl" (dict
+      "context" $
+      "route"   .Values.route) }}

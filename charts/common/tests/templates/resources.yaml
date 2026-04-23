@@ -1,0 +1,56 @@
+{{/*
+Resource-body fixture: exercises each of the common library's
+resource-rendering helpers (common.service.tpl, common.ingress.tpl,
+common.route.tpl, common.hpa.tpl, common.serviceAccount.tpl,
+common.secret.tpl) so the golden file
+`charts/common/tests/expected/default.yaml` captures a deterministic
+reference render.
+
+Each helper is invoked with the dict-form call convention documented in
+the helper header. The resulting YAML documents are separated with `---`
+so `helm template` emits each as a discrete document; kubeconform can
+validate each in turn.
+
+Any future divergence — a drift in the helper or in the canonical
+orion/keyrock/mintaka shape it mirrors — will show up as a non-empty
+diff against the golden file and fail `scripts/test-common.sh`.
+*/}}
+---
+{{ include "common.serviceAccount.tpl" (dict "context" $) }}
+---
+{{ include "common.service.tpl" (dict
+     "context" $
+     "service" .Values.service
+     "ports"   (list (dict
+                      "port"       .Values.service.port
+                      "targetPort" .Values.brokerTargetPort))) }}
+---
+{{ include "common.ingress.tpl" (dict
+     "context"     $
+     "ingress"     .Values.ingress
+     "servicePort" .Values.service.port) }}
+---
+{{ include "common.route.tpl" (dict
+     "context" $
+     "route"   .Values.route) }}
+---
+{{ include "common.hpa.tpl" (dict
+     "context"     $
+     "autoscaling" .Values.autoscaling) }}
+---
+{{ include "common.secret.tpl" (dict
+     "context"        $
+     "existingSecret" .Values.brokerDefaults.db.existingSecret
+     "data"           .Values.brokerSecretData) }}
+{{/*
+Regression test: when `existingSecret` resolves to a user-supplied
+name the helper must render nothing — and it must not evaluate the
+`required` guard on `data`. If the guard ever moves back above the
+no-op short-circuit, `helm template` fails with
+"common.secret.tpl: data is required" and the whole render aborts,
+which the golden-file diff cannot see. The simple act of rendering
+this call without error is the assertion.
+*/}}
+{{ include "common.secret.tpl" (dict
+     "context"        $
+     "existingSecret" "externally-managed-secret") }}

@@ -1,0 +1,18 @@
+apiVersion: v2
+name: common-tests
+version: 0.0.0
+appVersion: 1.0.1
+type: application
+kubeVersion: '>= 1.19-0'
+description: >-
+  Fixture consumer chart used to verify the `common` library chart's
+  helpers produce output byte-identical to the canonical orion / keyrock
+  helpers. Not published.
+home: https://github.com/FIWARE/helm-charts/tree/main/charts/common
+maintainers:
+  - name: wistefan
+    email: stefan.wiedemann@seamware.com
+dependencies:
+  - name: common
+    repository: "file://.."
+    version: "0.0.1"

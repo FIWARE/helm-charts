@@ -1,6 +1,6 @@
 # keyrock
 
-![Version: 0.8.2](https://img.shields.io/badge/Version-0.8.2-informational?style=flat-square) ![AppVersion: 8.3.3](https://img.shields.io/badge/AppVersion-8.3.3-informational?style=flat-square)
+![Version: 0.8.3](https://img.shields.io/badge/Version-0.8.3-informational?style=flat-square) ![AppVersion: 8.3.3](https://img.shields.io/badge/AppVersion-8.3.3-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -10,12 +10,19 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| wistefan | <stefan.wiedemann@fiware.org> |  |
-| dwendland | <dennis.wendland@fiware.org> |  |
+| wistefan | <stefan.wiedemann@seamware.com> |  |
 
 ## Source Code
 
 * <https://github.com/ging/fiware-idm>
+
+## Requirements
+
+Kubernetes: `>= 1.19-0`
+
+| Repository | Name | Version |
+|------------|------|---------|
+| file://../common | common | 0.0.1 |
 
 ## Values
 
@@ -30,6 +37,7 @@ A Helm chart for running the fiware idm keyrock on kubernetes.
 | authorisationRegistry.identifier | string | `""` | Identifier (EORI) of AR |
 | authorisationRegistry.tokenEndpoint | string | `"https://my-ar.com/connect/token"` | Token endpoint of AR |
 | authorisationRegistry.url | string | `"https://my-ar.com"` | URL of AR |
+| autoscaling.apiVersion | string | `"v2"` | version of the autoscaling API |
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |

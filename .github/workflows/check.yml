@@ -53,6 +53,27 @@ jobs:
           .github/build/install-kubeconform.sh
           ./eval.sh
 
+  # Render the `common` library chart's fixture consumer and diff the
+  # output against the committed golden files under
+  # charts/common/tests/expected/. Any drift in a `common.*` helper —
+  # intended or accidental — is caught here before it can propagate to
+  # the per-chart migrations. See scripts/test-common.sh for details.
+  common-tests:
+
+    runs-on: ubuntu-latest
+    needs:
+      - lint
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: azure/setup-helm@v4
+        with:
+          version: '${{ env.HELM_VERSION }}'
+
+      - name: Render fixture and diff against golden files
+        run: bash scripts/test-common.sh
+
   check:
     runs-on: ubuntu-latest
 
@@ -75,10 +96,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
+      - name: Check if already bumped
+        id: already-bumped
+        run: |
+          if git log origin/main..HEAD --oneline | grep -q "Update helm documentation"; then
+            echo Bumped
+            echo "bumped=true" >> $GITHUB_OUTPUT
+          else
+            echo Not bumped
+            echo "bumped=false" >> $GITHUB_OUTPUT
+          fi
+          
       - id: bump
         uses: zwaldowski/match-label-action@v4
         with:
@@ -119,11 +152,15 @@ jobs:
           echo "list=${CHARTS# }" >> $GITHUB_OUTPUT
 
       - name: Bump chart versions
-        if: steps.charts.outputs.list != ''
+        if: steps.charts.outputs.list != '' && steps.already-bumped.outputs.bumped == 'false'
         uses: ./.github/actions/bump-chart-version
         with:
           charts: ${{ steps.charts.outputs.list }}
           bump-type: ${{ steps.bump.outputs.match }}
+
+      - name: Generate helm docs
+        shell: bash
+        run: docker run --rm --volume "$(pwd):/helm-docs" -u $(id -u) jnorwood/helm-docs:v1.14.2
 
       - name: Commit files
         continue-on-error: true
