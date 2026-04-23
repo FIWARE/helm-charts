@@ -37,7 +37,7 @@ Kubernetes: `>= 1.19-0`
 | authorisationRegistry.identifier | string | `""` | Identifier (EORI) of AR |
 | authorisationRegistry.tokenEndpoint | string | `"https://my-ar.com/connect/token"` | Token endpoint of AR |
 | authorisationRegistry.url | string | `"https://my-ar.com"` | URL of AR |
-| autoscaling.apiVersion | string | `"v2beta2"` | version of the autoscaling API |
+| autoscaling.apiVersion | string | `"v2"` | version of the autoscaling API |
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |
