@@ -40,10 +40,6 @@ Arguments (dict):
 
 The helper renders nothing when `autoscaling.enabled` is false.
 
-Note: keyrock's current HPA template omits `metadata.namespace`. The
-common helper emits it (matching orion / mintaka) — this is a cosmetic
-addition when keyrock migrates, and is explicitly called out in
-docs/common-chart-proposal.md. Kubernetes behaviour is unchanged.
 */}}
 {{- define "common.hpa.tpl" -}}
 {{- $ctx := .context -}}

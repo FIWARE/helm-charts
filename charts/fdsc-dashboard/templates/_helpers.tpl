@@ -12,8 +12,6 @@ charts/common/templates/*.tpl). The wrappers exist so that:
   * The bodies stay in lock-step with the rest of the FIWARE charts,
     because there is exactly one implementation of each helper in
     `common`.
-
-See docs/common-chart-proposal.md for the migration rationale.
 */}}
 
 {{/*

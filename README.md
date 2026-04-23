@@ -59,9 +59,7 @@ The repository ships a [`common` library chart](./charts/common/README.md)
 that centralises the helpers (names, labels, service account, secrets,
 images, and resource bodies) previously duplicated across every FIWARE
 chart. Consumer charts depend on it via `file://../common`. See
-[`docs/common-chart-proposal.md`](./docs/common-chart-proposal.md) for the
-design and [`docs/common-chart-audit.md`](./docs/common-chart-audit.md)
-for the duplication baseline.
+[`docs/common-chart.md`](./docs/common-chart.md) formore information.
 
 ---
 
