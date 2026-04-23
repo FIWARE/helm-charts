@@ -1,6 +1,6 @@
 # mintaka changelog
 
-## 0.6.0
+## 0.4.3
 
 ### Common library chart migration
 
