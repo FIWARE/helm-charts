@@ -44,7 +44,7 @@ kubeconform) to the inlined canonical service template.
 {{- $service := required "common.service.tpl: service is required" .service -}}
 {{- $component := default "" .component -}}
 {{- $labelArgs := dict "context" $ctx "component" $component -}}
-{{- $ports := .ports -}}
+{{- $ports := required "common.service.tpl: ports is required" .ports -}}
 {{- if not $ports -}}
 {{- $ports = list (dict "port" $service.port) -}}
 {{- end -}}

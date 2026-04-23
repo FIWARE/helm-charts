@@ -11,7 +11,7 @@ description: >-
 home: https://github.com/FIWARE/helm-charts/tree/main/charts/common
 maintainers:
   - name: wistefan
-    email: stefan.wiedemann@fiware.org
+    email: stefan.wiedemann@seamware.com
 dependencies:
   - name: common
     repository: "file://.."

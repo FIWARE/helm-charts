@@ -55,5 +55,5 @@ Create the name of the service account to use. Delegates to
 Common labels. Delegates to `common.labels.standard`.
 */}}
 {{- define "mintaka.labels" -}}
-{{ include "common.labels.standard" . }}
+{{- include "common.labels.standard" . -}}
 {{- end -}}

@@ -72,5 +72,5 @@ Resolve the key within the DB secret. Delegates to
 Common labels. Delegates to `common.labels.standard`.
 */}}
 {{- define "orion.labels" -}}
-{{ include "common.labels.standard" . }}
+{{- include "common.labels.standard" . -}}
 {{- end -}}

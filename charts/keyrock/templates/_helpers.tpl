@@ -55,7 +55,7 @@ Create the name of the service account to use. Delegates to
 Common labels. Delegates to `common.labels.standard`.
 */}}
 {{- define "keyrock.labels" -}}
-{{ include "common.labels.standard" . }}
+{{- include "common.labels.standard" . -}}
 {{- end -}}
 
 {{/*
