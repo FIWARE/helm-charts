@@ -2,6 +2,7 @@
 #   helm dependency update charts/keyrock
 # and should not be tracked in git. The `common` library chart is
 # consumed via a local `file://../common` dependency — the resolved
-# subchart is packaged at install / publish time.
-charts/*/Chart.lock
-charts/*/charts/
+# subchart is packaged at install / publish time. The `**` globs also
+# cover nested fixture charts (e.g. charts/common/tests).
+charts/**/Chart.lock
+charts/**/charts/
