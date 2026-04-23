@@ -1,0 +1,10 @@
+Successfully deployed the fdsc-dashboard.
+
+Service: {{ include "fdsc-dashboard.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.service.port }}
+{{- if .Values.ingress.enabled }}
+{{- range $host := .Values.ingress.hosts }}
+  {{- range .paths }}
+Ingress URL: http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ . }}
+  {{- end }}
+{{- end }}
+{{- end }}
