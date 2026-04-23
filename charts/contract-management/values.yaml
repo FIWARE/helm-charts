@@ -1,4 +1,4 @@
-## Default values for til. 
+## Default values for til.
 ## This is a YAML-formatted file.
 ## Declare variables to be passed into your templates.
 
@@ -217,6 +217,13 @@ enableTmForum: true
 enableRainbow: true
 ## Enable integration with a central marketplace. Requires OdrlPap and TrustedIssuersList integration to be enabled.
 enableCentralMarketplace: false
+
+## Organization configuration
+organization:
+  ## Provider-side configuration
+  provider:
+    ## Role of the organization acting as provider (e.g. seller)
+    role: provider
 
 ## configures the m2m authentication via oid4vp
 oid4vp:
