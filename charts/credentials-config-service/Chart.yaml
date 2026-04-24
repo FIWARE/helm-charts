@@ -15,7 +15,7 @@ sources:
   - https://github.com/fiware/credentials-config-service
 maintainers:
   - name: wistefan
-    email: stefan.wiedemann@fiware.org
+    email: stefan.wiedemann@seamware.com
 # The `common` library chart ships every shared helper
 # (names, labels, service-account resolution, existing-secret
 # resolution, service/ingress/HPA/secret/serviceaccount bodies)
