@@ -1,51 +1,54 @@
+
+{{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
+did-helper-specific helpers.
+
+Every helper in this file is now a thin wrapper around the matching
+`common.*` helper from the `common` library chart (see
+charts/common/templates/*.tpl). The wrappers exist so that:
+
+  * Any external umbrella chart that already imports e.g.
+    `include "did-helper.fullname" .` keeps working — no external
+    breaking change.
+  * The bodies below stay in lock-step with the rest of the FIWARE
+    charts, because there is exactly one implementation of each
+    helper (in `common`).
+
+*/}}
+
+{{/*
+Expand the name of the chart. Delegates to `common.names.name`.
 */}}
 {{- define "did-helper.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- end }}
+{{- include "common.names.name" . -}}
+{{- end -}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
+Create a default fully qualified app name. Delegates to
+`common.names.fullname`.
 */}}
 {{- define "did-helper.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
-{{- end }}
+{{- include "common.names.fullname" . -}}
+{{- end -}}
 
 {{/*
-Create chart name and version as used by the chart label.
+Create chart name and version as used by the chart label. Delegates to
+`common.names.chart`.
 */}}
 {{- define "did-helper.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
+{{- include "common.names.chart" . -}}
+{{- end -}}
 
 {{/*
-Common labels
+Common labels. Delegates to `common.labels.standard`.
 */}}
 {{- define "did-helper.labels" -}}
-helm.sh/chart: {{ include "did-helper.chart" . }}
-{{ include "did-helper.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
+{{- include "common.labels.standard" . -}}
+{{- end -}}
 
 {{/*
-Selector labels
+Selector labels. Delegates to `common.labels.matchLabels`.
 */}}
 {{- define "did-helper.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "did-helper.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
+{{- include "common.labels.matchLabels" . -}}
+{{- end -}}
