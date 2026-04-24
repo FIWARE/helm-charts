@@ -1,0 +1,4 @@
+{{- include "common.ingress.tpl" (dict
+      "context"     $
+      "ingress"     .Values.ingress
+      "servicePort" .Values.service.port) }}

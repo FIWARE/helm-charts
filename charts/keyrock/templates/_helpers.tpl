@@ -14,10 +14,6 @@ charts/common/templates/*.tpl). The wrappers exist so that:
     charts, because there is exactly one implementation of each
     helper (in `common`).
 
-See docs/common-chart-proposal.md for the migration rationale and the
-planned deprecation window. Removal of the wrappers is scheduled as a
-future major version bump (see charts/common/DEPRECATIONS.md in Step
-11 of the plan).
 */}}
 
 {{/*

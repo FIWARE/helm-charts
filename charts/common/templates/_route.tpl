@@ -7,13 +7,6 @@ Renders a complete `route.openshift.io/v1` Route gated on
 charts/orion/templates/route.yaml and
 charts/mintaka/templates/route.yaml.
 
-Keyrock ships a multi-route variant (iterates `.Values.route.routes` and
-emits `cert-utils-operator.redhat-cop.io/certs-from-secret` annotations
-for each). That shape is chart-specific and stays as a bespoke
-`templates/route.yaml` in keyrock; it is NOT replaced by this helper in
-the migration (see docs/common-chart-proposal.md, "Charts that keep a
-bespoke route template").
-
 Call convention — always dict form:
 
   {{ include "common.route.tpl" (dict
