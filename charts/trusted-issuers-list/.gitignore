@@ -1,0 +1,7 @@
+# Helm dependency artefacts produced by
+#   helm dependency update charts/trusted-issuers-list
+# The `common` library chart is consumed via a local
+# `file://../common` dependency; the resolved subchart is repackaged
+# into `charts/` at install / publish time and must not be tracked.
+Chart.lock
+charts/
