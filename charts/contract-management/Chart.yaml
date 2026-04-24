@@ -16,6 +16,8 @@ sources:
 maintainers:
   - name: pulledtim
     email: tim.smyth@fiware.org
+  - name: wistefan
+    email: stefan.wiedemann@seamware.com
 # The `common` library chart ships every shared helper
 # (names, labels, service-account resolution, existing-secret
 # resolution, service/ingress/route/HPA/secret/serviceaccount
