@@ -1,10 +1,18 @@
+{{/*
+Canis-major's cert-manager Certificate is bespoke: the `common` library
+stops at Service / Ingress / Route / HPA / ServiceAccount / Secret, so
+there is no `common.certificate.tpl` to delegate to. The template uses
+`common.*` name / label helpers (via the `canis-major.*` wrappers) for
+consistency with the rest of the FIWARE charts.
+*/}}
 {{- if .Values.route.certificate -}}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: {{ include "canis-major.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{ include "canis-major.labels" . | nindent 4 }}
+    {{- include "canis-major.labels" . | nindent 4 }}
 spec:
   secretName: {{ include "canis-major.fullname" . }}-tls-sec
   issuerRef:
