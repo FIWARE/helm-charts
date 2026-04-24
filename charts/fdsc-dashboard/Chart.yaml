@@ -1,29 +1,28 @@
 apiVersion: v2
-name: orion
-version: 1.6.8
-appVersion: 1.0.1
+name: fdsc-dashboard
+version: 0.0.1
+appVersion: 0.1.0
 kubeVersion: '>= 1.19-0'
-home: https://github.com/FIWARE/context.Orion-LD
-description: A Helm chart for running the fiware orion-ld context broker on kubernetes.
+description: A Helm chart for running the fdsc-dashboard on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
 keywords:
   - fiware
-  - orion-ld
-  - orion
+  - data-space-connector
+  - dataspace
+  - dashboard
+  - ui
 sources:
-  - https://github.com/FIWARE/context.Orion-LD
+  - https://github.com/wistefan/fdsc-dashboard
 maintainers:
   - name: wistefan
-    email: stefan.wiedemann@seamware.com
-annotations:
-  charts.openshift.io/name: orion-ld
+    email: stefan.wiedemann@seamware.org
 # The `common` library chart ships every shared helper
 # (names, labels, service-account resolution, existing-secret
 # resolution, service/ingress/route/HPA/secret/serviceaccount
 # bodies). It is consumed via a local `file://` dependency so
 # publishing workflows do not need a separate repository entry —
-# Helm packages the library alongside orion in the resulting
-# `orion-<version>.tgz`. See charts/common/README.md.
+# Helm packages the library alongside fdsc-dashboard in the resulting
+# `fdsc-dashboard-<version>.tgz`. See charts/common/README.md.
 dependencies:
   - name: common
     repository: "https://fiware.github.io/helm-charts"

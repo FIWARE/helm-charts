@@ -7,13 +7,6 @@ Renders a complete `networking.k8s.io/v1` Ingress gated on
 charts/orion/templates/ingress.yaml and
 charts/mintaka/templates/ingress.yaml.
 
-Keyrock currently branches on `semverCompare ">=1.14-0"` to emit the
-legacy `extensions/v1beta1` Ingress shape. That branch is dropped here
-and is called out as the only unavoidable breaking change in the
-migration proposal (see docs/common-chart-proposal.md, "Breaking
-Changes"). The chart's declared `kubeVersion` (>=1.19) already rules out
-any cluster that would have needed the legacy apiVersion.
-
 Call convention — always dict form:
 
   {{ include "common.ingress.tpl" (dict

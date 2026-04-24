@@ -1,0 +1,3 @@
+{{- include "common.hpa.tpl" (dict
+      "context"     $
+      "autoscaling" .Values.autoscaling) }}

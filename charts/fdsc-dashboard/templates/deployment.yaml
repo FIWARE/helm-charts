@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fdsc-dashboard.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "fdsc-dashboard.labels" . | nindent 4 }}
+    {{- with .Values.deployment.additionalLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.deployment.additionalAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.deployment.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
+  strategy:
+    {{- with .Values.deployment.updateStrategy }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "fdsc-dashboard.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{- include "fdsc-dashboard.labels" . | nindent 8 }}
+        {{- with .Values.deployment.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.deployment.additionalAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "fdsc-dashboard.serviceAccountName" . }}
+      {{- with .Values.deployment.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag | default .Chart.AppVersion }}"
+          {{- with .Values.deployment.command }}
+          command:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.deployment.args }}
+          args:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.port }}
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+          env:
+            - name: AUTH_CONFIG_JSON
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "fdsc-dashboard.authSecretName" . }}
+                  key: {{ .Values.auth.secretKey }}
+            {{- with .Values.additionalEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+          {{- with .Values.deployment.additionalVolumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.deployment.additionalVolumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
