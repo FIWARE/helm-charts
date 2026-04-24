@@ -1,3 +1,10 @@
+{{/*
+Chart-local cert-manager.io/v1 Certificate: intentionally not migrated.
+Certificate CRs are not part of the common helper surface (same as
+charts/keyrock/templates/certificate.yaml and
+charts/ishare-satellite/templates/certificate.yaml, which also stay
+chart-local). See charts/vcverifier/CHANGELOG.md for details.
+*/}}
 {{- if .Values.route.certificate -}}
 apiVersion: cert-manager.io/v1
 kind: Certificate
