@@ -1,6 +1,6 @@
 apiVersion: v2
 name: trusted-issuers-list
-version: 0.16.2
+version: 0.18.0
 appVersion: 0.8.1
 description: A Helm chart for running the trusted-issuers-list on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
