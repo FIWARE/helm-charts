@@ -427,6 +427,22 @@ Chart count at audit time: **26** (`charts/*`).
 - **Deviations:** 3 deployable components; RBAC per component; Istio
   service entry; webhook + certificate; PVC.
 
+#### fdsc-dashboard
+
+- **Helpers:** none chart-local; all rendering is delegated to the
+  `common` library chart (`common.names.fullname`, `common.labels`,
+  `common.serviceAccountName`, `common.secretName`).
+- **Templates:** `NOTES.txt`, `service.yaml`, `deployment.yaml`,
+  `deployment-hpa.yaml`, `ingress.yaml`, `route.yaml`, `secret.yaml`,
+  `serviceaccount.yaml`.
+- **Chart.yaml:** apiVersion `v2`; version `0.1.0`; appVersion `0.1.0`;
+  depends on `common` via `file://../common`.
+- **Deviations:** no chart-local `_helpers.tpl` (fully delegated to
+  `common`); OIDC `AUTH_CONFIG_JSON` rendered into the chart's Secret
+  (or pulled from `.Values.auth.existingSecret`); build-time `VITE_*`
+  API URLs exposed under `.Values.apiUrls.*` for users who build their
+  own image.
+
 #### fdsc-edc
 
 - **Helpers:** `fdsc-edc.name|fullname|chart|serviceAccountName|labels` —

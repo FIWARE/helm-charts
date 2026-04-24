@@ -1,0 +1,3 @@
+{{- include "common.route.tpl" (dict
+      "context" $
+      "route"   .Values.route) }}
