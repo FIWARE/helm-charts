@@ -1,21 +1,23 @@
 {{- if .Values.eureka.enabled }}
-apiVersion: v1
-kind: Service
-metadata:  
-  name: {{ include "eureka.fullname" . }}-node-port
-  labels:
-    {{- include "eureka.labels" . | nindent 4 }}
-spec:
-  type: {{ .Values.eureka.service.type }}
-  ports:
-  - port: {{ .Values.eureka.service.port }}
-    targetPort: {{ .Values.eureka.service.port }}
-    {{- if and (eq .Values.eureka.service.type "NodePort") .Values.eureka.service.nodePort }}
-    nodePort: {{ .Values.eureka.service.nodePort }}
-    {{- else if eq .Values.eureka.service.type "ClusterIP" }}
-    nodePort: null
-    {{- end }}
-  selector:
-    {{- include "eureka.matchLabels" . | nindent 4 }}
+{{- /*
+NodePort-variant companion to `eureka-service.yaml`. The legacy name
+`<eureka.fullname>-node-port` is not produced by
+`common.names.fullname`, so it is supplied via `nameOverride`. The
+`nodePort` key is rendered verbatim by `common.service.tpl`: when
+`type` is switched to `ClusterIP` the caller can still pass
+`"nodePort" nil` to drop the previously-assigned node port, matching
+the pre-migration `nodePort: null` behaviour.
+*/}}
+{{- $port := dict "port" .Values.eureka.service.port "name" (quote .Values.eureka.service.port) -}}
+{{- if and (eq .Values.eureka.service.type "NodePort") .Values.eureka.service.nodePort -}}
+{{- $_ := set $port "nodePort" .Values.eureka.service.nodePort -}}
+{{- else if eq .Values.eureka.service.type "ClusterIP" -}}
+{{- $_ := set $port "nodePort" nil -}}
+{{- end -}}
+{{- include "common.service.tpl" (dict
+      "context" $
+      "component" .Values.eureka.name
+      "nameOverride" (printf "%s-node-port" (include "eureka.fullname" .))
+      "service" .Values.eureka.service
+      "ports"   (list $port)) }}
 {{- end }}
-
