@@ -21,7 +21,7 @@ Kubernetes: `>= 1.19-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| file://../common | common | 0.0.1 |
+| https://fiware.github.io/helm-charts | common | 0.0.1 |
 
 ## Values
 
