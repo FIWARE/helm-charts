@@ -1,0 +1,6 @@
+{{- include "common.service.tpl" (dict
+      "context" $
+      "service" .Values.service
+      "ports"   (list (dict
+                        "port"       .Values.service.port
+                        "targetPort" .Values.port))) }}

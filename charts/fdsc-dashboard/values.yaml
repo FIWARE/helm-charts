@@ -1,0 +1,220 @@
+## Default values for fdsc-dashboard.
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+# -- option to override the name config in the _helpers.tpl
+nameOverride: ""
+# -- option to override the fullname config in the _helpers.tpl
+fullnameOverride: ""
+
+## configuration for the k8s service to access the fdsc-dashboard
+service:
+  # -- service type
+  type: ClusterIP
+  # -- port to be used by the service; targets the container port
+  # (`.Values.port`).
+  port: 8080
+  # -- additional annotations, if required
+  annotations: {}
+
+# -- if a fdsc-dashboard specific service account should be used, it can be
+# configured here
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # -- specifies if the account should be created
+  create: false
+  # -- the name of the service account to use; if not set and `create` is true,
+  # a name is generated using the fullname helper
+  # name: ""
+
+## deployment specific configuration
+deployment:
+  # -- initial number of target replicas, can be different if autoscaling is
+  # enabled
+  replicaCount: 1
+  # -- number of old replicas to be retained
+  revisionHistoryLimit: 3
+  ## configuration of the fdsc-dashboard update strategy
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while
+      # updating
+      maxSurge: 1
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 0
+  ## configuration of the image to be used
+  image:
+    # -- fdsc-dashboard image name
+    # ref: https://quay.io/repository/seamware/fdsc-dashboard
+    repository: quay.io/seamware/fdsc-dashboard
+    # -- tag of the image to be used; defaults to `.Chart.AppVersion` when unset
+    # tag: ""
+    # -- specification of the image pull policy
+    pullPolicy: IfNotPresent
+  # -- secrets for pulling the fdsc-dashboard image from a private registry
+  imagePullSecrets: []
+  # -- additional labels for the deployment, if required
+  additionalLabels: {}
+  # -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  ## fdsc-dashboard resource requests and limits, we leave the default empty to
+  ## make that a conscious choice by the user. For the autoscaling to make
+  ## sense, you should configure this.
+  # resources:
+    # limits:
+      # cpu: 100m
+      # memory: 128Mi
+    # requests:
+      # cpu: 100m
+      # memory: 128Mi
+  # -- selector template
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  # -- tolerations template
+  # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  # -- affinity template
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+  ## The upstream image ships a static SPA served by nginx and has no
+  ## dedicated `/health` endpoint, so TCP probes against the http port are
+  ## used by default.
+  # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+    timeoutSeconds: 30
+  readinessProbe:
+    initialDelaySeconds: 31
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+    timeoutSeconds: 30
+  # -- override the default `args` of the container image
+  args: []
+  # -- override the default `command` of the container image
+  command: []
+  # -- additional volume mounts for the fdsc-dashboard container, if required
+  additionalVolumeMounts: []
+  # -- additional volumes for the fdsc-dashboard pod, if required
+  additionalVolumes: []
+
+# -- container port that the fdsc-dashboard (nginx) listens on
+port: 80
+
+## runtime OIDC / auth configuration rendered into a Secret and mounted as the
+## `AUTH_CONFIG_JSON` env var consumed by the dashboard at boot.
+auth:
+  # -- name of a pre-existing Secret containing the `AUTH_CONFIG_JSON` key. When
+  # set, the chart will not render its own Secret and the Deployment will
+  # reference this Secret instead.
+  existingSecret: ""
+  # -- key inside the Secret (chart-rendered or `existingSecret`) to mount into
+  # the `AUTH_CONFIG_JSON` env var
+  secretKey: AUTH_CONFIG_JSON
+  # -- raw OIDC providers configuration, rendered as JSON into the chart's
+  # Secret when `existingSecret` is empty. Default: auth disabled (no
+  # providers). See upstream docs for the full schema.
+  config:
+    providers: []
+
+## Build-time API URLs for the dashboard. These keys exist for documentation
+## purposes only — the upstream image bakes the `VITE_*` values into the
+## bundle at build time, so setting them here does NOT change the runtime
+## behaviour of the stock `quay.io/seamware/fdsc-dashboard` image. Users who
+## build their own image can surface these URLs via `additionalEnvVars` (which
+## is where they would need to plumb them at build time as well).
+apiUrls:
+  # -- build-time URL of the Trusted Issuer List (VITE_TIL_URL). Stock image
+  # ignores this key at runtime.
+  til: ""
+  # -- build-time URL of the Trusted Issuer Registry (VITE_TIR_URL). Stock
+  # image ignores this key at runtime.
+  tir: ""
+  # -- build-time URL of the Credentials Config Service (VITE_CCS_URL). Stock
+  # image ignores this key at runtime.
+  ccs: ""
+  # -- build-time URL of the ODRL PAP (VITE_ODRL_URL). Stock image ignores
+  # this key at runtime.
+  odrl: ""
+  # -- build-time URL for obtaining an auth token (VITE_AUTH_TOKEN_URL). Stock
+  # image ignores this key at runtime.
+  authToken: ""
+
+# -- a list of additional env vars to be set on the dashboard container, in
+# native env-var form. Useful for custom-built images that consume
+# additional configuration at runtime.
+additionalEnvVars: []
+
+## pod autoscaling configuration, use for automatic scaling of the dashboard
+## pods
+autoscaling:
+  # -- should autoscaling be enabled for the fdsc-dashboard
+  enabled: false
+  # -- apiVersion of the HorizontalPodAutoscaler resource emitted by the
+  # `common.hpa.tpl` helper. Users on Kubernetes 1.26+ may wish to override
+  # this to "v2".
+  apiVersion: "v2beta2"
+  # -- minimum number of running pods
+  minReplicas: 1
+  # -- maximum number of running pods
+  maxReplicas: 10
+  # -- metrics to react on
+  metrics: []
+  ## List of MetricSpecs to decide whether to scale
+  # See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#metricspec-v2beta2-autoscaling
+  # scaler targets to hold average cpu around 80%
+  #- type: Resource
+  #  resource:
+  #    name: cpu
+  #     target:
+  #      type: Utilization
+  #      averageUtilization: 80
+  ## scaler targets to hold average memory around 80%
+  #  - type: Resource
+  #    resource:
+  #      name: memory
+  #      target:
+  #        type: Utilization
+  #        averageUtilization: 80
+
+## openshift specific route definition. Will not work on plain k8s
+route:
+  # -- should the deployment create openshift routes
+  enabled: false
+  # -- annotations to be added to the route
+  annotations: {}
+  # -- host to be used
+  # host: localhost
+  # -- tls configuration for the route
+  tls: {}
+  # termination: edge
+
+## ingress configuration
+ingress:
+  # -- should there be an ingress to connect the fdsc-dashboard with the
+  # public internet
+  enabled: false
+  # -- annotations to be added to the ingress
+  annotations: {}
+    # kubernetes.io/ingress.class: "ambassador"
+    ## example annotations, allowing cert-manager to automatically create
+    ## tls-certs and forcing everything to use ssl.
+    # kubernetes.io/tls-acme: "true"
+    # ingress.kubernetes.io/ssl-redirect: "true"
+  # -- all hosts to be provided
+  hosts: []
+    ## provide a hosts and the paths that should be available
+    # - host: localhost
+      # paths:
+      # - /
+  # -- configure the ingress' tls
+  tls: []
+    # - secretName: fdsc-dashboard-tls
+      # hosts:
+        # - dashboard.fiware.org

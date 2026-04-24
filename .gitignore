@@ -6,3 +6,7 @@
 # cover nested fixture charts (e.g. charts/common/tests).
 charts/**/Chart.lock
 charts/**/charts/
+
+# Locally-installed tools (e.g. kubeconform, helm-docs) fetched by
+# developers running ./eval.sh without a system-wide install.
+bin/
