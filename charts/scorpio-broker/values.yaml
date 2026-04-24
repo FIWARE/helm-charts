@@ -227,8 +227,15 @@ gateway:
 ################################### AtContextServer ##########################################################################
 atContextServer:
 ## Enable the AtContextServer deployment & service
-  enabled: true 
+  enabled: true
   name: at-context-server
+## Kubernetes service exposing the AtContextServer deployment
+##
+  service:
+    # -- service type
+    type: ClusterIP
+    # -- port exposed by the AtContextServer service
+    port: 27015
 ## Number of AtContextServer instances to deploy
 #
   replicas: 1
@@ -332,9 +339,15 @@ atContextServer:
 ################################### ConfigServer ##########################################################################
 configServer:
 ## Enable the configServer deployment & service
-  enabled: true 
+  enabled: true
   name: config-server
-  
+## Kubernetes service exposing the configServer deployment
+##
+  service:
+    # -- service type
+    type: ClusterIP
+    # -- port exposed by the configServer service
+    port: 8888
 ## Number of configServer instances to deploy
 ##
   replicas: 1
@@ -441,9 +454,15 @@ configServer:
 ################################### EntityManager ##########################################################################
 entityManager:
 ## Enable the entityManager deployment & service
-  enabled: true 
+  enabled: true
   name: entity-manager
-  
+## Kubernetes service exposing the entityManager deployment
+##
+  service:
+    # -- service type
+    type: ClusterIP
+    # -- port exposed by the entityManager service
+    port: 1025
 ## Number of entityManager instances to deploy
 ##
   replicas: 1
@@ -549,9 +568,15 @@ entityManager:
 ################################### HistoryManager ##########################################################################
 historyManager:
 ## Enable the HistoryManager deployment & service
-  enabled: true 
+  enabled: true
   name: history-manager
-  
+## Kubernetes service exposing the HistoryManager deployment
+##
+  service:
+    # -- service type
+    type: ClusterIP
+    # -- port exposed by the HistoryManager service
+    port: 1040
 ## Number of HistoryManager instances to deploy
 ##
   replicas: 1
@@ -657,9 +682,15 @@ historyManager:
 ################################### QueryManager ##########################################################################
 queryManager:
 ## Enable the QueryManager deployment & service
-  enabled: true 
+  enabled: true
   name: query-manager
-  
+## Kubernetes service exposing the QueryManager deployment
+##
+  service:
+    # -- service type
+    type: ClusterIP
+    # -- port exposed by the QueryManager service
+    port: 1026
 ## Number of QueryManager instances to deploy
 ##
   replicas: 1
@@ -766,9 +797,15 @@ queryManager:
 ################################### RegistryManager ##########################################################################
 registryManager:
 ## Enable the RegistryManager deployment & service
-  enabled: true 
+  enabled: true
   name: registry-manager
-  
+## Kubernetes service exposing the RegistryManager deployment
+##
+  service:
+    # -- service type
+    type: ClusterIP
+    # -- port exposed by the RegistryManager service
+    port: 1030
 ## Number of RegistryManager instances to deploy
 ##
   replicas: 1
@@ -877,6 +914,13 @@ registrySubscriptionManager:
 ## Enable the RegistrySubscriptionManager deployment & service
   enabled: true
   name: registry-subscription-manager
+## Kubernetes service exposing the RegistrySubscriptionManager deployment
+##
+  service:
+    # -- service type
+    type: ClusterIP
+    # -- port exposed by the RegistrySubscriptionManager service
+    port: 1030
 
 ## Number of RegistrySubscriptionManager instances to deploy
 ##
@@ -984,9 +1028,15 @@ registrySubscriptionManager:
 ################################### SubscriptionManager ##########################################################################
 subscriptionManager:
 ## Enable the SubscriptionManager deployment & service
-  enabled: true 
+  enabled: true
   name: subscription-manager
-  
+## Kubernetes service exposing the SubscriptionManager deployment
+##
+  service:
+    # -- service type
+    type: ClusterIP
+    # -- port exposed by the SubscriptionManager service
+    port: 2026
 ## Number of SubscriptionManager instances to deploy
 ##
   replicas: 1

@@ -1,16 +1,15 @@
 {{- if .Values.eureka.enabled }}
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "eureka.fullname" . }}
-  labels:
-    {{ include "eureka.labels" . | nindent 4 }}
-  namespace: {{ .Release.Namespace }}
-spec:
-  ports:
-  - name: "8761"
-    port: 8761
-    targetPort: 8761
-  selector:
-    {{ include "eureka.matchLabels" . | nindent 4 }}
+{{- /*
+The top-level `eureka.service` values block describes the NodePort
+variant rendered by `eureka-node-port.yaml` (Step 3). The ClusterIP
+Service below reuses the same `port` value but forces `type: ClusterIP`
+so in-cluster traffic bypasses the NodePort path.
+*/}}
+{{- include "common.service.tpl" (dict
+      "context" $
+      "component" .Values.eureka.name
+      "service" (dict "type" "ClusterIP")
+      "ports"   (list (dict
+                        "port" .Values.eureka.service.port
+                        "name" (quote .Values.eureka.service.port)))) }}
 {{- end }}

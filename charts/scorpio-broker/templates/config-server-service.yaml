@@ -1,16 +1,9 @@
 {{- if .Values.configServer.enabled }}
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "configServer.fullname" . }}
-  labels:
-    {{- include "configServer.labels" . | nindent 4 }}
-spec:
-  ports:
-  - name: "8888"
-    port: 8888
-    targetPort: 8888
-  selector:
-    {{- include "configServer.matchLabels" . | nindent 4 }}
+{{- include "common.service.tpl" (dict
+      "context" $
+      "component" .Values.configServer.name
+      "service" .Values.configServer.service
+      "ports"   (list (dict
+                        "port" .Values.configServer.service.port
+                        "name" (quote .Values.configServer.service.port)))) }}
 {{- end }}
-

@@ -20,21 +20,33 @@ which sub-paths of `.Values` to look at:
   }}
 
 Arguments (dict):
-  context   - root context (`$`), required.
-  service   - the service sub-values, required. Map with at least
-              `.type` and optionally `.annotations`. `.port` is read
-              only as a fallback for a single-port caller that does not
-              pass `ports`.
-  ports     - list of port maps, optional. Each entry accepts:
-                port       - int, required
-                targetPort - int|string, defaults to `port`
-                protocol   - string, defaults to "TCP"
-                name       - string, defaults to "http"
-              When omitted, a single `http` port on `service.port` is
-              emitted (orion / mintaka / keyrock share this shape).
-  component - optional component name, forwarded to the name and label
-              helpers for multi-component charts (scorpio-broker, Step
-              10 of IMPLEMENTATION_PLAN.md).
+  context      - root context (`$`), required.
+  service      - the service sub-values, required. Map with at least
+                 `.type` and optionally `.annotations`. `.port` is read
+                 only as a fallback for a single-port caller that does
+                 not pass `ports`.
+  ports        - list of port maps, optional. Each entry accepts:
+                   port       - int, required
+                   targetPort - int|string, defaults to `port`
+                   protocol   - string, defaults to "TCP"
+                   name       - string, defaults to "http"
+                   nodePort   - int, optional. When present the key
+                                is rendered verbatim (including a
+                                literal `null`) so callers can force a
+                                ClusterIP to drop a previously-assigned
+                                node port during a type switch.
+                 When omitted, a single `http` port on `service.port`
+                 is emitted (orion / mintaka / keyrock share this
+                 shape).
+  component    - optional component name, forwarded to the name and
+                 label helpers for multi-component charts
+                 (scorpio-broker, Step 10 of IMPLEMENTATION_PLAN.md).
+  nameOverride - optional literal string to use as `metadata.name`
+                 verbatim, bypassing `common.names.fullname`. Required
+                 by scorpio-broker's two NodePort Services, whose
+                 legacy names (`<fullname>-node-port` and
+                 `scorpio-gateway-service`) do not follow the
+                 canonical `<release>-<chart>[-<component>]` pattern.
 
 Rendered output is identical (up to whitespace tolerated by
 kubeconform) to the inlined canonical service template.
@@ -43,6 +55,7 @@ kubeconform) to the inlined canonical service template.
 {{- $ctx := .context -}}
 {{- $service := required "common.service.tpl: service is required" .service -}}
 {{- $component := default "" .component -}}
+{{- $nameOverride := default "" .nameOverride -}}
 {{- $labelArgs := dict "context" $ctx "component" $component -}}
 {{- $ports := required "common.service.tpl: ports is required" .ports -}}
 {{- if not $ports -}}
@@ -51,7 +64,7 @@ kubeconform) to the inlined canonical service template.
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" $labelArgs }}
+  name: {{ if $nameOverride }}{{ $nameOverride }}{{ else }}{{ include "common.names.fullname" $labelArgs }}{{ end }}
   namespace: {{ include "common.names.namespace" (dict "context" $ctx) | quote }}
   {{- with $service.annotations }}
   annotations:
@@ -67,6 +80,9 @@ spec:
       targetPort: {{ default $port.port $port.targetPort }}
       protocol: {{ default "TCP" $port.protocol }}
       name: {{ default "http" $port.name }}
+      {{- if hasKey $port "nodePort" }}
+      nodePort: {{ $port.nodePort }}
+      {{- end }}
     {{- end }}
   selector:
     {{- include "common.labels.matchLabels" $labelArgs | nindent 4 }}
