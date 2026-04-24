@@ -2,7 +2,18 @@ apiVersion: v2
 name: did-helper
 description: A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
 type: application
-version: 0.1.16
+version: 0.1.17
 appVersion: "0.5.0"
 sources:
   - https://github.com/SEAMWARE/did-helper
+# The `common` library chart ships every shared helper
+# (names, labels, service-account resolution, existing-secret
+# resolution, service/ingress/route/HPA/secret/serviceaccount
+# bodies). It is consumed via a local `file://` dependency so
+# publishing workflows do not need a separate repository entry —
+# Helm packages the library alongside did-helper in the resulting
+# `did-helper-<version>.tgz`. See charts/common/README.md.
+dependencies:
+  - name: common
+    repository: "https://fiware.github.io/helm-charts"
+    version: "0.0.1"
