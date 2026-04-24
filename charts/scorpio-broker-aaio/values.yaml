@@ -123,15 +123,29 @@ resources: {}
   #   memory: 128Mi
 ## pod autoscaling configuration, use for automatic scaling of the broker pods
 autoscaling:
-  # -- should autoscaling be enabled      
+  # -- should autoscaling be enabled
   enabled: false
+  # -- autoscaling API version used to render the HorizontalPodAutoscaler.
+  # Bumped from the legacy `autoscaling/v2beta1` body to `v2beta2` to match
+  # the shared `common.hpa.tpl` default. Override to `"v2"` on Kubernetes
+  # 1.26+ where the beta versions are removed.
+  apiVersion: "v2beta2"
   # -- minimum number of running pods
   minReplicas: 1
   # -- maximum number of running pods
   maxReplicas: 100
-  # -- target average CPU utilization over all the pods
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  # -- list of HPA metrics, rendered verbatim into `spec.metrics`. Replaces
+  # the removed `targetCPUUtilizationPercentage` /
+  # `targetMemoryUtilizationPercentage` keys. Leave empty to disable metric
+  # rules; to reproduce the previous CPU-80% behaviour set e.g.:
+  #   metrics:
+  #     - type: Resource
+  #       resource:
+  #         name: cpu
+  #         target:
+  #           type: Utilization
+  #           averageUtilization: 80
+  metrics: []
 # -- selector template
 # ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
