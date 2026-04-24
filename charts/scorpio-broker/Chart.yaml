@@ -14,8 +14,20 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.2.0
+version: 0.3.0
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 appVersion: 2.1.0
+# The `common` library chart ships every shared helper
+# (names, labels, service-account resolution, existing-secret
+# resolution, service/ingress/route/HPA/secret/serviceaccount
+# bodies). It is consumed via a local `file://` dependency so
+# publishing workflows do not need a separate repository entry —
+# Helm packages the library alongside scorpio-broker in the
+# resulting `scorpio-broker-<version>.tgz`. See
+# charts/common/README.md.
+dependencies:
+  - name: common
+    repository: "file://../common"
+    version: "0.0.2"
