@@ -20,3 +20,15 @@ version: 0.4.12
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: "2.1.0"
+# The `common` library chart ships every shared helper
+# (names, labels, service-account resolution, existing-secret
+# resolution, service/ingress/route/HPA/secret/serviceaccount
+# bodies). It is consumed via a local `file://` dependency so
+# publishing workflows do not need a separate repository entry —
+# Helm packages the library alongside scorpio-broker-aaio in the
+# resulting `scorpio-broker-aaio-<version>.tgz`. See
+# charts/common/README.md.
+dependencies:
+  - name: common
+    repository: "file://../common"
+    version: "0.0.2"
