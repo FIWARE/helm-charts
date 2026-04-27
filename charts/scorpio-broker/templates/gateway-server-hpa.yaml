@@ -1,14 +1,6 @@
-{{- if and .Values.gateway.enabled .Values.gateway.hpa.enabled }}
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
- name: {{ include "gateway.fullname" . }}-hpa
-spec:
- scaleTargetRef:
-   apiVersion: apps/v1
-   kind: Deployment
-   name: {{ include "gateway.fullname" . }}
- minReplicas: {{ .Values.gateway.hpa.minReplicas }}
- maxReplicas: {{ .Values.gateway.hpa.maxReplicas }}
- targetCPUUtilizationPercentage: {{ .Values.gateway.hpa.targetCPUUtilizationPercentage }}
+{{- if .Values.gateway.enabled }}
+{{- include "common.hpa.tpl" (dict
+      "context"     $
+      "component"   .Values.gateway.name
+      "autoscaling" .Values.gateway.autoscaling) }}
 {{- end }}
