@@ -91,6 +91,10 @@ deployment:
 autoscaling:
   #  -- should autoscaling be enabled for til
   enabled: false
+  # -- apiVersion of the HorizontalPodAutoscaler resource emitted by the
+  # `common.hpa.tpl` helper.
+  # override this to "v2".
+  apiVersion: "v2"
   # -- minimum number of running pods
   minReplicas: 1
   # -- maximum number of running pods
