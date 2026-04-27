@@ -1,6 +1,6 @@
 # credentials-config-service
 
-![Version: 2.5.2](https://img.shields.io/badge/Version-2.5.2-informational?style=flat-square) ![AppVersion: 3.4.2](https://img.shields.io/badge/AppVersion-3.4.2-informational?style=flat-square)
+![Version: 2.6.0](https://img.shields.io/badge/Version-2.6.0-informational?style=flat-square) ![AppVersion: 3.4.2](https://img.shields.io/badge/AppVersion-3.4.2-informational?style=flat-square)
 
 A Helm chart for running the credentials-config-service on kubernetes.
 
@@ -8,17 +8,26 @@ A Helm chart for running the credentials-config-service on kubernetes.
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| wistefan | <stefan.wiedemann@fiware.org> |  |
+| wistefan | <stefan.wiedemann@seamware.com> |  |
 
 ## Source Code
 
 * <https://github.com/fiware/credentials-config-service>
+
+## Requirements
+
+Kubernetes: `>= 1.19-0`
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://fiware.github.io/helm-charts | common | 0.0.1 |
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | additionalEnvVars | list | `[]` | a list of additional env vars to be set, check the til docu for all available options |
+| autoscaling.apiVersion | string | `"v2"` | apiVersion of the HorizontalPodAutoscaler resource emitted by the `common.hpa.tpl` helper. override this to "v2". |
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |

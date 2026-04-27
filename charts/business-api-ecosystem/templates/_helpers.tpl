@@ -1,16 +1,64 @@
+{{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
+business-api-ecosystem helpers.
+
+The chart-level helpers (`business-api-ecosystem.name`,
+`business-api-ecosystem.chart`, `business-api-ecosystem.fullname`) are
+now thin wrappers around the matching `common.*` helpers shipped by the
+`common` library chart (see charts/common/templates/*.tpl and
+docs/common-chart.md). The wrappers exist so that:
+
+  * Any external umbrella chart that already imports e.g.
+    `include "business-api-ecosystem.name" .` keeps working — no
+    external breaking change.
+  * The bodies stay in lock-step with the rest of the FIWARE charts,
+    because there is exactly one implementation of each helper (in
+    `common`).
+
+The per-component helpers (`bizEcosystemApis.*`, `bizEcosystemRss.*`,
+`bizEcosystemChargingBackend.*`, `bizEcosystemLogicProxy.*`) remain
+chart-local on purpose. Their rendered names depend on a legacy
+`default "" .Values.nameOverride` base (empty fallback instead of
+`.Chart.Name`), and migrating them to `common.names.fullname` with a
+`component` argument would change the rendered names of every Service,
+Deployment, StatefulSet, PVC, Secret and ServiceAccount in the chart —
+a breaking change that cannot be absorbed by `helm upgrade`. The same
+reasoning applies to the per-component `serviceAccountName` and
+`secretName` / `certSecretName` helpers: they resolve relative to the
+per-component `bizEcosystem<X>.fullname`, so migrating them would only
+make sense once the per-component fullnames themselves move over.
+
+Chart-local, by design, and called out as non-goals in
+docs/common-chart.md:
+
+  * `bizEcosystem<X>.fullhostname` / `bizEcosystem<X>.hostnameonly`
+    — chart-specific hostname helpers.
+  * `business-api-ecosystem.initContainer.*` — MySQL / MongoDB / APIs /
+    RSS / Charging init-container body templates.
+  * `bizEcosystem<X>.apiInitContainer` / `rssInitContainer` — init-
+    container name helpers.
+  * `bizEcosystem<X>.labels` / `matchLabels` — legacy
+    `app` / `release` / `component` / `chart` / `heritage` label schema.
+    Switching to `common.labels.standard` (which emits
+    `app.kubernetes.io/*`) would change Service / Deployment selectors
+    and block `helm upgrade`; these stay chart-local until the chart is
+    willing to accept that break.
 */}}
-{{- define "business-api-ecosystem.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- end }}
 
 {{/*
-Create chart name and version as used by the chart label.
+Expand the name of the chart. Delegates to `common.names.name`.
+*/}}
+{{- define "business-api-ecosystem.name" -}}
+{{- include "common.names.name" . -}}
+{{- end -}}
+
+{{/*
+Create chart name and version as used by the chart label. Delegates to
+`common.names.chart`.
 */}}
 {{- define "business-api-ecosystem.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
+{{- include "common.names.chart" . -}}
+{{- end -}}
 
 {{/*
 Common labels
@@ -71,27 +119,25 @@ component: {{ .Values.bizEcosystemChargingBackend.name | quote }}
 {{- $_ := set $labels "app" (include "bizEcosystemLogicProxy.fullname" .) -}}
 {{- toYaml $labels -}}
 {{- end -}}
+
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
+Create a default fully qualified app name. Delegates to
+`common.names.fullname`.
 */}}
 {{- define "business-api-ecosystem.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
-{{- end }}
+{{- include "common.names.fullname" . -}}
+{{- end -}}
 
 {{/*
 Create a fully qualified bizEcosystemApis name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+
+Kept chart-local: this helper's `$name := default "" .Values.nameOverride`
+base differs from `common.names.fullname`'s
+`default .Chart.Name .Values.nameOverride`, and the rendered output
+(Service / Deployment / ServiceAccount names) would change if it were
+redirected at `common.names.fullname` with a `component` argument.
+We truncate at 63 chars because some Kubernetes name fields are limited
+to this (by the DNS naming spec).
 */}}
 
 {{- define "bizEcosystemApis.fullname" -}}
@@ -108,8 +154,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create a fully qualified bizEcosystemRss name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+Create a fully qualified bizEcosystemRss name. Kept chart-local for the
+same reason as `bizEcosystemApis.fullname` (see note above).
+We truncate at 63 chars because some Kubernetes name fields are limited
+to this (by the DNS naming spec).
 */}}
 
 {{- define "bizEcosystemRss.fullname" -}}
@@ -126,8 +174,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create a fully qualified bizEcosystemChargingBackend name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+Create a fully qualified bizEcosystemChargingBackend name. Kept chart-
+local for the same reason as `bizEcosystemApis.fullname` (see note
+above).
+We truncate at 63 chars because some Kubernetes name fields are limited
+to this (by the DNS naming spec).
 */}}
 
 {{- define "bizEcosystemChargingBackend.fullname" -}}
@@ -144,8 +195,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create a fully qualified bizEcosystemLogicProxy name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+Create a fully qualified bizEcosystemLogicProxy name. Kept chart-local
+for the same reason as `bizEcosystemApis.fullname` (see note above).
+We truncate at 63 chars because some Kubernetes name fields are limited
+to this (by the DNS naming spec).
 */}}
 
 {{- define "bizEcosystemLogicProxy.fullname" -}}
@@ -360,7 +413,10 @@ Template for Charging Backend initContainer check
 {{- end }}
 
 {{/*
-RSS secrets
+RSS secrets. Kept chart-local: the fallback (`bizEcosystemRss.fullname`)
+differs from `common.names.fullname` with a `component` argument (see
+note at top of file), so `common.secrets.name` cannot be used here
+without changing the rendered Secret name.
 */}}
 {{- define "bizEcosystemRss.secretName" -}}
     {{- if .Values.bizEcosystemRss.existingSecret -}}
@@ -371,7 +427,8 @@ RSS secrets
 {{- end -}}
 
 {{/*
-Logic proxy secrets
+Logic proxy secrets. Kept chart-local for the same reason as
+`bizEcosystemRss.secretName` (see note above).
 */}}
 {{- define "bizEcosystemLogicProxy.secretName" -}}
     {{- if .Values.bizEcosystemLogicProxy.existingSecret -}}
@@ -390,7 +447,8 @@ Logic proxy secrets
 {{- end -}}
 
 {{/*
-Charging backend secrets
+Charging backend secrets. Kept chart-local for the same reason as
+`bizEcosystemRss.secretName` (see note above).
 */}}
 {{- define "bizEcosystemChargingBackend.secretName" -}}
     {{- if .Values.bizEcosystemChargingBackend.existingSecret -}}
@@ -409,7 +467,8 @@ Charging backend secrets
 {{- end -}}
 
 {{/*
-API secret
+API secret. Kept chart-local for the same reason as
+`bizEcosystemRss.secretName` (see note above).
 */}}
 {{- define "bizEcosystemApis.secretName" -}}
     {{- if .Values.bizEcosystemApis.existingSecret -}}
