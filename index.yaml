@@ -2875,6 +2875,32 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/contract-management-0.5.0/contract-management-0.5.0.tgz
     version: 0.5.0
   credentials-config-service:
+  - apiVersion: v2
+    appVersion: 3.4.2
+    created: "2026-04-27T13:44:50.631391869Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.0.1
+    description: A Helm chart for running the credentials-config-service on kubernetes.
+    digest: 5ac101e665088bd2f977007f06c71fc4cfb801009f3a7cf36488df370d24d1fb
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - credentials-config-service
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: credentials-config-service
+    sources:
+    - https://github.com/fiware/credentials-config-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/credentials-config-service-2.6.0/credentials-config-service-2.6.0.tgz
+    version: 2.6.0
   - apiVersion: v1
     appVersion: 3.4.2
     created: "2026-03-05T15:38:13.439858261Z"
@@ -11390,4 +11416,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-04-24T08:47:21.850793871Z"
+generated: "2026-04-27T13:44:50.842464243Z"
