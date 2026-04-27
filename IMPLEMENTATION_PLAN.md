@@ -133,9 +133,28 @@ Breaking changes item 4):
 > `custom-sa` instead of `<fullname>`. Releases that did not set
 > `serviceAccount.name` are unaffected.
 
-The rendered YAML will also drop the blank leading line inside the
-`labels:` block (cosmetic, yaml-equivalent) — see the "Non-breaking
-cosmetic changes" section of `docs/common-chart.md`.
+Two additional non-breaking cosmetic deltas appear on the
+`templates/serviceaccount.yaml` output:
+
+1. The blank leading line inside the `labels:` block is gone — see
+   the "Non-breaking cosmetic changes" section of `docs/common-chart.md`.
+2. The SA's `metadata.labels` map expands from the chart-local 3-label
+   subset (`helm.sh/chart`, `app.kubernetes.io/version`,
+   `app.kubernetes.io/managed-by`) to the canonical 5-label set
+   emitted by `common.labels.standard` (adds `app.kubernetes.io/name`
+   and `app.kubernetes.io/instance`). This is a direct consequence of
+   `common.serviceAccount.tpl` rendering its own `labels:` block via
+   `common.labels.standard` rather than the chart-local
+   `tmforum.labels` helper. The expansion is non-functional: the SA's
+   `metadata.labels` are not used as a selector by any other resource
+   in the chart, so adding two extra metadata keys cannot change pod
+   scheduling, service routing, or selector matching. The chart-local
+   `tmforum.labels` body itself is unchanged (still the 3-label subset
+   used by per-API Deployments / Services / Ingresses, where the
+   duplicate-key risk discussed in step 2 applies); only the SA
+   resource — which is rendered by the common helper, not by an
+   inline `tmforum.labels` include — picks up the canonical 5-label
+   set.
 
 **Acceptance criteria:**
 
@@ -169,6 +188,12 @@ The diff is expected to contain **only** these items:
    change #4).
 2. `templates/serviceaccount.yaml` — the blank leading line inside
    `labels:` is gone (cosmetic).
+3. `templates/serviceaccount.yaml` — `metadata.labels` gains
+   `app.kubernetes.io/name` and `app.kubernetes.io/instance` (the SA
+   now carries the canonical 5-label set produced by
+   `common.labels.standard` instead of the chart-local 3-label
+   `tmforum.labels` subset). Non-functional, since SA labels are not
+   used as selectors by any other resource in the chart.
 
 Any other diff hunk is a regression and must be fixed before merging.
 
@@ -210,7 +235,13 @@ Model the file on `charts/mintaka/CHANGELOG.md`:
 - `### Breaking changes` section calling out the SA-name rename
   (item 4 from `docs/common-chart.md`).
 - `### Non-breaking cosmetic changes to rendered output` section calling
-  out the labels-blank-line removal on the new `serviceaccount.yaml`.
+  out:
+  - the labels-blank-line removal on the new `serviceaccount.yaml`;
+  - the SA `metadata.labels` expansion from the chart-local 3-label
+    subset to the canonical 5-label `common.labels.standard` set
+    (adds `app.kubernetes.io/name` and `app.kubernetes.io/instance`).
+    Non-functional — the SA's `metadata.labels` are metadata-only and
+    not consumed as a selector by any other resource in the chart.
 - `### Upgrade path` paragraph stating that `helm upgrade` of an
   existing release is a no-op for the Service / Deployment selector
   pair and a standard metadata update for the ServiceAccount resource.
