@@ -103,6 +103,8 @@ deployment:
 autoscaling:
   #  -- should autoscaling be enabled for til
   enabled: false
+  # -- HPA apiVersion (e.g. v2beta2 for k8s <1.26, v2 for 1.26+)
+  apiVersion: "v2beta2"
   # -- minimum number of running pods
   minReplicas: 1
   # -- maximum number of running pods
