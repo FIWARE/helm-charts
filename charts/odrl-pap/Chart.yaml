@@ -1,7 +1,8 @@
-apiVersion: v1
+apiVersion: v2
 name: odrl-pap
-version: 2.9.1
+version: 2.10.0
 appVersion: 1.4.3
+kubeVersion: '>= 1.19-0'
 description: A Helm chart for running the odrl-pap on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
 keywords:
@@ -15,3 +16,14 @@ sources:
 maintainers:
   - name: Stefan Wiedemann
     email: stefan.wiedemann@fiware.org
+# The `common` library chart ships every shared helper
+# (names, labels, service-account resolution, existing-secret
+# resolution, service/ingress/route/HPA/secret/serviceaccount
+# bodies). It is consumed via a local `file://` dependency so
+# publishing workflows do not need a separate repository entry —
+# Helm packages the library alongside odrl-pap in the resulting
+# `odrl-pap-<version>.tgz`. See charts/common/README.md.
+dependencies:
+  - name: common
+    repository: "https://fiware.github.io/helm-charts"
+    version: "0.0.1"
