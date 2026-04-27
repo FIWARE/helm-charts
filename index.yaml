@@ -2144,6 +2144,31 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-0.0.1/business-api-ecosystem-0.0.1.tgz
     version: 0.0.1
   canis-major:
+  - apiVersion: v2
+    appVersion: 1.5.15
+    created: "2026-04-27T13:53:44.454081162Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.0.1
+    description: A Helm chart for running canis major on kubernetes.
+    digest: da5e25fbe119d2b8af13541fe911faca21830cd11b8ccd9c771e03040583ef1b
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - canismajor
+    - blockchain
+    - dlt
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: canis-major
+    sources:
+    - https://github.com/FIWARE/CanisMajor
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/canis-major-0.2.0/canis-major-0.2.0.tgz
+    version: 0.2.0
   - apiVersion: v1
     appVersion: 1.5.15
     created: "2026-01-23T10:06:31.357499642Z"
@@ -11444,4 +11469,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-04-27T13:48:37.833401951Z"
+generated: "2026-04-27T13:53:44.454845766Z"
