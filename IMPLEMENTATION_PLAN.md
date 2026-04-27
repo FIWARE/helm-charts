@@ -67,19 +67,45 @@ chart name `tm-forum-api`.
 - `tmforum.fullname` → `include "common.names.fullname" .`
 - `tmforum.chart` → `include "common.names.chart" .`
 - `tmforum.serviceAccountName` → `include "common.serviceAccount.name" .`
-- `tmforum.labels` → `include "common.labels.standard" .`
+- `tmforum.labels` → **kept as the chart-local 3-label subset**
+  (`helm.sh/chart` + `app.kubernetes.io/version` +
+  `app.kubernetes.io/managed-by`). The `helm.sh/chart` value continues
+  to flow through `tmforum.chart`, which is itself a wrapper around
+  `common.names.chart`, so the canonical chart-and-version formatting
+  still lives in the library chart.
 
-Pattern to follow: `charts/mintaka/templates/_helpers.tpl`. Preserve the
-opening `vim: set filetype=mustache` comment and add a top-of-file
-docstring (mirroring mintaka's) explaining that every helper is now a
-wrapper and why the wrappers are kept.
+  Why not delegate to `common.labels.standard`?
+  `common.labels.standard` emits the canonical 5-label set (adds
+  `app.kubernetes.io/name` and `app.kubernetes.io/instance`).
+  tm-forum-api's `templates/deployment.yaml`, `templates/service.yaml`,
+  `templates/deploy-all-in-one.yaml`, `templates/envoy.yaml`, and
+  `templates/envoy-service.yaml` already emit per-API
+  `app.kubernetes.io/name: <fullname>-<api-name>` and
+  `app.kubernetes.io/instance: <release>` immediately before each
+  `tmforum.labels` include. Delegating `tmforum.labels` to the 5-label
+  set would yield duplicate map keys whose last-wins semantics would
+  override the per-API name with the chart-level name and break
+  selector matching across every per-API Deployment. This is the same
+  multi-component caveat that prevents the per-API
+  Service/Ingress/Route templates from being collapsed into
+  `common.*.tpl` (see Overview).
+
+Pattern to follow: `charts/mintaka/templates/_helpers.tpl` for the
+four name-style wrappers. The opening `vim: set filetype=mustache`
+comment is preserved. A top-of-file docstring (mirroring mintaka's)
+explains that the four name helpers are now wrappers, that the
+`tmforum` prefix is intentionally kept, and that `tmforum.labels` is
+kept chart-local with the rationale above.
 
 **Acceptance criteria:**
 
 - `helm template charts/tm-forum-api` renders without template errors.
 - `grep -rn "default .Chart.Name" charts/tm-forum-api/templates/_helpers.tpl`
-  returns nothing — the wrapper bodies no longer copy the canonical
-  `name`/`fullname` logic.
+  returns nothing — the wrapper bodies for `name`/`fullname` no longer
+  copy the canonical logic.
+- `helm template charts/tm-forum-api` renders byte-identical YAML to the
+  pre-step-2 baseline (the `tmforum.labels` body intentionally stays a
+  3-label subset so render parity is preserved).
 
 ### Step 3: Replace `serviceaccount.yaml` with `common.serviceAccount.tpl`
 
@@ -162,8 +188,13 @@ Model the file on `charts/mintaka/CHANGELOG.md`:
   listing:
   - `Chart.yaml` — new `common` dependency (`file://`-style comment
     rationale), version bump `0.16.16 → 0.17.0`.
-  - `templates/_helpers.tpl` — `tmforum.*` helpers now delegate to
-    `common.*`.
+  - `templates/_helpers.tpl` — `tmforum.name`, `tmforum.fullname`,
+    `tmforum.chart`, and `tmforum.serviceAccountName` now delegate to
+    `common.*`. `tmforum.labels` is intentionally kept as a chart-local
+    3-label subset (rationale: per-API templates already emit
+    `app.kubernetes.io/name` / `app.kubernetes.io/instance` per API; the
+    5-label `common.labels.standard` would create duplicate keys and
+    break selector matching).
   - `templates/serviceaccount.yaml` — replaced with one-line
     `common.serviceAccount.tpl` include.
   - `templates/service.yaml`, `templates/ingress.yaml`,
