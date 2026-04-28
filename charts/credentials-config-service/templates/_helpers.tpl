@@ -4,7 +4,7 @@
 credentials-config-service (`ccs.*`) helpers.
 
 Most helpers in this file are now thin wrappers around the matching
-`common.*` helper from the `common` library chart (see
+`fiwareCommon.*` helper from the `common` library chart (see
 charts/common/templates/*.tpl). The wrappers exist so that:
 
   * Any external umbrella chart that already imports e.g.
@@ -20,41 +20,41 @@ in the `common` library and is kept local.
 */}}
 
 {{/*
-Expand the name of the chart. Delegates to `common.names.name`.
+Expand the name of the chart. Delegates to `fiwareCommon.names.name`.
 */}}
 {{- define "ccs.name" -}}
-{{- include "common.names.name" . -}}
+{{- include "fiwareCommon.names.name" . -}}
 {{- end -}}
 
 {{/*
 Create a default fully qualified app name. Delegates to
-`common.names.fullname`.
+`fiwareCommon.names.fullname`.
 */}}
 {{- define "ccs.fullname" -}}
-{{- include "common.names.fullname" . -}}
+{{- include "fiwareCommon.names.fullname" . -}}
 {{- end -}}
 
 {{/*
 Create chart name and version as used by the chart label. Delegates to
-`common.names.chart`.
+`fiwareCommon.names.chart`.
 */}}
 {{- define "ccs.chart" -}}
-{{- include "common.names.chart" . -}}
+{{- include "fiwareCommon.names.chart" . -}}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use. Delegates to
-`common.serviceAccount.name`.
+`fiwareCommon.serviceAccount.name`.
 */}}
 {{- define "ccs.serviceAccountName" -}}
-{{- include "common.serviceAccount.name" . -}}
+{{- include "fiwareCommon.serviceAccount.name" . -}}
 {{- end -}}
 
 {{/*
-Common labels. Delegates to `common.labels.standard`.
+Common labels. Delegates to `fiwareCommon.labels.standard`.
 */}}
 {{- define "ccs.labels" -}}
-{{- include "common.labels.standard" . -}}
+{{- include "fiwareCommon.labels.standard" . -}}
 {{- end -}}
 
 {{/*
@@ -62,8 +62,8 @@ Resolve the name of the database credentials Secret.
 
 The ccs chart uses an opt-in `.Values.database.existingSecret.enabled`
 flag (unlike the bare-string / map-with-name forms consumed by
-`common.secrets.name` elsewhere). We translate that shape here: when
-`enabled` is true we forward the map to `common.secrets.name`, which
+`fiwareCommon.secrets.name` elsewhere). We translate that shape here: when
+`enabled` is true we forward the map to `fiwareCommon.secrets.name`, which
 tpl-expands `.name` and returns it verbatim; otherwise we pass an empty
 override so the helper falls back to the chart's fullname.
 */}}
@@ -72,7 +72,7 @@ override so the helper falls back to the chart's fullname.
 {{- if .Values.database.existingSecret.enabled -}}
 {{- $existing = .Values.database.existingSecret -}}
 {{- end -}}
-{{- include "common.secrets.name" (dict "context" . "existingSecret" $existing) -}}
+{{- include "fiwareCommon.secrets.name" (dict "context" . "existingSecret" $existing) -}}
 {{- end -}}
 
 {{/*
@@ -86,7 +86,7 @@ key `password` matches the legacy `ccs.passwordKey` behaviour.
 {{- if and .Values.database.existingSecret.enabled .Values.database.existingSecret.key -}}
 {{- $existing = .Values.database.existingSecret -}}
 {{- end -}}
-{{- include "common.secrets.key" (dict "context" . "existingSecret" $existing "defaultKey" "password") -}}
+{{- include "fiwareCommon.secrets.key" (dict "context" . "existingSecret" $existing "defaultKey" "password") -}}
 {{- end -}}
 
 {{/*

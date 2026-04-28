@@ -1,6 +1,6 @@
 apiVersion: v2
 name: contract-management
-version: 3.5.23
+version: 3.5.24
 appVersion: 3.3.8
 kubeVersion: '>= 1.19-0'
 description: A Helm chart for running the contract-management on kubernetes.
@@ -29,4 +29,4 @@ maintainers:
 dependencies:
   - name: common
     repository: "https://fiware.github.io/helm-charts"
-    version: "0.0.1"
+    version: "0.1.0"

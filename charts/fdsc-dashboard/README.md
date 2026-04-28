@@ -1,6 +1,6 @@
 # fdsc-dashboard
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 A Helm chart for running the fdsc-dashboard on kubernetes.
 
@@ -20,7 +20,7 @@ Kubernetes: `>= 1.19-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://fiware.github.io/helm-charts | common | 0.0.1 |
+| https://fiware.github.io/helm-charts | common | 0.1.0 |
 
 ## Values
 
@@ -35,7 +35,7 @@ Kubernetes: `>= 1.19-0`
 | auth.config | object | `{"providers":[]}` | raw OIDC providers configuration, rendered as JSON into the chart's Secret when `existingSecret` is empty. Default: auth disabled (no providers). See upstream docs for the full schema. |
 | auth.existingSecret | string | `""` | name of a pre-existing Secret containing the `AUTH_CONFIG_JSON` key. When set, the chart will not render its own Secret and the Deployment will reference this Secret instead. |
 | auth.secretKey | string | `"AUTH_CONFIG_JSON"` | key inside the Secret (chart-rendered or `existingSecret`) to mount into the `AUTH_CONFIG_JSON` env var |
-| autoscaling.apiVersion | string | `"v2beta2"` | apiVersion of the HorizontalPodAutoscaler resource emitted by the `common.hpa.tpl` helper. Users on Kubernetes 1.26+ may wish to override this to "v2". |
+| autoscaling.apiVersion | string | `"v2"` | apiVersion of the HorizontalPodAutoscaler resource emitted by the `fiwareCommon.hpa.tpl` helper. Users on Kubernetes 1.26+ may wish to override this to "v2". |
 | autoscaling.enabled | bool | `false` | should autoscaling be enabled for the fdsc-dashboard |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |

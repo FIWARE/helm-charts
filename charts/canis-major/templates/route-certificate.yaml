@@ -1,8 +1,8 @@
 {{/*
 Canis-major's cert-manager Certificate is bespoke: the `common` library
 stops at Service / Ingress / Route / HPA / ServiceAccount / Secret, so
-there is no `common.certificate.tpl` to delegate to. The template uses
-`common.*` name / label helpers (via the `canis-major.*` wrappers) for
+there is no `fiwareCommon.certificate.tpl` to delegate to. The template uses
+`fiwareCommon.*` name / label helpers (via the `canis-major.*` wrappers) for
 consistency with the rest of the FIWARE charts.
 */}}
 {{- if .Values.route.certificate -}}

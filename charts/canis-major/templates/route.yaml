@@ -1,13 +1,13 @@
 {{/*
 Canis-major ships an OpenShift Route body that deliberately diverges
-from `common.route.tpl` because it must emit the
+from `fiwareCommon.route.tpl` because it must emit the
 `cert-utils-operator.redhat-cop.io/certs-from-secret` annotation when
 `.Values.route.certificate` is set (the same annotation that drives the
 companion `route-certificate.yaml` cert-manager Certificate).
 
 The annotation is generated from `canis-major.fullname` and therefore
 cannot be expressed as a static `.Values.route.annotations` entry. The
-template keeps the bespoke body but uses `common.*` for names, labels
+template keeps the bespoke body but uses `fiwareCommon.*` for names, labels
 and namespace so the rendered output stays aligned with the rest of the
 FIWARE charts.
 */}}
