@@ -9,7 +9,7 @@ charts/mintaka/templates/ingress.yaml.
 
 Call convention — always dict form:
 
-  {{ include "common.ingress.tpl" (dict
+  {{ include "fiwareCommon.ingress.tpl" (dict
        "context"     $
        "ingress"     .Values.ingress
        "servicePort" .Values.service.port)
@@ -32,21 +32,21 @@ The helper renders nothing when `ingress.enabled` is false, so the
 consumer chart can `include` it unconditionally from a dedicated
 ingress.yaml file.
 */}}
-{{- define "common.ingress.tpl" -}}
+{{- define "fiwareCommon.ingress.tpl" -}}
 {{- $ctx := .context -}}
-{{- $ingress := required "common.ingress.tpl: ingress is required" .ingress -}}
-{{- $servicePort := required "common.ingress.tpl: servicePort is required" .servicePort -}}
+{{- $ingress := required "fiwareCommon.ingress.tpl: ingress is required" .ingress -}}
+{{- $servicePort := required "fiwareCommon.ingress.tpl: servicePort is required" .servicePort -}}
 {{- $component := default "" .component -}}
 {{- $labelArgs := dict "context" $ctx "component" $component -}}
 {{- if $ingress.enabled -}}
-{{- $fullName := include "common.names.fullname" $labelArgs -}}
+{{- $fullName := include "fiwareCommon.names.fullname" $labelArgs -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
-  namespace: {{ include "common.names.namespace" (dict "context" $ctx) | quote }}
+  namespace: {{ include "fiwareCommon.names.namespace" (dict "context" $ctx) | quote }}
   labels:
-    {{- include "common.labels.standard" $labelArgs | nindent 4 }}
+    {{- include "fiwareCommon.labels.standard" $labelArgs | nindent 4 }}
   {{- with $ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
