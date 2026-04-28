@@ -17,11 +17,8 @@ maintainers:
 # The `common` library chart ships every shared helper
 # (names, labels, service-account resolution, existing-secret
 # resolution, service/ingress/route/HPA/secret/serviceaccount
-# bodies). It is consumed via a local `file://` dependency so
-# publishing workflows do not need a separate repository entry —
-# Helm packages the library alongside fdsc-edc in the resulting
-# `fdsc-edc-<version>.tgz`. See charts/common/README.md.
+# bodies).
 dependencies:
   - name: common
-    repository: "file://../common"
-    version: ">=0.0.1"
+    repository: "https://fiware.github.io/helm-charts"
+    version: "0.1.0"
