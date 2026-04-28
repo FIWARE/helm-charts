@@ -1,6 +1,6 @@
 # trusted-issuers-list
 
-![Version: 0.18.0](https://img.shields.io/badge/Version-0.18.0-informational?style=flat-square) ![AppVersion: 0.8.1](https://img.shields.io/badge/AppVersion-0.8.1-informational?style=flat-square)
+![Version: 0.18.1](https://img.shields.io/badge/Version-0.18.1-informational?style=flat-square) ![AppVersion: 0.8.1](https://img.shields.io/badge/AppVersion-0.8.1-informational?style=flat-square)
 
 A Helm chart for running the trusted-issuers-list on kubernetes.
 
@@ -8,7 +8,7 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| wistefan | <stefan.wiedemann@fiware.org> |  |
+| wistefan | <stefan.wiedemann@seamware.com> |  |
 
 ## Source Code
 
@@ -18,7 +18,7 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 
 | Repository | Name | Version |
 |------------|------|---------|
-| file://../common | common | 0.0.2 |
+| https://fiware.github.io/helm-charts | common | 0.1.0 |
 
 ## Values
 
@@ -26,7 +26,7 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 |-----|------|---------|-------------|
 | additionalEnvVars | object | `{}` |  |
 | additonalEnvVars | list | `[]` | a list of additional env vars to be set, check the til docu for all available options |
-| autoscaling.apiVersion | string | `"v2beta2"` | apiVersion of the HorizontalPodAutoscaler resource emitted by the `common.hpa.tpl` helper. Matches the value previously hard-coded in the chart's HPA template; users on Kubernetes 1.26+ may wish to override this to "v2". |
+| autoscaling.apiVersion | string | `"v2"` | apiVersion of the HorizontalPodAutoscaler resource |
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |
