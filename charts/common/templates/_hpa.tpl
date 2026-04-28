@@ -11,12 +11,12 @@ charts/keyrock/templates/statefulset-hpa.yaml.
 
 Call convention — always dict form:
 
-  {{ include "common.hpa.tpl" (dict
+  {{ include "fiwareCommon.hpa.tpl" (dict
        "context"     $
        "autoscaling" .Values.autoscaling)
   }}
 
-  {{ include "common.hpa.tpl" (dict
+  {{ include "fiwareCommon.hpa.tpl" (dict
        "context"     $
        "autoscaling" .Values.autoscaling
        "kind"        "StatefulSet")
@@ -41,21 +41,21 @@ Arguments (dict):
 The helper renders nothing when `autoscaling.enabled` is false.
 
 */}}
-{{- define "common.hpa.tpl" -}}
+{{- define "fiwareCommon.hpa.tpl" -}}
 {{- $ctx := .context -}}
-{{- $autoscaling := required "common.hpa.tpl: autoscaling is required" .autoscaling -}}
+{{- $autoscaling := required "fiwareCommon.hpa.tpl: autoscaling is required" .autoscaling -}}
 {{- $kind := default "Deployment" .kind -}}
 {{- $component := default "" .component -}}
 {{- $labelArgs := dict "context" $ctx "component" $component -}}
 {{- if $autoscaling.enabled -}}
-{{- $fullName := include "common.names.fullname" $labelArgs -}}
+{{- $fullName := include "fiwareCommon.names.fullname" $labelArgs -}}
 apiVersion: autoscaling/{{ default "v2" $autoscaling.apiVersion }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ $fullName }}
-  namespace: {{ include "common.names.namespace" (dict "context" $ctx) | quote }}
+  namespace: {{ include "fiwareCommon.names.namespace" (dict "context" $ctx) | quote }}
   labels:
-    {{- include "common.labels.standard" $labelArgs | nindent 4 }}
+    {{- include "fiwareCommon.labels.standard" $labelArgs | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

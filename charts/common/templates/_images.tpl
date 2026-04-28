@@ -13,9 +13,9 @@ currently inlines in its deployment / statefulset template:
 Call convention (always dict form — helpers cannot guess which of the
 many per-chart `.image` blocks to look at):
 
-  {{- include "common.images.image" (dict "context" $ "image" .Values.deployment.image) }}
-  {{- include "common.images.pullPolicy" (dict "image" .Values.deployment.image) }}
-  {{- include "common.images.pullSecrets" (dict "pullSecrets" .Values.imagePullSecrets) | nindent 6 }}
+  {{- include "fiwareCommon.images.image" (dict "context" $ "image" .Values.deployment.image) }}
+  {{- include "fiwareCommon.images.pullPolicy" (dict "image" .Values.deployment.image) }}
+  {{- include "fiwareCommon.images.pullSecrets" (dict "pullSecrets" .Values.imagePullSecrets) | nindent 6 }}
 
 Accepted shape of the `image` block (the FIWARE convention):
 
@@ -31,7 +31,7 @@ embedded in a surrounding YAML block.
 */}}
 
 {{/*
-common.images.image
+fiwareCommon.images.image
 
 Render the `repository:tag` fragment for a container image. The tag
 defaults to `.Chart.AppVersion` when `image.tag` is empty, matching the
@@ -45,16 +45,16 @@ Arguments (dict):
   image   - the image sub-map (map with `.repository` and optional
             `.tag`), required.
 */}}
-{{- define "common.images.image" -}}
+{{- define "fiwareCommon.images.image" -}}
 {{- $ctx := .context -}}
-{{- $image := required "common.images.image: image is required" .image -}}
-{{- $repository := required "common.images.image: image.repository is required" $image.repository -}}
+{{- $image := required "fiwareCommon.images.image: image is required" .image -}}
+{{- $repository := required "fiwareCommon.images.image: image.repository is required" $image.repository -}}
 {{- $tag := default $ctx.Chart.AppVersion $image.tag -}}
 {{- printf "%s:%s" $repository (toString $tag) -}}
 {{- end -}}
 
 {{/*
-common.images.pullPolicy
+fiwareCommon.images.pullPolicy
 
 Render the pull-policy string for a container image. Returns
 `image.pullPolicy` when set, otherwise the Kubernetes default
@@ -63,13 +63,13 @@ Render the pull-policy string for a container image. Returns
 Arguments (dict):
   image - the image sub-map (map with optional `.pullPolicy`), required.
 */}}
-{{- define "common.images.pullPolicy" -}}
-{{- $image := required "common.images.pullPolicy: image is required" .image -}}
+{{- define "fiwareCommon.images.pullPolicy" -}}
+{{- $image := required "fiwareCommon.images.pullPolicy: image is required" .image -}}
 {{- default "IfNotPresent" $image.pullPolicy -}}
 {{- end -}}
 
 {{/*
-common.images.pullSecrets
+fiwareCommon.images.pullSecrets
 
 Render the `imagePullSecrets:` block when one or more pull secrets are
 configured. Accepts the two shapes currently used in FIWARE charts:
@@ -95,7 +95,7 @@ Arguments (dict):
 The caller is expected to indent the output (usually `| nindent 8`)
 because the surrounding `spec:` block lives at various depths.
 */}}
-{{- define "common.images.pullSecrets" -}}
+{{- define "fiwareCommon.images.pullSecrets" -}}
 {{- $pullSecrets := .pullSecrets -}}
 {{- if $pullSecrets -}}
 imagePullSecrets:

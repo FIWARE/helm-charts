@@ -10,9 +10,9 @@ to the legacy helper when called with the root context.
 
 Call styles — consistent with _names.tpl and _labels.tpl:
 
-  {{- include "common.serviceAccount.name" . }}
+  {{- include "fiwareCommon.serviceAccount.name" . }}
 
-  {{- include "common.serviceAccount.name" (dict "context" $ "component" "worker") }}
+  {{- include "fiwareCommon.serviceAccount.name" (dict "context" $ "component" "worker") }}
 
 The dict form exists so multi-component charts (scorpio-broker, Step 10
 in IMPLEMENTATION_PLAN.md) can scope the default SA name to a single
@@ -28,7 +28,7 @@ The helpers assume the consumer chart exposes the standard
     name:   <string, optional>
 
   * If `create` is true, the default name is
-    `common.names.fullname` (optionally suffixed with `-<component>`);
+    `fiwareCommon.names.fullname` (optionally suffixed with `-<component>`);
     `.Values.serviceAccount.name` overrides when set.
   * If `create` is false, the name is `.Values.serviceAccount.name` or
     literally `default` — matching the behaviour of every FIWARE chart
@@ -36,7 +36,7 @@ The helpers assume the consumer chart exposes the standard
 */}}
 
 {{/*
-common.serviceAccount.name
+fiwareCommon.serviceAccount.name
 
 Return the name of the ServiceAccount a pod should use. Exactly
 reproduces the legacy `<chart>.serviceAccountName` body:
@@ -50,7 +50,7 @@ reproduces the legacy `<chart>.serviceAccountName` body:
 When called in the dict form with a non-empty `component`, the default
 (create=true, no override) becomes `<fullname>-<component>`.
 */}}
-{{- define "common.serviceAccount.name" -}}
+{{- define "fiwareCommon.serviceAccount.name" -}}
 {{- $ctx := . -}}
 {{- $component := "" -}}
 {{- if and (kindIs "map" .) (hasKey . "context") -}}
@@ -58,7 +58,7 @@ When called in the dict form with a non-empty `component`, the default
 {{- $component = default "" .component -}}
 {{- end -}}
 {{- if $ctx.Values.serviceAccount.create -}}
-{{- $defaultName := include "common.names.fullname" (dict "context" $ctx "component" $component) -}}
+{{- $defaultName := include "fiwareCommon.names.fullname" (dict "context" $ctx "component" $component) -}}
 {{- default $defaultName $ctx.Values.serviceAccount.name -}}
 {{- else -}}
 {{- default "default" $ctx.Values.serviceAccount.name -}}
@@ -66,7 +66,7 @@ When called in the dict form with a non-empty `component`, the default
 {{- end -}}
 
 {{/*
-common.serviceAccount.tpl
+fiwareCommon.serviceAccount.tpl
 
 Render a complete `v1/ServiceAccount` manifest gated on
 `.Values.serviceAccount.create`. Mirrors the bodies in
@@ -75,9 +75,9 @@ charts/keyrock/templates/serviceaccount.yaml.
 
 Call convention — always dict form:
 
-  {{ include "common.serviceAccount.tpl" (dict "context" $) }}
+  {{ include "fiwareCommon.serviceAccount.tpl" (dict "context" $) }}
 
-  {{ include "common.serviceAccount.tpl" (dict "context" $ "component" "db") }}
+  {{ include "fiwareCommon.serviceAccount.tpl" (dict "context" $ "component" "db") }}
 
 Arguments (dict):
   context   - root context (`$`), required. Reads
@@ -90,7 +90,7 @@ The helper renders nothing when `.Values.serviceAccount.create` is
 false, so the consumer chart can `include` it unconditionally from a
 dedicated serviceaccount.yaml file.
 */}}
-{{- define "common.serviceAccount.tpl" -}}
+{{- define "fiwareCommon.serviceAccount.tpl" -}}
 {{- $ctx := .context -}}
 {{- $component := default "" .component -}}
 {{- $labelArgs := dict "context" $ctx "component" $component -}}
@@ -98,13 +98,13 @@ dedicated serviceaccount.yaml file.
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ include "common.serviceAccount.name" $labelArgs }}
-  namespace: {{ include "common.names.namespace" (dict "context" $ctx) | quote }}
+  name: {{ include "fiwareCommon.serviceAccount.name" $labelArgs }}
+  namespace: {{ include "fiwareCommon.names.namespace" (dict "context" $ctx) | quote }}
   {{- with $ctx.Values.serviceAccount.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "common.labels.standard" $labelArgs | nindent 4 }}
+    {{- include "fiwareCommon.labels.standard" $labelArgs | nindent 4 }}
 {{- end -}}
 {{- end -}}

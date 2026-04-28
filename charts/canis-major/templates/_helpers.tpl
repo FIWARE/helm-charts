@@ -1,65 +1,68 @@
 
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
+Canis-major-specific helpers.
+
+Every helper in this file is now a thin wrapper around the matching
+`fiwareCommon.*` helper from the `common` library chart (see
+charts/common/templates/*.tpl). The wrappers exist so that:
+
+  * Any external umbrella chart that already imports e.g.
+    `include "canis-major.fullname" .` keeps working — no external
+    breaking change.
+  * The bodies below stay in lock-step with the rest of the FIWARE
+    charts, because there is exactly one implementation of each
+    helper (in `common`).
+
+See docs/common-chart.md for the migration rationale and the
+planned deprecation window. Removal of the wrappers is scheduled as a
+future major version bump (see charts/common/DEPRECATIONS.md).
+*/}}
+
+{{/*
+Expand the name of the chart. Delegates to `fiwareCommon.names.name`.
 */}}
 {{- define "canis-major.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- include "fiwareCommon.names.name" . -}}
 {{- end -}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
+Create a default fully qualified app name. Delegates to
+`fiwareCommon.names.fullname`.
 */}}
 {{- define "canis-major.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- include "fiwareCommon.names.fullname" . -}}
 {{- end -}}
-{{- end -}}
-{{- end -}}
+
 {{/*
-Create chart name and version as used by the chart label.
+Create chart name and version as used by the chart label. Delegates to
+`fiwareCommon.names.chart`.
 */}}
 {{- define "canis-major.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- include "fiwareCommon.names.chart" . -}}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use
+Create the name of the service account to use. Delegates to
+`fiwareCommon.serviceAccount.name`.
 */}}
 {{- define "canis-major.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "canis-major.fullname" .) .Values.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
-{{- end -}}
+{{- include "fiwareCommon.serviceAccount.name" . -}}
 {{- end -}}
 
 {{/*
-Common labels
+Common labels. Delegates to `fiwareCommon.labels.standard`.
 */}}
 {{- define "canis-major.labels" -}}
-app.kubernetes.io/name: {{ include "canis-major.name" . }}
-helm.sh/chart: {{ include "canis-major.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- include "fiwareCommon.labels.standard" . -}}
 {{- end -}}
 
-
+{{/*
+Resolve the name of the Secret that stores the default-account private
+key. Delegates to `fiwareCommon.secrets.name`, which handles the keyrock-style
+`.Values.existingSecret` (bare string) form used by canis-major as well
+as the orion-style map form.
+*/}}
 {{- define "canis-major.secretName" -}}
-    {{- if .Values.existingSecret -}}
-        {{- printf "%s" (tpl .Values.existingSecret $) -}}
-    {{- else -}}
-        {{- printf "%s" (include "canis-major.fullname" .) -}}
-    {{- end -}}
+{{- include "fiwareCommon.secrets.name" (dict "context" . "existingSecret" .Values.existingSecret) -}}
 {{- end -}}

@@ -43,22 +43,22 @@ metadata:
     app.kubernetes.io/version: "1.0.1"
     app.kubernetes.io/managed-by: Helm
 data:
-  # ---- common.names.name ---------------------------------------------
+  # ---- fiwareCommon.names.name ---------------------------------------------
   common_names_name: "common-tests"
   legacy_names_name: "common-tests"
 
-  # ---- common.names.fullname -----------------------------------------
+  # ---- fiwareCommon.names.fullname -----------------------------------------
   common_names_fullname: "test-release-common-tests"
   legacy_names_fullname: "test-release-common-tests"
 
-  # ---- common.names.chart --------------------------------------------
+  # ---- fiwareCommon.names.chart --------------------------------------------
   common_names_chart: "common-tests-0.0.0"
   legacy_names_chart: "common-tests-0.0.0"
 
-  # ---- common.names.namespace ----------------------------------------
+  # ---- fiwareCommon.names.namespace ----------------------------------------
   common_names_namespace: "test-ns"
 
-  # ---- common.labels.standard ----------------------------------------
+  # ---- fiwareCommon.labels.standard ----------------------------------------
   common_labels_standard: |
     app.kubernetes.io/name: common-tests
     helm.sh/chart: common-tests-0.0.0
@@ -72,7 +72,7 @@ data:
     app.kubernetes.io/version: "1.0.1"
     app.kubernetes.io/managed-by: Helm
 
-  # ---- common.labels.matchLabels -------------------------------------
+  # ---- fiwareCommon.labels.matchLabels -------------------------------------
   common_labels_matchLabels: |
     app.kubernetes.io/name: common-tests
     app.kubernetes.io/instance: test-release
@@ -84,7 +84,7 @@ data:
   # Additive: when component is empty the dict form equals the plain
   # form; when non-empty it adds `-<component>` to the name and
   # `app.kubernetes.io/component: <component>` to the labels. Only the
-  # common.* side is exercised here (legacy charts don't use this
+  # fiwareCommon.* side is exercised here (legacy charts don't use this
   # variant yet).
   common_names_name_with_component: "common-tests-worker"
   common_names_fullname_with_component: "test-release-common-tests-worker"
@@ -112,7 +112,7 @@ data:
     app.kubernetes.io/version: "1.0.1"
     app.kubernetes.io/managed-by: Helm
 
-  # ---- common.serviceAccount.name ------------------------------------
+  # ---- fiwareCommon.serviceAccount.name ------------------------------------
   # Default branch: `serviceAccount.create: true`, `serviceAccount.name: ""`
   # → fullname; same as the legacy body.
   common_sa_name_default: "test-release-common-tests"
@@ -120,37 +120,37 @@ data:
 
   # Component variant: `create: true`, no override, component="worker"
   # → fullname-worker. Additive: legacy has no equivalent to compare
-  # against, so this line is only on the common.* side.
+  # against, so this line is only on the fiwareCommon.* side.
   common_sa_name_component: "test-release-common-tests-worker"
 
-  # ---- common.secrets.name (keyrock-style, string override) ----------
+  # ---- fiwareCommon.secrets.name (keyrock-style, string override) ----------
   common_secret_keyrock: "my-keyrock-secret"
   legacy_secret_keyrock: "my-keyrock-secret"
 
-  # ---- common.secrets.name (keyrock cert, string override + suffix) --
+  # ---- fiwareCommon.secrets.name (keyrock cert, string override + suffix) --
   common_secret_keyrock_cert: "my-keyrock-cert-secret"
   legacy_secret_keyrock_cert: "my-keyrock-cert-secret"
 
-  # ---- common.secrets.name (orion-style, map with name) --------------
+  # ---- fiwareCommon.secrets.name (orion-style, map with name) --------------
   common_secret_orion: "my-orion-db-secret"
   legacy_secret_orion: "my-orion-db-secret"
 
-  # ---- common.secrets.name (orion-style, map without name) -----------
+  # ---- fiwareCommon.secrets.name (orion-style, map without name) -----------
   # Falls back to fullname because the map lacks a `name` key.
   common_secret_orion_noname: "test-release-common-tests"
 
-  # ---- common.secrets.name (no existingSecret) -----------------------
+  # ---- fiwareCommon.secrets.name (no existingSecret) -----------------------
   # Both nil (absent) and empty fall back to fullname.
   common_secret_orion_absent: "test-release-common-tests"
 
-  # ---- common.secrets.key (orion-style, key set) ---------------------
+  # ---- fiwareCommon.secrets.key (orion-style, key set) ---------------------
   common_secret_key_orion: "myDbPasswordKey"
   legacy_secret_key_orion: "myDbPasswordKey"
 
-  # ---- common.secrets.key (map without key → default) ----------------
+  # ---- fiwareCommon.secrets.key (map without key → default) ----------------
   common_secret_key_default: "dbPassword"
 
-  # ---- common.images.image -------------------------------------------
+  # ---- fiwareCommon.images.image -------------------------------------------
   # `image.tag: ""` with .Chart.AppVersion="1.0.1" → repository:1.0.1;
   # matches the `tag | default .Chart.AppVersion` idiom used in
   # onboarding-portal / did-helper / odrl-pap / etc.
@@ -162,14 +162,14 @@ data:
   common_image_pinned: "quay.io/fiware/common-tests:2.0.0"
   legacy_image_pinned: "quay.io/fiware/common-tests:2.0.0"
 
-  # ---- common.images.pullPolicy --------------------------------------
+  # ---- fiwareCommon.images.pullPolicy --------------------------------------
   # Empty → IfNotPresent (Kubernetes default).
   common_pullPolicy_default: "IfNotPresent"
 
   # Explicit → passthrough.
   common_pullPolicy_pinned: "Always"
 
-  # ---- common.images.pullSecrets -------------------------------------
+  # ---- fiwareCommon.images.pullSecrets -------------------------------------
   # Mix of `- name: ...` and bare strings in the input; both normalise
   # to canonical `- name: ...` form.
   common_pullSecrets: |
@@ -251,10 +251,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - "common.example.org"
+        - "fiwareCommon.example.org"
       secretName: common-tls
   rules:
-    - host: "common.example.org"
+    - host: "fiwareCommon.example.org"
       http:
         paths:
         - path: /
@@ -280,7 +280,7 @@ metadata:
   annotations:
     haproxy.router.openshift.io/timeout: 30s
 spec:
-  host: common.apps.example.org
+  host: fiwareCommon.apps.example.org
   to:
     kind: Service
     name: test-release-common-tests
