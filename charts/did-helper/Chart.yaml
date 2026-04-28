@@ -16,4 +16,4 @@ sources:
 dependencies:
   - name: common
     repository: "https://fiware.github.io/helm-charts"
-    version: "0.0.1"
+    version: "0.1.0"

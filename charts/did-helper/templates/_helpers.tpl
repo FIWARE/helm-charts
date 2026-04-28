@@ -4,7 +4,7 @@
 did-helper-specific helpers.
 
 Every helper in this file is now a thin wrapper around the matching
-`common.*` helper from the `common` library chart (see
+`fiwareCommon.*` helper from the `common` library chart (see
 charts/common/templates/*.tpl). The wrappers exist so that:
 
   * Any external umbrella chart that already imports e.g.
@@ -17,38 +17,38 @@ charts/common/templates/*.tpl). The wrappers exist so that:
 */}}
 
 {{/*
-Expand the name of the chart. Delegates to `common.names.name`.
+Expand the name of the chart. Delegates to `fiwareCommon.names.name`.
 */}}
 {{- define "did-helper.name" -}}
-{{- include "common.names.name" . -}}
+{{- include "fiwareCommon.names.name" . -}}
 {{- end -}}
 
 {{/*
 Create a default fully qualified app name. Delegates to
-`common.names.fullname`.
+`fiwareCommon.names.fullname`.
 */}}
 {{- define "did-helper.fullname" -}}
-{{- include "common.names.fullname" . -}}
+{{- include "fiwareCommon.names.fullname" . -}}
 {{- end -}}
 
 {{/*
 Create chart name and version as used by the chart label. Delegates to
-`common.names.chart`.
+`fiwareCommon.names.chart`.
 */}}
 {{- define "did-helper.chart" -}}
-{{- include "common.names.chart" . -}}
+{{- include "fiwareCommon.names.chart" . -}}
 {{- end -}}
 
 {{/*
-Common labels. Delegates to `common.labels.standard`.
+Common labels. Delegates to `fiwareCommon.labels.standard`.
 */}}
 {{- define "did-helper.labels" -}}
-{{- include "common.labels.standard" . -}}
+{{- include "fiwareCommon.labels.standard" . -}}
 {{- end -}}
 
 {{/*
-Selector labels. Delegates to `common.labels.matchLabels`.
+Selector labels. Delegates to `fiwareCommon.labels.matchLabels`.
 */}}
 {{- define "did-helper.selectorLabels" -}}
-{{- include "common.labels.matchLabels" . -}}
+{{- include "fiwareCommon.labels.matchLabels" . -}}
 {{- end -}}
