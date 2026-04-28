@@ -14,7 +14,7 @@ keywords:
   - OID4VP
 maintainers:
   - name: wistefan
-    email: stefan.wiedemann@fiware.org
+    email: stefan.wiedemann@seamware.com
 # The `common` library chart ships every shared helper
 # (names, labels, service-account resolution, existing-secret
 # resolution, service/ingress/route/HPA/secret/serviceaccount
@@ -25,4 +25,4 @@ maintainers:
 dependencies:
   - name: common
     repository: "https://fiware.github.io/helm-charts"
-    version: "0.0.1"
+    version: "0.1.0"
