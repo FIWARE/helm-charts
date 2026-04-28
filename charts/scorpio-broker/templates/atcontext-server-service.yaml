@@ -1,5 +1,5 @@
 {{- if .Values.atContextServer.enabled }}
-{{- include "common.service.tpl" (dict
+{{- include "fiwareCommon.service.tpl" (dict
       "context" $
       "component" .Values.atContextServer.name
       "service" .Values.atContextServer.service

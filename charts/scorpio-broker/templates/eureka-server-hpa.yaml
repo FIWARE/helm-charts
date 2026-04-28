@@ -1,5 +1,5 @@
 {{- if .Values.eureka.enabled }}
-{{- include "common.hpa.tpl" (dict
+{{- include "fiwareCommon.hpa.tpl" (dict
       "context"     $
       "component"   .Values.eureka.name
       "autoscaling" .Values.eureka.autoscaling) }}

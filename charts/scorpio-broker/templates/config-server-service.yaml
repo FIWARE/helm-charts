@@ -1,5 +1,5 @@
 {{- if .Values.configServer.enabled }}
-{{- include "common.service.tpl" (dict
+{{- include "fiwareCommon.service.tpl" (dict
       "context" $
       "component" .Values.configServer.name
       "service" .Values.configServer.service

@@ -2,8 +2,8 @@
 {{- /*
 NodePort-variant companion to `gateway-service.yaml`. The legacy name
 `scorpio-gateway-service` is hard-coded (no include) and is not produced
-by `common.names.fullname`, so it is supplied via `nameOverride`. The
-`nodePort` key is rendered verbatim by `common.service.tpl`: when
+by `fiwareCommon.names.fullname`, so it is supplied via `nameOverride`. The
+`nodePort` key is rendered verbatim by `fiwareCommon.service.tpl`: when
 `type` is switched to `ClusterIP` the caller can still pass
 `"nodePort" nil` to drop the previously-assigned node port, matching
 the pre-migration `nodePort: null` behaviour.
@@ -14,7 +14,7 @@ the pre-migration `nodePort: null` behaviour.
 {{- else if eq .Values.gateway.service.type "ClusterIP" -}}
 {{- $_ := set $port "nodePort" nil -}}
 {{- end -}}
-{{- include "common.service.tpl" (dict
+{{- include "fiwareCommon.service.tpl" (dict
       "context" $
       "component" .Values.gateway.name
       "nameOverride" "scorpio-gateway-service"

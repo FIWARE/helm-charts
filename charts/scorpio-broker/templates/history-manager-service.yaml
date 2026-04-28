@@ -1,5 +1,5 @@
 {{- if .Values.historyManager.enabled }}
-{{- include "common.service.tpl" (dict
+{{- include "fiwareCommon.service.tpl" (dict
       "context" $
       "component" .Values.historyManager.name
       "service" .Values.historyManager.service

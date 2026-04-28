@@ -5,7 +5,7 @@ variant rendered by `scorpio-gateway-node-port-svc.yaml` (Step 3). The
 ClusterIP Service below reuses the same `port` value but forces
 `type: ClusterIP` so in-cluster traffic bypasses the NodePort path.
 */}}
-{{- include "common.service.tpl" (dict
+{{- include "fiwareCommon.service.tpl" (dict
       "context" $
       "component" .Values.gateway.name
       "service" (dict "type" "ClusterIP")

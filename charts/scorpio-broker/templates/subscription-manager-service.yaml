@@ -1,5 +1,5 @@
 {{- if .Values.subscriptionManager.enabled }}
-{{- include "common.service.tpl" (dict
+{{- include "fiwareCommon.service.tpl" (dict
       "context" $
       "component" .Values.subscriptionManager.name
       "service" .Values.subscriptionManager.service

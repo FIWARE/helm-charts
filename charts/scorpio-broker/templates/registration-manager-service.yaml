@@ -1,5 +1,5 @@
 {{- if .Values.registryManager.enabled }}
-{{- include "common.service.tpl" (dict
+{{- include "fiwareCommon.service.tpl" (dict
       "context" $
       "component" .Values.registryManager.name
       "service" .Values.registryManager.service

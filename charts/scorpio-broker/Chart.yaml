@@ -22,12 +22,8 @@ appVersion: 2.1.0
 # The `common` library chart ships every shared helper
 # (names, labels, service-account resolution, existing-secret
 # resolution, service/ingress/route/HPA/secret/serviceaccount
-# bodies). It is consumed via a local `file://` dependency so
-# publishing workflows do not need a separate repository entry —
-# Helm packages the library alongside scorpio-broker in the
-# resulting `scorpio-broker-<version>.tgz`. See
-# charts/common/README.md.
+# bodies).
 dependencies:
   - name: common
-    repository: "file://../common"
-    version: "0.0.2"
+    repository: "https://fiware.github.io/helm-charts"
+    version: "0.1.0"
