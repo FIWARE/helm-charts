@@ -21,7 +21,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://fiware.github.io/helm-charts | common | 0..0 |
+| https://fiware.github.io/helm-charts | common | 0.1.0 |
 
 ## Values
 
