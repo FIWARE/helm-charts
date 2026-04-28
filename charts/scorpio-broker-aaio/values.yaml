@@ -126,10 +126,7 @@ autoscaling:
   # -- should autoscaling be enabled
   enabled: false
   # -- autoscaling API version used to render the HorizontalPodAutoscaler.
-  # Bumped from the legacy `autoscaling/v2beta1` body to `v2beta2` to match
-  # the shared `common.hpa.tpl` default. Override to `"v2"` on Kubernetes
-  # 1.26+ where the beta versions are removed.
-  apiVersion: "v2beta2"
+  apiVersion: "v2"
   # -- minimum number of running pods
   minReplicas: 1
   # -- maximum number of running pods
