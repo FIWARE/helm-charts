@@ -2,7 +2,7 @@
 
 ![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
-FIWARE common library chart. Bundles the template helpers (names, labels, service account, secret, image, and resource bodies) that are currently duplicated across every FIWARE Helm chart. Consumer charts depend on it locally and include its `common.*` templates instead of re-implementing the same boilerplate per chart.
+FIWARE common library chart. Bundles the template helpers (names, labels, service account, secret, image, and resource bodies) that are currently duplicated across every FIWARE Helm chart. Consumer charts depend on it locally and include its `fiwareCommon.*` templates instead of re-implementing the same boilerplate per chart.
 
 **Homepage:** <https://github.com/FIWARE/helm-charts/tree/main/charts/common>
 
