@@ -1,4 +1,4 @@
-{{- include "common.ingress.tpl" (dict
+{{- include "fiwareCommon.ingress.tpl" (dict
       "context"     $
       "ingress"     .Values.ingress
       "servicePort" .Values.service.port) }}

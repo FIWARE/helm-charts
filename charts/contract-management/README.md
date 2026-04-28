@@ -1,6 +1,6 @@
 # contract-management
 
-![Version: 3.5.22](https://img.shields.io/badge/Version-3.5.22-informational?style=flat-square) ![AppVersion: 3.3.8](https://img.shields.io/badge/AppVersion-3.3.8-informational?style=flat-square)
+![Version: 3.5.24](https://img.shields.io/badge/Version-3.5.24-informational?style=flat-square) ![AppVersion: 3.3.8](https://img.shields.io/badge/AppVersion-3.3.8-informational?style=flat-square)
 
 A Helm chart for running the contract-management on kubernetes.
 
@@ -9,10 +9,19 @@ A Helm chart for running the contract-management on kubernetes.
 | Name | Email | Url |
 | ---- | ------ | --- |
 | pulledtim | <tim.smyth@fiware.org> |  |
+| wistefan | <stefan.wiedemann@seamware.com> |  |
 
 ## Source Code
 
 * <https://github.com/fiware/contract-management>
+
+## Requirements
+
+Kubernetes: `>= 1.19-0`
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://fiware.github.io/helm-charts | common | 0.1.0 |
 
 ## Values
 

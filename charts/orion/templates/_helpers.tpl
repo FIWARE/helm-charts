@@ -4,7 +4,7 @@
 Orion-specific helpers.
 
 Every helper in this file is now a thin wrapper around the matching
-`common.*` helper from the `common` library chart (see
+`fiwareCommon.*` helper from the `common` library chart (see
 charts/common/templates/*.tpl). The wrappers exist so that:
 
   * Any external umbrella chart that already imports e.g.
@@ -17,56 +17,56 @@ charts/common/templates/*.tpl). The wrappers exist so that:
 */}}
 
 {{/*
-Expand the name of the chart. Delegates to `common.names.name`.
+Expand the name of the chart. Delegates to `fiwareCommon.names.name`.
 */}}
 {{- define "orion.name" -}}
-{{- include "common.names.name" . -}}
+{{- include "fiwareCommon.names.name" . -}}
 {{- end -}}
 
 {{/*
 Create a default fully qualified app name. Delegates to
-`common.names.fullname`.
+`fiwareCommon.names.fullname`.
 */}}
 {{- define "orion.fullname" -}}
-{{- include "common.names.fullname" . -}}
+{{- include "fiwareCommon.names.fullname" . -}}
 {{- end -}}
 
 {{/*
 Create chart name and version as used by the chart label. Delegates to
-`common.names.chart`.
+`fiwareCommon.names.chart`.
 */}}
 {{- define "orion.chart" -}}
-{{- include "common.names.chart" . -}}
+{{- include "fiwareCommon.names.chart" . -}}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use. Delegates to
-`common.serviceAccount.name`.
+`fiwareCommon.serviceAccount.name`.
 */}}
 {{- define "orion.serviceAccountName" -}}
-{{- include "common.serviceAccount.name" . -}}
+{{- include "fiwareCommon.serviceAccount.name" . -}}
 {{- end -}}
 
 {{/*
 Resolve the name of the Secret holding the mongo DB password.
-Delegates to `common.secrets.name` with the orion-specific
+Delegates to `fiwareCommon.secrets.name` with the orion-specific
 `.Values.broker.db.existingSecret` key.
 */}}
 {{- define "orion.secretName" -}}
-{{- include "common.secrets.name" (dict "context" . "existingSecret" .Values.broker.db.existingSecret) -}}
+{{- include "fiwareCommon.secrets.name" (dict "context" . "existingSecret" .Values.broker.db.existingSecret) -}}
 {{- end -}}
 
 {{/*
 Resolve the key within the DB secret. Delegates to
-`common.secrets.key`; orion's canonical default key is `dbPassword`.
+`fiwareCommon.secrets.key`; orion's canonical default key is `dbPassword`.
 */}}
 {{- define "orion.secretKey" -}}
-{{- include "common.secrets.key" (dict "context" . "existingSecret" .Values.broker.db.existingSecret "defaultKey" "dbPassword") -}}
+{{- include "fiwareCommon.secrets.key" (dict "context" . "existingSecret" .Values.broker.db.existingSecret "defaultKey" "dbPassword") -}}
 {{- end -}}
 
 {{/*
-Common labels. Delegates to `common.labels.standard`.
+Common labels. Delegates to `fiwareCommon.labels.standard`.
 */}}
 {{- define "orion.labels" -}}
-{{- include "common.labels.standard" . -}}
+{{- include "fiwareCommon.labels.standard" . -}}
 {{- end -}}
