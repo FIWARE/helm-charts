@@ -17,34 +17,34 @@ initdata Job and the main Deployment) — stay chart-local.
 */}}
 
 {{/*
-Expand the name of the chart — delegates to `common.names.name`.
+Expand the name of the chart — delegates to `fiwareCommon.names.name`.
 */}}
 {{- define "til.name" -}}
-{{- include "common.names.name" . -}}
+{{- include "fiwareCommon.names.name" . -}}
 {{- end -}}
 
 {{/*
 Create a default fully qualified app name — delegates to
-`common.names.fullname`.
+`fiwareCommon.names.fullname`.
 */}}
 {{- define "til.fullname" -}}
-{{- include "common.names.fullname" . -}}
+{{- include "fiwareCommon.names.fullname" . -}}
 {{- end -}}
 
 {{/*
 Create chart name and version as used by the chart label — delegates
-to `common.names.chart`.
+to `fiwareCommon.names.chart`.
 */}}
 {{- define "til.chart" -}}
-{{- include "common.names.chart" . -}}
+{{- include "fiwareCommon.names.chart" . -}}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use — delegates to
-`common.serviceAccount.name`.
+`fiwareCommon.serviceAccount.name`.
 */}}
 {{- define "til.serviceAccountName" -}}
-{{- include "common.serviceAccount.name" . -}}
+{{- include "fiwareCommon.serviceAccount.name" . -}}
 {{- end -}}
 
 {{/*
@@ -62,15 +62,15 @@ today.
 {{- end -}}
 
 {{/*
-Common labels — delegates to `common.labels.standard`.
+Common labels — delegates to `fiwareCommon.labels.standard`.
 */}}
 {{- define "til.labels" -}}
-{{- include "common.labels.standard" . -}}
+{{- include "fiwareCommon.labels.standard" . -}}
 {{- end -}}
 
 {{/*
 Support for existing database secret — delegates to
-`common.secrets.name`. The legacy behaviour only treats
+`fiwareCommon.secrets.name`. The legacy behaviour only treats
 `.Values.database.existingSecret` as an override when its `enabled`
 flag is true; otherwise the chart falls back to `<fullname>` even if
 a stray `name` remains set. That gate is preserved here.
@@ -80,13 +80,13 @@ a stray `name` remains set. That gate is preserved here.
 {{- if .Values.database.existingSecret.enabled -}}
 {{-   $existing = .Values.database.existingSecret -}}
 {{- end -}}
-{{- include "common.secrets.name"
+{{- include "fiwareCommon.secrets.name"
       (dict "context" . "existingSecret" $existing) -}}
 {{- end -}}
 
 {{/*
 Key within the database Secret that carries the password — delegates
-to `common.secrets.key`. Same `enabled` gate as `til.secretName`;
+to `fiwareCommon.secrets.key`. Same `enabled` gate as `til.secretName`;
 defaults to `"password"` to match the legacy body.
 */}}
 {{- define "til.passwordKey" -}}
@@ -94,7 +94,7 @@ defaults to `"password"` to match the legacy body.
 {{- if .Values.database.existingSecret.enabled -}}
 {{-   $existing = .Values.database.existingSecret -}}
 {{- end -}}
-{{- include "common.secrets.key"
+{{- include "fiwareCommon.secrets.key"
       (dict "context" . "existingSecret" $existing "defaultKey" "password") -}}
 {{- end -}}
 
