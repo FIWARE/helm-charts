@@ -4,7 +4,7 @@
 contract-management-specific helpers.
 
 The five core helpers in this file are now thin wrappers around the
-matching `common.*` helper from the `common` library chart (see
+matching `fiwareCommon.*` helper from the `common` library chart (see
 charts/common/templates/*.tpl). The wrappers exist so that:
 
   * Any external umbrella chart that already imports e.g.
@@ -20,54 +20,54 @@ future major version bump (see charts/common/DEPRECATIONS.md).
 
 The `contract.secretName` / `contract.passwordKey` helpers below use a
 chart-specific `.Values.database.existingSecret.enabled` gate that is
-not expressible in `common.secrets.name` / `common.secrets.key` (the
+not expressible in `fiwareCommon.secrets.name` / `fiwareCommon.secrets.key` (the
 library helpers use a truthy-`existingSecret` gate instead). They are
 retained verbatim for backwards compatibility with any external caller
 that already relies on this shape.
 */}}
 
 {{/*
-Expand the name of the chart. Delegates to `common.names.name`.
+Expand the name of the chart. Delegates to `fiwareCommon.names.name`.
 */}}
 {{- define "contract.name" -}}
-{{- include "common.names.name" . -}}
+{{- include "fiwareCommon.names.name" . -}}
 {{- end -}}
 
 {{/*
 Create a default fully qualified app name. Delegates to
-`common.names.fullname`.
+`fiwareCommon.names.fullname`.
 */}}
 {{- define "contract.fullname" -}}
-{{- include "common.names.fullname" . -}}
+{{- include "fiwareCommon.names.fullname" . -}}
 {{- end -}}
 
 {{/*
 Create chart name and version as used by the chart label. Delegates to
-`common.names.chart`.
+`fiwareCommon.names.chart`.
 */}}
 {{- define "contract.chart" -}}
-{{- include "common.names.chart" . -}}
+{{- include "fiwareCommon.names.chart" . -}}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use. Delegates to
-`common.serviceAccount.name`.
+`fiwareCommon.serviceAccount.name`.
 */}}
 {{- define "contract.serviceAccountName" -}}
-{{- include "common.serviceAccount.name" . -}}
+{{- include "fiwareCommon.serviceAccount.name" . -}}
 {{- end -}}
 
 {{/*
-Common labels. Delegates to `common.labels.standard`.
+Common labels. Delegates to `fiwareCommon.labels.standard`.
 */}}
 {{- define "contract.labels" -}}
-{{- include "common.labels.standard" . -}}
+{{- include "fiwareCommon.labels.standard" . -}}
 {{- end -}}
 
 {{/*
 Support for an existing database secret. Preserved verbatim from the
 pre-migration helper because it uses a chart-specific `.enabled` gate
-(not supported by `common.secrets.name`, which treats any truthy
+(not supported by `fiwareCommon.secrets.name`, which treats any truthy
 `existingSecret` value as "override active").
 */}}
 {{- define "contract.secretName" -}}

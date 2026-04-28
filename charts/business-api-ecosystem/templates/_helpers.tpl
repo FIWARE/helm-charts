@@ -4,7 +4,7 @@ business-api-ecosystem helpers.
 
 The chart-level helpers (`business-api-ecosystem.name`,
 `business-api-ecosystem.chart`, `business-api-ecosystem.fullname`) are
-now thin wrappers around the matching `common.*` helpers shipped by the
+now thin wrappers around the matching `fiwareCommon.*` helpers shipped by the
 `common` library chart (see charts/common/templates/*.tpl and
 docs/common-chart.md). The wrappers exist so that:
 
@@ -19,7 +19,7 @@ The per-component helpers (`bizEcosystemApis.*`, `bizEcosystemRss.*`,
 `bizEcosystemChargingBackend.*`, `bizEcosystemLogicProxy.*`) remain
 chart-local on purpose. Their rendered names depend on a legacy
 `default "" .Values.nameOverride` base (empty fallback instead of
-`.Chart.Name`), and migrating them to `common.names.fullname` with a
+`.Chart.Name`), and migrating them to `fiwareCommon.names.fullname` with a
 `component` argument would change the rendered names of every Service,
 Deployment, StatefulSet, PVC, Secret and ServiceAccount in the chart —
 a breaking change that cannot be absorbed by `helm upgrade`. The same
@@ -39,36 +39,36 @@ docs/common-chart.md:
     container name helpers.
   * `bizEcosystem<X>.labels` / `matchLabels` — legacy
     `app` / `release` / `component` / `chart` / `heritage` label schema.
-    Switching to `common.labels.standard` (which emits
+    Switching to `fiwareCommon.labels.standard` (which emits
     `app.kubernetes.io/*`) would change Service / Deployment selectors
     and block `helm upgrade`; these stay chart-local until the chart is
     willing to accept that break.
 */}}
 
 {{/*
-Expand the name of the chart. Delegates to `common.names.name`.
+Expand the name of the chart. Delegates to `fiwareCommon.names.name`.
 */}}
 {{- define "business-api-ecosystem.name" -}}
-{{- include "common.names.name" . -}}
+{{- include "fiwareCommon.names.name" . -}}
 {{- end -}}
 
 {{/*
 Create chart name and version as used by the chart label. Delegates to
-`common.names.chart`.
+`fiwareCommon.names.chart`.
 */}}
 {{- define "business-api-ecosystem.chart" -}}
-{{- include "common.names.chart" . -}}
+{{- include "fiwareCommon.names.chart" . -}}
 {{- end -}}
 
 {{/*
 Common labels
 */}}
-{{- define "business-api-ecosystem.common.matchLabels" -}}
+{{- define "business-api-ecosystem.fiwareCommon.matchLabels" -}}
 app: {{ template "business-api-ecosystem.name" . }}
 release: {{ .Release.Name }}
 {{- end -}}
 
-{{- define "business-api-ecosystem.common.metaLabels" -}}
+{{- define "business-api-ecosystem.fiwareCommon.metaLabels" -}}
 chart: {{ template "business-api-ecosystem.chart" . }}
 heritage: {{ .Release.Service }}
 {{- end -}}
@@ -78,43 +78,43 @@ Create unified labels for BAE components
 */}}
 {{- define "bizEcosystemApis.labels" -}}
 {{ include "bizEcosystemApis.matchLabels" . }}
-{{ include "business-api-ecosystem.common.metaLabels" . }}
+{{ include "business-api-ecosystem.fiwareCommon.metaLabels" . }}
 {{- end -}}
 
 {{- define "bizEcosystemApis.matchLabels" -}}
 component: {{ .Values.bizEcosystemApis.name | quote }}
-{{ include "business-api-ecosystem.common.matchLabels" . }}
+{{ include "business-api-ecosystem.fiwareCommon.matchLabels" . }}
 {{- end -}}
 
 {{- define "bizEcosystemRss.labels" -}}
 {{ include "bizEcosystemRss.matchLabels" . }}
-{{ include "business-api-ecosystem.common.metaLabels" . }}
+{{ include "business-api-ecosystem.fiwareCommon.metaLabels" . }}
 {{- end -}}
 
 {{- define "bizEcosystemRss.matchLabels" -}}
 component: {{ .Values.bizEcosystemRss.name | quote }}
-{{ include "business-api-ecosystem.common.matchLabels" . }}
+{{ include "business-api-ecosystem.fiwareCommon.matchLabels" . }}
 {{- end -}}
 
 {{- define "bizEcosystemChargingBackend.labels" -}}
 {{ include "bizEcosystemChargingBackend.matchLabels" . }}
-{{ include "business-api-ecosystem.common.metaLabels" . }}
+{{ include "business-api-ecosystem.fiwareCommon.metaLabels" . }}
 {{- end -}}
 
 {{- define "bizEcosystemChargingBackend.matchLabels" -}}
 component: {{ .Values.bizEcosystemChargingBackend.name | quote }}
-{{ include "business-api-ecosystem.common.matchLabels" . }}
+{{ include "business-api-ecosystem.fiwareCommon.matchLabels" . }}
 {{- end -}}
 
 {{- define "bizEcosystemLogicProxy.labels" -}}
 {{- $match := include "bizEcosystemLogicProxy.matchLabels" . | fromYaml -}}
-{{- $meta := include "business-api-ecosystem.common.metaLabels" . | fromYaml -}}
+{{- $meta := include "business-api-ecosystem.fiwareCommon.metaLabels" . | fromYaml -}}
 {{- $merged := merge $match $meta -}}
 {{- toYaml $merged -}}
 {{- end -}}
 
 {{- define "bizEcosystemLogicProxy.matchLabels" -}}
-{{- $labels := include "business-api-ecosystem.common.matchLabels" . | fromYaml -}}
+{{- $labels := include "business-api-ecosystem.fiwareCommon.matchLabels" . | fromYaml -}}
 {{- $_ := set $labels "component" .Values.bizEcosystemLogicProxy.name | quote -}}
 {{- $_ := set $labels "app" (include "bizEcosystemLogicProxy.fullname" .) -}}
 {{- toYaml $labels -}}
@@ -122,20 +122,20 @@ component: {{ .Values.bizEcosystemChargingBackend.name | quote }}
 
 {{/*
 Create a default fully qualified app name. Delegates to
-`common.names.fullname`.
+`fiwareCommon.names.fullname`.
 */}}
 {{- define "business-api-ecosystem.fullname" -}}
-{{- include "common.names.fullname" . -}}
+{{- include "fiwareCommon.names.fullname" . -}}
 {{- end -}}
 
 {{/*
 Create a fully qualified bizEcosystemApis name.
 
 Kept chart-local: this helper's `$name := default "" .Values.nameOverride`
-base differs from `common.names.fullname`'s
+base differs from `fiwareCommon.names.fullname`'s
 `default .Chart.Name .Values.nameOverride`, and the rendered output
 (Service / Deployment / ServiceAccount names) would change if it were
-redirected at `common.names.fullname` with a `component` argument.
+redirected at `fiwareCommon.names.fullname` with a `component` argument.
 We truncate at 63 chars because some Kubernetes name fields are limited
 to this (by the DNS naming spec).
 */}}
@@ -414,8 +414,8 @@ Template for Charging Backend initContainer check
 
 {{/*
 RSS secrets. Kept chart-local: the fallback (`bizEcosystemRss.fullname`)
-differs from `common.names.fullname` with a `component` argument (see
-note at top of file), so `common.secrets.name` cannot be used here
+differs from `fiwareCommon.names.fullname` with a `component` argument (see
+note at top of file), so `fiwareCommon.secrets.name` cannot be used here
 without changing the rendered Secret name.
 */}}
 {{- define "bizEcosystemRss.secretName" -}}

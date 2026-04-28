@@ -157,9 +157,9 @@ autoscaling:
   # -- should autoscaling be enabled for the fdsc-dashboard
   enabled: false
   # -- apiVersion of the HorizontalPodAutoscaler resource emitted by the
-  # `common.hpa.tpl` helper. Users on Kubernetes 1.26+ may wish to override
+  # `fiwareCommon.hpa.tpl` helper. Users on Kubernetes 1.26+ may wish to override
   # this to "v2".
-  apiVersion: "v2beta2"
+  apiVersion: "v2"
   # -- minimum number of running pods
   minReplicas: 1
   # -- maximum number of running pods
