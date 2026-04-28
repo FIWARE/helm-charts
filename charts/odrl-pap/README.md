@@ -1,6 +1,6 @@
 # odrl-pap
 
-![Version: 2.9.1](https://img.shields.io/badge/Version-2.9.1-informational?style=flat-square) ![AppVersion: 1.4.3](https://img.shields.io/badge/AppVersion-1.4.3-informational?style=flat-square)
+![Version: 2.10.1](https://img.shields.io/badge/Version-2.10.1-informational?style=flat-square) ![AppVersion: 1.4.3](https://img.shields.io/badge/AppVersion-1.4.3-informational?style=flat-square)
 
 A Helm chart for running the odrl-pap on kubernetes.
 
@@ -8,11 +8,19 @@ A Helm chart for running the odrl-pap on kubernetes.
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Stefan Wiedemann | <stefan.wiedemann@fiware.org> |  |
+| Stefan Wiedemann | <stefan.wiedemann@seamware.com> |  |
 
 ## Source Code
 
 * <https://github.com/wistefan/odrl-pap>
+
+## Requirements
+
+Kubernetes: `>= 1.19-0`
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://fiware.github.io/helm-charts | common | 0.1.0 |
 
 ## Values
 
@@ -23,6 +31,7 @@ A Helm chart for running the odrl-pap on kubernetes.
 | additionalRego.enabled | bool | `false` | should additional packages be loaded |
 | additionalRego.packages | string | `"action.rego: |\n  package odrl.action\n\n  import rego.v1\n\n  ## odrl:use\n  # checks if the given request is a usage - in constrast to the default, this example would only consider modifications a \"use\"\n  is_use(request) if {\n      methods := [\"POST\", \"PUT\", \"PATCH\"]\n      request.method in methods\n  }\n"` |  |
 | additonalEnvVars | list | `[]` | a list of additional env vars to be set, check the til docu for all available options |
+| autoscaling.apiVersion | string | `"v2"` | HPA apiVersion (e.g. v2beta2 for k8s <1.26, v2 for 1.26+) |
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |
