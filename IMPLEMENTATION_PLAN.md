@@ -194,14 +194,62 @@ The diff is expected to contain **only** these items:
    `common.labels.standard` instead of the chart-local 3-label
    `tmforum.labels` subset). Non-functional, since SA labels are not
    used as selectors by any other resource in the chart.
+4. **Every** rendered resource carries `helm.sh/chart:
+   tm-forum-api-0.17.0` instead of `tm-forum-api-0.16.16`. This is a
+   universal label-propagation effect of step 1's `Chart.yaml`
+   `version` bump (0.16.16 → 0.17.0); it is **not** a step-2 or
+   step-3 regression. With default values (which render one Service /
+   Ingress / Deployment / Envoy resource per `.Values.apis` entry plus
+   the per-chart Service / Deployment), there is no SA hunk to
+   exercise, so this label flip is the entire raw diff. The
+   acceptance criterion is therefore "empty diff after normalising
+   the chart-version label", not "literal empty diff".
 
 Any other diff hunk is a regression and must be fixed before merging.
 
 **Acceptance criteria:**
 
-- Render parity holds for the default values (empty diff).
-- Render parity with `serviceAccount.name=custom-sa` shows only the
-  documented SA-name delta plus the cosmetic labels-blank-line delta.
+- Render parity holds for the default values: empty diff after
+  normalising `helm.sh/chart: tm-forum-api-0.16.16` →
+  `helm.sh/chart: tm-forum-api-0.17.0` on the baseline.
+- Render parity with `serviceAccount.create=true` (no name override)
+  shows only the cosmetic labels-blank-line delta and the SA
+  metadata-labels 3 → 5 expansion (items 2 and 3 above).
+- Render parity with `serviceAccount.create=true` +
+  `serviceAccount.name=custom-sa` shows the same two deltas plus the
+  documented SA-name delta (item 1 above).
+
+**Verified:** Three scenarios were run against the merge-base
+(`5d6a098`, the post-`1.10.3 → 1.10.4` appVersion bump that the work
+branch inherits) and the post-step-3 work branch tip:
+
+1. Default values (`helm template tmforum charts/tm-forum-api`):
+   228-line raw diff, all of it the chart-version label flip across
+   every per-API Service / Ingress / Deployment / Envoy resource and
+   the per-chart Service / Deployment. 0 lines of structural diff
+   after normalising the chart-version label on the baseline.
+
+2. `--set serviceAccount.create=true` (no name override): SA-only
+   3-line hunk after chart-version normalisation — the blank
+   leading line inside `labels:` is replaced by
+   `app.kubernetes.io/name: tm-forum-api`, and
+   `app.kubernetes.io/instance: tmforum` is appended. SA
+   `metadata.name` remains `tmforum-tm-forum-api`, confirming the
+   breaking-change-#4 path is not triggered for releases that did
+   not configure `serviceAccount.name`.
+
+3. `--set serviceAccount.create=true --set serviceAccount.name=custom-sa`:
+   SA-only 4-line hunk after chart-version normalisation — the same
+   two label-block deltas plus the documented SA-name flip from
+   `tmforum-tm-forum-api` to `custom-sa`.
+
+`helm lint charts/tm-forum-api` exits 0 on the work branch. No diff
+hunks exist outside `templates/serviceaccount.yaml` (after
+chart-version normalisation), confirming the per-API Service /
+Ingress / Route / Deployment / Envoy / all-in-one templates render
+byte-identical to the pre-migration output — the migration's only
+structural changes are the helper rewires from step 2 and the SA
+template replacement from step 3.
 
 ### Step 5: Add `CHANGELOG.md` entry for the chart
 
