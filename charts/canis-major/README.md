@@ -1,6 +1,6 @@
 # canis-major
 
-![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![AppVersion: 1.5.15](https://img.shields.io/badge/AppVersion-1.5.15-informational?style=flat-square)
+![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![AppVersion: 1.5.15](https://img.shields.io/badge/AppVersion-1.5.15-informational?style=flat-square)
 
 A Helm chart for running canis major on kubernetes.
 
@@ -8,11 +8,19 @@ A Helm chart for running canis major on kubernetes.
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| wistefan | <stefan.wiedemann@fiware.org> |  |
+| wistefan | <stefan.wiedemann@seamware.com> |  |
 
 ## Source Code
 
 * <https://github.com/FIWARE/CanisMajor>
+
+## Requirements
+
+Kubernetes: `>= 1.19-0`
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://fiware.github.io/helm-charts | common | 0.1.0 |
 
 ## Values
 

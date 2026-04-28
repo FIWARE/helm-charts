@@ -1,7 +1,7 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Inlined copies of the canonical orion/keyrock helpers. These exist only
-in the fixture and are used to assert that `common.*` produces
+in the fixture and are used to assert that `fiwareCommon.*` produces
 byte-identical output for matching inputs. They are intentionally a
 copy-paste of charts/orion/templates/_helpers.tpl (and, where relevant,
 charts/keyrock/templates/_helpers.tpl); if a future change to the
@@ -48,7 +48,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{/*
 Legacy copies of the serviceAccount / secret helpers. Same purpose as
 the name/labels copies above — the parity ConfigMap renders them
-side-by-side with the `common.*` output so `diff` catches divergence.
+side-by-side with the `fiwareCommon.*` output so `diff` catches divergence.
 
 `legacy.serviceAccountName` matches charts/orion/templates/_helpers.tpl
 and charts/keyrock/templates/_helpers.tpl verbatim.
