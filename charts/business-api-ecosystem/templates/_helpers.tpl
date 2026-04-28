@@ -63,12 +63,12 @@ Create chart name and version as used by the chart label. Delegates to
 {{/*
 Common labels
 */}}
-{{- define "business-api-ecosystem.fiwareCommon.matchLabels" -}}
+{{- define "business-api-ecosystem.common.matchLabels" -}}
 app: {{ template "business-api-ecosystem.name" . }}
 release: {{ .Release.Name }}
 {{- end -}}
 
-{{- define "business-api-ecosystem.fiwareCommon.metaLabels" -}}
+{{- define "business-api-ecosystem.common.metaLabels" -}}
 chart: {{ template "business-api-ecosystem.chart" . }}
 heritage: {{ .Release.Service }}
 {{- end -}}
@@ -78,43 +78,43 @@ Create unified labels for BAE components
 */}}
 {{- define "bizEcosystemApis.labels" -}}
 {{ include "bizEcosystemApis.matchLabels" . }}
-{{ include "business-api-ecosystem.fiwareCommon.metaLabels" . }}
+{{ include "business-api-ecosystem.common.metaLabels" . }}
 {{- end -}}
 
 {{- define "bizEcosystemApis.matchLabels" -}}
 component: {{ .Values.bizEcosystemApis.name | quote }}
-{{ include "business-api-ecosystem.fiwareCommon.matchLabels" . }}
+{{ include "business-api-ecosystem.common.matchLabels" . }}
 {{- end -}}
 
 {{- define "bizEcosystemRss.labels" -}}
 {{ include "bizEcosystemRss.matchLabels" . }}
-{{ include "business-api-ecosystem.fiwareCommon.metaLabels" . }}
+{{ include "business-api-ecosystem.common.metaLabels" . }}
 {{- end -}}
 
 {{- define "bizEcosystemRss.matchLabels" -}}
 component: {{ .Values.bizEcosystemRss.name | quote }}
-{{ include "business-api-ecosystem.fiwareCommon.matchLabels" . }}
+{{ include "business-api-ecosystem.common.matchLabels" . }}
 {{- end -}}
 
 {{- define "bizEcosystemChargingBackend.labels" -}}
 {{ include "bizEcosystemChargingBackend.matchLabels" . }}
-{{ include "business-api-ecosystem.fiwareCommon.metaLabels" . }}
+{{ include "business-api-ecosystem.common.metaLabels" . }}
 {{- end -}}
 
 {{- define "bizEcosystemChargingBackend.matchLabels" -}}
 component: {{ .Values.bizEcosystemChargingBackend.name | quote }}
-{{ include "business-api-ecosystem.fiwareCommon.matchLabels" . }}
+{{ include "business-api-ecosystem.common.matchLabels" . }}
 {{- end -}}
 
 {{- define "bizEcosystemLogicProxy.labels" -}}
 {{- $match := include "bizEcosystemLogicProxy.matchLabels" . | fromYaml -}}
-{{- $meta := include "business-api-ecosystem.fiwareCommon.metaLabels" . | fromYaml -}}
+{{- $meta := include "business-api-ecosystem.common.metaLabels" . | fromYaml -}}
 {{- $merged := merge $match $meta -}}
 {{- toYaml $merged -}}
 {{- end -}}
 
 {{- define "bizEcosystemLogicProxy.matchLabels" -}}
-{{- $labels := include "business-api-ecosystem.fiwareCommon.matchLabels" . | fromYaml -}}
+{{- $labels := include "business-api-ecosystem.common.matchLabels" . | fromYaml -}}
 {{- $_ := set $labels "component" .Values.bizEcosystemLogicProxy.name | quote -}}
 {{- $_ := set $labels "app" (include "bizEcosystemLogicProxy.fullname" .) -}}
 {{- toYaml $labels -}}
