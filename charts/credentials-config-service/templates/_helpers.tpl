@@ -1,81 +1,98 @@
 
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
+credentials-config-service (`ccs.*`) helpers.
+
+Most helpers in this file are now thin wrappers around the matching
+`fiwareCommon.*` helper from the `common` library chart (see
+charts/common/templates/*.tpl). The wrappers exist so that:
+
+  * Any external umbrella chart that already imports e.g.
+    `include "ccs.fullname" .` keeps working — no external
+    breaking change.
+  * The bodies below stay in lock-step with the rest of the FIWARE
+    charts, because there is exactly one implementation of each
+    helper (in `common`).
+
+The chart-specific `ccs.app.config` helper, which renders the
+application-config YAML consumed by the ConfigMap, has no counterpart
+in the `common` library and is kept local.
+*/}}
+
+{{/*
+Expand the name of the chart. Delegates to `fiwareCommon.names.name`.
 */}}
 {{- define "ccs.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- include "fiwareCommon.names.name" . -}}
 {{- end -}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
+Create a default fully qualified app name. Delegates to
+`fiwareCommon.names.fullname`.
 */}}
 {{- define "ccs.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- include "fiwareCommon.names.fullname" . -}}
 {{- end -}}
-{{- end -}}
-{{- end -}}
+
 {{/*
-Create chart name and version as used by the chart label.
+Create chart name and version as used by the chart label. Delegates to
+`fiwareCommon.names.chart`.
 */}}
 {{- define "ccs.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- include "fiwareCommon.names.chart" . -}}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use
+Create the name of the service account to use. Delegates to
+`fiwareCommon.serviceAccount.name`.
 */}}
 {{- define "ccs.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "ccs.fullname" .) .Values.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
-{{- end -}}
+{{- include "fiwareCommon.serviceAccount.name" . -}}
 {{- end -}}
 
 {{/*
-Common labels
+Common labels. Delegates to `fiwareCommon.labels.standard`.
 */}}
 {{- define "ccs.labels" -}}
-app.kubernetes.io/name: {{ include "ccs.name" . }}
-helm.sh/chart: {{ include "ccs.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- include "fiwareCommon.labels.standard" . -}}
 {{- end -}}
 
 {{/*
-Support for existing database secret
+Resolve the name of the database credentials Secret.
+
+The ccs chart uses an opt-in `.Values.database.existingSecret.enabled`
+flag (unlike the bare-string / map-with-name forms consumed by
+`fiwareCommon.secrets.name` elsewhere). We translate that shape here: when
+`enabled` is true we forward the map to `fiwareCommon.secrets.name`, which
+tpl-expands `.name` and returns it verbatim; otherwise we pass an empty
+override so the helper falls back to the chart's fullname.
 */}}
 {{- define "ccs.secretName" -}}
-    {{- if .Values.database.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.database.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "%s" (include "ccs.fullname" .) -}}
-    {{- end -}}
+{{- $existing := "" -}}
+{{- if .Values.database.existingSecret.enabled -}}
+{{- $existing = .Values.database.existingSecret -}}
 {{- end -}}
-
-{{- define "ccs.passwordKey" -}}
-    {{- if and (.Values.database.existingSecret.enabled) (.Values.database.existingSecret.key) -}}
-        {{- printf "%s" (tpl .Values.database.existingSecret.key $) -}}
-    {{- else -}}
-        {{- printf "password" -}}
-    {{- end -}}
+{{- include "fiwareCommon.secrets.name" (dict "context" . "existingSecret" $existing) -}}
 {{- end -}}
 
 {{/*
-Base application configuration base on dialec and persistence
+Resolve the key within the database Secret to reference.
+
+Same `enabled`-gated translation as `ccs.secretName` above; the default
+key `password` matches the legacy `ccs.passwordKey` behaviour.
+*/}}
+{{- define "ccs.passwordKey" -}}
+{{- $existing := "" -}}
+{{- if and .Values.database.existingSecret.enabled .Values.database.existingSecret.key -}}
+{{- $existing = .Values.database.existingSecret -}}
+{{- end -}}
+{{- include "fiwareCommon.secrets.key" (dict "context" . "existingSecret" $existing "defaultKey" "password") -}}
+{{- end -}}
+
+{{/*
+Base application configuration based on dialect and persistence. This
+renders the `application.yaml` consumed by the ConfigMap and is
+chart-specific — it has no counterpart in the `common` library.
  */}}
 {{- define "ccs.app.config" -}}
 endpoints:
