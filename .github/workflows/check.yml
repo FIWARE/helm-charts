@@ -104,7 +104,7 @@ jobs:
       - name: Check if already bumped
         id: already-bumped
         run: |
-          if git log --oneline | grep -q "Update helm documentation"; then
+          if git log --oneline ${{ github.event.pull_request.base.sha }}..${{ github.sha }} | grep -q "Update helm documentation"; then
             echo Bumped
             echo "bumped=true" >> $GITHUB_OUTPUT
           else

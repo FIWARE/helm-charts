@@ -1,6 +1,6 @@
 # mintaka
 
-![Version: 0.4.4](https://img.shields.io/badge/Version-0.4.4-informational?style=flat-square) ![AppVersion: 0.0.5](https://img.shields.io/badge/AppVersion-0.0.5-informational?style=flat-square)
+![Version: 0.4.5](https://img.shields.io/badge/Version-0.4.5-informational?style=flat-square) ![AppVersion: 0.0.5](https://img.shields.io/badge/AppVersion-0.0.5-informational?style=flat-square)
 
 A Helm chart for running mintaka on kubernetes.
 
@@ -20,14 +20,14 @@ Kubernetes: `>= 1.19-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://fiware.github.io/helm-charts | common | 0.0.1 |
+| https://fiware.github.io/helm-charts | common | 0.1.0 |
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | additonalEnvVars | list | `[]` | a list of additional env vars to be set, check the mintaka docu for all available options |
-| autoscaling.apiVersion | string | `"v2beta2"` | apiVersion of the HorizontalPodAutoscaler resource emitted by the `common.hpa.tpl` helper. Matches the value previously hard-coded in the chart's HPA template; users on Kubernetes 1.26+ may wish to override this to "v2". |
+| autoscaling.apiVersion | string | `"v2"` | apiVersion of the HorizontalPodAutoscaler resource emitted by the `fiwareCommon.hpa.tpl` helper. Matches the value previously hard-coded in the chart's HPA template; users on Kubernetes 1.26+ may wish to override this to "v2". |
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |

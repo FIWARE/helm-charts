@@ -9,7 +9,7 @@ charts/mintaka/templates/route.yaml.
 
 Call convention — always dict form:
 
-  {{ include "common.route.tpl" (dict
+  {{ include "fiwareCommon.route.tpl" (dict
        "context" $
        "route"   .Values.route)
   }}
@@ -29,20 +29,20 @@ Arguments (dict):
 
 The helper renders nothing when `route.enabled` is false.
 */}}
-{{- define "common.route.tpl" -}}
+{{- define "fiwareCommon.route.tpl" -}}
 {{- $ctx := .context -}}
-{{- $route := required "common.route.tpl: route is required" .route -}}
+{{- $route := required "fiwareCommon.route.tpl: route is required" .route -}}
 {{- $component := default "" .component -}}
 {{- $labelArgs := dict "context" $ctx "component" $component -}}
 {{- if $route.enabled -}}
-{{- $fullName := include "common.names.fullname" $labelArgs -}}
+{{- $fullName := include "fiwareCommon.names.fullname" $labelArgs -}}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: {{ $fullName }}
-  namespace: {{ include "common.names.namespace" (dict "context" $ctx) | quote }}
+  namespace: {{ include "fiwareCommon.names.namespace" (dict "context" $ctx) | quote }}
   labels:
-    {{- include "common.labels.standard" $labelArgs | nindent 4 }}
+    {{- include "fiwareCommon.labels.standard" $labelArgs | nindent 4 }}
   {{- with $route.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

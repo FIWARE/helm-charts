@@ -2,7 +2,7 @@ apiVersion: v2
 name: business-api-ecosystem
 description: A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 icon: https://fiware.github.io/catalogue/img/fiware.png
-version: 0.11.26
+version: 0.11.28
 appVersion: 9.0.1
 home: https://business-api-ecosystem.readthedocs.io/en/latest/
 keywords:
@@ -15,3 +15,17 @@ sources:
 maintainers:
   - name: dwendland
     email: dennis.wendland@fiware.org
+  - name: wistefan
+    email: stefan.wiedemann@seamware.com
+# The `common` library chart ships every shared helper
+# (names, labels, service-account resolution, existing-secret
+# resolution, service/ingress/route/HPA/secret/serviceaccount
+# bodies). It is consumed via a local `file://` dependency so
+# publishing workflows do not need a separate repository entry —
+# Helm packages the library alongside business-api-ecosystem in
+# the resulting `business-api-ecosystem-<version>.tgz`.
+# See charts/common/README.md.
+dependencies:
+  - name: common
+    repository: "https://fiware.github.io/helm-charts"
+    version: "0.1.0"

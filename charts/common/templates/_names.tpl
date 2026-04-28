@@ -5,7 +5,7 @@ Name helpers for the FIWARE `common` library chart.
 Every helper is designed to reproduce the body of the matching helper
 currently copied into each consumer chart's `templates/_helpers.tpl`,
 byte-for-byte. A consumer chart's wrapper (`<chart>.name`,
-`<chart>.fullname`, …) can delegate to the `common.*` helper without
+`<chart>.fullname`, …) can delegate to the `fiwareCommon.*` helper without
 changing any rendered manifest.
 
 Argument convention: helpers accept either
@@ -25,7 +25,7 @@ fidelity on Helm's typed `.Chart` / `.Release` objects) is performed.
 */}}
 
 {{/*
-common.names.name
+fiwareCommon.names.name
 
 Expand the name of the chart. Replicates the canonical `<chart>.name`
 helper (see charts/orion/templates/_helpers.tpl):
@@ -35,7 +35,7 @@ helper (see charts/orion/templates/_helpers.tpl):
 A `component` in the dict form is appended as `-<component>` before the
 final trunc/trim.
 */}}
-{{- define "common.names.name" -}}
+{{- define "fiwareCommon.names.name" -}}
 {{- if and (kindIs "map" .) (hasKey . "context") -}}
 {{- $ctx := .context -}}
 {{- $component := default "" .component -}}
@@ -51,7 +51,7 @@ final trunc/trim.
 {{- end -}}
 
 {{/*
-common.names.fullname
+fiwareCommon.names.fullname
 
 Create a default fully qualified app name. Replicates the canonical
 `<chart>.fullname` helper:
@@ -67,7 +67,7 @@ initial base is computed, then the whole thing is trunc/trimmed again.
 When called with the root context (or with `component` empty) the
 output is byte-identical to the existing `<chart>.fullname` helper.
 */}}
-{{- define "common.names.fullname" -}}
+{{- define "fiwareCommon.names.fullname" -}}
 {{- if and (kindIs "map" .) (hasKey . "context") -}}
 {{- $ctx := .context -}}
 {{- $component := default "" .component -}}
@@ -102,7 +102,7 @@ output is byte-identical to the existing `<chart>.fullname` helper.
 {{- end -}}
 
 {{/*
-common.names.chart
+fiwareCommon.names.chart
 
 Create the chart name and version as used by the `helm.sh/chart` label.
 Replicates the canonical `<chart>.chart` helper:
@@ -114,7 +114,7 @@ here: `helm.sh/chart` identifies the shipped chart, not a component
 within it, and must remain constant across components of a multi-
 component release.
 */}}
-{{- define "common.names.chart" -}}
+{{- define "fiwareCommon.names.chart" -}}
 {{- if and (kindIs "map" .) (hasKey . "context") -}}
 {{- $ctx := .context -}}
 {{- printf "%s-%s" $ctx.Chart.Name $ctx.Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
@@ -124,7 +124,7 @@ component release.
 {{- end -}}
 
 {{/*
-common.names.namespace
+fiwareCommon.names.namespace
 
 Return the namespace a rendered resource should live in. Defaults to
 `.Release.Namespace`; honours `.Values.namespaceOverride` when the
@@ -132,7 +132,7 @@ consumer chart exposes that value. Matches the `namespace: {{
 .Release.Namespace | quote }}` pattern used across FIWARE charts, with
 the addition of an opt-in override.
 */}}
-{{- define "common.names.namespace" -}}
+{{- define "fiwareCommon.names.namespace" -}}
 {{- if and (kindIs "map" .) (hasKey . "context") -}}
 {{- $ctx := .context -}}
 {{- default $ctx.Release.Namespace $ctx.Values.namespaceOverride -}}

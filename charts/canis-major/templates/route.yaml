@@ -1,15 +1,29 @@
+{{/*
+Canis-major ships an OpenShift Route body that deliberately diverges
+from `fiwareCommon.route.tpl` because it must emit the
+`cert-utils-operator.redhat-cop.io/certs-from-secret` annotation when
+`.Values.route.certificate` is set (the same annotation that drives the
+companion `route-certificate.yaml` cert-manager Certificate).
+
+The annotation is generated from `canis-major.fullname` and therefore
+cannot be expressed as a static `.Values.route.annotations` entry. The
+template keeps the bespoke body but uses `fiwareCommon.*` for names, labels
+and namespace so the rendered output stays aligned with the rest of the
+FIWARE charts.
+*/}}
 {{- if .Values.route.enabled -}}
 {{- $fullName := include "canis-major.fullname" . -}}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: {{ include "canis-major.fullname" . }}
+  name: {{ $fullName }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{ include "canis-major.labels" . | nindent 4 }}
+    {{- include "canis-major.labels" . | nindent 4 }}
   {{- if or .Values.route.annotations .Values.route.certificate }}
   annotations:
     {{- if .Values.route.certificate }}
-    cert-utils-operator.redhat-cop.io/certs-from-secret: {{ include "canis-major.fullname" . }}-tls-sec
+    cert-utils-operator.redhat-cop.io/certs-from-secret: {{ $fullName }}-tls-sec
     {{- end }}
     {{- with .Values.route.annotations }}
       {{- toYaml . | nindent 4 }}
@@ -17,14 +31,14 @@ metadata:
   {{- end }}
 spec:
   {{- if .Values.route.host }}
-  host: {{ .Values.route.host}}
+  host: {{ .Values.route.host }}
   {{- end }}
   to:
     kind: Service
     name: {{ $fullName }}
   {{- if .Values.route.tls }}
   tls:
-  {{- with .Values.route.tls }}
+    {{- with .Values.route.tls }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
   {{- end }}

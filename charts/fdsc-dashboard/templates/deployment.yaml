@@ -80,6 +80,14 @@ spec:
                 secretKeyRef:
                   name: {{ include "fdsc-dashboard.authSecretName" . }}
                   key: {{ .Values.auth.secretKey }}
+            - name: TIL_API_URL
+              value: {{ .Values.apiUrls.til }}
+            - name: TIR_API_URL
+              value: {{ .Values.apiUrls.tir }}
+            - name: CCS_API_URL
+              value: {{ .Values.apiUrls.ccs }}
+            - name: ODRL_API_URL
+              value: {{ .Values.apiUrls.odrl }}
             {{- with .Values.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
