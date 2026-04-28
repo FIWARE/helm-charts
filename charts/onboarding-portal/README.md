@@ -1,6 +1,6 @@
 # onboarding-portal
 
-![Version: 1.2.6](https://img.shields.io/badge/Version-1.2.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.5](https://img.shields.io/badge/AppVersion-0.0.5-informational?style=flat-square)
+![Version: 1.3.1](https://img.shields.io/badge/Version-1.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.5](https://img.shields.io/badge/AppVersion-0.0.5-informational?style=flat-square)
 
 A Helm chart for the OnBoarding Portal
 
@@ -13,6 +13,12 @@ A Helm chart for the OnBoarding Portal
 ## Source Code
 
 * <https://github.com/SEAMWARE/On-Boarding-Portal>
+
+## Requirements
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://fiware.github.io/helm-charts | common | 0.1.0 |
 
 ## Values
 
