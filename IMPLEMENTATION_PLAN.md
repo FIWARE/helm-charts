@@ -329,3 +329,48 @@ three — do not skip or narrow the validation.
 - No changes to `service.yaml`, `ingress.yaml`, `route.yaml`,
   `route-certificate.yaml`, `envoy*.yaml`, `deploy-all-in-one.yaml`,
   `deployment.yaml`, `NOTES.txt`, `values.yaml`, or `README.md*`.
+
+#### Step 6 — Verified results (2026-04-28)
+
+All three validation scripts ran from the repository root and all three
+exited 0:
+
+| Script        | Exit code | Notes |
+|---------------|----------:|-------|
+| `./build.sh`  | 0         | Resolved the `common` (file-repo) and `redis` (OCI bitnami) dependencies for tm-forum-api alongside the rest of the monorepo. |
+| `./lint.sh`   | 0         | `helm lint` for every chart, including tm-forum-api, passes with the new `common.*`-backed helpers. |
+| `./eval.sh`   | 0         | `helm template <chart> \| kubeconform -strict -ignore-missing-schemas` succeeds for every chart. tm-forum-api logs `[tm-forum-api] ✔ Success` and the run ends with `All charts validated successfully!`. |
+
+`./eval.sh` requires a `kubeconform` binary on `PATH` or at
+`./bin/kubeconform`; the tool is gitignored under `bin/` (see the
+`.gitignore` block "Locally-installed tools (e.g. kubeconform, helm-docs)
+fetched by developers running ./eval.sh without a system-wide install"),
+and was fetched from the upstream `yannh/kubeconform` v0.6.7 release for
+this validation. No tracked file was added by the binary install.
+
+**Cumulative diff against `origin/main` (output of
+`git diff --name-status origin/main...HEAD`):**
+
+```
+A	IMPLEMENTATION_PLAN.md
+A	charts/tm-forum-api/CHANGELOG.md
+M	charts/tm-forum-api/Chart.yaml
+M	charts/tm-forum-api/templates/_helpers.tpl
+M	charts/tm-forum-api/templates/serviceaccount.yaml
+M	docs/common-chart.md
+```
+
+This matches the acceptance criteria exactly:
+
+- The five expected chart-scope changes (`Chart.yaml`, `_helpers.tpl`,
+  `serviceaccount.yaml`, new `CHANGELOG.md`, `docs/common-chart.md`) are
+  present.
+- `IMPLEMENTATION_PLAN.md` is the per-ticket plan artefact added in the
+  plan branch and is expected to ship with the work-branch merge — it
+  is not part of the chart-scope criterion.
+- No per-API templates (`service.yaml`, `ingress.yaml`, `route.yaml`,
+  `route-certificate.yaml`, `envoy*.yaml`, `deploy-all-in-one.yaml`,
+  `deployment.yaml`), `NOTES.txt`, `values.yaml`, or `README.md*` were
+  touched.
+
+The migration is complete and ready to ship.
