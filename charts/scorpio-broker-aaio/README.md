@@ -1,18 +1,25 @@
 # scorpio-broker-aaio
 
-![Version: 0.4.12](https://img.shields.io/badge/Version-0.4.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.0](https://img.shields.io/badge/AppVersion-2.1.0-informational?style=flat-square)
+![Version: 0.4.13](https://img.shields.io/badge/Version-0.4.13-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.0](https://img.shields.io/badge/AppVersion-2.1.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes in which all the microservices are deployed under a single container and thus less effective for production environment but serves well in testing and dev environment.
+
+## Requirements
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://fiware.github.io/helm-charts | common | 0.1..0 |
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
-| autoscaling.enabled | bool | `false` | should autoscaling be enabled       |
+| autoscaling.apiVersion | string | `"v2"` | autoscaling API version used to render the HorizontalPodAutoscaler. |
+| autoscaling.enabled | bool | `false` | should autoscaling be enabled |
 | autoscaling.maxReplicas | int | `100` | maximum number of running pods |
+| autoscaling.metrics | list | `[]` | list of HPA metrics, rendered verbatim into `spec.metrics`. Replaces the removed `targetCPUUtilizationPercentage` / `targetMemoryUtilizationPercentage` keys. Leave empty to disable metric rules; to reproduce the previous CPU-80% behaviour set e.g.:   metrics:     - type: Resource       resource:         name: cpu         target:           type: Utilization           averageUtilization: 80 |
 | autoscaling.minReplicas | int | `1` | minimum number of running pods |
-| autoscaling.targetCPUUtilizationPercentage | int | `80` | target average CPU utilization over all the pods |
 | db.dbhost | string | `"ngb"` | host of the database to be used |
 | db.existingSecret | object | `{"enabled":false,"key":"password","name":"the-secret"}` | existing secret to retrieve the db password |
 | db.existingSecret.enabled | bool | `false` | should an existing secret be used |
