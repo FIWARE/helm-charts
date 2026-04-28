@@ -2331,6 +2331,31 @@ entries:
     version: 0.0.1
   common:
   - apiVersion: v2
+    created: "2026-04-28T09:44:38.922880429Z"
+    description: FIWARE common library chart. Bundles the template helpers (names,
+      labels, service account, secret, image, and resource bodies) that are currently
+      duplicated across every FIWARE Helm chart. Consumer charts depend on it locally
+      and include its `fiwareCommon.*` templates instead of re-implementing the same
+      boilerplate per chart.
+    digest: 89a9ad1ab6cb1635ceedbd5aa0030e30b072aa499e4fe9ddd2eb44b200c971e0
+    home: https://github.com/FIWARE/helm-charts/tree/main/charts/common
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - common
+    - library
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: common
+    sources:
+    - https://github.com/FIWARE/helm-charts
+    type: library
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/common-0.1.0/common-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v2
     created: "2026-04-24T06:21:26.649098412Z"
     description: FIWARE common library chart. Bundles the template helpers (names,
       labels, service account, secret, image, and resource bodies) that are currently
@@ -11497,4 +11522,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-04-27T13:55:53.67275784Z"
+generated: "2026-04-28T09:44:38.923641901Z"
