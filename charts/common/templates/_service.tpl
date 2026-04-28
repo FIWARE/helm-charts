@@ -11,7 +11,7 @@ charts/mintaka/templates/service.yaml for the reference bodies).
 Call convention — always dict form, because the helper cannot guess
 which sub-paths of `.Values` to look at:
 
-  {{ include "common.service.tpl" (dict
+  {{ include "fiwareCommon.service.tpl" (dict
        "context" $
        "service" .Values.service
        "ports"   (list (dict
@@ -51,27 +51,27 @@ Arguments (dict):
 Rendered output is identical (up to whitespace tolerated by
 kubeconform) to the inlined canonical service template.
 */}}
-{{- define "common.service.tpl" -}}
+{{- define "fiwareCommon.service.tpl" -}}
 {{- $ctx := .context -}}
-{{- $service := required "common.service.tpl: service is required" .service -}}
+{{- $service := required "fiwareCommon.service.tpl: service is required" .service -}}
 {{- $component := default "" .component -}}
 {{- $nameOverride := default "" .nameOverride -}}
 {{- $labelArgs := dict "context" $ctx "component" $component -}}
-{{- $ports := required "common.service.tpl: ports is required" .ports -}}
+{{- $ports := required "fiwareCommon.service.tpl: ports is required" .ports -}}
 {{- if not $ports -}}
 {{- $ports = list (dict "port" $service.port) -}}
 {{- end -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ if $nameOverride }}{{ $nameOverride }}{{ else }}{{ include "common.names.fullname" $labelArgs }}{{ end }}
-  namespace: {{ include "common.names.namespace" (dict "context" $ctx) | quote }}
+  name: {{ include "fiwareCommon.names.fullname" $labelArgs }}
+  namespace: {{ include "fiwareCommon.names.namespace" (dict "context" $ctx) | quote }}
   {{- with $service.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "common.labels.standard" $labelArgs | nindent 4 }}
+    {{- include "fiwareCommon.labels.standard" $labelArgs | nindent 4 }}
 spec:
   type: {{ $service.type }}
   ports:
@@ -85,5 +85,5 @@ spec:
       {{- end }}
     {{- end }}
   selector:
-    {{- include "common.labels.matchLabels" $labelArgs | nindent 4 }}
+    {{- include "fiwareCommon.labels.matchLabels" $labelArgs | nindent 4 }}
 {{- end -}}

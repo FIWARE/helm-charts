@@ -123,24 +123,15 @@ auth:
   config:
     providers: []
 
-## Build-time API URLs for the dashboard. These keys exist for documentation
-## purposes only — the upstream image bakes the `VITE_*` values into the
-## bundle at build time, so setting them here does NOT change the runtime
-## behaviour of the stock `quay.io/seamware/fdsc-dashboard` image. Users who
-## build their own image can surface these URLs via `additionalEnvVars` (which
-## is where they would need to plumb them at build time as well).
+# -- urls of the backend services to be used
 apiUrls:
-  # -- build-time URL of the Trusted Issuer List (VITE_TIL_URL). Stock image
-  # ignores this key at runtime.
+  # -- URL of the Trusted Issuer List
   til: ""
-  # -- build-time URL of the Trusted Issuer Registry (VITE_TIR_URL). Stock
-  # image ignores this key at runtime.
+  # -- URL of the Trusted Issuer Registry (VITE_TIR_URL)
   tir: ""
-  # -- build-time URL of the Credentials Config Service (VITE_CCS_URL). Stock
-  # image ignores this key at runtime.
+  # -- URL of the Credentials Config Service (VITE_CCS_URL)
   ccs: ""
-  # -- build-time URL of the ODRL PAP (VITE_ODRL_URL). Stock image ignores
-  # this key at runtime.
+  # -- URL of the ODRL PAP (VITE_ODRL_URL)
   odrl: ""
   # -- build-time URL for obtaining an auth token (VITE_AUTH_TOKEN_URL). Stock
   # image ignores this key at runtime.
@@ -157,9 +148,9 @@ autoscaling:
   # -- should autoscaling be enabled for the fdsc-dashboard
   enabled: false
   # -- apiVersion of the HorizontalPodAutoscaler resource emitted by the
-  # `common.hpa.tpl` helper. Users on Kubernetes 1.26+ may wish to override
+  # `fiwareCommon.hpa.tpl` helper. Users on Kubernetes 1.26+ may wish to override
   # this to "v2".
-  apiVersion: "v2beta2"
+  apiVersion: "v2"
   # -- minimum number of running pods
   minReplicas: 1
   # -- maximum number of running pods
