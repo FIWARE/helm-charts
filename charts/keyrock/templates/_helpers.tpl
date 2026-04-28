@@ -4,7 +4,7 @@
 Keyrock-specific helpers.
 
 Every helper in this file is now a thin wrapper around the matching
-`common.*` helper from the `common` library chart (see
+`fiwareCommon.*` helper from the `common` library chart (see
 charts/common/templates/*.tpl). The wrappers exist so that:
 
   * Any external umbrella chart that already imports e.g.
@@ -17,56 +17,56 @@ charts/common/templates/*.tpl). The wrappers exist so that:
 */}}
 
 {{/*
-Expand the name of the chart. Delegates to `common.names.name`.
+Expand the name of the chart. Delegates to `fiwareCommon.names.name`.
 */}}
 {{- define "keyrock.name" -}}
-{{- include "common.names.name" . -}}
+{{- include "fiwareCommon.names.name" . -}}
 {{- end -}}
 
 {{/*
 Create a default fully qualified app name. Delegates to
-`common.names.fullname`.
+`fiwareCommon.names.fullname`.
 */}}
 {{- define "keyrock.fullname" -}}
-{{- include "common.names.fullname" . -}}
+{{- include "fiwareCommon.names.fullname" . -}}
 {{- end -}}
 
 {{/*
 Create chart name and version as used by the chart label. Delegates to
-`common.names.chart`.
+`fiwareCommon.names.chart`.
 */}}
 {{- define "keyrock.chart" -}}
-{{- include "common.names.chart" . -}}
+{{- include "fiwareCommon.names.chart" . -}}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use. Delegates to
-`common.serviceAccount.name`.
+`fiwareCommon.serviceAccount.name`.
 */}}
 {{- define "keyrock.serviceAccountName" -}}
-{{- include "common.serviceAccount.name" . -}}
+{{- include "fiwareCommon.serviceAccount.name" . -}}
 {{- end -}}
 
 {{/*
-Common labels. Delegates to `common.labels.standard`.
+Common labels. Delegates to `fiwareCommon.labels.standard`.
 */}}
 {{- define "keyrock.labels" -}}
-{{- include "common.labels.standard" . -}}
+{{- include "fiwareCommon.labels.standard" . -}}
 {{- end -}}
 
 {{/*
 Resolve the name of the credentials Secret. Delegates to
-`common.secrets.name` with keyrock's `.Values.existingSecret` key.
+`fiwareCommon.secrets.name` with keyrock's `.Values.existingSecret` key.
 */}}
 {{- define "keyrock.secretName" -}}
-{{- include "common.secrets.name" (dict "context" . "existingSecret" .Values.existingSecret) -}}
+{{- include "fiwareCommon.secrets.name" (dict "context" . "existingSecret" .Values.existingSecret) -}}
 {{- end -}}
 
 {{/*
 Resolve the name of the certificate Secret. Delegates to
-`common.secrets.name` with keyrock's `.Values.existingCertSecret`
+`fiwareCommon.secrets.name` with keyrock's `.Values.existingCertSecret`
 key and the `-certs` fallback suffix.
 */}}
 {{- define "keyrock.certSecretName" -}}
-{{- include "common.secrets.name" (dict "context" . "existingSecret" .Values.existingCertSecret "suffix" "-certs") -}}
+{{- include "fiwareCommon.secrets.name" (dict "context" . "existingSecret" .Values.existingCertSecret "suffix" "-certs") -}}
 {{- end -}}

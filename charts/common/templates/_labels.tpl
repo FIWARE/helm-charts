@@ -10,9 +10,9 @@ root context or a dict form with an empty `component`.
 
 Call styles — like the name helpers in _names.tpl:
 
-  {{- include "common.labels.standard" . }}
+  {{- include "fiwareCommon.labels.standard" . }}
 
-  {{- include "common.labels.standard" (dict "context" $ "component" "db") }}
+  {{- include "fiwareCommon.labels.standard" (dict "context" $ "component" "db") }}
 
 When a `component` is supplied the optional `app.kubernetes.io/component`
 line is appended to the existing 5-label set (respectively to the
@@ -22,7 +22,7 @@ with the root context render exactly the same YAML they do today.
 */}}
 
 {{/*
-common.labels.standard
+fiwareCommon.labels.standard
 
 The full 5-label set used on `metadata.labels:` across FIWARE charts:
 
@@ -38,15 +38,15 @@ When called via the dict form with a non-empty `component`, an extra
 
 line is appended.
 */}}
-{{- define "common.labels.standard" -}}
+{{- define "fiwareCommon.labels.standard" -}}
 {{- $ctx := . -}}
 {{- $component := "" -}}
 {{- if and (kindIs "map" .) (hasKey . "context") -}}
 {{- $ctx = .context -}}
 {{- $component = default "" .component -}}
 {{- end -}}
-app.kubernetes.io/name: {{ include "common.names.name" (dict "context" $ctx "component" $component) }}
-helm.sh/chart: {{ include "common.names.chart" (dict "context" $ctx) }}
+app.kubernetes.io/name: {{ include "fiwareCommon.names.name" (dict "context" $ctx "component" $component) }}
+helm.sh/chart: {{ include "fiwareCommon.names.chart" (dict "context" $ctx) }}
 app.kubernetes.io/instance: {{ $ctx.Release.Name }}
 {{- if $ctx.Chart.AppVersion }}
 app.kubernetes.io/version: {{ $ctx.Chart.AppVersion | quote }}
@@ -58,7 +58,7 @@ app.kubernetes.io/component: {{ $component }}
 {{- end -}}
 
 {{/*
-common.labels.matchLabels
+fiwareCommon.labels.matchLabels
 
 The 2-label selector set used on `spec.selector.matchLabels:` and on
 service selectors across FIWARE charts:
@@ -74,14 +74,14 @@ line is appended. Match-label stability (selectors cannot change after
 a release is installed) means consumer charts should only start
 passing `component` on a fresh release.
 */}}
-{{- define "common.labels.matchLabels" -}}
+{{- define "fiwareCommon.labels.matchLabels" -}}
 {{- $ctx := . -}}
 {{- $component := "" -}}
 {{- if and (kindIs "map" .) (hasKey . "context") -}}
 {{- $ctx = .context -}}
 {{- $component = default "" .component -}}
 {{- end -}}
-app.kubernetes.io/name: {{ include "common.names.name" (dict "context" $ctx "component" $component) }}
+app.kubernetes.io/name: {{ include "fiwareCommon.names.name" (dict "context" $ctx "component" $component) }}
 app.kubernetes.io/instance: {{ $ctx.Release.Name }}
 {{- if $component }}
 app.kubernetes.io/component: {{ $component }}

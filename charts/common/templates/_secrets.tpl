@@ -27,19 +27,19 @@ single `include`.
 Call convention (always dict form — secrets take parameters that can't
 be deduced from `.`):
 
-  {{- include "common.secrets.name" (dict
+  {{- include "fiwareCommon.secrets.name" (dict
         "context"        $
         "existingSecret" .Values.existingSecret
         "suffix"         "-certs") }}
 
-  {{- include "common.secrets.key" (dict
+  {{- include "fiwareCommon.secrets.key" (dict
         "context"        $
         "existingSecret" .Values.broker.db.existingSecret
         "defaultKey"     "dbPassword") }}
 */}}
 
 {{/*
-common.secrets.name
+fiwareCommon.secrets.name
 
 Resolve the name of a Secret to reference.
 
@@ -61,7 +61,7 @@ Arguments (dict):
                    Used by keyrock.certSecretName ("-certs"); defaults
                    to empty for the orion/keyrock.secretName case.
   component      - optional component name, forwarded to
-                   `common.names.fullname` (multi-component charts).
+                   `fiwareCommon.names.fullname` (multi-component charts).
 
 Rendering parity:
   * `keyrock.secretName` == this helper with `existingSecret =
@@ -71,12 +71,12 @@ Rendering parity:
   * `orion.secretName` == this helper with `existingSecret =
     .Values.broker.db.existingSecret` and no `suffix`.
 */}}
-{{- define "common.secrets.name" -}}
+{{- define "fiwareCommon.secrets.name" -}}
 {{- $ctx := .context -}}
 {{- $existing := .existingSecret -}}
 {{- $suffix := default "" .suffix -}}
 {{- $component := default "" .component -}}
-{{- $fallback := printf "%s%s" (include "common.names.fullname" (dict "context" $ctx "component" $component)) $suffix -}}
+{{- $fallback := printf "%s%s" (include "fiwareCommon.names.fullname" (dict "context" $ctx "component" $component)) $suffix -}}
 {{- if $existing -}}
 {{- if kindIs "map" $existing -}}
 {{- if $existing.name -}}
@@ -95,14 +95,14 @@ Rendering parity:
 {{- end -}}
 
 {{/*
-common.secrets.key
+fiwareCommon.secrets.key
 
 Resolve the key within a Secret to reference.
 
 Arguments (dict):
   context        - root context ($), required for `tpl` expansion of a
                    user-supplied key.
-  existingSecret - as for `common.secrets.name`. Only the map form with
+  existingSecret - as for `fiwareCommon.secrets.name`. Only the map form with
                    a `.key` entry participates in key resolution; other
                    shapes silently fall back to `defaultKey`.
   defaultKey     - the per-chart default key name (required).
@@ -112,10 +112,10 @@ Rendering parity:
   * `orion.secretKey` == this helper with `existingSecret =
     .Values.broker.db.existingSecret` and `defaultKey = "dbPassword"`.
 */}}
-{{- define "common.secrets.key" -}}
+{{- define "fiwareCommon.secrets.key" -}}
 {{- $ctx := .context -}}
 {{- $existing := .existingSecret -}}
-{{- $defaultKey := required "common.secrets.key: defaultKey is required" .defaultKey -}}
+{{- $defaultKey := required "fiwareCommon.secrets.key: defaultKey is required" .defaultKey -}}
 {{- if and (kindIs "map" $existing) $existing.key -}}
 {{- tpl $existing.key $ctx -}}
 {{- else -}}
