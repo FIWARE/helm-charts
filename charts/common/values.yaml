@@ -2,7 +2,7 @@
 # Chart.yaml). Library charts do not render any manifests themselves; they
 # exist only to provide named templates that consumer charts can `include`.
 #
-# As a result this values.yaml is intentionally empty: the `common.*`
+# As a result this values.yaml is intentionally empty: the `fiwareCommon.*`
 # helpers operate on the values tree passed in by the consumer chart
 # (typically via `(dict "context" $ "values" .Values.<x>)`).
 #

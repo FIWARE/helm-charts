@@ -10,13 +10,13 @@ charts/keyrock/templates/secret.yaml.
 
 Call convention — always dict form:
 
-  {{ include "common.secret.tpl" (dict
+  {{ include "fiwareCommon.secret.tpl" (dict
        "context"        $
        "existingSecret" .Values.broker.db.existingSecret
        "data"           (dict "dbPassword" .Values.broker.db.auth.password))
   }}
 
-  {{ include "common.secret.tpl" (dict
+  {{ include "fiwareCommon.secret.tpl" (dict
        "context"        $
        "existingSecret" .Values.existingCertSecret
        "suffix"         "-certs"
@@ -26,7 +26,7 @@ Call convention — always dict form:
 Arguments (dict):
   context        - root context (`$`), required.
   existingSecret - user-supplied override. Same shape rules as
-                   `common.secrets.name`:
+                   `fiwareCommon.secrets.name`:
                      * nil / empty / absent
                      * bare string
                      * map with an optional `.name`
@@ -39,7 +39,7 @@ Arguments (dict):
                    renders nothing (user-supplied existing secret) the
                    `data` argument may be omitted. Callers that only
                    want the `existingSecret` check semantics can also
-                   use `common.secrets.name` directly.
+                   use `fiwareCommon.secrets.name` directly.
   type           - string, defaults to "Opaque".
   suffix         - optional name suffix (e.g. "-certs") — used by
                    keyrock for its certificate Secret.
@@ -48,9 +48,9 @@ Arguments (dict):
 
 When `existingSecret` resolves to a user-supplied name the helper is a
 no-op; the consumer's deployment continues to reference the resolved
-`common.secrets.name` output.
+`fiwareCommon.secrets.name` output.
 */}}
-{{- define "common.secret.tpl" -}}
+{{- define "fiwareCommon.secret.tpl" -}}
 {{- $ctx := .context -}}
 {{- $existing := .existingSecret -}}
 {{- $type := default "Opaque" .type -}}
@@ -66,15 +66,15 @@ no-op; the consumer's deployment continues to reference the resolved
   {{- end -}}
 {{- end -}}
 {{- if not $userSupplied -}}
-{{- $data := required "common.secret.tpl: data is required" .data -}}
-{{- $fullName := include "common.names.fullname" $labelArgs -}}
+{{- $data := required "fiwareCommon.secret.tpl: data is required" .data -}}
+{{- $fullName := include "fiwareCommon.names.fullname" $labelArgs -}}
 apiVersion: v1
 kind: Secret
 metadata:
   name: {{ printf "%s%s" $fullName $suffix }}
-  namespace: {{ include "common.names.namespace" (dict "context" $ctx) | quote }}
+  namespace: {{ include "fiwareCommon.names.namespace" (dict "context" $ctx) | quote }}
   labels:
-    {{- include "common.labels.standard" $labelArgs | nindent 4 }}
+    {{- include "fiwareCommon.labels.standard" $labelArgs | nindent 4 }}
 type: {{ $type }}
 data:
   {{- range $key, $value := $data }}
