@@ -1,6 +1,6 @@
 # fdsc-dashboard
 
-![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.0.4](https://img.shields.io/badge/Version-0.0.4-informational?style=flat-square) ![AppVersion: 0.2.1](https://img.shields.io/badge/AppVersion-0.2.1-informational?style=flat-square)
 
 A Helm chart for running the fdsc-dashboard on kubernetes.
 
@@ -27,11 +27,12 @@ Kubernetes: `>= 1.19-0`
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | additionalEnvVars | list | `[]` | a list of additional env vars to be set on the dashboard container, in native env-var form. Useful for custom-built images that consume additional configuration at runtime. |
+| apiUrls | object | `{"authToken":"","ccs":"","odrl":"","til":"","tir":""}` | urls of the backend services to be used |
 | apiUrls.authToken | string | `""` | build-time URL for obtaining an auth token (VITE_AUTH_TOKEN_URL). Stock image ignores this key at runtime. |
-| apiUrls.ccs | string | `""` | build-time URL of the Credentials Config Service (VITE_CCS_URL). Stock image ignores this key at runtime. |
-| apiUrls.odrl | string | `""` | build-time URL of the ODRL PAP (VITE_ODRL_URL). Stock image ignores this key at runtime. |
-| apiUrls.til | string | `""` | build-time URL of the Trusted Issuer List (VITE_TIL_URL). Stock image ignores this key at runtime. |
-| apiUrls.tir | string | `""` | build-time URL of the Trusted Issuer Registry (VITE_TIR_URL). Stock image ignores this key at runtime. |
+| apiUrls.ccs | string | `""` | URL of the Credentials Config Service (VITE_CCS_URL) |
+| apiUrls.odrl | string | `""` | URL of the ODRL PAP (VITE_ODRL_URL) |
+| apiUrls.til | string | `""` | URL of the Trusted Issuer List |
+| apiUrls.tir | string | `""` | URL of the Trusted Issuer Registry (VITE_TIR_URL) |
 | auth.config | object | `{"providers":[]}` | raw OIDC providers configuration, rendered as JSON into the chart's Secret when `existingSecret` is empty. Default: auth disabled (no providers). See upstream docs for the full schema. |
 | auth.existingSecret | string | `""` | name of a pre-existing Secret containing the `AUTH_CONFIG_JSON` key. When set, the chart will not render its own Secret and the Deployment will reference this Secret instead. |
 | auth.secretKey | string | `"AUTH_CONFIG_JSON"` | key inside the Secret (chart-rendered or `existingSecret`) to mount into the `AUTH_CONFIG_JSON` env var |
