@@ -201,7 +201,7 @@ spec:
     - port: 1026
       targetPort: 1026
       protocol: TCP
-      name: "http"
+      name: http
   selector:
     app.kubernetes.io/name: common-tests
     app.kubernetes.io/instance: test-release
