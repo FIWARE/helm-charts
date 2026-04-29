@@ -8607,6 +8607,22 @@ entries:
   scorpio-broker:
   - apiVersion: v2
     appVersion: 2.1.0
+    created: "2026-04-29T09:54:23.897866071Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.0
+    description: A Helm chart for Kubernetes in which every microservices has its
+      own container and hence have reserved resources for it and virtually isolated
+      from others and best for production.
+    digest: c2b9ce1a7b8b98a40fff186adaaf51a544b0247c700d830ea1c16f9272b0d27c
+    name: scorpio-broker
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/scorpio-broker-0.3.1/scorpio-broker-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v2
+    appVersion: 2.1.0
     created: "2024-05-02T13:26:32.568925102Z"
     description: A Helm chart for Kubernetes in which every microservices has its
       own container and hence have reserved resources for it and virtually isolated
@@ -12024,4 +12040,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-04-29T09:44:27.266201835Z"
+generated: "2026-04-29T09:54:23.899232997Z"
