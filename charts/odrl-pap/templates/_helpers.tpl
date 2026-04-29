@@ -1,75 +1,89 @@
 
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
+odrl-pap-specific helpers.
+
+Every helper in this file is now a thin wrapper around the matching
+`fiwareCommon.*` helper from the `common` library chart (see
+charts/common/templates/*.tpl). The wrappers exist so that:
+
+  * Any external umbrella chart that already imports e.g.
+    `include "pap.fullname" .` keeps working — no external
+    breaking change.
+  * The bodies below stay in lock-step with the rest of the FIWARE
+    charts, because there is exactly one implementation of each
+    helper (in `common`).
+
+*/}}
+
+{{/*
+Expand the name of the chart. Delegates to `fiwareCommon.names.name`.
 */}}
 {{- define "pap.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- include "fiwareCommon.names.name" . -}}
 {{- end -}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
+Create a default fully qualified app name. Delegates to
+`fiwareCommon.names.fullname`.
 */}}
 {{- define "pap.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- include "fiwareCommon.names.fullname" . -}}
 {{- end -}}
-{{- end -}}
-{{- end -}}
+
 {{/*
-Create chart name and version as used by the chart label.
+Create chart name and version as used by the chart label. Delegates to
+`fiwareCommon.names.chart`.
 */}}
 {{- define "pap.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- include "fiwareCommon.names.chart" . -}}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use
+Create the name of the service account to use. Delegates to
+`fiwareCommon.serviceAccount.name`.
 */}}
 {{- define "pap.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "pap.fullname" .) .Values.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
-{{- end -}}
+{{- include "fiwareCommon.serviceAccount.name" . -}}
 {{- end -}}
 
 {{/*
-Common labels
+Common labels. Delegates to `fiwareCommon.labels.standard`.
 */}}
 {{- define "pap.labels" -}}
-app.kubernetes.io/name: {{ include "pap.name" . }}
-helm.sh/chart: {{ include "pap.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- include "fiwareCommon.labels.standard" . -}}
 {{- end -}}
 
 {{/*
-Support for existing database secret 
+Resolve the name of the database Secret. Delegates to
+`fiwareCommon.secrets.name` with odrl-pap's `.Values.database.existingSecret`
+key.
+
+odrl-pap follows the DB-flavoured shape (`existingSecret` is a map with
+an `enabled` gate plus always-populated `name` / `key` placeholders).
+The override is only honoured when `enabled: true`; otherwise the
+helper falls back to `<fullname>` for byte-for-byte parity with the
+legacy body.
 */}}
 {{- define "pap.secretName" -}}
-    {{- if .Values.database.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.database.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "%s" (include "pap.fullname" .) -}}
-    {{- end -}}
+{{- $existing := "" -}}
+{{- if .Values.database.existingSecret.enabled -}}
+{{- $existing = .Values.database.existingSecret -}}
+{{- end -}}
+{{- include "fiwareCommon.secrets.name" (dict "context" $ "existingSecret" $existing) -}}
 {{- end -}}
 
+{{/*
+Resolve the key within the database Secret. Delegates to
+`fiwareCommon.secrets.key`, falling back to `password` (the legacy default).
+The `enabled` gate is honoured for byte-for-byte parity with the legacy
+body — when `enabled: false`, the chart-local default `password` is
+returned regardless of any `.Values.database.existingSecret.key` value.
+*/}}
 {{- define "pap.passwordKey" -}}
-    {{- if and (.Values.database.existingSecret.enabled) (.Values.database.existingSecret.key) -}}
-        {{- printf "%s" (tpl .Values.database.existingSecret.key $) -}}
-    {{- else -}}
-        {{- printf "password" -}}
-    {{- end -}}
+{{- $existing := "" -}}
+{{- if .Values.database.existingSecret.enabled -}}
+{{- $existing = .Values.database.existingSecret -}}
+{{- end -}}
+{{- include "fiwareCommon.secrets.key" (dict "context" $ "existingSecret" $existing "defaultKey" "password") -}}
 {{- end -}}
