@@ -1,310 +1,200 @@
+{{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
+scorpio-broker helpers.
+
+Every helper in this file is now a thin wrapper around the matching
+`fiwareCommon.*` helper from the `common` library chart (see
+charts/common/templates/*.tpl). The wrappers exist so that:
+
+  * Any external umbrella chart that already imports e.g.
+    `include "scorpio-broker-dist.fullname" .` or
+    `include "eureka.fullname" .` keeps working — no external
+    breaking change.
+  * The bodies below stay in lock-step with the rest of the FIWARE
+    charts, because there is exactly one implementation of each
+    helper (in `common`).
+
+scorpio-broker is a multi-component chart: in addition to the
+chart-wide helpers it ships a `<component>.fullname`,
+`<component>.labels` and `<component>.matchLabels` helper for each of
+the 10 microservices. Those per-component helpers forward the root
+context plus the `<component>.name` value to the `fiwareCommon.*` helpers
+via `(dict "context" $ "component" <name>)`, which is the dict call
+style documented in `charts/common/templates/_names.tpl` for
+multi-component charts.
+*/}}
+
+{{/*
+Expand the name of the chart. Delegates to `fiwareCommon.names.name`.
 */}}
 {{- define "scorpio-broker-dist.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- end }}
+{{- include "fiwareCommon.names.name" . -}}
+{{- end -}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
+Create a default fully qualified app name. Delegates to
+`fiwareCommon.names.fullname`.
 */}}
 {{- define "scorpio-broker-dist.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
-{{- end }}
-
-
-{{- define "atContextServer.fullname" -}}
-{{- if .Values.atContextServer.fullnameOverride }}
-{{- .Values.atContextServer.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.atContextServer.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.atContextServer.name | trunc 63 | trimSuffix "-" -}}
+{{- include "fiwareCommon.names.fullname" . -}}
 {{- end -}}
-{{- end -}}
-{{- end -}}
-
-
-{{- define "configServer.fullname" -}}
-{{- if .Values.configServer.fullnameOverride }}
-{{- .Values.configServer.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.configServer.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.configServer.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-
-{{- define "entityManager.fullname" -}}
-{{- if .Values.entityManager.fullnameOverride }}
-{{- .Values.entityManager.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.entityManager.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.entityManager.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-
-{{- define "gateway.fullname" -}}
-{{- if .Values.gateway.fullnameOverride }}
-{{- .Values.gateway.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.gateway.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.gateway.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-
-{{- define "eureka.fullname" -}}
-{{- if .Values.eureka.fullnameOverride }}
-{{- .Values.eureka.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.eureka.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.eureka.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-
-{{- define "historyManager.fullname" -}}
-{{- if .Values.historyManager.fullnameOverride }}
-{{- .Values.historyManager.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.historyManager.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.historyManager.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-
-{{- define "queryManager.fullname" -}}
-{{- if .Values.queryManager.fullnameOverride }}
-{{- .Values.queryManager.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.queryManager.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.queryManager.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-
-{{- define "registryManager.fullname" -}}
-{{- if .Values.registryManager.fullnameOverride }}
-{{- .Values.registryManager.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.registryManager.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.registryManager.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-
-{{- define "registrySubscriptionManager.fullname" -}}
-{{- if .Values.registrySubscriptionManager.fullnameOverride }}
-{{- .Values.registrySubscriptionManager.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.registrySubscriptionManager.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.registrySubscriptionManager.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-
-{{- define "subscriptionManager.fullname" -}}
-{{- if .Values.subscriptionManager.fullnameOverride }}
-{{- .Values.subscriptionManager.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.subscriptionManager.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.subscriptionManager.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
 
 {{/*
-Create chart name and version as used by the chart label.
+Create chart name and version as used by the chart label. Delegates to
+`fiwareCommon.names.chart`.
 */}}
 {{- define "scorpio-broker-dist.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
+{{- include "fiwareCommon.names.chart" . -}}
+{{- end -}}
 
 {{/*
-Common labels
+Selector labels. Delegates to `fiwareCommon.labels.matchLabels`.
 */}}
-{{- define "scorpio-broker-dist.common.matchLabels" -}}
-app: {{ template "scorpio-broker-dist.name" . }}
-release: {{ .Release.Name }}
+{{- define "scorpio-broker-dist.selectorLabels" -}}
+{{- include "fiwareCommon.labels.matchLabels" . -}}
 {{- end -}}
 
-{{- define "scorpio-broker-dist.common.metaLabels" -}}
-chart: {{ template "scorpio-broker-dist.chart" . }}
-heritage: {{ .Release.Service }}
+{{/*
+Create the name of the service account to use. Delegates to
+`fiwareCommon.serviceAccount.name`.
+*/}}
+{{- define "scorpio-broker-dist.serviceAccountName" -}}
+{{- include "fiwareCommon.serviceAccount.name" . -}}
 {{- end -}}
 
+{{/*
+Per-component `fullname` helpers. Each forwards the root context plus
+the `<component>.name` from values to `fiwareCommon.names.fullname`, which
+appends `-<component>` to the chart-wide fullname.
+*/}}
+{{- define "atContextServer.fullname" -}}
+{{- include "fiwareCommon.names.fullname" (dict "context" . "component" .Values.atContextServer.name) -}}
+{{- end -}}
+
+{{- define "configServer.fullname" -}}
+{{- include "fiwareCommon.names.fullname" (dict "context" . "component" .Values.configServer.name) -}}
+{{- end -}}
+
+{{- define "entityManager.fullname" -}}
+{{- include "fiwareCommon.names.fullname" (dict "context" . "component" .Values.entityManager.name) -}}
+{{- end -}}
+
+{{- define "gateway.fullname" -}}
+{{- include "fiwareCommon.names.fullname" (dict "context" . "component" .Values.gateway.name) -}}
+{{- end -}}
+
+{{- define "eureka.fullname" -}}
+{{- include "fiwareCommon.names.fullname" (dict "context" . "component" .Values.eureka.name) -}}
+{{- end -}}
+
+{{- define "historyManager.fullname" -}}
+{{- include "fiwareCommon.names.fullname" (dict "context" . "component" .Values.historyManager.name) -}}
+{{- end -}}
+
+{{- define "queryManager.fullname" -}}
+{{- include "fiwareCommon.names.fullname" (dict "context" . "component" .Values.queryManager.name) -}}
+{{- end -}}
+
+{{- define "registryManager.fullname" -}}
+{{- include "fiwareCommon.names.fullname" (dict "context" . "component" .Values.registryManager.name) -}}
+{{- end -}}
+
+{{- define "registrySubscriptionManager.fullname" -}}
+{{- include "fiwareCommon.names.fullname" (dict "context" . "component" .Values.registrySubscriptionManager.name) -}}
+{{- end -}}
+
+{{- define "subscriptionManager.fullname" -}}
+{{- include "fiwareCommon.names.fullname" (dict "context" . "component" .Values.subscriptionManager.name) -}}
+{{- end -}}
+
+{{/*
+Per-component `labels` helpers. Each forwards the root context plus
+the `<component>.name` from values to `fiwareCommon.labels.standard`, which
+appends an `app.kubernetes.io/component: <name>` line to the canonical
+5-label set.
+*/}}
 {{- define "atContextServer.labels" -}}
-{{ include "atContextServer.matchLabels" . }}
-{{ include "scorpio-broker-dist.common.metaLabels" . }}
-{{- end -}}
-
-{{- define "atContextServer.matchLabels" -}}
-component: {{ .Values.atContextServer.name | quote }}
-{{ include "scorpio-broker-dist.common.matchLabels" . }}
+{{- include "fiwareCommon.labels.standard" (dict "context" . "component" .Values.atContextServer.name) -}}
 {{- end -}}
 
 {{- define "configServer.labels" -}}
-{{ include "configServer.matchLabels" . }}
-{{ include "scorpio-broker-dist.common.metaLabels" . }}
-{{- end -}}
-
-{{- define "configServer.matchLabels" -}}
-component: {{ .Values.configServer.name | quote }}
-{{ include "scorpio-broker-dist.common.matchLabels" . }}
-{{- end -}}
-
-{{- define "eureka.labels" -}}
-{{ include "eureka.matchLabels" . }}
-{{ include "scorpio-broker-dist.common.metaLabels" . }}
-{{- end -}}
-
-{{- define "eureka.matchLabels" -}}
-component: {{ .Values.eureka.name | quote }}
-{{ include "scorpio-broker-dist.common.matchLabels" . }}
-{{- end -}}
-
-{{- define "gateway.labels" -}}
-{{ include "gateway.matchLabels" . }}
-{{ include "scorpio-broker-dist.common.metaLabels" . }}
-{{- end -}}
-
-{{- define "gateway.matchLabels" -}}
-component: {{ .Values.gateway.name | quote }}
-{{ include "scorpio-broker-dist.common.matchLabels" . }}
+{{- include "fiwareCommon.labels.standard" (dict "context" . "component" .Values.configServer.name) -}}
 {{- end -}}
 
 {{- define "entityManager.labels" -}}
-{{ include "entityManager.matchLabels" . }}
-{{ include "scorpio-broker-dist.common.metaLabels" . }}
+{{- include "fiwareCommon.labels.standard" (dict "context" . "component" .Values.entityManager.name) -}}
 {{- end -}}
 
-{{- define "entityManager.matchLabels" -}}
-component: {{ .Values.entityManager.name | quote }}
-{{ include "scorpio-broker-dist.common.matchLabels" . }}
+{{- define "gateway.labels" -}}
+{{- include "fiwareCommon.labels.standard" (dict "context" . "component" .Values.gateway.name) -}}
+{{- end -}}
+
+{{- define "eureka.labels" -}}
+{{- include "fiwareCommon.labels.standard" (dict "context" . "component" .Values.eureka.name) -}}
 {{- end -}}
 
 {{- define "historyManager.labels" -}}
-{{ include "historyManager.matchLabels" . }}
-{{ include "scorpio-broker-dist.common.metaLabels" . }}
-{{- end -}}
-
-{{- define "historyManager.matchLabels" -}}
-component: {{ .Values.historyManager.name | quote }}
-{{ include "scorpio-broker-dist.common.matchLabels" . }}
+{{- include "fiwareCommon.labels.standard" (dict "context" . "component" .Values.historyManager.name) -}}
 {{- end -}}
 
 {{- define "queryManager.labels" -}}
-{{ include "queryManager.matchLabels" . }}
-{{ include "scorpio-broker-dist.common.metaLabels" . }}
-{{- end -}}
-
-{{- define "queryManager.matchLabels" -}}
-component: {{ .Values.queryManager.name | quote }}
-{{ include "scorpio-broker-dist.common.matchLabels" . }}
+{{- include "fiwareCommon.labels.standard" (dict "context" . "component" .Values.queryManager.name) -}}
 {{- end -}}
 
 {{- define "registryManager.labels" -}}
-{{ include "registryManager.matchLabels" . }}
-{{ include "scorpio-broker-dist.common.metaLabels" . }}
-{{- end -}}
-
-
-{{- define "registryManager.matchLabels" -}}
-component: {{ .Values.registryManager.name | quote }}
-{{ include "scorpio-broker-dist.common.matchLabels" . }}
+{{- include "fiwareCommon.labels.standard" (dict "context" . "component" .Values.registryManager.name) -}}
 {{- end -}}
 
 {{- define "registrySubscriptionManager.labels" -}}
-{{ include "registrySubscriptionManager.matchLabels" . }}
-{{ include "scorpio-broker-dist.common.metaLabels" . }}
-{{- end -}}
-
-
-{{- define "registrySubscriptionManager.matchLabels" -}}
-component: {{ .Values.registrySubscriptionManager.name | quote }}
-{{ include "scorpio-broker-dist.common.matchLabels" . }}
+{{- include "fiwareCommon.labels.standard" (dict "context" . "component" .Values.registrySubscriptionManager.name) -}}
 {{- end -}}
 
 {{- define "subscriptionManager.labels" -}}
-{{ include "subscriptionManager.matchLabels" . }}
-{{ include "scorpio-broker-dist.common.metaLabels" . }}
+{{- include "fiwareCommon.labels.standard" (dict "context" . "component" .Values.subscriptionManager.name) -}}
+{{- end -}}
+
+{{/*
+Per-component `matchLabels` helpers. Each forwards the root context
+plus the `<component>.name` from values to `fiwareCommon.labels.matchLabels`,
+which appends an `app.kubernetes.io/component: <name>` line to the
+canonical 2-label selector set.
+*/}}
+{{- define "atContextServer.matchLabels" -}}
+{{- include "fiwareCommon.labels.matchLabels" (dict "context" . "component" .Values.atContextServer.name) -}}
+{{- end -}}
+
+{{- define "configServer.matchLabels" -}}
+{{- include "fiwareCommon.labels.matchLabels" (dict "context" . "component" .Values.configServer.name) -}}
+{{- end -}}
+
+{{- define "entityManager.matchLabels" -}}
+{{- include "fiwareCommon.labels.matchLabels" (dict "context" . "component" .Values.entityManager.name) -}}
+{{- end -}}
+
+{{- define "gateway.matchLabels" -}}
+{{- include "fiwareCommon.labels.matchLabels" (dict "context" . "component" .Values.gateway.name) -}}
+{{- end -}}
+
+{{- define "eureka.matchLabels" -}}
+{{- include "fiwareCommon.labels.matchLabels" (dict "context" . "component" .Values.eureka.name) -}}
+{{- end -}}
+
+{{- define "historyManager.matchLabels" -}}
+{{- include "fiwareCommon.labels.matchLabels" (dict "context" . "component" .Values.historyManager.name) -}}
+{{- end -}}
+
+{{- define "queryManager.matchLabels" -}}
+{{- include "fiwareCommon.labels.matchLabels" (dict "context" . "component" .Values.queryManager.name) -}}
+{{- end -}}
+
+{{- define "registryManager.matchLabels" -}}
+{{- include "fiwareCommon.labels.matchLabels" (dict "context" . "component" .Values.registryManager.name) -}}
+{{- end -}}
+
+{{- define "registrySubscriptionManager.matchLabels" -}}
+{{- include "fiwareCommon.labels.matchLabels" (dict "context" . "component" .Values.registrySubscriptionManager.name) -}}
 {{- end -}}
 
 {{- define "subscriptionManager.matchLabels" -}}
-component: {{ .Values.subscriptionManager.name | quote }}
-{{ include "scorpio-broker-dist.common.matchLabels" . }}
+{{- include "fiwareCommon.labels.matchLabels" (dict "context" . "component" .Values.subscriptionManager.name) -}}
 {{- end -}}
-
-
-{{/*
-Selector labels
-*/}}
-{{- define "scorpio-broker-dist.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "scorpio-broker-dist.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "scorpio-broker-dist.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "scorpio-broker-dist.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
-

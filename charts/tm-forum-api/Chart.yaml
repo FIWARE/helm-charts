@@ -1,7 +1,7 @@
 apiVersion: v2
 name: tm-forum-api
-version: 0.16.17
-appVersion: 1.11.0
+version: 0.17.1
+appVersion: 1.10.4
 kubeVersion: '>= 1.19-0'
 home: https://github.com/FIWARE/tmforum-api
 description: A Helm chart for running the FIWARE TMForum-APIs
@@ -13,10 +13,17 @@ sources:
   - https://github.com/FIWARE/tmforum-api
 maintainers:
   - name: wistefan
-    email: stefan.wiedemann@fiware.org
+    email: stefan.wiedemann@seamware.com
 annotations:
   charts.openshift.io/name: tm-forum-api
+# The `common` library chart ships every shared helper
+# (names, labels, service-account resolution, existing-secret
+# resolution, service/ingress/route/HPA/secret/serviceaccount
+# bodies). 
 dependencies:
+  - name: common
+    repository: "https://fiware.github.io/helm-charts"
+    version: "0.1.0"
   - name: redis
     version: 18.1.2
     repository: oci://registry-1.docker.io/bitnamicharts

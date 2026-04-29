@@ -1,7 +1,8 @@
-apiVersion: v1
+apiVersion: v2
 name: vcverifier
-version: 4.9.0
+version: 4.10.2
 appVersion: 6.11.0
+kubeVersion: '>= 1.19-0'
 home: https://github.com/fiware/vcverifier
 description: A Helm chart for running the FIWARE VCVerifier.
 sources:
@@ -13,4 +14,15 @@ keywords:
   - OID4VP
 maintainers:
   - name: wistefan
-    email: stefan.wiedemann@fiware.org
+    email: stefan.wiedemann@seamware.com
+# The `common` library chart ships every shared helper
+# (names, labels, service-account resolution, existing-secret
+# resolution, service/ingress/route/HPA/secret/serviceaccount
+# bodies). It is consumed via a local `file://` dependency so
+# publishing workflows do not need a separate repository entry —
+# Helm packages the library alongside vcverifier in the resulting
+# `vcverifier-<version>.tgz`. See charts/common/README.md.
+dependencies:
+  - name: common
+    repository: "https://fiware.github.io/helm-charts"
+    version: "0.1.0"

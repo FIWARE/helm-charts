@@ -1,49 +1,57 @@
 
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
+Helpers for the `trusted-issuers-list` chart.
+
+The seven canonical FIWARE helpers (`name`, `fullname`, `chart`,
+`serviceAccountName`, `labels`, `secretName`, `passwordKey`) are thin
+wrappers over the in-repo `common` library chart. The include paths
+`til.*` are preserved verbatim so umbrella charts that already call
+e.g. `include "til.fullname" .` continue to resolve without change.
+See docs/common-chart.md for the library contract.
+
+The two chart-specific helpers — `til.serviceName` (honours
+`service.serviceNameOverride`) and `til.app.config` (renders the
+micronaut + datasource configuration fragment consumed by the
+initdata Job and the main Deployment) — stay chart-local.
+*/}}
+
+{{/*
+Expand the name of the chart — delegates to `fiwareCommon.names.name`.
 */}}
 {{- define "til.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- include "fiwareCommon.names.name" . -}}
 {{- end -}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
+Create a default fully qualified app name — delegates to
+`fiwareCommon.names.fullname`.
 */}}
 {{- define "til.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- include "fiwareCommon.names.fullname" . -}}
 {{- end -}}
-{{- end -}}
-{{- end -}}
+
 {{/*
-Create chart name and version as used by the chart label.
+Create chart name and version as used by the chart label — delegates
+to `fiwareCommon.names.chart`.
 */}}
 {{- define "til.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- include "fiwareCommon.names.chart" . -}}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use
+Create the name of the service account to use — delegates to
+`fiwareCommon.serviceAccount.name`.
 */}}
 {{- define "til.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "til.fullname" .) .Values.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
-{{- end -}}
+{{- include "fiwareCommon.serviceAccount.name" . -}}
 {{- end -}}
 
 {{/*
-Create the name of the service
+Create the name of the service. Chart-specific: honours
+`.Values.service.serviceNameOverride` before falling back to the
+fullname. Stays chart-local because `common` has no matching helper
+today.
 */}}
 {{- define "til.serviceName" -}}
 {{- if .Values.service.serviceNameOverride -}}
@@ -54,39 +62,46 @@ Create the name of the service
 {{- end -}}
 
 {{/*
-Common labels
+Common labels — delegates to `fiwareCommon.labels.standard`.
 */}}
 {{- define "til.labels" -}}
-app.kubernetes.io/name: {{ include "til.name" . }}
-helm.sh/chart: {{ include "til.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- include "fiwareCommon.labels.standard" . -}}
 {{- end -}}
 
 {{/*
-Support for existing database secret
+Support for existing database secret — delegates to
+`fiwareCommon.secrets.name`. The legacy behaviour only treats
+`.Values.database.existingSecret` as an override when its `enabled`
+flag is true; otherwise the chart falls back to `<fullname>` even if
+a stray `name` remains set. That gate is preserved here.
 */}}
 {{- define "til.secretName" -}}
-    {{- if .Values.database.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.database.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "%s" (include "til.fullname" .) -}}
-    {{- end -}}
+{{- $existing := "" -}}
+{{- if .Values.database.existingSecret.enabled -}}
+{{-   $existing = .Values.database.existingSecret -}}
 {{- end -}}
-
-{{- define "til.passwordKey" -}}
-    {{- if .Values.database.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.database.existingSecret.key $) -}}
-    {{- else -}}
-        {{- printf "password" -}}
-    {{- end -}}
+{{- include "fiwareCommon.secrets.name"
+      (dict "context" . "existingSecret" $existing) -}}
 {{- end -}}
 
 {{/*
-Base application configuration base on dialect and persistence
+Key within the database Secret that carries the password — delegates
+to `fiwareCommon.secrets.key`. Same `enabled` gate as `til.secretName`;
+defaults to `"password"` to match the legacy body.
+*/}}
+{{- define "til.passwordKey" -}}
+{{- $existing := "" -}}
+{{- if .Values.database.existingSecret.enabled -}}
+{{-   $existing = .Values.database.existingSecret -}}
+{{- end -}}
+{{- include "fiwareCommon.secrets.key"
+      (dict "context" . "existingSecret" $existing "defaultKey" "password") -}}
+{{- end -}}
+
+{{/*
+Base application configuration based on dialect and persistence.
+Chart-specific micronaut + datasource renderer consumed by the
+initdata Job and the main Deployment; no equivalent in `common`.
  */}}
 {{- define "til.app.config" -}}
 endpoints:

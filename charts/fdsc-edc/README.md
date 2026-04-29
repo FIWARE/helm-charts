@@ -1,6 +1,6 @@
 # fdsc-edc
 
-![Version: 0.1.8](https://img.shields.io/badge/Version-0.1.8-informational?style=flat-square) ![AppVersion: 0.1.7](https://img.shields.io/badge/AppVersion-0.1.7-informational?style=flat-square)
+![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![AppVersion: 0.1.7](https://img.shields.io/badge/AppVersion-0.1.7-informational?style=flat-square)
 
 A Helm chart for running the fdsc-edc on kubernetes.
 
@@ -13,6 +13,12 @@ A Helm chart for running the fdsc-edc on kubernetes.
 ## Source Code
 
 * <https://github.com/SEAMWARE/fdsc-edc>
+
+## Requirements
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://fiware.github.io/helm-charts | common | 0.1.0 |
 
 ## Values
 

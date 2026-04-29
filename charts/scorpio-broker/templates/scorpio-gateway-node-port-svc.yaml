@@ -1,21 +1,23 @@
 {{- if .Values.gateway.enabled }}
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    {{ include "gateway.labels" . | nindent 4 }}
-  name: scorpio-gateway-service
-spec:
-  type: {{ .Values.gateway.service.type }}
-  ports:
-  - port: {{ .Values.gateway.service.port }}
-    targetPort: {{ .Values.gateway.service.port }}
-    {{- if and (eq .Values.gateway.service.type "NodePort") .Values.gateway.service.nodePort }}
-    nodePort: {{ .Values.gateway.service.nodePort }}
-    {{- else if eq .Values.gateway.service.type "ClusterIP" }}
-    nodePort: null
-    {{- end }}
-  selector:
-    {{ include "gateway.matchLabels" . | nindent 4 }}
+{{- /*
+NodePort-variant companion to `gateway-service.yaml`. The legacy name
+`scorpio-gateway-service` is hard-coded (no include) and is not produced
+by `fiwareCommon.names.fullname`, so it is supplied via `nameOverride`. The
+`nodePort` key is rendered verbatim by `fiwareCommon.service.tpl`: when
+`type` is switched to `ClusterIP` the caller can still pass
+`"nodePort" nil` to drop the previously-assigned node port, matching
+the pre-migration `nodePort: null` behaviour.
+*/}}
+{{- $port := dict "port" .Values.gateway.service.port "name" (quote .Values.gateway.service.port) -}}
+{{- if and (eq .Values.gateway.service.type "NodePort") .Values.gateway.service.nodePort -}}
+{{- $_ := set $port "nodePort" .Values.gateway.service.nodePort -}}
+{{- else if eq .Values.gateway.service.type "ClusterIP" -}}
+{{- $_ := set $port "nodePort" nil -}}
+{{- end -}}
+{{- include "fiwareCommon.service.tpl" (dict
+      "context" $
+      "component" .Values.gateway.name
+      "nameOverride" "scorpio-gateway-service"
+      "service" .Values.gateway.service
+      "ports"   (list $port)) }}
 {{- end }}
-
