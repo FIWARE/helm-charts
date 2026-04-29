@@ -2384,6 +2384,31 @@ entries:
     version: 0.0.1
   common:
   - apiVersion: v2
+    created: "2026-04-29T09:37:25.40390981Z"
+    description: FIWARE common library chart. Bundles the template helpers (names,
+      labels, service account, secret, image, and resource bodies) that are currently
+      duplicated across every FIWARE Helm chart. Consumer charts depend on it locally
+      and include its `fiwareCommon.*` templates instead of re-implementing the same
+      boilerplate per chart.
+    digest: 8c1be96d1b01c94be8ab03714ff5bd2b6415398aca66119e39bd7f903186b893
+    home: https://github.com/FIWARE/helm-charts/tree/main/charts/common
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - common
+    - library
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: common
+    sources:
+    - https://github.com/FIWARE/helm-charts
+    type: library
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/common-0.1.1/common-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     created: "2026-04-28T09:44:38.922880429Z"
     description: FIWARE common library chart. Bundles the template helpers (names,
       labels, service account, secret, image, and resource bodies) that are currently
@@ -8607,6 +8632,22 @@ entries:
   scorpio-broker-aaio:
   - apiVersion: v2
     appVersion: 2.1.0
+    created: "2026-04-29T09:37:25.585275178Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.0
+    description: A Helm chart for Kubernetes in which all the microservices are deployed
+      under a single container and thus less effective for production environment
+      but serves well in testing and dev environment.
+    digest: da802bdde544ff6dc7776b63d63022f8c2fd2952ed83cef7cd13004d17f3bdf5
+    name: scorpio-broker-aaio
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/scorpio-broker-aaio-0.4.13/scorpio-broker-aaio-0.4.13.tgz
+    version: 0.4.13
+  - apiVersion: v2
+    appVersion: 2.1.0
     created: "2024-09-05T13:27:49.454223206Z"
     description: A Helm chart for Kubernetes in which all the microservices are deployed
       under a single container and thus less effective for production environment
@@ -11903,4 +11944,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-04-29T09:22:29.56181442Z"
+generated: "2026-04-29T09:37:25.586031924Z"
