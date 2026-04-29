@@ -163,6 +163,12 @@ Wiring a chart up to `common` is mechanical:
 - `orion` — see `charts/orion/CHANGELOG.md`.
 - `keyrock` — see `charts/keyrock/CHANGELOG.md`.
 - `mintaka` — see `charts/mintaka/CHANGELOG.md`.
+- `tm-forum-api` — see `charts/tm-forum-api/CHANGELOG.md`. Helpers and
+  `serviceaccount.yaml` only; per-API `service.yaml` / `ingress.yaml` /
+  `route.yaml` / `deployment.yaml` and the Envoy sidecar templates are
+  intentionally kept chart-local because they iterate over
+  `.Values.apis` (one resource per API) and have no counterpart on the
+  single-resource `common.*.tpl` helper surface.
 
 ### Breaking changes
 
