@@ -61,7 +61,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: http-health
+              port: http
             initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
@@ -70,7 +70,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /health
-              port: http-health
+              port: http
             initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
