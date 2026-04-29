@@ -8,7 +8,7 @@ A Helm chart for Kubernetes in which all the microservices are deployed under a 
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://fiware.github.io/helm-charts | common | 0.1.0 |
+| https://fiware.github.io/helm-charts | common | 0.1.1 |
 
 ## Values
 
