@@ -4,5 +4,4 @@
       "ports"   (list (dict
                         "port"       .Values.service.port
                         "targetPort" 9090
-                        "protocol"   "TCP"
-                        "name"       "9090"))) }}
+                        "protocol"   "TCP"))) }}
