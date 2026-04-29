@@ -1,6 +1,6 @@
 # fdsc-dashboard
 
-![Version: 0.0.7](https://img.shields.io/badge/Version-0.0.7-informational?style=flat-square) ![AppVersion: 0.2.1](https://img.shields.io/badge/AppVersion-0.2.1-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![AppVersion: 0.3.0](https://img.shields.io/badge/AppVersion-0.3.0-informational?style=flat-square)
 
 A Helm chart for running the fdsc-dashboard on kubernetes.
 
@@ -75,7 +75,7 @@ Kubernetes: `>= 1.19-0`
 | ingress.hosts | list | `[]` | all hosts to be provided |
 | ingress.tls | list | `[]` | configure the ingress' tls |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
-| port | int | `80` | container port that the fdsc-dashboard (nginx) listens on |
+| port | int | `3000` | container port that the fdsc-dashboard (nginx) listens on |
 | route.annotations | object | `{}` | annotations to be added to the route |
 | route.enabled | bool | `false` | should the deployment create openshift routes |
 | route.tls | object | `{}` | tls configuration for the route |
