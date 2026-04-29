@@ -4888,6 +4888,32 @@ entries:
   fdsc-dashboard:
   - apiVersion: v2
     appVersion: 0.2.1
+    created: "2026-04-29T05:02:57.830363549Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.0
+    description: A Helm chart for running the fdsc-dashboard on kubernetes.
+    digest: e1f24cde1c1801c578c294acec7306cc4a8fcafa6b3bf8d7ba7a2ce37425b748
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - data-space-connector
+    - dataspace
+    - dashboard
+    - ui
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.org
+      name: wistefan
+    name: fdsc-dashboard
+    sources:
+    - https://github.com/wistefan/fdsc-dashboard
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/fdsc-dashboard-0.0.6/fdsc-dashboard-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v2
+    appVersion: 0.2.1
     created: "2026-04-28T11:38:11.383579052Z"
     dependencies:
     - name: common
@@ -11758,4 +11784,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-04-28T11:38:11.384447693Z"
+generated: "2026-04-29T05:02:57.831344881Z"
