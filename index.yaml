@@ -11356,6 +11356,31 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-registry-0.0.1/trusted-issuers-registry-0.0.1.tgz
     version: 0.0.1
   vcverifier:
+  - apiVersion: v2
+    appVersion: 6.11.0
+    created: "2026-04-29T09:40:33.225272017Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.0
+    description: A Helm chart for running the FIWARE VCVerifier.
+    digest: 68210bea33272eb474151836d8519118849bb9ac58360ca5742bf9b96b718b2f
+    home: https://github.com/fiware/vcverifier
+    keywords:
+    - FIWARE Data Space Connector
+    - FIWARE
+    - Verifiable Credentials
+    - OID4VP
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: vcverifier
+    sources:
+    - https://github.com/fiware/vcverifier
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-4.10.2/vcverifier-4.10.2.tgz
+    version: 4.10.2
   - apiVersion: v1
     appVersion: 6.11.0
     created: "2026-04-23T08:24:01.142939902Z"
@@ -11944,4 +11969,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-04-29T09:37:25.586031924Z"
+generated: "2026-04-29T09:40:33.226457562Z"
