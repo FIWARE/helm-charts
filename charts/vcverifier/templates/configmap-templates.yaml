@@ -1,3 +1,9 @@
+{{/*
+Chart-local ConfigMap (<fullname>-template, gated on .Values.templates):
+intentionally not migrated. This ConfigMap ships the vcverifier HTML /
+template payload and is not part of the common helper surface. See
+charts/vcverifier/CHANGELOG.md for details.
+*/}}
 {{- if .Values.templates }}
 apiVersion: v1
 kind: ConfigMap

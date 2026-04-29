@@ -66,7 +66,7 @@ spec:
     - port: {{ $port.port }}
       targetPort: {{ default $port.port $port.targetPort }}
       protocol: {{ default "TCP" $port.protocol }}
-      name: {{ default "http" $port.name }}
+      name: {{ default "http" $port.name | quote }}
     {{- end }}
   selector:
     {{- include "fiwareCommon.labels.matchLabels" $labelArgs | nindent 4 }}

@@ -1,3 +1,10 @@
+{{/*
+Chart-local ConfigMap (server.yaml configuration payload): intentionally
+not migrated. This ConfigMap renders the chart-specific verifier
+configuration (server, m2m, logging, verifier, configRepo, elsi blocks)
+and is not part of the common helper surface. See
+charts/vcverifier/CHANGELOG.md for details.
+*/}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
