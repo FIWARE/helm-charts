@@ -27,4 +27,4 @@ appVersion: "2.1.0"
 dependencies:
   - name: common
     repository: "https://fiware.github.io/helm-charts"
-    version: "0.1..0"
+    version: "0.1.0"
