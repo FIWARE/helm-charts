@@ -48,7 +48,7 @@ service:
   # -- service type      
   type: NodePort
   # -- port to be used by the service
-  port: 9090
+  port: "9090"
 
 readinessProbe:
   path: /actuator/health
