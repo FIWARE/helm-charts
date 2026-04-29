@@ -1,6 +1,6 @@
 # trusted-issuers-list
 
-![Version: 0.16.2](https://img.shields.io/badge/Version-0.16.2-informational?style=flat-square) ![AppVersion: 0.8.1](https://img.shields.io/badge/AppVersion-0.8.1-informational?style=flat-square)
+![Version: 0.18.2](https://img.shields.io/badge/Version-0.18.2-informational?style=flat-square) ![AppVersion: 0.8.1](https://img.shields.io/badge/AppVersion-0.8.1-informational?style=flat-square)
 
 A Helm chart for running the trusted-issuers-list on kubernetes.
 
@@ -8,11 +8,17 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| wistefan | <stefan.wiedemann@fiware.org> |  |
+| wistefan | <stefan.wiedemann@seamware.com> |  |
 
 ## Source Code
 
 * <https://github.com/fiware/trusted-issuers-list>
+
+## Requirements
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://fiware.github.io/helm-charts | common | 0.1.0 |
 
 ## Values
 
@@ -20,6 +26,7 @@ A Helm chart for running the trusted-issuers-list on kubernetes.
 |-----|------|---------|-------------|
 | additionalEnvVars | object | `{}` |  |
 | additonalEnvVars | list | `[]` | a list of additional env vars to be set, check the til docu for all available options |
+| autoscaling.apiVersion | string | `"v2"` | apiVersion of the HorizontalPodAutoscaler resource |
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |
