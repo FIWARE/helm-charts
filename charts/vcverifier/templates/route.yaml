@@ -1,3 +1,12 @@
+{{/*
+Chart-local Route: intentionally not migrated to common.route.tpl. This
+chart emits the cert-utils-operator.redhat-cop.io/certs-from-secret
+annotation when .Values.route.certificate is set and carries an explicit
+spec.port.targetPort: {{ .Values.service.port }} — neither of which is
+produced by the common helper. Migrating would change the rendered
+manifest and violate the ticket's "minimal breaking" requirement. See
+charts/vcverifier/CHANGELOG.md for details.
+*/}}
 {{- if .Values.route.enabled }}
 {{- $fullName := include "vcverifier.fullname" . -}}
 apiVersion: route.openshift.io/v1

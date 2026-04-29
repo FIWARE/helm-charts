@@ -1,6 +1,6 @@
 # vcverifier
 
-![Version: 4.9.0](https://img.shields.io/badge/Version-4.9.0-informational?style=flat-square) ![AppVersion: 6.11.0](https://img.shields.io/badge/AppVersion-6.11.0-informational?style=flat-square)
+![Version: 4.10.2](https://img.shields.io/badge/Version-4.10.2-informational?style=flat-square) ![AppVersion: 6.11.0](https://img.shields.io/badge/AppVersion-6.11.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE VCVerifier.
 
@@ -10,11 +10,19 @@ A Helm chart for running the FIWARE VCVerifier.
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| wistefan | <stefan.wiedemann@fiware.org> |  |
+| wistefan | <stefan.wiedemann@seamware.com> |  |
 
 ## Source Code
 
 * <https://github.com/fiware/vcverifier>
+
+## Requirements
+
+Kubernetes: `>= 1.19-0`
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://fiware.github.io/helm-charts | common | 0.1.0 |
 
 ## Values
 
