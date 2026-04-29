@@ -1,3 +1,11 @@
+{{/*
+Chart-local Deployment: intentionally not migrated to the common library
+chart. The container / env / probe / volume body (CA-bundle init
+container, signing-cert and client-cert volumes, templates ConfigMap
+mount, static volume) is chart-specific and has no counterpart in the
+common helper surface. See charts/vcverifier/CHANGELOG.md for the full
+"Common library chart migration" rationale.
+*/}}
 kind: Deployment
 apiVersion: apps/v1
 metadata:
