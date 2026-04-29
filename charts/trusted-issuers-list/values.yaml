@@ -93,6 +93,8 @@ deployment:
 autoscaling:
   #  -- should autoscaling be enabled for til
   enabled: false
+  # -- apiVersion of the HorizontalPodAutoscaler resource
+  apiVersion: "v2"
   # -- minimum number of running pods
   minReplicas: 1
   # -- maximum number of running pods
