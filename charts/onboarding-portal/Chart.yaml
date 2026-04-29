@@ -1,6 +1,6 @@
 apiVersion: v2
 name: onboarding-portal
-version: 1.2.6
+version: 1.3.2
 appVersion: 0.0.5
 type: application
 description: A Helm chart for the OnBoarding Portal
@@ -14,3 +14,15 @@ keywords:
   - Data Space Connector
 sources:
   - https://github.com/SEAMWARE/On-Boarding-Portal
+# The `common` library chart ships every shared helper
+# (names, labels, service-account resolution, existing-secret
+# resolution, service/ingress/route/HPA/secret/serviceaccount
+# bodies). It is consumed via the published FIWARE helm repo so
+# publishing workflows do not need a separate repository entry —
+# Helm packages the library alongside onboarding-portal in the
+# resulting `onboarding-portal-<version>.tgz`. See
+# charts/common/README.md.
+dependencies:
+  - name: common
+    repository: "https://fiware.github.io/helm-charts"
+    version: "0.1.0"
