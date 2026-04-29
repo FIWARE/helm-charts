@@ -10439,6 +10439,31 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/tm-forum-api-0.0.1/tm-forum-api-0.0.1.tgz
     version: 0.0.1
   trusted-issuers-list:
+  - apiVersion: v2
+    appVersion: 0.8.1
+    created: "2026-04-29T09:44:27.264783967Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.0
+    description: A Helm chart for running the trusted-issuers-list on kubernetes.
+    digest: 12d0bf5fadd8bd4b7bb31d29682053808f2891c0138a0e0d2e42d38dd061e21e
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - trusted-issuers-list
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: trusted-issuers-list
+    sources:
+    - https://github.com/fiware/trusted-issuers-list
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-list-0.18.2/trusted-issuers-list-0.18.2.tgz
+    version: 0.18.2
   - apiVersion: v1
     appVersion: 0.8.1
     created: "2026-04-09T07:46:04.060114168Z"
@@ -11999,4 +12024,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-04-29T09:42:50.119201237Z"
+generated: "2026-04-29T09:44:27.266201835Z"
