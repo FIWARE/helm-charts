@@ -1,7 +1,7 @@
 apiVersion: v2
 name: fdsc-dashboard
-version: 0.3.0
-appVersion: 0.3.0
+version: 0.5.0
+appVersion: 0.4.0
 kubeVersion: '>= 1.19-0'
 description: A Helm chart for running the fdsc-dashboard on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
@@ -26,4 +26,4 @@ maintainers:
 dependencies:
   - name: common
     repository: "https://fiware.github.io/helm-charts"
-    version: "0.1.0"
+    version: "0.1.1"

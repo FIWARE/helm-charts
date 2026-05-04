@@ -1,6 +1,6 @@
 # fdsc-dashboard
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![AppVersion: 0.3.0](https://img.shields.io/badge/AppVersion-0.3.0-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![AppVersion: 0.4.0](https://img.shields.io/badge/AppVersion-0.4.0-informational?style=flat-square)
 
 A Helm chart for running the fdsc-dashboard on kubernetes.
 
@@ -20,7 +20,7 @@ Kubernetes: `>= 1.19-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://fiware.github.io/helm-charts | common | 0.1.0 |
+| https://fiware.github.io/helm-charts | common | 0.1.1 |
 
 ## Values
 
@@ -33,6 +33,10 @@ Kubernetes: `>= 1.19-0`
 | apiUrls.odrl | string | `""` | URL of the ODRL PAP (VITE_ODRL_URL) |
 | apiUrls.til | string | `""` | URL of the Trusted Issuer List |
 | apiUrls.tir | string | `""` | URL of the Trusted Issuer Registry (VITE_TIR_URL) |
+| apisix | object | `{"adminKey":null,"dashboardUrl":"http://apisix-admin:9180/ui","enabled":false}` | configuration of apisix to be included into the dashboard |
+| apisix.adminKey | string | `nil` | token to be used for accessing the apisix apis(X-API-KEY) |
+| apisix.dashboardUrl | string | `"http://apisix-admin:9180/ui"` | url of the apisix dashboard ui |
+| apisix.enabled | bool | `false` | should apisix inclusion be enabled |
 | auth.config | object | `{"providers":[]}` | raw OIDC providers configuration, rendered as JSON into the chart's Secret when `existingSecret` is empty. Default: auth disabled (no providers). See upstream docs for the full schema. |
 | auth.existingSecret | string | `""` | name of a pre-existing Secret containing the `AUTH_CONFIG_JSON` key. When set, the chart will not render its own Secret and the Deployment will reference this Secret instead. |
 | auth.secretKey | string | `"AUTH_CONFIG_JSON"` | key inside the Secret (chart-rendered or `existingSecret`) to mount into the `AUTH_CONFIG_JSON` env var |
