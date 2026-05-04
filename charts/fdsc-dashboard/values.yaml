@@ -137,6 +137,15 @@ apiUrls:
   # image ignores this key at runtime.
   authToken: ""
 
+# -- configuration of apisix to be included into the dashboard
+apisix:
+  # -- should apisix inclusion be enabled
+  enabled: false
+  # -- url of the apisix dashboard ui
+  dashboardUrl: http://apisix-admin:9180/ui
+  # -- token to be used for accessing the apisix apis(X-API-KEY)
+  adminKey: 
+
 # -- a list of additional env vars to be set on the dashboard container, in
 # native env-var form. Useful for custom-built images that consume
 # additional configuration at runtime.
