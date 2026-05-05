@@ -34,6 +34,8 @@ oauth:
   aggregatorrole: Aggregator
   # -- Role defined in the IDM client app for organization admins of the BAE
   orgadminrole: orgAdmin
+  # -- Role defined in the IDM client app for organization certifiers of the BAE
+  certifierrole: certifier
   # -- IDP provider for passport strategy (fiware, keycloak, github, ...)
   provider: fiware
   # -- Whether the used FIWARE IDM is version 6 or lower
@@ -46,6 +48,9 @@ siop:
   enabled: false
   callbackPath: /auth/vc/callback
   clientId: marketplace-client
+  privateKey: ""
+  privateKeyPem: ""
+  signAlgorithm: "ES256"
   verifier:
     host: https://verifier.apps.fiware.fiware.dev
     qrCodePath: /api/v1/loginQR
@@ -600,6 +605,37 @@ bizEcosystemLogicProxy:
 
   # -- Allow users to edit party attributes
   allowEditParty: true
+
+  # -- Optional SIOP mode toggle, passed as BAE_LP_SIOP_IS_REDIRECTION
+  siopIsRedirection: ""
+  # -- Optional comma-separated operator list, passed as BAE_LP_SIOP_OPERATORS
+  siopOperators: ""
+
+  # -- Optional custom URLs used by logic-proxy backend flows and UI integrations
+  chatUrl: ""
+  searchUrl: ""
+  billingEngineUrl: ""
+  contactUsNotificationUrl: ""
+  paymentGateway: ""
+
+  # -- Optional endpoint host overrides
+  endpointQuoteHost: ""
+  endpointQuotePath: ""
+  endpointQuotePort: ""
+  endpointSearchHost: ""
+
+  # -- Optional feature flags
+  quoteEnabled: false
+  tenderingEnabled: false
+  purchaseEnabled: false
+  dataSpaceEnabled: false
+  launchValidationEnabled: false
+
+  # -- Optional metadata/schema settings
+  operatorId: ""
+  priceCompSchema: ""
+  offeringSchema: ""
+  partyLocation: ""
 
   # -- use initcontainers to wait for the apis to be deployed
   initContainers: true

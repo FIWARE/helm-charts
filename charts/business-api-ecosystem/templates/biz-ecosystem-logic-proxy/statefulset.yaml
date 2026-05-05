@@ -177,6 +177,8 @@ spec:
               value: {{ .Values.oauth.customerrole | quote }}
             - name: BAE_LP_OAUTH2_ORG_ADMIN_ROLE
               value: {{ .Values.oauth.orgadminrole | quote }}
+            - name: BAE_LP_OAUTH2_ORG_CERTIFIER_ROLE
+              value: {{ .Values.oauth.certifierrole | quote }}
             {{- if .Values.oauth.defaultRole }}
             - name: BAE_LP_OAUTH2_DEFAULT_ROLE
               value: {{ .Values.oauth.defaultRole | quote }}
@@ -323,9 +325,9 @@ spec:
             - name: BAE_EORI
               value: {{ .Values.bizEcosystemLogicProxy.token.identifier | quote }}
             {{- end }}
-            {{- if .Values.siop.enabled }}
             - name: BAE_LP_SIOP_ENABLED
               value: {{ .Values.siop.enabled | quote }}
+            {{- if .Values.siop.enabled }}
             - name: BAE_LP_SIOP_CLIENT_ID
               value: {{ .Values.siop.clientId | quote }}
             - name: BAE_LP_SIOP_VERIFIER_HOST
@@ -340,6 +342,88 @@ spec:
               value: {{ .Values.externalUrl }}{{ .Values.siop.callbackPath }}
             - name: BAE_LP_SIOP_ALLOWED_ROLES
               value: {{ join "," .Values.siop.allowedRoles }}
+            {{- if .Values.siop.privateKey }}
+            - name: BAE_LP_SIOP_PRIVATE_KEY
+              value: {{ .Values.siop.privateKey | quote }}
+            {{- end }}
+            {{- if .Values.siop.privateKeyPem }}
+            - name: BAE_LP_SIOP_PRIVATE_KEY_PEM
+              value: {{ .Values.siop.privateKeyPem | quote }}
+            {{- end }}
+            {{- if .Values.siop.signAlgorithm }}
+            - name: BAE_LP_SIO_SIGN_ALGORITHM
+              value: {{ .Values.siop.signAlgorithm | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.siopIsRedirection }}
+            - name: BAE_LP_SIOP_IS_REDIRECTION
+              value: {{ .Values.bizEcosystemLogicProxy.siopIsRedirection | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.siopOperators }}
+            - name: BAE_LP_SIOP_OPERATORS
+              value: {{ .Values.bizEcosystemLogicProxy.siopOperators | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.chatUrl }}
+            - name: BAE_LP_CHAT_URL
+              value: {{ .Values.bizEcosystemLogicProxy.chatUrl | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.searchUrl }}
+            - name: BAE_LP_SEARCH_URL
+              value: {{ .Values.bizEcosystemLogicProxy.searchUrl | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.billingEngineUrl }}
+            - name: BAE_LP_BILLING_ENGINE_URL
+              value: {{ .Values.bizEcosystemLogicProxy.billingEngineUrl | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.contactUsNotificationUrl }}
+            - name: BAE_LP_CONTACT_US_NOTIFICATION_URL
+              value: {{ .Values.bizEcosystemLogicProxy.contactUsNotificationUrl | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.paymentGateway }}
+            - name: BAE_LP_PAYMENT_GATEWAY
+              value: {{ .Values.bizEcosystemLogicProxy.paymentGateway | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.endpointSearchHost }}
+            - name: BAE_LP_ENDPOINT_SEARCH_HOST
+              value: {{ .Values.bizEcosystemLogicProxy.endpointSearchHost | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.endpointQuoteHost }}
+            - name: BAE_LP_ENDPOINT_QUOTE_HOST
+              value: {{ .Values.bizEcosystemLogicProxy.endpointQuoteHost | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.endpointQuotePath }}
+            - name: BAE_LP_ENDPOINT_QUOTE_PATH
+              value: {{ .Values.bizEcosystemLogicProxy.endpointQuotePath | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.endpointQuotePort }}
+            - name: BAE_LP_ENDPOINT_QUOTE_PORT
+              value: {{ .Values.bizEcosystemLogicProxy.endpointQuotePort | quote }}
+            {{- end }}
+            - name: BAE_LP_QUOTE_ENABLED
+              value: {{ .Values.bizEcosystemLogicProxy.quoteEnabled | quote }}
+            - name: BAE_LP_TENDERING_ENABLED
+              value: {{ .Values.bizEcosystemLogicProxy.tenderingEnabled | quote }}
+            - name: BAE_LP_PURCHASE_ENABLED
+              value: {{ .Values.bizEcosystemLogicProxy.purchaseEnabled | quote }}
+            - name: BAE_LP_DATASPACE_ENABLED
+              value: {{ .Values.bizEcosystemLogicProxy.dataSpaceEnabled | quote }}
+            - name: BAE_LP_LAUNCH_VALIDATION_ENABLED
+              value: {{ .Values.bizEcosystemLogicProxy.launchValidationEnabled | quote }}
+            {{- if .Values.bizEcosystemLogicProxy.operatorId }}
+            - name: BAE_LP_OPERATOR_ID
+              value: {{ .Values.bizEcosystemLogicProxy.operatorId | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.priceCompSchema }}
+            - name: BAE_LP_PRICE_COMP_SCHEMA
+              value: {{ .Values.bizEcosystemLogicProxy.priceCompSchema | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.offeringSchema }}
+            - name: BAE_LP_OFFERING_SCHEMA
+              value: {{ .Values.bizEcosystemLogicProxy.offeringSchema | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.partyLocation }}
+            - name: BAE_LP_PARTY_LOCATION
+              value: {{ .Values.bizEcosystemLogicProxy.partyLocation | quote }}
             {{- end }}
             {{- with .Values.bizEcosystemLogicProxy.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
