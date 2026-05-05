@@ -137,6 +137,10 @@ spec:
               value: {{ .Values.bizEcosystemChargingBackend.db.port | quote }}
             - name: BAE_CB_MONGO_DB
               value: {{ .Values.bizEcosystemChargingBackend.db.database | quote }}
+            {{- if .Values.bizEcosystemChargingBackend.db.authMechanism }}
+            - name: BAE_CB_MONGO_AUTH_MECHANISM
+              value: {{ .Values.bizEcosystemChargingBackend.db.authMechanism | quote }}
+            {{- end }}
             - name: BAE_CB_MONGO_USER
               value: {{ .Values.bizEcosystemChargingBackend.db.user | quote }}
             - name: BAE_CB_MONGO_PASS
@@ -172,6 +176,10 @@ spec:
             - name: BAE_CB_EMAIL_SMTP_PORT
               value: {{ .Values.bizEcosystemChargingBackend.email.smtp.port | quote }}
             {{- end }}
+            {{- end }}
+            {{- if .Values.bizEcosystemChargingBackend.notificationRecipientEmail }}
+            - name: BAE_CB_NOTIFICATION_RECIPIENT_EMAIL
+              value: {{ .Values.bizEcosystemChargingBackend.notificationRecipientEmail | quote }}
             {{- end }}
             - name: BAE_CB_VERIFY_REQUESTS
               value: {{ .Values.bizEcosystemChargingBackend.verifyRequests | quote }}
@@ -227,6 +235,18 @@ spec:
             - name: BAE_CB_CUSTOMER_BILL
               value: http://{{ $tmForum.customerBill.host }}:{{ $tmForum.customerBill.port }}{{ $tmForum.customerBill.path }}/
             {{- end }}
+            {{- if .Values.bizEcosystemChargingBackend.domeBillingUrl }}
+            - name: BAE_CB_DOME_BILLING_URL
+              value: {{ .Values.bizEcosystemChargingBackend.domeBillingUrl | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemChargingBackend.dpas.clientApiUrl }}
+            - name: BAE_CB_DPAS_CLIENT_API_URL
+              value: {{ .Values.bizEcosystemChargingBackend.dpas.clientApiUrl | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemChargingBackend.dpas.key }}
+            - name: DPAS_KEY
+              value: {{ .Values.bizEcosystemChargingBackend.dpas.key | quote }}
+            {{- end }}
             - name: BAE_CB_AUTHORIZE_SERVICE
               value: http://{{ include "bizEcosystemLogicProxy.fullhostname" . }}{{ .Values.bizEcosystemChargingBackend.authorizeServicePath }}
             {{- if .Values.bizEcosystemChargingBackend.plugins.enabled }}
@@ -242,6 +262,14 @@ spec:
             {{- end }}
             - name: BAE_CB_PROPAGATE_TOKEN
               value: {{ .Values.bizEcosystemChargingBackend.propagateToken | quote }}
+            {{- if .Values.bizEcosystemChargingBackend.operatorId }}
+            - name: BAE_CB_OPERATOR_ID
+              value: {{ .Values.bizEcosystemChargingBackend.operatorId | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemChargingBackend.relatedPartySchemaLocation }}
+            - name: BAE_CB_RELATED_PARTY_SCHEMA_LOCATION
+              value: {{ .Values.bizEcosystemChargingBackend.relatedPartySchemaLocation | quote }}
+            {{- end }}
             {{- if .Values.bizEcosystemChargingBackend.token.enabled }}
             - name: BAE_TOKEN_KEY
               value: {{ .Values.bizEcosystemChargingBackend.basePath }}/key.pem

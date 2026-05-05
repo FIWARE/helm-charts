@@ -306,6 +306,8 @@ bizEcosystemChargingBackend:
     password: pass
     # -- key of the password inside the secret
     secretKey: dbPassword
+    # -- optional MongoDB auth mechanism (e.g. SCRAM-SHA-1, SCRAM-SHA-256)
+    authMechanism: ""
 
   ## -- Mailing configuration
   email:
@@ -347,6 +349,25 @@ bizEcosystemChargingBackend:
 
   # -- Sets whether to expect the user access token in each request from the logic proxy
   propagateToken: true
+
+  # -- Optional identifier of the party operating the marketplace
+  operatorId: ""
+
+  # -- Optional schema URL used to extend entities that miss a relatedParty object
+  relatedPartySchemaLocation: ""
+
+  # -- Optional URL for DOME billing service integration
+  domeBillingUrl: ""
+
+  # -- Optional e-mail address receiving billing notifications
+  notificationRecipientEmail: ""
+
+  ## -- DPAS-specific settings
+  dpas:
+    # -- DPAS payment start endpoint
+    clientApiUrl: ""
+    # -- DPAS JWT verification key
+    key: ""
 
   ## -- Configuration for backing up the pvcs of the charging backend into a gcs-bucket
   backup:
