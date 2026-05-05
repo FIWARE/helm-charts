@@ -43,15 +43,6 @@ spec:
       {{- end }}
       initContainers:
         {{- include "business-api-ecosystem.initContainer.mongodb" ( dict "ctx" . "name" .Values.bizEcosystemChargingBackend.name "host" .Values.bizEcosystemChargingBackend.db.host ) | nindent 8 }}
-        {{- if .Values.bizEcosystemChargingBackend.initContainers }}
-        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-inventory" "path" "DSProductInventory" ) | nindent 8 }}
-        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-catalog" "path" "DSProductCatalog" ) | nindent 8 }}
-        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-ordering" "path" "DSProductOrdering" ) | nindent 8 }}
-        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-party" "path" "DSPartyManagement" ) | nindent 8 }}
-        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-billing" "path" "DSBillingManagement" ) | nindent 8 }}
-        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-customer" "path" "DSCustomerManagement" ) | nindent 8 }}
-        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-usage" "path" "DSUsageManagement" ) | nindent 8 }}
-        {{- end }}
       containers:
         {{- if .Values.bizEcosystemChargingBackend.backup.enabled }}
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemChargingBackend.name }}-backup
@@ -80,6 +71,9 @@ spec:
             {{- end }}
         {{- end }}
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemChargingBackend.name }}
+          {{- $legacyApis := (get .Values "bizEcosystemApis") | default (dict) }}
+          {{- $legacyTmForum := (get $legacyApis "tmForum") | default (dict) }}
+          {{- $tmForum := mergeOverwrite (deepCopy $legacyTmForum) (default (dict) .Values.tmForum) }}
           imagePullPolicy: {{ .Values.bizEcosystemChargingBackend.deployment.image.pullPolicy }}
           image: "{{ .Values.bizEcosystemChargingBackend.deployment.image.repository }}:{{ .Values.bizEcosystemChargingBackend.deployment.image.tag }}"
           ports:
@@ -189,68 +183,49 @@ spec:
               value: {{ .Values.bizEcosystemChargingBackend.loglevel | quote }}  
             - name: BAE_CB_MAX_UPLOAD_SIZE
               value: {{ .Values.bizEcosystemChargingBackend.maxUploadSize | quote }}
-            {{- if .Values.bizEcosystemApis.tmForum.catalog }}
+            {{- if $tmForum.catalog }}
             - name: BAE_CB_CATALOG
-              value: http://{{ .Values.bizEcosystemApis.tmForum.catalog.host }}:{{ .Values.bizEcosystemApis.tmForum.catalog.port }}{{ .Values.bizEcosystemApis.tmForum.catalog.path }}/
-            {{- else }}
-            - name: BAE_CB_CATALOG
-              value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductCatalog
+              value: http://{{ $tmForum.catalog.host }}:{{ $tmForum.catalog.port }}{{ $tmForum.catalog.path }}/
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.services }}
+            {{- if $tmForum.services }}
             - name: BAE_CB_SERVICE_CATALOG
-              value: http://{{ .Values.bizEcosystemApis.tmForum.services.host }}:{{ .Values.bizEcosystemApis.tmForum.services.port }}{{ .Values.bizEcosystemApis.tmForum.services.path }}/
-            {{- else }}
-            - name: BAE_CB_SERVICE_CATALOG
-              value: http://{{ include "bizEcosystemApis.fullhostname" . }}
+              value: http://{{ $tmForum.services.host }}:{{ $tmForum.services.port }}{{ $tmForum.services.path }}/
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.resources }}
+            {{- if $tmForum.resources }}
             - name: BAE_CB_RESOURCE_CATALOG
-              value: http://{{ .Values.bizEcosystemApis.tmForum.resources.host }}:{{ .Values.bizEcosystemApis.tmForum.resources.port }}{{ .Values.bizEcosystemApis.tmForum.resources.path }}/
-            {{- else }}
-            - name: BAE_CB_RESOURCE_CATALOG
-              value: http://{{ include "bizEcosystemApis.fullhostname" . }}
+              value: http://{{ $tmForum.resources.host }}:{{ $tmForum.resources.port }}{{ $tmForum.resources.path }}/
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.inventory }}
+            {{- if $tmForum.inventory }}
             - name: BAE_CB_INVENTORY
-              value: http://{{ .Values.bizEcosystemApis.tmForum.inventory.host }}:{{ .Values.bizEcosystemApis.tmForum.inventory.port }}{{ .Values.bizEcosystemApis.tmForum.inventory.path }}/
-            {{- else }}
-            - name: BAE_CB_INVENTORY
-              value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductInventory
+              value: http://{{ $tmForum.inventory.host }}:{{ $tmForum.inventory.port }}{{ $tmForum.inventory.path }}/
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.serviceInventory }}
+            {{- if $tmForum.serviceInventory }}
             - name: BAE_CB_SERVICE_INVENTORY
-              value: http://{{ .Values.bizEcosystemApis.tmForum.serviceInventory.host }}:{{ .Values.bizEcosystemApis.tmForum.serviceInventory.port }}{{ .Values.bizEcosystemApis.tmForum.serviceInventory.path }}/
-            {{- else }}
-            - name: BAE_CB_SERVICE_INVENTORY
-              value: http://{{ include "bizEcosystemApis.fullhostname" . }}
+              value: http://{{ $tmForum.serviceInventory.host }}:{{ $tmForum.serviceInventory.port }}{{ $tmForum.serviceInventory.path }}/
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.resourceInventory }}
+            {{- if $tmForum.resourceInventory }}
             - name: BAE_CB_RESOURCE_INVENTORY
-              value: http://{{ .Values.bizEcosystemApis.tmForum.resourceInventory.host }}:{{ .Values.bizEcosystemApis.tmForum.resourceInventory.port }}{{ .Values.bizEcosystemApis.tmForum.resourceInventory.path }}/
-            {{- else }}
-            - name: BAE_CB_RESOURCE_INVENTORY
-              value: http://{{ include "bizEcosystemApis.fullhostname" . }}
+              value: http://{{ $tmForum.resourceInventory.host }}:{{ $tmForum.resourceInventory.port }}{{ $tmForum.resourceInventory.path }}/
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.ordering }}
+            {{- if $tmForum.ordering }}
             - name: BAE_CB_ORDERING
-              value: http://{{ .Values.bizEcosystemApis.tmForum.ordering.host }}:{{ .Values.bizEcosystemApis.tmForum.ordering.port }}{{ .Values.bizEcosystemApis.tmForum.ordering.path }}/
-            {{- else }}
-            - name: BAE_CB_ORDERING
-              value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSProductOrdering
+              value: http://{{ $tmForum.ordering.host }}:{{ $tmForum.ordering.port }}{{ $tmForum.ordering.path }}/
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.billing }}
+            {{- if $tmForum.billing }}
             - name: BAE_CB_BILLING
-              value: http://{{ .Values.bizEcosystemApis.tmForum.billing.host }}:{{ .Values.bizEcosystemApis.tmForum.billing.port }}{{ .Values.bizEcosystemApis.tmForum.billing.path }}/  
-            {{- else }}
-            - name: BAE_CB_BILLING
-              value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSBillingManagement
+              value: http://{{ $tmForum.billing.host }}:{{ $tmForum.billing.port }}{{ $tmForum.billing.path }}/
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.usage }}
+            {{- if $tmForum.usage }}
             - name: BAE_CB_USAGE
-              value: http://{{ .Values.bizEcosystemApis.tmForum.usage.host }}:{{ .Values.bizEcosystemApis.tmForum.usage.port }}{{ .Values.bizEcosystemApis.tmForum.usage.path }}/         
-            {{- else }}
-            - name: BAE_CB_USAGE
-              value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSUsageManagement
+              value: http://{{ $tmForum.usage.host }}:{{ $tmForum.usage.port }}{{ $tmForum.usage.path }}/
+            {{- end }}
+            {{- if $tmForum.party }}
+            - name: BAE_CB_PARTY
+              value: http://{{ $tmForum.party.host }}:{{ $tmForum.party.port }}{{ $tmForum.party.path }}/
+            {{- end }}
+            {{- if $tmForum.customerBill }}
+            - name: BAE_CB_CUSTOMER_BILL
+              value: http://{{ $tmForum.customerBill.host }}:{{ $tmForum.customerBill.port }}{{ $tmForum.customerBill.path }}/
             {{- end }}
             - name: BAE_CB_AUTHORIZE_SERVICE
               value: http://{{ include "bizEcosystemLogicProxy.fullhostname" . }}{{ .Values.bizEcosystemChargingBackend.authorizeServicePath }}

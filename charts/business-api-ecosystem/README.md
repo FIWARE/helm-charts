@@ -27,53 +27,6 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| bizEcosystemApis.db.host | string | `"mysql"` |  |
-| bizEcosystemApis.db.password | string | `"pass"` |  |
-| bizEcosystemApis.deployment.additionalAnnotations | object | `{}` |  |
-| bizEcosystemApis.deployment.additionalLabels | object | `{}` |  |
-| bizEcosystemApis.deployment.affinity | object | `{}` |  |
-| bizEcosystemApis.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
-| bizEcosystemApis.deployment.image.repository | string | `"fiware/biz-ecosystem-apis"` |  |
-| bizEcosystemApis.deployment.image.tag | string | `"v8.0.0"` |  |
-| bizEcosystemApis.deployment.livenessProbe.failureThreshold | int | `3` |  |
-| bizEcosystemApis.deployment.livenessProbe.initialDelaySeconds | int | `120` |  |
-| bizEcosystemApis.deployment.livenessProbe.periodSeconds | int | `30` |  |
-| bizEcosystemApis.deployment.livenessProbe.successThreshold | int | `1` |  |
-| bizEcosystemApis.deployment.livenessProbe.timeoutSeconds | int | `30` |  |
-| bizEcosystemApis.deployment.nodeSelector | object | `{}` |  |
-| bizEcosystemApis.deployment.readinessProbe.failureThreshold | int | `3` |  |
-| bizEcosystemApis.deployment.readinessProbe.initialDelaySeconds | int | `61` |  |
-| bizEcosystemApis.deployment.readinessProbe.periodSeconds | int | `30` |  |
-| bizEcosystemApis.deployment.readinessProbe.successThreshold | int | `1` |  |
-| bizEcosystemApis.deployment.readinessProbe.timeoutSeconds | int | `30` |  |
-| bizEcosystemApis.deployment.replicaCount | int | `1` |  |
-| bizEcosystemApis.deployment.revisionHistoryLimit | int | `3` |  |
-| bizEcosystemApis.deployment.tolerations | list | `[]` |  |
-| bizEcosystemApis.deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` |  |
-| bizEcosystemApis.deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` |  |
-| bizEcosystemApis.deployment.updateStrategy.type | string | `"RollingUpdate"` |  |
-| bizEcosystemApis.enabled | bool | `true` |  |
-| bizEcosystemApis.fullnameOverride | string | `""` |  |
-| bizEcosystemApis.name | string | `"biz-ecosystem-apis"` |  |
-| bizEcosystemApis.port | int | `8080` |  |
-| bizEcosystemApis.securityContext | object | `{}` |  |
-| bizEcosystemApis.service.annotations | object | `{}` |  |
-| bizEcosystemApis.service.port | int | `8080` |  |
-| bizEcosystemApis.service.type | string | `"ClusterIP"` |  |
-| bizEcosystemApis.serviceAccount.annotations | object | `{}` |  |
-| bizEcosystemApis.serviceAccount.create | bool | `false` |  |
-| bizEcosystemApis.serviceAccount.name | string | `"ssc"` |  |
-| bizEcosystemApis.tmForum.billing | object | `{}` |  |
-| bizEcosystemApis.tmForum.catalog | object | `{}` |  |
-| bizEcosystemApis.tmForum.customer | object | `{}` |  |
-| bizEcosystemApis.tmForum.inventory | object | `{}` |  |
-| bizEcosystemApis.tmForum.ordering | object | `{}` |  |
-| bizEcosystemApis.tmForum.party | object | `{}` |  |
-| bizEcosystemApis.tmForum.resourceInventory | object | `{}` |  |
-| bizEcosystemApis.tmForum.resources | object | `{}` |  |
-| bizEcosystemApis.tmForum.serviceInventory | object | `{}` |  |
-| bizEcosystemApis.tmForum.services | object | `{}` |  |
-| bizEcosystemApis.tmForum.usage | object | `{}` |  |
 | bizEcosystemChargingBackend.authorizeServicePath | string | `"/authorizeService/apiKeys"` | Authorize service path of the logic proxy |
 | bizEcosystemChargingBackend.backup.bucketName | string | `"gs://my/bucket"` |  |
 | bizEcosystemChargingBackend.backup.enabled | bool | `false` |  |
@@ -253,6 +206,18 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | siop.ccs.defaultOidcScope | string | `"defaultScope"` | Default scope to be used from scopes below, if none is provided |
 | siop.ccs.enabeld | bool | `false` | is automatic credentials config registration enabled |
 | siop.ccs.endpoint | string | `"http://credentials-config-service:8080"` | Endpoint of the CCS |
+| tmForum.billing | object | `{}` |  |
+| tmForum.catalog | object | `{}` |  |
+| tmForum.customer | object | `{}` |  |
+| tmForum.customerBill | object | `{}` |  |
+| tmForum.inventory | object | `{}` |  |
+| tmForum.ordering | object | `{}` |  |
+| tmForum.party | object | `{}` |  |
+| tmForum.resourceInventory | object | `{}` |  |
+| tmForum.resources | object | `{}` |  |
+| tmForum.serviceInventory | object | `{}` |  |
+| tmForum.services | object | `{}` |  |
+| tmForum.usage | object | `{}` |  |
 | siop.clientId | string | `"marketplace-client"` |  |
 | siop.enabled | bool | `false` |  |
 | siop.verifier.host | string | `"https://verifier.apps.fiware.fiware.dev"` |  |

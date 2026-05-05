@@ -2,20 +2,6 @@
 Business API Ecosystem (FIWARE Marketplace) has been deployed
 =============================================================
 
-{{ if .Values.bizEcosystemApis.enabled }}
-Business API Ecosystem TMForum APIs
------------------------------------
-The Business API Ecosystem TMForum APIs can be accessed on the following DNS name and port from within your cluster:
-{{ include "bizEcosystemApis.fullhostname" . }}
-
-To connect from outside the K8s cluster:
-export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "business-api-ecosystem.name" . }},component={{ .Values.bizEcosystemApis.name | quote }}" -o jsonpath="{.items[0].metadata.name}")
-export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
-
-kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME {{ .Values.bizEcosystemApis.service.port }}:$CONTAINER_PORT
-{{- end }}
-
-
 {{ if .Values.bizEcosystemChargingBackend.enabled }}
 Business API Ecosystem Charging Backend API
 --------------------------------------------
