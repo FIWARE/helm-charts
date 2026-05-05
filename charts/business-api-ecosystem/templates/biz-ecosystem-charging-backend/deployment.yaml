@@ -51,7 +51,6 @@ spec:
         {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-billing" "path" "DSBillingManagement" ) | nindent 8 }}
         {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-customer" "path" "DSCustomerManagement" ) | nindent 8 }}
         {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.apiInitContainer\" . }}-usage" "path" "DSUsageManagement" ) | nindent 8 }}
-        {{- include "business-api-ecosystem.initContainer.rss" ( dict "ctx" . "name" "{{ include \"bizEcosystemChargingBackend.rssInitContainer\" . }}" ) | nindent 8 }}
         {{- end }}
       containers:
         {{- if .Values.bizEcosystemChargingBackend.backup.enabled }}
@@ -253,8 +252,6 @@ spec:
             - name: BAE_CB_USAGE
               value: http://{{ include "bizEcosystemApis.fullhostname" . }}/DSUsageManagement
             {{- end }}
-            - name: BAE_CB_RSS
-              value: http://{{ include "bizEcosystemRss.fullhostname" . }}/DSRevenueSharing
             - name: BAE_CB_AUTHORIZE_SERVICE
               value: http://{{ include "bizEcosystemLogicProxy.fullhostname" . }}{{ .Values.bizEcosystemChargingBackend.authorizeServicePath }}
             {{- if .Values.bizEcosystemChargingBackend.plugins.enabled }}

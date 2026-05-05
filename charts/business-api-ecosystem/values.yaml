@@ -131,21 +131,6 @@ initContainer:
     maxRetries: 60
     ## -- Sleep interval in s between each retry
     sleepInterval: 10
-  ## -- Wait for RSS
-  rss:
-    ## -- Name:
-    name: rss-wait
-    ## -- Image
-    image: curlimages/curl
-    ## -- Image pull policy
-    imagePullPolicy: IfNotPresent
-    ## -- Maximum number of retries to check for API avilability
-    maxRetries: 60
-    ## -- Sleep interval in s between each retry
-    sleepInterval: 10
-
-
-
 ## -- Configuration for biz-ecosystem-apis component
 ##
 bizEcosystemApis:
@@ -291,116 +276,6 @@ bizEcosystemApis:
     host: mysql
     ## -- password for connecting the database
     password: pass
-
-
-
-## -- Configuration for biz-ecosystem-rss component
-##
-bizEcosystemRss:
-  ## -- If false, will not be installed
-  enabled: true
-
-  ## -- Configure existing secret to be used for DB password
-  # existingSecret: rss-secret
-
-  ## -- Component name
-  name: biz-ecosystem-rss
-
-  ## -- option to override the fullname config in the _helpers.tpl
-  fullnameOverride: ""
-
-  ## -- configuration for the k8s service to access the RSS API
-  service:
-    ## -- service type
-    type: ClusterIP
-    ## -- port to be used by the service
-    port: 8080
-    ## -- addtional annotations, if required
-    annotations: {}
-
-  ## -- Service account
-  serviceAccount:
-    create: false
-    name: ssc
-    annotations: {}
-
-  ## -- Security context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  securityContext: {}
-
-  ## -- deployment specific configuration
-  deployment:
-    ## -- initial number of target replications, can be different if autoscaling is enabled
-    replicaCount: 1
-    ## -- number of old replicas to be retained
-    revisionHistoryLimit: 3
-    ## -- configuration of the update strategy
-    updateStrategy:
-      ## -- type of the update
-      type: RollingUpdate
-      ## -- new pods will be added gradually
-      rollingUpdate:
-        ## -- number of pods that can be created above the desired amount while updating
-        maxSurge: 1
-        ## -- number of pods that can be unavailable while updating
-        maxUnavailable: 0
-    ## -- configuration of the image to be used
-    image:
-      ## -- BAE RSS image name
-      ## ref: https://hub.docker.com/r/fiware/biz-ecosystem-rss
-      repository: fiware/biz-ecosystem-rss
-      ## -- tag of the image to be used
-      tag: v8.0.0
-      ## -- specification of the image pull policy
-      pullPolicy: IfNotPresent
-    ## -- additional labels for the deployment, if required
-    additionalLabels: {}
-    ## -- additional annotations for the deployment, if required
-    additionalAnnotations: {}
-    ## -- selector template
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-    nodeSelector: {}
-    ## -- tolerations template
-    ## ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-    tolerations: []
-    ## -- affinity template
-    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-    affinity: {}
-    ## -- liveness and readiness probes
-    # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-    livenessProbe:
-      initialDelaySeconds: 120
-      periodSeconds: 30
-      successThreshold: 1
-      failureThreshold: 3
-      timeoutSeconds: 30
-    readinessProbe:
-      initialDelaySeconds: 61
-      periodSeconds: 30
-      successThreshold: 1
-      failureThreshold: 3
-      timeoutSeconds: 30
-
-  ## -- port that the RSS container uses
-  port: 8080
-
-  ## -- database configuration for RSS
-  db:
-    ## -- host of the database to be used
-    host: mysql
-    ## -- port of the database to be used
-    port: 3306
-    ## -- URL connection string of the database to be used
-    url: jdbc:mysql://mysql:3306/RSS
-    ## -- driver class name for connection to the database to be used
-    driver: com.mysql.jdbc.Driver
-    ## -- username for connecting the database
-    user: root
-    ## -- password for connecting the database
-    password: pass
-
-
-
 ## -- Configuration for biz-ecosystem-charging-backend component
 ##
 bizEcosystemChargingBackend:

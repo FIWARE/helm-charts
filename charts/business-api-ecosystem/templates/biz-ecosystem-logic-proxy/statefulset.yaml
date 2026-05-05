@@ -303,10 +303,6 @@ spec:
             - name: BAE_LP_ENDPOINT_SERVICE_PORT
               value: {{ .Values.bizEcosystemApis.service.port | quote }}
             {{- end }}
-            - name: BAE_LP_ENDPOINT_RSS_HOST
-              value: {{ include "bizEcosystemRss.hostnameonly" . }}
-            - name: BAE_LP_ENDPOINT_RSS_PORT
-              value: {{ .Values.bizEcosystemRss.service.port | quote }}
             {{- if .Values.bizEcosystemApis.tmForum.usage }}
             - name: BAE_LP_ENDPOINT_USAGE_HOST
               value: {{ .Values.bizEcosystemApis.tmForum.usage.host }}
