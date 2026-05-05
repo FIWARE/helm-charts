@@ -90,6 +90,12 @@ spec:
               value: {{ .Values.apiUrls.ccs }}
             - name: ODRL_API_URL
               value: {{ .Values.apiUrls.odrl }}
+            {{- if .Values.apisix.enabled }}
+            - name: APISIX_DASHBOARD_URL
+              value: {{ .Values.apisix.dashboardUrl }}
+            - name: APISIX_ADMIN_API_KEY
+              value: {{ .Values.apisix.adminKey }}
+            {{- end }}
             {{- with .Values.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
