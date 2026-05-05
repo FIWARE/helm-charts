@@ -43,3 +43,17 @@ data:
       {{- with .Values.deployment.elsi }}
       {{- toYaml . | nindent 6 }}
       {{- end }}
+
+    {{- if .Values.deployment.database }}
+    database:
+      {{- with .Values.deployment.database }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+    {{- end }}
+
+    {{- if .Values.deployment.configServer }}
+    configServer:
+      {{- with .Values.deployment.configServer }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+    {{- end }}
