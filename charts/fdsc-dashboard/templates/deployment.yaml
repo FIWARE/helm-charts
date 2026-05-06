@@ -96,6 +96,12 @@ spec:
             - name: APISIX_ADMIN_API_KEY
               value: {{ .Values.apisix.adminKey }}
             {{- end }}
+            {{- if .Values.grafana.enabled }}
+            - name: GRAFANA_URL
+              value: {{ .Values.grafana.url }}
+            - name: GRAFANA_PANELS_JSON
+              value: {{ .Values.grafana.panelsJson }}
+            {{- end }}
             {{- with .Values.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
