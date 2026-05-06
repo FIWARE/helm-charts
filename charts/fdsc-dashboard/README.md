@@ -1,6 +1,6 @@
 # fdsc-dashboard
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![AppVersion: 0.4.0](https://img.shields.io/badge/AppVersion-0.4.0-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![AppVersion: 0.5.0](https://img.shields.io/badge/AppVersion-0.5.0-informational?style=flat-square)
 
 A Helm chart for running the fdsc-dashboard on kubernetes.
 
@@ -74,6 +74,10 @@ Kubernetes: `>= 1.19-0`
 | deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
 | deployment.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | fullnameOverride | string | `""` | option to override the fullname config in the _helpers.tpl |
+| grafana | object | `{"enabled":false,"panelsJson":"[{\"title\":\"Example Panel\",\"path\":\"/d/apisix-routes/apisix-routes?orgId=1&from=now-1h&to=now&timezone=browser&var-datasource=PBFA97CFB590B2093&var-route=$__all&var-service=$__all&refresh=30s\",\"span\":12}]\n","url":"http://grafana:80"}` | configuration of grafana dashboard(s) to be included in the dashboard |
+| grafana.enabled | bool | `false` | should grafana inclusion be enabled |
+| grafana.panelsJson | string | `"[{\"title\":\"Example Panel\",\"path\":\"/d/apisix-routes/apisix-routes?orgId=1&from=now-1h&to=now&timezone=browser&var-datasource=PBFA97CFB590B2093&var-route=$__all&var-service=$__all&refresh=30s\",\"span\":12}]\n"` | configuration of the panels to be included |
+| grafana.url | string | `"http://grafana:80"` | url of grafana to be embedded |
 | ingress.annotations | object | `{}` | annotations to be added to the ingress |
 | ingress.enabled | bool | `false` | should there be an ingress to connect the fdsc-dashboard with the public internet |
 | ingress.hosts | list | `[]` | all hosts to be provided |
