@@ -100,7 +100,8 @@ spec:
             - name: GRAFANA_URL
               value: {{ .Values.grafana.url }}
             - name: GRAFANA_PANELS_JSON
-              value: {{ .Values.grafana.panelsJson }}
+              value: |
+                {{ .Values.grafana.panelsJson }}
             {{- end }}
             {{- with .Values.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
