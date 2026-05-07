@@ -124,6 +124,25 @@ deployment:
     keyPath:
     # -- expiration time in minutes for JWT tokens
     jwtExpiration: 30
+    refreshToken:
+      # -- Enabled controls whether the verifier issues refresh tokens alongside
+      # -- access tokens. When false (the default), no refresh tokens are generated
+      # -- and the refresh_token grant type is rejected.
+      enabled: false
+      # -- Expiration is the lifetime of issued refresh tokens, in minutes.
+      # -- Defaults to 2880 (48 hours). Only meaningful when Enabled is true.
+      expiration: 2880
+      # -- CleanupInterval is how often (in seconds) expired refresh token rows are
+      # -- purged from the database. 0 or negative disables cleanup.
+      cleanupInterval: "60"
+      # --  HashSalt is the HMAC-SHA256 key used when hashing refresh tokens before
+      # storage. Tokens are always hashed; this field controls whether the key
+      # is stable across restarts. If empty, server will rotate it and invalidate tokens when restarted
+      # hashSalt: ''
+      # saltSecret:
+      #  name: ''
+      #  key: ''
+
   else: {}
   # -- config repo configuration
   configRepo:

@@ -97,6 +97,15 @@ spec:
           {{- end }}
           {{- end }}
           {{- end }}
+          {{- if and .Values.deployment.verifier.refreshToken .Values.deployment.verifier.refreshToken.enabled .Values.deployment.verifier.refreshToken.saltSecret .Values.deployment.verifier.refreshToken.saltSecret.name }}
+          {{- with .Values.deployment.verifier.refreshToken.saltSecret }}
+            - name: VCVERIFIER_VERIFIER_REFRESH_TOKEN_HASH_SALT
+              valueFrom:
+                secretKeyRef:
+                  key: {{ .key }}
+                  name: {{ .name }}
+          {{- end }}
+          {{- end }}
           {{- if .Values.deployment.additionalEnvVars }}
             {{- with .Values.deployment.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}

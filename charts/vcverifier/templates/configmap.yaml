@@ -31,7 +31,11 @@ data:
 
     verifier:
       {{- with .Values.deployment.verifier }}
-      {{- toYaml . | nindent 6 }}
+      {{- $verifier := omit . "refreshToken" }}
+      {{- if .refreshToken }}
+      {{- $_ := set $verifier "refreshToken" (omit .refreshToken "saltSecret") }}
+      {{- end }}
+      {{- toYaml $verifier | nindent 6 }}
       {{- end }}
 
     configRepo:
