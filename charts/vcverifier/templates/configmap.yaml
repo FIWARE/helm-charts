@@ -31,7 +31,11 @@ data:
 
     verifier:
       {{- with .Values.deployment.verifier }}
-      {{- toYaml . | nindent 6 }}
+      {{- $verifier := omit . "refreshToken" }}
+      {{- if .refreshToken }}
+      {{- $_ := set $verifier "refreshToken" (omit .refreshToken "saltSecret") }}
+      {{- end }}
+      {{- toYaml $verifier | nindent 6 }}
       {{- end }}
 
     configRepo:
@@ -46,9 +50,7 @@ data:
 
     {{- if .Values.deployment.database }}
     database:
-      {{- with .Values.deployment.database }}
-      {{- toYaml . | nindent 6 }}
-      {{- end }}
+      {{- toYaml (omit .Values.deployment.database "existingSecret") | nindent 6 }}
     {{- end }}
 
     {{- if .Values.deployment.configServer }}
