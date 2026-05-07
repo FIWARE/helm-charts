@@ -71,6 +71,10 @@ spec:
           ports:
             - containerPort: {{ .Values.deployment.port }}
               name: backend
+            {{- if .Values.deployment.configServer.enabled }}
+            - containerPort: {{ .Values.deployment.configServer.port }}
+              name: admin
+            {{- end }}
           env:
           {{- if .Values.deployment.alternativeConfig }}
             - name: CONFIG_FILE
