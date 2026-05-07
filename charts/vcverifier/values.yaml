@@ -128,7 +128,25 @@ deployment:
   # -- config repo configuration
   configRepo:
     configEndpoint: http://credentials-config:8080/
-
+  database:
+    # database backend: postgres, mysql, or sqlite
+    type: postgres
+    # hostname of the database server (default: localhost)
+    host: ''
+    # port of the database server (default: 5432)
+    port: 5432
+    # database name; for SQLite: file path or ":memory:" for an in-memory database
+    name: ''
+    # database user
+    user: ''
+    # database password — never write plaintext in production; use a secret
+    # password: ''
+    # TLS mode: "disable" / "require" / etc. (postgres) or "true" / "false" / "skip-verify" (mysql)
+    sslMode: disable
+    existingSecret:
+      name: ''
+      usernameKey: ''
+      passwordKey: ''
   # -- Configuration for certificates used by the verifier
   serverCertificates:
     # -- Private key used by the verifier to sign credentials.

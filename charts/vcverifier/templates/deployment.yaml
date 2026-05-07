@@ -79,6 +79,24 @@ spec:
             - name: CONFIG_FILE
               value: /configs/server.yaml
           {{- end }}
+          {{- if and .Values.deployment.database .Values.deployment.database.existingSecret .Values.deployment.database.existingSecret.name }}
+          {{- with .Values.deployment.database.existingSecret }}
+          {{- if .usernameKey }}
+            - name: VCVERIFIER_DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: {{ .usernameKey }}
+                  name: {{ .name }}
+          {{- end }}
+          {{- if .passwordKey }}
+            - name: VCVERIFIER_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: {{ .passwordKey }}
+                  name: {{ .name }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
           {{- if .Values.deployment.additionalEnvVars }}
             {{- with .Values.deployment.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}

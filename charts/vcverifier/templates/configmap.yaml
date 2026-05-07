@@ -46,9 +46,7 @@ data:
 
     {{- if .Values.deployment.database }}
     database:
-      {{- with .Values.deployment.database }}
-      {{- toYaml . | nindent 6 }}
-      {{- end }}
+      {{- toYaml (omit .Values.deployment.database "existingSecret") | nindent 6 }}
     {{- end }}
 
     {{- if .Values.deployment.configServer }}
