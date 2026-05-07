@@ -1,6 +1,6 @@
 # vcverifier
 
-![Version: 4.10.7](https://img.shields.io/badge/Version-4.10.7-informational?style=flat-square) ![AppVersion: 6.12.2](https://img.shields.io/badge/AppVersion-6.12.2-informational?style=flat-square)
+![Version: 4.11.0](https://img.shields.io/badge/Version-4.11.0-informational?style=flat-square) ![AppVersion: 6.12.5](https://img.shields.io/badge/AppVersion-6.12.5-informational?style=flat-square)
 
 A Helm chart for running the FIWARE VCVerifier.
 
@@ -22,7 +22,7 @@ Kubernetes: `>= 1.19-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://fiware.github.io/helm-charts | common | 0.1.0 |
+| https://fiware.github.io/helm-charts | common | 0.1.1 |
 
 ## Values
 
@@ -32,6 +32,22 @@ Kubernetes: `>= 1.19-0`
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
 | deployment.configRepo | object | `{"configEndpoint":"http://credentials-config:8080/"}` | config repo configuration |
+| deployment.configServer | object | `{"enabled":false,"idleTimeout":120,"port":8090,"readTimeout":5,"shutdownTimeout":5,"writeTimeout":10}` | ConfigServer holds the configuration for the second HTTP server that serves the Credentials Config Service (CCS) REST API. |
+| deployment.configServer.enabled | bool | `false` | Whether the config server is enabled |
+| deployment.configServer.idleTimeout | int | `120` | IdleTimeout is the maximum amount of time to wait for the next request (seconds) |
+| deployment.configServer.port | int | `8090` | Port to bind the config server |
+| deployment.configServer.readTimeout | int | `5` | ReadTimeout is the maximum duration for reading the entire request (seconds) |
+| deployment.configServer.shutdownTimeout | int | `5` | ShutdownTimeout is the time allowed for active requests to finish during shutdown (seconds) |
+| deployment.configServer.writeTimeout | int | `10` | WriteTimeout is the maximum duration before timing out writes of the response (seconds) |
+| deployment.database.existingSecret.name | string | `""` |  |
+| deployment.database.existingSecret.passwordKey | string | `""` |  |
+| deployment.database.existingSecret.usernameKey | string | `""` |  |
+| deployment.database.host | string | `""` |  |
+| deployment.database.name | string | `""` |  |
+| deployment.database.port | int | `5432` |  |
+| deployment.database.sslMode | string | `"disable"` |  |
+| deployment.database.type | string | `"postgres"` |  |
+| deployment.database.user | string | `""` |  |
 | deployment.else | object | `{}` |  |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/vcverifier"` | image name |
@@ -87,7 +103,7 @@ Kubernetes: `>= 1.19-0`
 | deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
 | deployment.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
-| deployment.verifier | object | `{"authorizationEndpoint":null,"clientIdentification":{"certificatePath":null,"id":null,"keyAlgorithm":null,"keyPath":null,"kid":null},"did":"did:key:myverifier","generateKey":true,"jwtExpiration":30,"keyAlgorithm":"RS256","keyPath":null,"policyConfig":{},"sessionExpiry":30,"supportedModes":["urlEncoded"],"tilCacheExpiry":30,"tirAddress":"http://my-tir.org","tirCacheExpiry":30,"validationMode":"none"}` | configuration required for the verifier functionality |
+| deployment.verifier | object | `{"authorizationEndpoint":null,"clientIdentification":{"certificatePath":null,"id":null,"keyAlgorithm":null,"keyPath":null,"kid":null},"did":"did:key:myverifier","generateKey":true,"jwtExpiration":30,"keyAlgorithm":"RS256","keyPath":null,"policyConfig":{},"refreshToken":{"cleanupInterval":"60","enabled":false,"expiration":2880},"sessionExpiry":30,"supportedModes":["urlEncoded"],"tilCacheExpiry":30,"tirAddress":"http://my-tir.org","tirCacheExpiry":30,"validationMode":"none"}` | configuration required for the verifier functionality |
 | deployment.verifier.authorizationEndpoint | string | `nil` | path of the authorizationEndpoint to be provided in the .well-known/openid-configuration |
 | deployment.verifier.clientIdentification | object | `{"certificatePath":null,"id":null,"keyAlgorithm":null,"keyPath":null,"kid":null}` | Identification to be used for the verifier. |
 | deployment.verifier.clientIdentification.certificatePath | string | `nil` | optional path to the certifcate to embed in the jwt header |
@@ -101,6 +117,9 @@ Kubernetes: `>= 1.19-0`
 | deployment.verifier.keyAlgorithm | string | `"RS256"` | algorithm to be used for the jwt signatures - currently supported: RS256 and ES256 |
 | deployment.verifier.keyPath | string | `nil` | path to the private key for jwt signatures |
 | deployment.verifier.policyConfig | object | `{}` | policies that shall be checked |
+| deployment.verifier.refreshToken.cleanupInterval | string | `"60"` | purged from the database. 0 or negative disables cleanup. |
+| deployment.verifier.refreshToken.enabled | bool | `false` | and the refresh_token grant type is rejected. |
+| deployment.verifier.refreshToken.expiration | int | `2880` | Defaults to 2880 (48 hours). Only meaningful when Enabled is true. |
 | deployment.verifier.sessionExpiry | int | `30` | expiry of a login-session in seconds |
 | deployment.verifier.supportedModes | list | `["urlEncoded"]` | supported request modes - currently 'urlEncoded', 'byValue' and 'byReference' are available. In case of byValue, the keyPath has to be set. |
 | deployment.verifier.tilCacheExpiry | int | `30` | expiry of the til-cache entries |
