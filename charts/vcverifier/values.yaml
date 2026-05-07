@@ -147,6 +147,21 @@ deployment:
       name: ''
       usernameKey: ''
       passwordKey: ''
+  # -- ConfigServer holds the configuration for the second HTTP server that serves the Credentials Config Service (CCS) REST API.
+  configServer:
+    # -- Whether the config server is enabled
+    enabled: false
+    # -- Port to bind the config server
+    port: 8090
+    # -- ReadTimeout is the maximum duration for reading the entire request (seconds)
+    readTimeout: 5
+    # -- WriteTimeout is the maximum duration before timing out writes of the response (seconds)
+    writeTimeout: 10
+    # -- IdleTimeout is the maximum amount of time to wait for the next request (seconds)
+    idleTimeout: 120
+    # -- ShutdownTimeout is the time allowed for active requests to finish during shutdown (seconds)
+    shutdownTimeout: 5
+
   # -- Configuration for certificates used by the verifier
   serverCertificates:
     # -- Private key used by the verifier to sign credentials.
