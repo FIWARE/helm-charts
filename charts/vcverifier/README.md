@@ -1,6 +1,6 @@
 # vcverifier
 
-![Version: 4.12.1](https://img.shields.io/badge/Version-4.12.1-informational?style=flat-square) ![AppVersion: 6.12.5](https://img.shields.io/badge/AppVersion-6.12.5-informational?style=flat-square)
+![Version: 4.12.2](https://img.shields.io/badge/Version-4.12.2-informational?style=flat-square) ![AppVersion: 6.12.5](https://img.shields.io/badge/AppVersion-6.12.5-informational?style=flat-square)
 
 A Helm chart for running the FIWARE VCVerifier.
 
@@ -22,12 +22,16 @@ Kubernetes: `>= 1.19-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://fiware.github.io/helm-charts | common | 0.1.1 |
+| https://fiware.github.io/helm-charts | common | 0.1.2 |
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| configIngress.annotations | object | `{}` | annotations to be added to the ingress |
+| configIngress.enabled | bool | `false` | should there be an ingress to connect the config verifier with the public internet |
+| configIngress.hosts | list | `[]` | all hosts to be provided |
+| configIngress.tls | list | `[]` | configure the ingress' tls |
 | deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
