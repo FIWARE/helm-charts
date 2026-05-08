@@ -293,7 +293,26 @@ ingress:
     # - secretName: bae-as-tls
       # hosts:
         # - vcverifier.fiware.org
-
+configIngress:
+  # -- should there be an ingress to connect the config verifier with the public internet
+  enabled: false
+  # -- annotations to be added to the ingress
+  annotations: {}
+    # kubernetes.io/ingress.class: "ambassador"
+    ## example annotations, allowing cert-manager to automatically create tls-certs and forcing everything to use ssl.
+    # kubernetes.io/tls-acme: "true"
+    # ingress.kubernetes.io/ssl-redirect: "true"
+  # -- all hosts to be provided
+  hosts: []
+    ## provide a hosts and the paths that should be available
+    # - host: localhost
+      # paths:
+      # - /
+  # -- configure the ingress' tls
+  tls: []
+    # - secretName: bae-as-tls
+      # hosts:
+        # - config.vcverifier.fiware.org
 # -- if the style of the login-page should be altered, templates can be provided here.
 templates:
   # for example:
