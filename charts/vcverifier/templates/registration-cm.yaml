@@ -1,0 +1,42 @@
+{{- if and (eq .Values.registration.enabled true) (.Values.registration) }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "vcverifier.fullname" . }}-registration
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{ include "vcverifier.labels" . | nindent 4 }}
+data:
+  init.sh: |-
+    set -e  # Exit on error
+    {{- if .Values.registration.prepScript }}
+    # Prep script
+    {{ .Values.registration.prepScript }}
+    {{- end }}
+
+    {{- if .Values.registration.host }}
+    HOST="{{ .Values.registration.host | trimSuffix "/" }}"
+    {{- else if .Values.deployment.configServer.enabled }}
+    HOST="http://{{ include "fiwareCommon.names.fullname" (dict "context" $) }}:{{ .Values.deployment.configServer.port }}"
+    {{- else }}
+    HOST="{{ .Values.deployment.configRepo.configEndpoint | trimSuffix "/" }}"
+    {{- end }}
+    {{- range .Values.registration.services }}
+
+    curl -f -X 'POST' "${HOST}/service" \
+      -H 'accept: */*' \
+      -H 'Content-Type: application/json' \
+      -d @- <<EOF
+    {
+      "id": "{{ .id }}",
+      "defaultOidcScope": "{{ .defaultOidcScope }}",
+      {{- if .authorizationType }}
+      "authorizationType": "{{ .authorizationType }}",
+      {{- end }}
+      "oidcScopes": {{ .oidcScopes | toJson }}
+    }
+    EOF
+    {{- end }}
+
+{{- end }}

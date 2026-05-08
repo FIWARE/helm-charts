@@ -309,3 +309,44 @@ templates:
 
 static:
   enabled: false
+
+# -- Configuration for the post-install registration job. Requires one of: deployment.configServer.enabled=true, deployment.configRepo.configEndpoint, or registration.host to be set.
+registration:
+  # -- Enable the registration job
+  enabled: false
+  job:
+    image:
+      # -- Image registry and repository for the registration job (curl-based)
+      registry: quay.io/curl/curl
+      # -- Image tag for the registration job
+      tag: 8.1.2
+      # -- Image pull policy for the registration job
+      pullPolicy: IfNotPresent
+    # -- Annotations for the registration Job resource. Defaults configure it as a Helm post-install hook that is deleted on success.
+    annotations:
+      "helm.sh/hook": post-install
+      "helm.sh/hook-delete-policy": hook-succeeded
+    # -- Additional labels to add to the registration Job resource
+    additionalLabels: {}
+    # -- Number of retries before marking the job as failed
+    backoffLimit: 10
+    # -- Seconds after the job finishes before it is automatically deleted. Set to 0 to delete immediately.
+    ttlSecondsAfterFinished: 120
+    # -- Maximum duration in seconds for the job to run before it is terminated
+    activeDeadlineSeconds: 300
+    # -- Resource requests and limits for the registration job container
+    resources: {}
+    # -- Service account name to use for the registration job pod
+    serviceAccountName: ""
+    # -- Image pull secrets for the registration job pod
+    imagePullSecrets: []
+    # -- Extra environment variables to add to the registration job container
+    extraEnv: []
+    # - name: MY_VAR
+    #   value: "my-value"
+  # -- List of credential config services to register. Each entry is posted to the CCS /service endpoint.
+  services: []
+  # -- Shell script snippet executed before the registration curl calls
+  prepScript: ''
+  # -- Override the host used for registration HTTP requests. If empty, falls back to deployment.configServer (when enabled) or deployment.configRepo.configEndpoint.
+  host: ''

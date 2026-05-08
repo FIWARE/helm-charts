@@ -1,0 +1,56 @@
+{{- if and (eq .Values.registration.enabled true) (.Values.registration) }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "vcverifier.fullname" . }}-job
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{ include "vcverifier.labels" . | nindent 4 }}
+    {{- with .Values.registration.job.additionalLabels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.registration.job.annotations }}
+  annotations:
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.registration.job.ttlSecondsAfterFinished }}
+  ttlSecondsAfterFinished: {{ .Values.registration.job.ttlSecondsAfterFinished }}
+  {{- end }}
+  {{- if .Values.registration.job.activeDeadlineSeconds }}
+  activeDeadlineSeconds: {{ .Values.registration.job.activeDeadlineSeconds }}
+  {{- end }}
+  backoffLimit: {{ .Values.registration.job.backoffLimit }}
+  template:
+    spec:
+      {{- with .Values.registration.job.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.registration.job.serviceAccountName }}
+      serviceAccountName: {{ .Values.registration.job.serviceAccountName }}
+      {{- end }}
+      containers:
+        - name: register-credential-config
+          image: {{ .Values.registration.job.image.registry }}:{{ .Values.registration.job.image.tag }}
+          imagePullPolicy: {{ .Values.registration.job.image.pullPolicy }}
+          command: [ "/bin/sh", "-c", "/bin/init.sh" ]
+          {{- with .Values.registration.job.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.registration.job.extraEnv }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: registration
+              mountPath: /bin/init.sh
+              subPath: init.sh
+      volumes:
+        - name: registration
+          configMap:
+            name: {{ include "vcverifier.fullname" . }}-registration
+            defaultMode: 0755
+      restartPolicy: Never
+{{- end }}
