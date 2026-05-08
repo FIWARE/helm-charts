@@ -27,6 +27,8 @@ Arguments (dict):
                 (the consumer chart's `.Values.service.port`).
   component   - optional component name, forwarded to the name / label
                 helpers for multi-component charts.
+  serviceName - optional backend service name override. Defaults to the
+                computed fullName when omitted.
 
 The helper renders nothing when `ingress.enabled` is false, so the
 consumer chart can `include` it unconditionally from a dedicated
@@ -40,6 +42,7 @@ ingress.yaml file.
 {{- $labelArgs := dict "context" $ctx "component" $component -}}
 {{- if $ingress.enabled -}}
 {{- $fullName := include "fiwareCommon.names.fullname" $labelArgs -}}
+{{- $serviceName := default $fullName .serviceName -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -75,7 +78,7 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: {{ $fullName }}
+              name: {{ $serviceName }}
               port:
                 number: {{ $servicePort }}
         {{- end }}
