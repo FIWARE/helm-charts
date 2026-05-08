@@ -86,7 +86,7 @@ spec:
           {{- if and .Values.deployment.database .Values.deployment.database.existingSecret .Values.deployment.database.existingSecret.name }}
           {{- with .Values.deployment.database.existingSecret }}
           {{- if .usernameKey }}
-            - name: VCVERIFIER_DATABASE_USERNAME
+            - name: VCVERIFIER_DATABASE_USER
               valueFrom:
                 secretKeyRef:
                   key: {{ .usernameKey }}
