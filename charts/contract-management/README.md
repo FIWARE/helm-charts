@@ -1,6 +1,6 @@
 # contract-management
 
-![Version: 3.5.27](https://img.shields.io/badge/Version-3.5.27-informational?style=flat-square) ![AppVersion: 3.3.8](https://img.shields.io/badge/AppVersion-3.3.8-informational?style=flat-square)
+![Version: 3.5.28](https://img.shields.io/badge/Version-3.5.28-informational?style=flat-square) ![AppVersion: 3.3.8](https://img.shields.io/badge/AppVersion-3.3.8-informational?style=flat-square)
 
 A Helm chart for running the contract-management on kubernetes.
 
