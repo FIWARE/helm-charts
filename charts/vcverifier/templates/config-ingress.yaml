@@ -1,0 +1,9 @@
+{{- if .Values.deployment.configServer.enabled }}
+{{- $svcName := include "fiwareCommon.names.fullname" $ }}
+{{- include "fiwareCommon.ingress.tpl" (dict
+      "context"     $
+      "ingress"     .Values.configIngress
+      "servicePort" .Values.deployment.configServer.port
+      "serviceName" $svcName
+      "component"   "config") }}
+{{- end }}
