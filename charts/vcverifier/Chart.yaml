@@ -1,7 +1,7 @@
 apiVersion: v2
 name: vcverifier
-version: 4.12.2
-appVersion: 6.12.5
+version: 4.12.3
+appVersion: 6.12.6
 kubeVersion: '>= 1.19-0'
 home: https://github.com/fiware/vcverifier
 description: A Helm chart for running the FIWARE VCVerifier.
