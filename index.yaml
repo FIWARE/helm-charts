@@ -555,6 +555,34 @@ entries:
   business-api-ecosystem:
   - apiVersion: v2
     appVersion: 9.0.1
+    created: "2026-05-11T12:18:29.088330382Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
+      Marketplace) on Kubernetes
+    digest: 229599f7f34311146b3fb23136f6f7bd4b1a565e10aa6c551586ec62496f64cf
+    home: https://business-api-ecosystem.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - marketplace
+    - bae
+    - tmforum
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: business-api-ecosystem
+    sources:
+    - https://github.com/FIWARE-TMForum/Business-API-Ecosystem
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-0.11.32/business-api-ecosystem-0.11.32.tgz
+    version: 0.11.32
+  - apiVersion: v2
+    appVersion: 9.0.1
     created: "2026-05-11T07:28:16.19841879Z"
     dependencies:
     - name: common
@@ -7232,6 +7260,32 @@ entries:
   odrl-pap:
   - apiVersion: v2
     appVersion: 1.4.3
+    created: "2026-05-11T12:18:29.548810984Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the odrl-pap on kubernetes.
+    digest: fcf76a556c605f1d307efd1d9043ac8589342be202738fd25226a231691bd370
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - Data Space Connector
+    - DSBA
+    - Authorization
+    - ODRL
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: Stefan Wiedemann
+    name: odrl-pap
+    sources:
+    - https://github.com/wistefan/odrl-pap
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/odrl-pap-2.10.9/odrl-pap-2.10.9.tgz
+    version: 2.10.9
+  - apiVersion: v2
+    appVersion: 1.4.3
     created: "2026-05-11T12:11:52.581427529Z"
     dependencies:
     - name: common
@@ -12894,4 +12948,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-05-11T12:11:52.582416795Z"
+generated: "2026-05-11T12:18:29.549851616Z"
