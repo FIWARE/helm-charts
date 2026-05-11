@@ -1,6 +1,6 @@
 apiVersion: v2
 name: fdsc-edc
-version: 0.2.2
+version: 0.2.4
 appVersion: 0.1.7
 description: A Helm chart for running the fdsc-edc on kubernetes.
 icon: https://fiware.github.io/catalogue/img/fiware.png
@@ -21,4 +21,4 @@ maintainers:
 dependencies:
   - name: common
     repository: "https://fiware.github.io/helm-charts"
-    version: "0.1.0"
+    version: "0.1.2"
