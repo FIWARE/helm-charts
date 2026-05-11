@@ -25,11 +25,11 @@ spec:
         {{- with .Values.deployment.additionalLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if .Values.deployment.additionalAnnotations -}}
+      {{- if .Values.deployment.additionalAnnotations }}
       annotations:
         prometheus.io/scrape: {{ .Values.management.prometheus.enabled | quote }}
         prometheus.io/path: /q/metrics
-        prometheus.io/port: {{ .Values.management.port }}
+        prometheus.io/port: {{ .Values.management.port | quote }}
         {{- with .Values.deployment.additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
