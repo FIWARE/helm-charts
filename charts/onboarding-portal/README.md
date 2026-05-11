@@ -1,6 +1,6 @@
 # onboarding-portal
 
-![Version: 1.3.2](https://img.shields.io/badge/Version-1.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.5](https://img.shields.io/badge/AppVersion-0.0.5-informational?style=flat-square)
+![Version: 1.3.4](https://img.shields.io/badge/Version-1.3.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 A Helm chart for the OnBoarding Portal
 
@@ -18,7 +18,7 @@ A Helm chart for the OnBoarding Portal
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://fiware.github.io/helm-charts | common | 0.1.0 |
+| https://fiware.github.io/helm-charts | common | 0.1.2 |
 
 ## Values
 

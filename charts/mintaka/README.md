@@ -1,6 +1,6 @@
 # mintaka
 
-![Version: 0.4.5](https://img.shields.io/badge/Version-0.4.5-informational?style=flat-square) ![AppVersion: 0.0.5](https://img.shields.io/badge/AppVersion-0.0.5-informational?style=flat-square)
+![Version: 0.4.6](https://img.shields.io/badge/Version-0.4.6-informational?style=flat-square) ![AppVersion: 0.0.5](https://img.shields.io/badge/AppVersion-0.0.5-informational?style=flat-square)
 
 A Helm chart for running mintaka on kubernetes.
 
@@ -20,7 +20,7 @@ Kubernetes: `>= 1.19-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://fiware.github.io/helm-charts | common | 0.1.0 |
+| https://fiware.github.io/helm-charts | common | 0.1.2 |
 
 ## Values
 

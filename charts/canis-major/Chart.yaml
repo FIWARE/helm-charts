@@ -1,6 +1,6 @@
 apiVersion: v2
 name: canis-major
-version: 0.2.1
+version: 0.2.2
 appVersion: 1.5.15
 kubeVersion: '>= 1.19-0'
 description: A Helm chart for running canis major on kubernetes.
