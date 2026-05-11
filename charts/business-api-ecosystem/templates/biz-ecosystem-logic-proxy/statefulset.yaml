@@ -24,7 +24,7 @@ spec:
         {{- with .Values.bizEcosystemLogicProxy.statefulset.additionalLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if .Values.bizEcosystemLogicProxy.statefulset.additionalAnnotations -}}
+      {{- if .Values.bizEcosystemLogicProxy.statefulset.additionalAnnotations }}
       annotations:
         {{- with .Values.bizEcosystemLogicProxy.statefulset.additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
