@@ -5,13 +5,13 @@ metadata:
   name: {{ include "vcverifier.fullname" . }}-job
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{ include "vcverifier.labels" . | nindent 4 }}
+    {{- include "vcverifier.labels" . | nindent 4 }}
     {{- with .Values.registration.job.additionalLabels }}
-    {{ toYaml . | nindent 4 }}
+    {{- toYaml . | nindent 4 }}
     {{- end }}
   {{- with .Values.registration.job.annotations }}
   annotations:
-    {{ toYaml . | nindent 4 }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   {{- if .Values.registration.job.ttlSecondsAfterFinished }}
