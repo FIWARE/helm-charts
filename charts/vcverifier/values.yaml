@@ -151,21 +151,21 @@ deployment:
     # database backend: postgres, mysql, or sqlite
     type: postgres
     # hostname of the database server (default: localhost)
-    host: ''
+    host: ""
     # port of the database server (default: 5432)
     port: 5432
     # database name; for SQLite: file path or ":memory:" for an in-memory database
-    name: ''
+    name: ""
     # database user
-    user: ''
+    user: ""
     # database password — never write plaintext in production; use a secret
     # password: ''
     # TLS mode: "disable" / "require" / etc. (postgres) or "true" / "false" / "skip-verify" (mysql)
     sslMode: disable
     existingSecret:
-      name: ''
-      usernameKey: ''
-      passwordKey: ''
+      name: ""
+      usernameKey: ""
+      passwordKey: ""
   # -- ConfigServer holds the configuration for the second HTTP server that serves the Credentials Config Service (CCS) REST API.
   configServer:
     # -- Whether the config server is enabled
@@ -216,12 +216,12 @@ deployment:
   # -- additional annotations for the deployment, if required
   additionalAnnotations: {}
   # resources:
-    # limits:
-      # cpu: 100m
-      # memory: 128Mi
-    # requests:
-      # cpu: 100m
-      # memory: 128Mi
+  # limits:
+  # cpu: 100m
+  # memory: 128Mi
+  # requests:
+  # cpu: 100m
+  # memory: 128Mi
   # -- selector template
   # ref: https://kubernetes.io/docs/user-guide/node-selection/
   nodeSelector: {}
@@ -267,7 +267,7 @@ route:
     termination: edge
   # -- configuration for certificate generation.
   # -- see: https://github.com/FIWARE-Ops/fiware-gitops/blob/master/doc/ROUTES.md
-  certificate: { }
+  certificate: {}
   #   issuer:
   #     kind: ClusterIssuer
   #     name: letsencrypt-aws-prod
@@ -286,13 +286,13 @@ ingress:
   hosts: []
     ## provide a hosts and the paths that should be available
     # - host: localhost
-      # paths:
-      # - /
+    # paths:
+    # - /
   # -- configure the ingress' tls
   tls: []
     # - secretName: bae-as-tls
-      # hosts:
-        # - vcverifier.fiware.org
+    # hosts:
+    # - vcverifier.fiware.org
 configIngress:
   # -- should there be an ingress to connect the config verifier with the public internet
   enabled: false
@@ -306,13 +306,13 @@ configIngress:
   hosts: []
     ## provide a hosts and the paths that should be available
     # - host: localhost
-      # paths:
-      # - /
+    # paths:
+    # - /
   # -- configure the ingress' tls
   tls: []
     # - secretName: bae-as-tls
-      # hosts:
-        # - config.vcverifier.fiware.org
+    # hosts:
+    # - config.vcverifier.fiware.org
 # -- if the style of the login-page should be altered, templates can be provided here.
 templates:
   # for example:
@@ -363,9 +363,32 @@ registration:
     extraEnv: []
     # - name: MY_VAR
     #   value: "my-value"
+    # -- init container that polls the registration HOST (derived the same way as the job script) until it returns HTTP 2xx
+    initContainers:
+      waitForHost:
+        # -- enable the wait-for-host init container
+        enabled: false
+        # -- path to append to the derived HOST when polling (e.g. /health)
+        path: ""
+        # -- seconds to wait between attempts
+        interval: 5
+        # -- image used for the curl-based wait container
+        image:
+          # -- image repository
+          repository: quay.io/curl/curl
+          # -- image tag
+          tag: 8.1.2
+          # -- image pull policy
+          pullPolicy: IfNotPresent
+    # -- extra init containers appended verbatim to the pod spec (after waitForHost)
+    extraInitContainers: []
+    # - name: my-init
+    #   image: busybox
+    #   command: ["sh", "-c", "echo hello"]
+
   # -- List of credential config services to register. Each entry is posted to the CCS /service endpoint.
   services: []
   # -- Shell script snippet executed before the registration curl calls
-  prepScript: ''
+  prepScript: ""
   # -- Override the host used for registration HTTP requests. If empty, falls back to deployment.configServer (when enabled) or deployment.configRepo.configEndpoint.
-  host: ''
+  host: ""
