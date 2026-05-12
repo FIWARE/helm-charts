@@ -367,9 +367,9 @@ registration:
     initContainers:
       waitForHost:
         # -- enable the wait-for-host init container
-        enabled: false
+        enabled: enable
         # -- path to append to the derived HOST when polling (e.g. /health)
-        path: ""
+        path: /health
         # -- seconds to wait between attempts
         interval: 5
         # -- image used for the curl-based wait container
