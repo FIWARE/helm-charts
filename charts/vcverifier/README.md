@@ -1,6 +1,6 @@
 # vcverifier
 
-![Version: 4.12.5](https://img.shields.io/badge/Version-4.12.5-informational?style=flat-square) ![AppVersion: 6.12.6](https://img.shields.io/badge/AppVersion-6.12.6-informational?style=flat-square)
+![Version: 4.12.6](https://img.shields.io/badge/Version-4.12.6-informational?style=flat-square) ![AppVersion: 6.12.6](https://img.shields.io/badge/AppVersion-6.12.6-informational?style=flat-square)
 
 A Helm chart for running the FIWARE VCVerifier.
 
@@ -136,7 +136,7 @@ Kubernetes: `>= 1.19-0`
 | ingress.hosts | list | `[]` | all hosts to be provided |
 | ingress.tls | list | `[]` | configure the ingress' tls |
 | nameOverride | string | `""` |  |
-| registration | object | `{"enabled":false,"host":"","job":{"activeDeadlineSeconds":300,"additionalLabels":{},"annotations":{"helm.sh/hook":"post-install","helm.sh/hook-delete-policy":"hook-succeeded"},"backoffLimit":10,"extraEnv":[],"extraInitContainers":[],"image":{"pullPolicy":"IfNotPresent","registry":"quay.io/curl/curl","tag":"8.1.2"},"imagePullSecrets":[],"initContainers":{"waitForHost":{"enabled":false,"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/curl/curl","tag":"8.1.2"},"interval":5,"path":""}},"resources":{},"serviceAccountName":"","ttlSecondsAfterFinished":120},"prepScript":"","services":[]}` | Configuration for the post-install registration job. Requires one of: deployment.configServer.enabled=true, deployment.configRepo.configEndpoint, or registration.host to be set. |
+| registration | object | `{"enabled":false,"host":"","job":{"activeDeadlineSeconds":300,"additionalLabels":{},"annotations":{"helm.sh/hook":"post-install","helm.sh/hook-delete-policy":"hook-succeeded"},"backoffLimit":10,"extraEnv":[],"extraInitContainers":[],"image":{"pullPolicy":"IfNotPresent","registry":"quay.io/curl/curl","tag":"8.1.2"},"imagePullSecrets":[],"initContainers":{"waitForHost":{"enabled":"enable","image":{"pullPolicy":"IfNotPresent","repository":"quay.io/curl/curl","tag":"8.1.2"},"interval":5,"path":"/health"}},"resources":{},"serviceAccountName":"","ttlSecondsAfterFinished":120},"prepScript":"","services":[]}` | Configuration for the post-install registration job. Requires one of: deployment.configServer.enabled=true, deployment.configRepo.configEndpoint, or registration.host to be set. |
 | registration.enabled | bool | `false` | Enable the registration job |
 | registration.host | string | `""` | Override the host used for registration HTTP requests. If empty, falls back to deployment.configServer (when enabled) or deployment.configRepo.configEndpoint. |
 | registration.job.activeDeadlineSeconds | int | `300` | Maximum duration in seconds for the job to run before it is terminated |
@@ -149,14 +149,14 @@ Kubernetes: `>= 1.19-0`
 | registration.job.image.registry | string | `"quay.io/curl/curl"` | Image registry and repository for the registration job (curl-based) |
 | registration.job.image.tag | string | `"8.1.2"` | Image tag for the registration job |
 | registration.job.imagePullSecrets | list | `[]` | Image pull secrets for the registration job pod |
-| registration.job.initContainers | object | `{"waitForHost":{"enabled":false,"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/curl/curl","tag":"8.1.2"},"interval":5,"path":""}}` | init container that polls the registration HOST (derived the same way as the job script) until it returns HTTP 2xx |
-| registration.job.initContainers.waitForHost.enabled | bool | `false` | enable the wait-for-host init container |
+| registration.job.initContainers | object | `{"waitForHost":{"enabled":"enable","image":{"pullPolicy":"IfNotPresent","repository":"quay.io/curl/curl","tag":"8.1.2"},"interval":5,"path":"/health"}}` | init container that polls the registration HOST (derived the same way as the job script) until it returns HTTP 2xx |
+| registration.job.initContainers.waitForHost.enabled | string | `"enable"` | enable the wait-for-host init container |
 | registration.job.initContainers.waitForHost.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/curl/curl","tag":"8.1.2"}` | image used for the curl-based wait container |
 | registration.job.initContainers.waitForHost.image.pullPolicy | string | `"IfNotPresent"` | image pull policy |
 | registration.job.initContainers.waitForHost.image.repository | string | `"quay.io/curl/curl"` | image repository |
 | registration.job.initContainers.waitForHost.image.tag | string | `"8.1.2"` | image tag |
 | registration.job.initContainers.waitForHost.interval | int | `5` | seconds to wait between attempts |
-| registration.job.initContainers.waitForHost.path | string | `""` | path to append to the derived HOST when polling (e.g. /health) |
+| registration.job.initContainers.waitForHost.path | string | `"/health"` | path to append to the derived HOST when polling (e.g. /health) |
 | registration.job.resources | object | `{}` | Resource requests and limits for the registration job container |
 | registration.job.serviceAccountName | string | `""` | Service account name to use for the registration job pod |
 | registration.job.ttlSecondsAfterFinished | int | `120` | Seconds after the job finishes before it is automatically deleted. Set to 0 to delete immediately. |
