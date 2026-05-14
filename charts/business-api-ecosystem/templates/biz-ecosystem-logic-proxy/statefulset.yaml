@@ -328,6 +328,7 @@ spec:
             - name: BAE_LP_SIOP_ENABLED
               value: {{ .Values.siop.enabled | quote }}
             {{- if .Values.siop.enabled }}
+            {{- $siopPrivateKeySecret := .Values.siop.privateKeySecret | default (dict) }}
             - name: BAE_LP_SIOP_CLIENT_ID
               value: {{ .Values.siop.clientId | quote }}
             - name: BAE_LP_SIOP_VERIFIER_HOST
@@ -342,7 +343,13 @@ spec:
               value: {{ .Values.externalUrl }}{{ .Values.siop.callbackPath }}
             - name: BAE_LP_SIOP_ALLOWED_ROLES
               value: {{ join "," .Values.siop.allowedRoles }}
-            {{- if .Values.siop.privateKey }}
+            {{- if and $siopPrivateKeySecret.name $siopPrivateKeySecret.key }}
+            - name: BAE_LP_SIOP_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $siopPrivateKeySecret.name | quote }}
+                  key: {{ $siopPrivateKeySecret.key | quote }}
+            {{- else if .Values.siop.privateKey }}
             - name: BAE_LP_SIOP_PRIVATE_KEY
               value: {{ .Values.siop.privateKey | quote }}
             {{- end }}

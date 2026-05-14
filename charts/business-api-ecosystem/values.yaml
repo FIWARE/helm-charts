@@ -48,6 +48,10 @@ siop:
   enabled: false
   callbackPath: /auth/vc/callback
   clientId: marketplace-client
+  # -- Kubernetes Secret reference for BAE_LP_SIOP_PRIVATE_KEY (preferred over plain siop.privateKey)
+  # privateKeySecret:
+  #   name: bae-secret
+  #   key: privateKey
   privateKey: ""
   privateKeyPem: ""
   signAlgorithm: "ES256"
