@@ -86,7 +86,7 @@ spec:
           {{- end }}
           livenessProbe:
             httpGet:
-              path: /charging/api/assetManagement/currencyCodes
+              path: /charging/api/health/
               port: {{ .Values.bizEcosystemChargingBackend.port}}
             initialDelaySeconds: {{ .Values.bizEcosystemChargingBackend.deployment.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bizEcosystemChargingBackend.deployment.livenessProbe.periodSeconds }}
@@ -95,7 +95,7 @@ spec:
             timeoutSeconds: {{ .Values.bizEcosystemChargingBackend.deployment.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
-              path: /charging/api/assetManagement/currencyCodes
+              path: /charging/api/health/
               port: {{ .Values.bizEcosystemChargingBackend.port}}
             initialDelaySeconds: {{ .Values.bizEcosystemChargingBackend.deployment.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.bizEcosystemChargingBackend.deployment.readinessProbe.periodSeconds }}

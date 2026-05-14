@@ -44,7 +44,7 @@ spec:
         {{- end }}
         {{- include "business-api-ecosystem.initContainer.mongodb" ( dict "ctx" . "name" .Values.bizEcosystemLogicProxy.name "host" .Values.bizEcosystemLogicProxy.db.host ) | nindent 8 }}
         {{- if .Values.bizEcosystemLogicProxy.initContainers }}
-        {{- include "business-api-ecosystem.initContainer.charging" ( dict "ctx" . "name" (printf "%s-%s-charging" .Values.bizEcosystemLogicProxy.name .Values.initContainer.apis.name) "path" "charging/api/assetManagement/currencyCodes" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.charging" ( dict "ctx" . "name" (printf "%s-%s-charging" .Values.bizEcosystemLogicProxy.name .Values.initContainer.apis.name) "path" "charging/api/health/" ) | nindent 8 }}
         {{- end }}
         {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
         - name: {{ .Values.bizEcosystemLogicProxy.name }}-theme-init
