@@ -74,6 +74,7 @@ spec:
           {{- $legacyApis := (get .Values "bizEcosystemApis") | default (dict) }}
           {{- $legacyTmForum := (get $legacyApis "tmForum") | default (dict) }}
           {{- $tmForum := mergeOverwrite (deepCopy $legacyTmForum) (default (dict) .Values.tmForum) }}
+          {{- $paypal := .Values.bizEcosystemChargingBackend.paypal | default (dict) }}
           imagePullPolicy: {{ .Values.bizEcosystemChargingBackend.deployment.image.pullPolicy }}
           image: "{{ .Values.bizEcosystemChargingBackend.deployment.image.repository }}:{{ .Values.bizEcosystemChargingBackend.deployment.image.tag }}"
           ports:
@@ -122,9 +123,9 @@ spec:
           env:
             - name: BAE_CB_PAYMENT_METHOD
               value: {{ .Values.bizEcosystemChargingBackend.payment.method | quote }}
-            {{- if .Values.bizEcosystemChargingBackend.paypal }}
+            {{- if or $paypal.clientId $paypal.clientSecret }}
             - name: BAE_CB_PAYPAL_CLIENT_ID
-              value: {{ .Values.bizEcosystemChargingBackend.paypal.clientId | quote }}
+              value: {{ $paypal.clientId | quote }}
             - name: BAE_CB_PAYPAL_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:

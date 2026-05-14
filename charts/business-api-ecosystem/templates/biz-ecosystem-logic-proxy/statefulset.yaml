@@ -165,7 +165,7 @@ spec:
                   name: {{ include "bizEcosystemLogicProxy.secretName" . }}
                   key: oauthClientSecret
             {{- end }}
-            {{- if .Values.oauth.cliencallbackPath }}
+            {{- if .Values.oauth.callbackPath }}
             - name: BAE_LP_OAUTH2_CALLBACK
               value: {{ .Values.externalUrl }}{{ .Values.oauth.callbackPath }}
             {{- end }}
