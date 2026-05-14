@@ -365,8 +365,8 @@ bizEcosystemChargingBackend:
   # -- Optional schema URL used to extend entities that miss a relatedParty object
   relatedPartySchemaLocation: ""
 
-  # -- Optional URL for DOME billing service integration
-  domeBillingUrl: ""
+  # -- Optional URL for billing service integration
+  billingUrl: ""
 
   # -- Optional e-mail address receiving billing notifications
   notificationRecipientEmail: ""

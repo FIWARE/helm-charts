@@ -69,7 +69,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` |  |
 | bizEcosystemChargingBackend.deployment.updateStrategy.type | string | `"RollingUpdate"` |  |
 | bizEcosystemChargingBackend.deployment.updateStrategyPVC.type | string | `"Recreate"` |  |
-| bizEcosystemChargingBackend.domeBillingUrl | string | `""` | Optional URL for DOME billing service integration |
+| bizEcosystemChargingBackend.billingUrl | string | `""` | Optional URL for billing service integration |
 | bizEcosystemChargingBackend.dpas.clientApiUrl | string | `""` | DPAS payment start endpoint |
 | bizEcosystemChargingBackend.dpas.key | string | `""` | DPAS JWT verification key |
 | bizEcosystemChargingBackend.email.mail | string | `"charging@email.com"` |  |

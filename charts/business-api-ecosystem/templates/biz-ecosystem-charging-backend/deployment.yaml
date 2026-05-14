@@ -236,9 +236,9 @@ spec:
             - name: BAE_CB_CUSTOMER_BILL
               value: http://{{ $tmForum.customerBill.host }}:{{ $tmForum.customerBill.port }}{{ $tmForum.customerBill.path }}/
             {{- end }}
-            {{- if .Values.bizEcosystemChargingBackend.domeBillingUrl }}
+            {{- if .Values.bizEcosystemChargingBackend.billingUrl }}
             - name: BAE_CB_DOME_BILLING_URL
-              value: {{ .Values.bizEcosystemChargingBackend.domeBillingUrl | quote }}
+              value: {{ .Values.bizEcosystemChargingBackend.billingUrl | quote }}
             {{- end }}
             {{- if .Values.bizEcosystemChargingBackend.dpas.clientApiUrl }}
             - name: BAE_CB_DPAS_CLIENT_API_URL
