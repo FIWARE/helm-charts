@@ -194,47 +194,47 @@ spec:
               value: {{ .Values.bizEcosystemChargingBackend.maxUploadSize | quote }}
             {{- if $tmForum.catalog }}
             - name: BAE_CB_CATALOG
-              value: http://{{ $tmForum.catalog.host }}:{{ $tmForum.catalog.port }}{{ $tmForum.catalog.path }}/
+              value: http://{{ $tmForum.catalog.host }}:{{ $tmForum.catalog.port }}{{ trimSuffix "/" $tmForum.catalog.path }}
             {{- end }}
             {{- if $tmForum.services }}
             - name: BAE_CB_SERVICE_CATALOG
-              value: http://{{ $tmForum.services.host }}:{{ $tmForum.services.port }}{{ $tmForum.services.path }}/
+              value: http://{{ $tmForum.services.host }}:{{ $tmForum.services.port }}{{ trimSuffix "/" $tmForum.services.path }}
             {{- end }}
             {{- if $tmForum.resources }}
             - name: BAE_CB_RESOURCE_CATALOG
-              value: http://{{ $tmForum.resources.host }}:{{ $tmForum.resources.port }}{{ $tmForum.resources.path }}/
+              value: http://{{ $tmForum.resources.host }}:{{ $tmForum.resources.port }}{{ trimSuffix "/" $tmForum.resources.path }}
             {{- end }}
             {{- if $tmForum.inventory }}
             - name: BAE_CB_INVENTORY
-              value: http://{{ $tmForum.inventory.host }}:{{ $tmForum.inventory.port }}{{ $tmForum.inventory.path }}/
+              value: http://{{ $tmForum.inventory.host }}:{{ $tmForum.inventory.port }}{{ trimSuffix "/" $tmForum.inventory.path }}
             {{- end }}
             {{- if $tmForum.serviceInventory }}
             - name: BAE_CB_SERVICE_INVENTORY
-              value: http://{{ $tmForum.serviceInventory.host }}:{{ $tmForum.serviceInventory.port }}{{ $tmForum.serviceInventory.path }}/
+              value: http://{{ $tmForum.serviceInventory.host }}:{{ $tmForum.serviceInventory.port }}{{ trimSuffix "/" $tmForum.serviceInventory.path }}
             {{- end }}
             {{- if $tmForum.resourceInventory }}
             - name: BAE_CB_RESOURCE_INVENTORY
-              value: http://{{ $tmForum.resourceInventory.host }}:{{ $tmForum.resourceInventory.port }}{{ $tmForum.resourceInventory.path }}/
+              value: http://{{ $tmForum.resourceInventory.host }}:{{ $tmForum.resourceInventory.port }}{{ trimSuffix "/" $tmForum.resourceInventory.path }}
             {{- end }}
             {{- if $tmForum.ordering }}
             - name: BAE_CB_ORDERING
-              value: http://{{ $tmForum.ordering.host }}:{{ $tmForum.ordering.port }}{{ $tmForum.ordering.path }}/
+              value: http://{{ $tmForum.ordering.host }}:{{ $tmForum.ordering.port }}{{ trimSuffix "/" $tmForum.ordering.path }}
             {{- end }}
             {{- if $tmForum.billing }}
             - name: BAE_CB_BILLING
-              value: http://{{ $tmForum.billing.host }}:{{ $tmForum.billing.port }}{{ $tmForum.billing.path }}/
+              value: http://{{ $tmForum.billing.host }}:{{ $tmForum.billing.port }}{{ trimSuffix "/" $tmForum.billing.path }}
             {{- end }}
             {{- if $tmForum.usage }}
             - name: BAE_CB_USAGE
-              value: http://{{ $tmForum.usage.host }}:{{ $tmForum.usage.port }}{{ $tmForum.usage.path }}/
+              value: http://{{ $tmForum.usage.host }}:{{ $tmForum.usage.port }}{{ trimSuffix "/" $tmForum.usage.path }}
             {{- end }}
             {{- if $tmForum.party }}
             - name: BAE_CB_PARTY
-              value: http://{{ $tmForum.party.host }}:{{ $tmForum.party.port }}{{ $tmForum.party.path }}/
+              value: http://{{ $tmForum.party.host }}:{{ $tmForum.party.port }}{{ trimSuffix "/" $tmForum.party.path }}
             {{- end }}
             {{- if $tmForum.customerBill }}
             - name: BAE_CB_CUSTOMER_BILL
-              value: http://{{ $tmForum.customerBill.host }}:{{ $tmForum.customerBill.port }}{{ $tmForum.customerBill.path }}/
+              value: http://{{ $tmForum.customerBill.host }}:{{ $tmForum.customerBill.port }}{{ trimSuffix "/" $tmForum.customerBill.path }}
             {{- end }}
             {{- if .Values.bizEcosystemChargingBackend.billingUrl }}
             - name: BAE_CB_DOME_BILLING_URL
