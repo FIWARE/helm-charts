@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 0.11.32](https://img.shields.io/badge/Version-0.11.32-informational?style=flat-square) ![AppVersion: 9.0.1](https://img.shields.io/badge/AppVersion-9.0.1-informational?style=flat-square)
+![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![AppVersion: 2026.05.14](https://img.shields.io/badge/AppVersion-2026.05.14-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -12,6 +12,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | ---- | ------ | --- |
 | dwendland | <dennis.wendland@fiware.org> |  |
 | wistefan | <stefan.wiedemann@seamware.com> |  |
+| fdelavega | <francisco.delavega@seamware.com> |  |
 
 ## Source Code
 
@@ -27,53 +28,6 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| bizEcosystemApis.db.host | string | `"mysql"` |  |
-| bizEcosystemApis.db.password | string | `"pass"` |  |
-| bizEcosystemApis.deployment.additionalAnnotations | object | `{}` |  |
-| bizEcosystemApis.deployment.additionalLabels | object | `{}` |  |
-| bizEcosystemApis.deployment.affinity | object | `{}` |  |
-| bizEcosystemApis.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
-| bizEcosystemApis.deployment.image.repository | string | `"fiware/biz-ecosystem-apis"` |  |
-| bizEcosystemApis.deployment.image.tag | string | `"v8.0.0"` |  |
-| bizEcosystemApis.deployment.livenessProbe.failureThreshold | int | `3` |  |
-| bizEcosystemApis.deployment.livenessProbe.initialDelaySeconds | int | `120` |  |
-| bizEcosystemApis.deployment.livenessProbe.periodSeconds | int | `30` |  |
-| bizEcosystemApis.deployment.livenessProbe.successThreshold | int | `1` |  |
-| bizEcosystemApis.deployment.livenessProbe.timeoutSeconds | int | `30` |  |
-| bizEcosystemApis.deployment.nodeSelector | object | `{}` |  |
-| bizEcosystemApis.deployment.readinessProbe.failureThreshold | int | `3` |  |
-| bizEcosystemApis.deployment.readinessProbe.initialDelaySeconds | int | `61` |  |
-| bizEcosystemApis.deployment.readinessProbe.periodSeconds | int | `30` |  |
-| bizEcosystemApis.deployment.readinessProbe.successThreshold | int | `1` |  |
-| bizEcosystemApis.deployment.readinessProbe.timeoutSeconds | int | `30` |  |
-| bizEcosystemApis.deployment.replicaCount | int | `1` |  |
-| bizEcosystemApis.deployment.revisionHistoryLimit | int | `3` |  |
-| bizEcosystemApis.deployment.tolerations | list | `[]` |  |
-| bizEcosystemApis.deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` |  |
-| bizEcosystemApis.deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` |  |
-| bizEcosystemApis.deployment.updateStrategy.type | string | `"RollingUpdate"` |  |
-| bizEcosystemApis.enabled | bool | `true` |  |
-| bizEcosystemApis.fullnameOverride | string | `""` |  |
-| bizEcosystemApis.name | string | `"biz-ecosystem-apis"` |  |
-| bizEcosystemApis.port | int | `8080` |  |
-| bizEcosystemApis.securityContext | object | `{}` |  |
-| bizEcosystemApis.service.annotations | object | `{}` |  |
-| bizEcosystemApis.service.port | int | `8080` |  |
-| bizEcosystemApis.service.type | string | `"ClusterIP"` |  |
-| bizEcosystemApis.serviceAccount.annotations | object | `{}` |  |
-| bizEcosystemApis.serviceAccount.create | bool | `false` |  |
-| bizEcosystemApis.serviceAccount.name | string | `"ssc"` |  |
-| bizEcosystemApis.tmForum.billing | object | `{}` |  |
-| bizEcosystemApis.tmForum.catalog | object | `{}` |  |
-| bizEcosystemApis.tmForum.customer | object | `{}` |  |
-| bizEcosystemApis.tmForum.inventory | object | `{}` |  |
-| bizEcosystemApis.tmForum.ordering | object | `{}` |  |
-| bizEcosystemApis.tmForum.party | object | `{}` |  |
-| bizEcosystemApis.tmForum.resourceInventory | object | `{}` |  |
-| bizEcosystemApis.tmForum.resources | object | `{}` |  |
-| bizEcosystemApis.tmForum.serviceInventory | object | `{}` |  |
-| bizEcosystemApis.tmForum.services | object | `{}` |  |
-| bizEcosystemApis.tmForum.usage | object | `{}` |  |
 | bizEcosystemChargingBackend.authorizeServicePath | string | `"/authorizeService/apiKeys"` | Authorize service path of the logic proxy |
 | bizEcosystemChargingBackend.backup.bucketName | string | `"gs://my/bucket"` |  |
 | bizEcosystemChargingBackend.backup.enabled | bool | `false` |  |
@@ -84,6 +38,8 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.backup.schedule | string | `"* 1 *  *  *"` |  |
 | bizEcosystemChargingBackend.backup.secretName | string | `"gcs-secret"` |  |
 | bizEcosystemChargingBackend.basePath | string | `"/business-ecosystem-charging-backend"` | Base app path of charging backend (for versions < 8.1.0: /business-ecosystem-charging-backend, for versions >= 8.1.0: /opt/business-ecosystem-charging-backend) |
+| bizEcosystemChargingBackend.billingUrl | string | `""` | Optional URL for billing service integration |
+| bizEcosystemChargingBackend.db.authMechanism | string | `""` | optional MongoDB auth mechanism (e.g. SCRAM-SHA-1, SCRAM-SHA-256) |
 | bizEcosystemChargingBackend.db.database | string | `"charging_db"` |  |
 | bizEcosystemChargingBackend.db.host | string | `"mongo"` |  |
 | bizEcosystemChargingBackend.db.password | string | `"pass"` |  |
@@ -95,7 +51,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.deployment.affinity | object | `{}` |  |
 | bizEcosystemChargingBackend.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemChargingBackend.deployment.image.repository | string | `"fiware/biz-ecosystem-charging-backend"` |  |
-| bizEcosystemChargingBackend.deployment.image.tag | string | `"v8.0.0"` |  |
+| bizEcosystemChargingBackend.deployment.image.tag | string | `"11.6.1"` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.failureThreshold | int | `3` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.initialDelaySeconds | int | `61` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.periodSeconds | int | `30` |  |
@@ -114,6 +70,8 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` |  |
 | bizEcosystemChargingBackend.deployment.updateStrategy.type | string | `"RollingUpdate"` |  |
 | bizEcosystemChargingBackend.deployment.updateStrategyPVC.type | string | `"Recreate"` |  |
+| bizEcosystemChargingBackend.dpas.clientApiUrl | string | `""` | DPAS payment start endpoint |
+| bizEcosystemChargingBackend.dpas.key | string | `""` | DPAS JWT verification key |
 | bizEcosystemChargingBackend.email.mail | string | `"charging@email.com"` |  |
 | bizEcosystemChargingBackend.enabled | bool | `true` |  |
 | bizEcosystemChargingBackend.extraEnvVars | list | `[]` | List of additional ENV vars to be set, e.g., to be used in asset plugins |
@@ -126,6 +84,8 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.media.enabled | bool | `true` | Enable the PVC for media storage |
 | bizEcosystemChargingBackend.media.size | string | `"8Gi"` | Size of the PVC |
 | bizEcosystemChargingBackend.name | string | `"biz-ecosystem-charging-backend"` |  |
+| bizEcosystemChargingBackend.notificationRecipientEmail | string | `""` | Optional e-mail address receiving billing notifications |
+| bizEcosystemChargingBackend.operatorId | string | `""` | Optional identifier of the party operating the marketplace |
 | bizEcosystemChargingBackend.payment.method | string | `"None"` | method: paypal or None (testing mode payment disconected) |
 | bizEcosystemChargingBackend.plugins.annotations | object | `{}` |  |
 | bizEcosystemChargingBackend.plugins.enabled | bool | `false` |  |
@@ -134,6 +94,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.plugins.size | string | `"4Gi"` |  |
 | bizEcosystemChargingBackend.port | int | `8006` | port that the charging backend container uses |
 | bizEcosystemChargingBackend.propagateToken | bool | `true` | Sets whether to expect the user access token in each request from the logic proxy |
+| bizEcosystemChargingBackend.relatedPartySchemaLocation | string | `""` | Optional schema URL used to extend entities that miss a relatedParty object |
 | bizEcosystemChargingBackend.securityContext | object | `{}` |  |
 | bizEcosystemChargingBackend.service.annotations | object | `{}` |  |
 | bizEcosystemChargingBackend.service.port | int | `8006` |  |
@@ -149,8 +110,12 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.allowEditParty | bool | `true` | Allow users to edit party attributes |
 | bizEcosystemLogicProxy.allowLocalEORI | bool | `false` | Allow to use organisations from local IDP as participants when creating or acquiring offerings |
 | bizEcosystemLogicProxy.basePath | string | `"/business-ecosystem-logic-proxy"` | Base app path of logic proxy (for versions < 8.1.0: /business-ecosystem-logic-proxy, for versions >= 8.1.0: /opt/business-ecosystem-logic-proxy) |
+| bizEcosystemLogicProxy.billingEngineUrl | string | `""` |  |
+| bizEcosystemLogicProxy.chatUrl | string | `""` | Optional custom URLs used by logic-proxy backend flows and UI integrations |
 | bizEcosystemLogicProxy.collectStaticCommand | string | `"True"` | Execute the collect static command on startup |
 | bizEcosystemLogicProxy.command | list | `[]` | in case the startup command should be alterd |
+| bizEcosystemLogicProxy.contactUsNotificationUrl | string | `""` |  |
+| bizEcosystemLogicProxy.dataSpaceEnabled | bool | `false` |  |
 | bizEcosystemLogicProxy.db.database | string | `"belp_db"` | Database name for connecting the database |
 | bizEcosystemLogicProxy.db.host | string | `"mongo"` | host of the database to be used |
 | bizEcosystemLogicProxy.db.password | string | `"pass"` | password for connecting the database |
@@ -161,6 +126,10 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.elastic.url | string | `"elasticsearch:9200"` | URL of elasticsearch service |
 | bizEcosystemLogicProxy.elastic.version | int | `7` | API version of elasticsearch |
 | bizEcosystemLogicProxy.enabled | bool | `true` |  |
+| bizEcosystemLogicProxy.endpointQuoteHost | string | `""` | Optional endpoint host overrides |
+| bizEcosystemLogicProxy.endpointQuotePath | string | `""` |  |
+| bizEcosystemLogicProxy.endpointQuotePort | string | `""` |  |
+| bizEcosystemLogicProxy.endpointSearchHost | string | `""` |  |
 | bizEcosystemLogicProxy.externalIdp.enabled | bool | `false` | Enable usage of external IDPs |
 | bizEcosystemLogicProxy.externalIdp.showLocalLogin | bool | `false` | Show login button for local IDP on login modal dialog with list of external IDPs |
 | bizEcosystemLogicProxy.extraVolumeMounts | list | `[]` |  |
@@ -170,16 +139,25 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.ingress.hosts | list | `[]` | all hosts to be provided |
 | bizEcosystemLogicProxy.ingress.tls | list | `[]` | configure the ingress' tls |
 | bizEcosystemLogicProxy.initContainers | bool | `true` | use initcontainers to wait for the apis to be deployed |
+| bizEcosystemLogicProxy.launchValidationEnabled | bool | `false` |  |
 | bizEcosystemLogicProxy.name | string | `"biz-ecosystem-logic-proxy"` |  |
 | bizEcosystemLogicProxy.nodeEnvironment | string | `"development"` | Deployment in development or in production |
+| bizEcosystemLogicProxy.offeringSchema | string | `""` |  |
+| bizEcosystemLogicProxy.operatorId | string | `""` | Optional metadata/schema settings |
+| bizEcosystemLogicProxy.partyLocation | string | `""` |  |
+| bizEcosystemLogicProxy.paymentGateway | string | `""` |  |
 | bizEcosystemLogicProxy.port | int | `8004` | port that the logic proxy container uses |
+| bizEcosystemLogicProxy.priceCompSchema | string | `""` |  |
 | bizEcosystemLogicProxy.propagateToken | bool | `true` | Sets whether the logic proxy should propagate the user access token to the backend components |
+| bizEcosystemLogicProxy.purchaseEnabled | bool | `false` |  |
+| bizEcosystemLogicProxy.quoteEnabled | bool | `false` | Optional feature flags |
 | bizEcosystemLogicProxy.revenueModel | int | `30` | Default market owner precentage for Revenue Sharing models |
 | bizEcosystemLogicProxy.route.enabled | bool | `false` | should the deployment create openshift routes |
 | bizEcosystemLogicProxy.route.routes | list | `[{"annotations":{},"certificate":{},"tls":{}}]` | Routes that should be created |
 | bizEcosystemLogicProxy.route.routes[0] | object | `{"annotations":{},"certificate":{},"tls":{}}` | annotations to be added to the route |
 | bizEcosystemLogicProxy.route.routes[0].certificate | object | `{}` | see: https://github.com/FIWARE-Ops/fiware-gitops/blob/master/doc/ROUTES.md |
 | bizEcosystemLogicProxy.route.routes[0].tls | object | `{}` | tls configuration for the route |
+| bizEcosystemLogicProxy.searchUrl | string | `""` |  |
 | bizEcosystemLogicProxy.securityContext | object | `{}` |  |
 | bizEcosystemLogicProxy.service.annotations | object | `{}` |  |
 | bizEcosystemLogicProxy.service.port | int | `8004` |  |
@@ -187,12 +165,14 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.serviceAccount.annotations | object | `{}` |  |
 | bizEcosystemLogicProxy.serviceAccount.create | bool | `false` |  |
 | bizEcosystemLogicProxy.serviceAccount.name | string | `"ssc"` |  |
+| bizEcosystemLogicProxy.siopIsRedirection | string | `""` | Optional SIOP mode toggle, passed as BAE_LP_SIOP_IS_REDIRECTION |
+| bizEcosystemLogicProxy.siopOperators | string | `""` | Optional comma-separated operator list, passed as BAE_LP_SIOP_OPERATORS |
 | bizEcosystemLogicProxy.statefulset.additionalAnnotations | object | `{}` |  |
 | bizEcosystemLogicProxy.statefulset.additionalLabels | object | `{}` |  |
 | bizEcosystemLogicProxy.statefulset.affinity | object | `{}` |  |
 | bizEcosystemLogicProxy.statefulset.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemLogicProxy.statefulset.image.repository | string | `"fiware/biz-ecosystem-logic-proxy"` |  |
-| bizEcosystemLogicProxy.statefulset.image.tag | string | `"v8.0.0"` |  |
+| bizEcosystemLogicProxy.statefulset.image.tag | string | `"11.19.2"` |  |
 | bizEcosystemLogicProxy.statefulset.livenessProbe.failureThreshold | int | `3` |  |
 | bizEcosystemLogicProxy.statefulset.livenessProbe.initialDelaySeconds | int | `61` |  |
 | bizEcosystemLogicProxy.statefulset.livenessProbe.periodSeconds | int | `30` |  |
@@ -208,6 +188,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.statefulset.revisionHistoryLimit | int | `3` |  |
 | bizEcosystemLogicProxy.statefulset.tolerations | list | `[]` |  |
 | bizEcosystemLogicProxy.statefulset.updateStrategy.type | string | `"RollingUpdate"` |  |
+| bizEcosystemLogicProxy.tenderingEnabled | bool | `false` |  |
 | bizEcosystemLogicProxy.theme.enabled | bool | `false` | Enable theme |
 | bizEcosystemLogicProxy.theme.image | string | `"my-theme-image:latest"` |  |
 | bizEcosystemLogicProxy.theme.imagePullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
@@ -217,46 +198,6 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.token.enabled | bool | `false` | Enable storage of local key and certificate |
 | bizEcosystemLogicProxy.token.identifier | string | `""` | Identifier (e.g. EORI) of local marketplace instance |
 | bizEcosystemLogicProxy.token.key | string | `""` | String with private key in PEM format |
-| bizEcosystemRss.db.driver | string | `"com.mysql.jdbc.Driver"` |  |
-| bizEcosystemRss.db.host | string | `"mysql"` |  |
-| bizEcosystemRss.db.password | string | `"pass"` |  |
-| bizEcosystemRss.db.port | int | `3306` |  |
-| bizEcosystemRss.db.url | string | `"jdbc:mysql://mysql:3306/RSS"` |  |
-| bizEcosystemRss.db.user | string | `"root"` |  |
-| bizEcosystemRss.deployment.additionalAnnotations | object | `{}` |  |
-| bizEcosystemRss.deployment.additionalLabels | object | `{}` |  |
-| bizEcosystemRss.deployment.affinity | object | `{}` |  |
-| bizEcosystemRss.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
-| bizEcosystemRss.deployment.image.repository | string | `"fiware/biz-ecosystem-rss"` |  |
-| bizEcosystemRss.deployment.image.tag | string | `"v8.0.0"` |  |
-| bizEcosystemRss.deployment.livenessProbe.failureThreshold | int | `3` |  |
-| bizEcosystemRss.deployment.livenessProbe.initialDelaySeconds | int | `120` |  |
-| bizEcosystemRss.deployment.livenessProbe.periodSeconds | int | `30` |  |
-| bizEcosystemRss.deployment.livenessProbe.successThreshold | int | `1` |  |
-| bizEcosystemRss.deployment.livenessProbe.timeoutSeconds | int | `30` |  |
-| bizEcosystemRss.deployment.nodeSelector | object | `{}` |  |
-| bizEcosystemRss.deployment.readinessProbe.failureThreshold | int | `3` |  |
-| bizEcosystemRss.deployment.readinessProbe.initialDelaySeconds | int | `61` |  |
-| bizEcosystemRss.deployment.readinessProbe.periodSeconds | int | `30` |  |
-| bizEcosystemRss.deployment.readinessProbe.successThreshold | int | `1` |  |
-| bizEcosystemRss.deployment.readinessProbe.timeoutSeconds | int | `30` |  |
-| bizEcosystemRss.deployment.replicaCount | int | `1` |  |
-| bizEcosystemRss.deployment.revisionHistoryLimit | int | `3` |  |
-| bizEcosystemRss.deployment.tolerations | list | `[]` |  |
-| bizEcosystemRss.deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` |  |
-| bizEcosystemRss.deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` |  |
-| bizEcosystemRss.deployment.updateStrategy.type | string | `"RollingUpdate"` |  |
-| bizEcosystemRss.enabled | bool | `true` |  |
-| bizEcosystemRss.fullnameOverride | string | `""` |  |
-| bizEcosystemRss.name | string | `"biz-ecosystem-rss"` |  |
-| bizEcosystemRss.port | int | `8080` |  |
-| bizEcosystemRss.securityContext | object | `{}` |  |
-| bizEcosystemRss.service.annotations | object | `{}` |  |
-| bizEcosystemRss.service.port | int | `8080` |  |
-| bizEcosystemRss.service.type | string | `"ClusterIP"` |  |
-| bizEcosystemRss.serviceAccount.annotations | object | `{}` |  |
-| bizEcosystemRss.serviceAccount.create | bool | `false` |  |
-| bizEcosystemRss.serviceAccount.name | string | `"ssc"` |  |
 | externalUrl | string | `"https://marketplace.fiware.org"` |  |
 | fullnameOverride | string | `""` |  |
 | initContainer.apis.image | string | `"busybox"` |  |
@@ -276,14 +217,10 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | initContainer.mysql.maxRetries | int | `60` |  |
 | initContainer.mysql.name | string | `"wait-for-mysql"` |  |
 | initContainer.mysql.sleepInterval | int | `5` |  |
-| initContainer.rss.image | string | `"curlimages/curl"` |  |
-| initContainer.rss.imagePullPolicy | string | `"IfNotPresent"` |  |
-| initContainer.rss.maxRetries | int | `60` |  |
-| initContainer.rss.name | string | `"rss-wait"` |  |
-| initContainer.rss.sleepInterval | int | `10` |  |
 | nameOverride | string | `""` |  |
 | oauth.adminrole | string | `"admin"` | Admin role |
 | oauth.aggregatorrole | string | `"Aggregator"` | Aggregator role |
+| oauth.certifierrole | string | `"certifier"` | Role defined in the IDM client app for organization certifiers of the BAE |
 | oauth.clientSecret | string | `""` | OAuth2 Client Secret of the BAE application. E.G., market-clientSecret |
 | oauth.customerrole | string | `"customer"` | Customer role |
 | oauth.grantedrole | string | `"admin"` | Granted role |
@@ -296,14 +233,29 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | siop.allowedRoles[1] | string | `"customer"` |  |
 | siop.callbackPath | string | `"/auth/vc/callback"` |  |
 | siop.ccs.defaultOidcScope | string | `"defaultScope"` | Default scope to be used from scopes below, if none is provided |
-| siop.ccs.enabeld | bool | `false` | is automatic credentials config registration enabled |
+| siop.ccs.enabled | bool | `false` | is automatic credentials config registration enabled |
 | siop.ccs.endpoint | string | `"http://credentials-config-service:8080"` | Endpoint of the CCS |
 | siop.clientId | string | `"marketplace-client"` |  |
 | siop.enabled | bool | `false` |  |
+| siop.privateKey | string | `""` | Kubernetes Secret reference for BAE_LP_SIOP_PRIVATE_KEY (preferred over plain siop.privateKey) privateKeySecret:   name: bae-secret   key: privateKey |
+| siop.privateKeyPem | string | `""` |  |
+| siop.signAlgorithm | string | `"ES256"` |  |
 | siop.verifier.host | string | `"https://verifier.apps.fiware.fiware.dev"` |  |
 | siop.verifier.jwksPath | string | `"/.well-known/jwks"` |  |
 | siop.verifier.qrCodePath | string | `"/api/v1/loginQR"` |  |
 | siop.verifier.tokenPath | string | `"/token"` |  |
+| tmForum.billing | object | `{}` |  |
+| tmForum.catalog | object | `{}` |  |
+| tmForum.customer | object | `{}` |  |
+| tmForum.customerBill | object | `{}` |  |
+| tmForum.inventory | object | `{}` |  |
+| tmForum.ordering | object | `{}` |  |
+| tmForum.party | object | `{}` |  |
+| tmForum.resourceInventory | object | `{}` |  |
+| tmForum.resources | object | `{}` |  |
+| tmForum.serviceInventory | object | `{}` |  |
+| tmForum.services | object | `{}` |  |
+| tmForum.usage | object | `{}` |  |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)
