@@ -15,8 +15,8 @@ docs/common-chart.md). The wrappers exist so that:
     because there is exactly one implementation of each helper (in
     `common`).
 
-The per-component helpers (`bizEcosystemApis.*`, `bizEcosystemRss.*`,
-`bizEcosystemChargingBackend.*`, `bizEcosystemLogicProxy.*`) remain
+The per-component helpers (`bizEcosystemChargingBackend.*`,
+`bizEcosystemLogicProxy.*`) remain
 chart-local on purpose. Their rendered names depend on a legacy
 `default "" .Values.nameOverride` base (empty fallback instead of
 `.Chart.Name`), and migrating them to `fiwareCommon.names.fullname` with a
@@ -33,10 +33,8 @@ docs/common-chart.md:
 
   * `bizEcosystem<X>.fullhostname` / `bizEcosystem<X>.hostnameonly`
     — chart-specific hostname helpers.
-  * `business-api-ecosystem.initContainer.*` — MySQL / MongoDB / APIs /
-    RSS / Charging init-container body templates.
-  * `bizEcosystem<X>.apiInitContainer` / `rssInitContainer` — init-
-    container name helpers.
+  * `business-api-ecosystem.initContainer.*` — MySQL / MongoDB /
+    Charging init-container body templates.
   * `bizEcosystem<X>.labels` / `matchLabels` — legacy
     `app` / `release` / `component` / `chart` / `heritage` label schema.
     Switching to `fiwareCommon.labels.standard` (which emits
@@ -76,26 +74,6 @@ heritage: {{ .Release.Service }}
 {{/*
 Create unified labels for BAE components
 */}}
-{{- define "bizEcosystemApis.labels" -}}
-{{ include "bizEcosystemApis.matchLabels" . }}
-{{ include "business-api-ecosystem.common.metaLabels" . }}
-{{- end -}}
-
-{{- define "bizEcosystemApis.matchLabels" -}}
-component: {{ .Values.bizEcosystemApis.name | quote }}
-{{ include "business-api-ecosystem.common.matchLabels" . }}
-{{- end -}}
-
-{{- define "bizEcosystemRss.labels" -}}
-{{ include "bizEcosystemRss.matchLabels" . }}
-{{ include "business-api-ecosystem.common.metaLabels" . }}
-{{- end -}}
-
-{{- define "bizEcosystemRss.matchLabels" -}}
-component: {{ .Values.bizEcosystemRss.name | quote }}
-{{ include "business-api-ecosystem.common.matchLabels" . }}
-{{- end -}}
-
 {{- define "bizEcosystemChargingBackend.labels" -}}
 {{ include "bizEcosystemChargingBackend.matchLabels" . }}
 {{ include "business-api-ecosystem.common.metaLabels" . }}
@@ -129,54 +107,8 @@ Create a default fully qualified app name. Delegates to
 {{- end -}}
 
 {{/*
-Create a fully qualified bizEcosystemApis name.
-
-Kept chart-local: this helper's `$name := default "" .Values.nameOverride`
-base differs from `fiwareCommon.names.fullname`'s
-`default .Chart.Name .Values.nameOverride`, and the rendered output
-(Service / Deployment / ServiceAccount names) would change if it were
-redirected at `fiwareCommon.names.fullname` with a `component` argument.
-We truncate at 63 chars because some Kubernetes name fields are limited
-to this (by the DNS naming spec).
-*/}}
-
-{{- define "bizEcosystemApis.fullname" -}}
-{{- if .Values.bizEcosystemApis.fullnameOverride -}}
-{{- .Values.bizEcosystemApis.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default "" .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.bizEcosystemApis.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.bizEcosystemApis.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create a fully qualified bizEcosystemRss name. Kept chart-local for the
-same reason as `bizEcosystemApis.fullname` (see note above).
-We truncate at 63 chars because some Kubernetes name fields are limited
-to this (by the DNS naming spec).
-*/}}
-
-{{- define "bizEcosystemRss.fullname" -}}
-{{- if .Values.bizEcosystemRss.fullnameOverride -}}
-{{- .Values.bizEcosystemRss.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default "" .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-%s" .Release.Name .Values.bizEcosystemRss.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-%s" .Release.Name $name .Values.bizEcosystemRss.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Create a fully qualified bizEcosystemChargingBackend name. Kept chart-
-local for the same reason as `bizEcosystemApis.fullname` (see note
-above).
+local with legacy naming behavior.
 We truncate at 63 chars because some Kubernetes name fields are limited
 to this (by the DNS naming spec).
 */}}
@@ -196,7 +128,7 @@ to this (by the DNS naming spec).
 
 {{/*
 Create a fully qualified bizEcosystemLogicProxy name. Kept chart-local
-for the same reason as `bizEcosystemApis.fullname` (see note above).
+with legacy naming behavior.
 We truncate at 63 chars because some Kubernetes name fields are limited
 to this (by the DNS naming spec).
 */}}
@@ -230,28 +162,6 @@ Allow the release namespace to be overridden for multi-namespace deployments in 
 {{- end -}}
 
 {{/*
-Create the name of the bizEcosystemApis service account to use
-*/}}
-{{- define "bizEcosystemApis.serviceAccountName" -}}
-{{- if .Values.bizEcosystemApis.serviceAccount.create }}
-    {{- default (include "bizEcosystemApis.fullname" .) .Values.bizEcosystemApis.serviceAccount.name }}
-{{- else }}
-    {{- default "default" .Values.bizEcosystemApis.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
-{{/*
-Create the name of the bizEcosystemRss service account to use
-*/}}
-{{- define "bizEcosystemRss.serviceAccountName" -}}
-{{- if .Values.bizEcosystemRss.serviceAccount.create }}
-    {{- default (include "bizEcosystemRss.fullname" .) .Values.bizEcosystemRss.serviceAccount.name }}
-{{- else }}
-    {{- default "default" .Values.bizEcosystemRss.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
-{{/*
 Create the name of the bizEcosystemChargingBackend service account to use
 */}}
 {{- define "bizEcosystemChargingBackend.serviceAccountName" -}}
@@ -271,34 +181,6 @@ Create the name of the bizEcosystemLogicProxy service account to use
 {{- else }}
     {{- default "default" .Values.bizEcosystemLogicProxy.serviceAccount.name }}
 {{- end }}
-{{- end }}
-
-{{/*
-Create the full hostname:port for the TMForum APIs endpoints
-*/}}
-{{- define "bizEcosystemApis.fullhostname" -}}
-{{ include "bizEcosystemApis.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.bizEcosystemApis.service.port }}
-{{- end }}
-
-{{/*
-Create the hostname only for the TMForum APIs
-*/}}
-{{- define "bizEcosystemApis.hostnameonly" -}}
-{{ include "bizEcosystemApis.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
-{{- end }}
-
-{{/*
-Create the full hostname:port for the RSS APIs endpoints
-*/}}
-{{- define "bizEcosystemRss.fullhostname" -}}
-{{ include "bizEcosystemRss.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.bizEcosystemRss.service.port }}
-{{- end }}
-
-{{/*
-Create the hostname only for the RSS
-*/}}
-{{- define "bizEcosystemRss.hostnameonly" -}}
-{{ include "bizEcosystemRss.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 {{- end }}
 
 {{/*
@@ -330,34 +212,6 @@ Create the full hostname:port for the Logic Proxy
 {{- end }}
 
 {{/*
-Create the name of the API check initContainer for bizEcosystemRss
-*/}}
-{{- define "bizEcosystemRss.apiInitContainer" -}}
-{{- printf "%s-%s" .Values.bizEcosystemRss.name .Values.initContainer.apis.name | trunc 50 | trimSuffix "-" -}}
-{{- end }}
-
-{{/*
-Create the name of the RSS check initContainer for bizEcosystemChargingBackend
-*/}}
-{{- define "bizEcosystemChargingBackend.rssInitContainer" -}}
-{{- printf "%s-%s" .Values.bizEcosystemChargingBackend.name .Values.initContainer.rss.name | trunc 50 | trimSuffix "-" -}}
-{{- end }}
-
-{{/*
-Create the name of the API check initContainer for bizEcosystemChargingBackend
-*/}}
-{{- define "bizEcosystemChargingBackend.apiInitContainer" -}}
-{{- printf "%s-%s" .Values.bizEcosystemChargingBackend.name .Values.initContainer.apis.name | trunc 50 | trimSuffix "-" -}}
-{{- end }}
-
-{{/*
-Create the name of the API check initContainer for bizEcosystemLogicProxy
-*/}}
-{{- define "bizEcosystemLogicProxy.apiInitContainer" -}}
-{{- printf "%s-%s" .Values.bizEcosystemLogicProxy.name .Values.initContainer.apis.name | trunc 50 | trimSuffix "-" -}}
-{{- end }}
-
-{{/*
 Template for MySQL initContainer check
 */}}
 {{- define "business-api-ecosystem.initContainer.mysql" }}
@@ -380,28 +234,6 @@ Template for MySQL initContainer check
 {{- end }}
 
 {{/*
-Template for TMForum APIs initContainer check
-*/}}
-{{- define "business-api-ecosystem.initContainer.apis" }}
-- name: {{ tpl .name .ctx }}
-  image: "{{ .ctx.Values.initContainer.apis.image }}"
-  imagePullPolicy: {{ .ctx.Values.initContainer.apis.imagePullPolicy | quote }}
-  command: ['sh', '-c',
-    'while ! wget "http://{{ include "bizEcosystemApis.fullhostname" .ctx }}/{{ .path }}"; do echo "Waiting for APIs"; ((i++)) && ((i=={{ .ctx.Values.initContainer.apis.maxRetries }})) && break; sleep {{ .ctx.Values.initContainer.apis.sleepInterval }}; done;']
-{{- end }}
-
-{{/*
-Template for RSS initContainer check
-*/}}
-{{- define "business-api-ecosystem.initContainer.rss" }}
-- name: {{ tpl .name .ctx }}
-  image: "{{ .ctx.Values.initContainer.rss.image }}"
-  imagePullPolicy: {{ .ctx.Values.initContainer.rss.imagePullPolicy | quote }}
-  command: ['sh', '-c',
-    'while ! curl "{{ include "bizEcosystemRss.fullhostname" .ctx }}"; do echo "Waiting for RSS"; ((i++)) && ((i=={{ .ctx.Values.initContainer.rss.maxRetries }})) && break; sleep {{ .ctx.Values.initContainer.rss.sleepInterval }}; done;']
-{{- end }}
-
-{{/*
 Template for Charging Backend initContainer check
 */}}
 {{- define "business-api-ecosystem.initContainer.charging" }}
@@ -413,22 +245,10 @@ Template for Charging Backend initContainer check
 {{- end }}
 
 {{/*
-RSS secrets. Kept chart-local: the fallback (`bizEcosystemRss.fullname`)
-differs from `fiwareCommon.names.fullname` with a `component` argument (see
-note at top of file), so `fiwareCommon.secrets.name` cannot be used here
-without changing the rendered Secret name.
-*/}}
-{{- define "bizEcosystemRss.secretName" -}}
-    {{- if .Values.bizEcosystemRss.existingSecret -}}
-        {{- printf "%s" (tpl .Values.bizEcosystemRss.existingSecret $) -}}
-    {{- else -}}
-        {{- printf "%s" (include "bizEcosystemRss.fullname" .) -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Logic proxy secrets. Kept chart-local for the same reason as
-`bizEcosystemRss.secretName` (see note above).
+Logic proxy secrets are kept chart-local because the fallback secret
+name is derived from `bizEcosystemLogicProxy.fullname`, which uses this
+chart's legacy per-component fullname behavior (`default "" .Values.nameOverride`).
+Switching to `fiwareCommon.secrets.name` would change rendered secret names.
 */}}
 {{- define "bizEcosystemLogicProxy.secretName" -}}
     {{- if .Values.bizEcosystemLogicProxy.existingSecret -}}
@@ -447,8 +267,11 @@ Logic proxy secrets. Kept chart-local for the same reason as
 {{- end -}}
 
 {{/*
-Charging backend secrets. Kept chart-local for the same reason as
-`bizEcosystemRss.secretName` (see note above).
+Charging backend secrets are kept chart-local because the fallback
+secret name is derived from `bizEcosystemChargingBackend.fullname`,
+which uses this chart's legacy per-component fullname behavior
+(`default "" .Values.nameOverride`). Switching to
+`fiwareCommon.secrets.name` would change rendered secret names.
 */}}
 {{- define "bizEcosystemChargingBackend.secretName" -}}
     {{- if .Values.bizEcosystemChargingBackend.existingSecret -}}
@@ -463,17 +286,5 @@ Charging backend secrets. Kept chart-local for the same reason as
         {{- printf "%s" (tpl .Values.bizEcosystemChargingBackend.existingCertSecret $) -}}
     {{- else -}}
         {{- printf "%s-certs" (include "bizEcosystemChargingBackend.fullname" .) -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-API secret. Kept chart-local for the same reason as
-`bizEcosystemRss.secretName` (see note above).
-*/}}
-{{- define "bizEcosystemApis.secretName" -}}
-    {{- if .Values.bizEcosystemApis.existingSecret -}}
-        {{- printf "%s" (tpl .Values.bizEcosystemApis.existingSecret $) -}}
-    {{- else -}}
-        {{- printf "%s" (include "bizEcosystemApis.fullname" .) -}}
     {{- end -}}
 {{- end -}}

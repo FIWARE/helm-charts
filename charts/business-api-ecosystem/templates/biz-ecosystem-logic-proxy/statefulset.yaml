@@ -44,14 +44,7 @@ spec:
         {{- end }}
         {{- include "business-api-ecosystem.initContainer.mongodb" ( dict "ctx" . "name" .Values.bizEcosystemLogicProxy.name "host" .Values.bizEcosystemLogicProxy.db.host ) | nindent 8 }}
         {{- if .Values.bizEcosystemLogicProxy.initContainers }}
-        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-inventory" "path" "DSProductInventory" ) | nindent 8 }}
-        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-catalog" "path" "DSProductCatalog" ) | nindent 8 }}
-        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-ordering" "path" "DSProductOrdering" ) | nindent 8 }}
-        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-party" "path" "DSPartyManagement" ) | nindent 8 }}
-        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-billing" "path" "DSBillingManagement" ) | nindent 8 }}
-        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-customer" "path" "DSCustomerManagement" ) | nindent 8 }}
-        {{- include "business-api-ecosystem.initContainer.apis" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-usage" "path" "DSUsageManagement" ) | nindent 8 }}
-        {{- include "business-api-ecosystem.initContainer.charging" ( dict "ctx" . "name" "{{ include \"bizEcosystemLogicProxy.apiInitContainer\" . }}-charging" "path" "charging/api/assetManagement/currencyCodes" ) | nindent 8 }}
+        {{- include "business-api-ecosystem.initContainer.charging" ( dict "ctx" . "name" (printf "%s-%s-charging" .Values.bizEcosystemLogicProxy.name .Values.initContainer.apis.name) "path" "charging/api/health/" ) | nindent 8 }}
         {{- end }}
         {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
         - name: {{ .Values.bizEcosystemLogicProxy.name }}-theme-init
@@ -78,6 +71,9 @@ spec:
         {{- end }}
         {{- end }}
         - name: {{ template "business-api-ecosystem.name" . }}-{{ .Values.bizEcosystemLogicProxy.name }}
+          {{- $legacyApis := (get .Values "bizEcosystemApis") | default (dict) }}
+          {{- $legacyTmForum := (get $legacyApis "tmForum") | default (dict) }}
+          {{- $tmForum := mergeOverwrite (deepCopy $legacyTmForum) (default (dict) .Values.tmForum) }}
           imagePullPolicy: {{ .Values.bizEcosystemLogicProxy.statefulset.image.pullPolicy }}
           image: "{{ .Values.bizEcosystemLogicProxy.statefulset.image.repository }}:{{ .Values.bizEcosystemLogicProxy.statefulset.image.tag }}"
           {{- if .Values.bizEcosystemLogicProxy.command }}
@@ -169,7 +165,7 @@ spec:
                   name: {{ include "bizEcosystemLogicProxy.secretName" . }}
                   key: oauthClientSecret
             {{- end }}
-            {{- if .Values.oauth.cliencallbackPath }}
+            {{- if .Values.oauth.callbackPath }}
             - name: BAE_LP_OAUTH2_CALLBACK
               value: {{ .Values.externalUrl }}{{ .Values.oauth.callbackPath }}
             {{- end }}
@@ -181,6 +177,8 @@ spec:
               value: {{ .Values.oauth.customerrole | quote }}
             - name: BAE_LP_OAUTH2_ORG_ADMIN_ROLE
               value: {{ .Values.oauth.orgadminrole | quote }}
+            - name: BAE_LP_OAUTH2_ORG_CERTIFIER_ROLE
+              value: {{ .Values.oauth.certifierrole | quote }}
             {{- if .Values.oauth.defaultRole }}
             - name: BAE_LP_OAUTH2_DEFAULT_ROLE
               value: {{ .Values.oauth.defaultRole | quote }}
@@ -199,152 +197,101 @@ spec:
             {{- end }}
             - name: BAE_LP_REVENUE_MODEL
               value: {{ .Values.bizEcosystemLogicProxy.revenueModel | quote }}
-            {{- if .Values.bizEcosystemApis.tmForum.catalog }}
+            {{- if $tmForum.catalog }}
             - name: BAE_LP_ENDPOINT_CATALOG_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.catalog.host }}
+              value: {{ $tmForum.catalog.host }}
             - name: BAE_LP_ENDPOINT_CATALOG_PATH
-              value: {{ .Values.bizEcosystemApis.tmForum.catalog.path }}
+              value: {{ $tmForum.catalog.path }}
             - name: BAE_LP_ENDPOINT_CATALOG_PORT
-              value: {{ .Values.bizEcosystemApis.tmForum.catalog.port | quote }}
-            {{- else }}
-            - name: BAE_LP_ENDPOINT_CATALOG_HOST
-              value: {{ include "bizEcosystemApis.hostnameonly" . }}
-            - name: BAE_LP_ENDPOINT_CATALOG_PORT
-              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+              value: {{ $tmForum.catalog.port | quote }}
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.inventory }}
+            {{- if $tmForum.inventory }}
             - name: BAE_LP_ENDPOINT_INVENTORY_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.inventory.host }}
+              value: {{ $tmForum.inventory.host }}
             - name: BAE_LP_ENDPOINT_INVENTORY_PATH
-              value: {{ .Values.bizEcosystemApis.tmForum.inventory.path }}
+              value: {{ $tmForum.inventory.path }}
             - name: BAE_LP_ENDPOINT_INVENTORY_PORT
-              value: {{ .Values.bizEcosystemApis.tmForum.inventory.port | quote }}
-            {{- else }}
-            - name: BAE_LP_ENDPOINT_INVENTORY_HOST
-              value: {{ include "bizEcosystemApis.hostnameonly" . }}
-            - name: BAE_LP_ENDPOINT_INVENTORY_PORT
-              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+              value: {{ $tmForum.inventory.port | quote }}
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.serviceInventory }}
+            {{- if $tmForum.serviceInventory }}
             - name: BAE_LP_ENDPOINT_SERVICE_INVENTORY_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.serviceInventory.host }}
+              value: {{ $tmForum.serviceInventory.host }}
             - name: BAE_LP_ENDPOINT_SERVICE_INVENTORY_PATH
-              value: {{ .Values.bizEcosystemApis.tmForum.serviceInventory.path }}
+              value: {{ $tmForum.serviceInventory.path }}
             - name: BAE_LP_ENDPOINT_SERVICE_INVENTORY_PORT
-              value: {{ .Values.bizEcosystemApis.tmForum.serviceInventory.port | quote }}
-            {{- else }}
-            - name: BAE_LP_ENDPOINT_SERVICE_INVENTORY_HOST
-              value: {{ include "bizEcosystemApis.hostnameonly" . }}
-            - name: BAE_LP_ENDPOINT_SERVICE_INVENTORY_PORT
-              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+              value: {{ $tmForum.serviceInventory.port | quote }}
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.resourceInventory }}
+            {{- if $tmForum.resourceInventory }}
             - name: BAE_LP_ENDPOINT_RESOURCE_INVENTORY_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.resourceInventory.host }}
+              value: {{ $tmForum.resourceInventory.host }}
             - name: BAE_LP_ENDPOINT_RESOURCE_INVENTORY_PATH
-              value: {{ .Values.bizEcosystemApis.tmForum.resourceInventory.path }}
+              value: {{ $tmForum.resourceInventory.path }}
             - name: BAE_LP_ENDPOINT_RESOURCE_INVENTORY_PORT
-              value: {{ .Values.bizEcosystemApis.tmForum.resourceInventory.port | quote }}
-            {{- else }}
-            - name: BAE_LP_ENDPOINT_RESOURCE_INVENTORY_HOST
-              value: {{ include "bizEcosystemApis.hostnameonly" . }}
-            - name: BAE_LP_ENDPOINT_RESOURCE_INVENTORY_PORT
-              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+              value: {{ $tmForum.resourceInventory.port | quote }}
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.ordering }}
+            {{- if $tmForum.ordering }}
             - name: BAE_LP_ENDPOINT_ORDERING_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.ordering.host }}
+              value: {{ $tmForum.ordering.host }}
             - name: BAE_LP_ENDPOINT_ORDERING_PATH
-              value: {{ .Values.bizEcosystemApis.tmForum.ordering.path }}
+              value: {{ $tmForum.ordering.path }}
             - name: BAE_LP_ENDPOINT_ORDERING_PORT
-              value: {{ .Values.bizEcosystemApis.tmForum.ordering.port | quote }}
-            {{- else }}
-            - name: BAE_LP_ENDPOINT_ORDERING_HOST
-              value: {{ include "bizEcosystemApis.hostnameonly" . }}
-            - name: BAE_LP_ENDPOINT_ORDERING_PORT
-              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+              value: {{ $tmForum.ordering.port | quote }}
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.billing }}
+            {{- if $tmForum.billing }}
             - name: BAE_LP_ENDPOINT_BILLING_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.billing.host }}
+              value: {{ $tmForum.billing.host }}
             - name: BAE_LP_ENDPOINT_BILLING_PATH
-              value: {{ .Values.bizEcosystemApis.tmForum.billing.path }}
+              value: {{ $tmForum.billing.path }}
             - name: BAE_LP_ENDPOINT_BILLING_PORT
-              value: {{ .Values.bizEcosystemApis.tmForum.billing.port | quote }}
-            {{- else }}
-            - name: BAE_LP_ENDPOINT_BILLING_HOST
-              value: {{ include "bizEcosystemApis.hostnameonly" . }}
-            - name: BAE_LP_ENDPOINT_BILLING_PORT
-              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+              value: {{ $tmForum.billing.port | quote }}
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.resources }}
+            {{- if $tmForum.resources }}
             - name: BAE_LP_ENDPOINT_RESOURCE_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.resources.host }}
+              value: {{ $tmForum.resources.host }}
             - name: BAE_LP_ENDPOINT_RESOURCE_PATH
-              value: {{ .Values.bizEcosystemApis.tmForum.resources.path }}
+              value: {{ $tmForum.resources.path }}
             - name: BAE_LP_ENDPOINT_RESOURCE_PORT
-              value: {{ .Values.bizEcosystemApis.tmForum.resources.port | quote }}
-            {{- else }}
-            - name: BAE_LP_ENDPOINT_RESOURCE_HOST
-              value: {{ include "bizEcosystemApis.hostnameonly" . }}
-            - name: BAE_LP_ENDPOINT_RESOURCE_PORT
-              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+              value: {{ $tmForum.resources.port | quote }}
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.services }}
+            {{- if $tmForum.services }}
             - name: BAE_LP_ENDPOINT_SERVICE_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.services.host }}
+              value: {{ $tmForum.services.host }}
             - name: BAE_LP_ENDPOINT_SERVICE_PATH
-              value: {{ .Values.bizEcosystemApis.tmForum.services.path }}
+              value: {{ $tmForum.services.path }}
             - name: BAE_LP_ENDPOINT_SERVICE_PORT
-              value: {{ .Values.bizEcosystemApis.tmForum.services.port | quote }}
-            {{- else }}
-            - name: BAE_LP_ENDPOINT_SERVICE_HOST
-              value: {{ include "bizEcosystemApis.hostnameonly" . }}
-            - name: BAE_LP_ENDPOINT_SERVICE_PORT
-              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+              value: {{ $tmForum.services.port | quote }}
             {{- end }}
-            - name: BAE_LP_ENDPOINT_RSS_HOST
-              value: {{ include "bizEcosystemRss.hostnameonly" . }}
-            - name: BAE_LP_ENDPOINT_RSS_PORT
-              value: {{ .Values.bizEcosystemRss.service.port | quote }}
-            {{- if .Values.bizEcosystemApis.tmForum.usage }}
+            {{- if $tmForum.usage }}
             - name: BAE_LP_ENDPOINT_USAGE_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.usage.host }}
+              value: {{ $tmForum.usage.host }}
             - name: BAE_LP_ENDPOINT_USAGE_PATH
-              value: {{ .Values.bizEcosystemApis.tmForum.usage.path }}
+              value: {{ $tmForum.usage.path }}
             - name: BAE_LP_ENDPOINT_USAGE_PORT
-              value: {{ .Values.bizEcosystemApis.tmForum.usage.port | quote }}
-            {{- else }}
-            - name: BAE_LP_ENDPOINT_USAGE_HOST
-              value: {{ include "bizEcosystemApis.hostnameonly" . }}
-            - name: BAE_LP_ENDPOINT_USAGE_PORT
-              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+              value: {{ $tmForum.usage.port | quote }}
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.party }}
+            {{- if $tmForum.party }}
             - name: BAE_LP_ENDPOINT_PARTY_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.party.host }}
+              value: {{ $tmForum.party.host }}
             - name: BAE_LP_ENDPOINT_PARTY_PATH
-              value: {{ .Values.bizEcosystemApis.tmForum.party.path }}
+              value: {{ $tmForum.party.path }}
             - name: BAE_LP_ENDPOINT_PARTY_PORT
-              value: {{ .Values.bizEcosystemApis.tmForum.party.port | quote }}
-            {{- else }}
-            - name: BAE_LP_ENDPOINT_PARTY_HOST
-              value: {{ include "bizEcosystemApis.hostnameonly" . }}
-            - name: BAE_LP_ENDPOINT_PARTY_PORT
-              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+              value: {{ $tmForum.party.port | quote }}
             {{- end }}
-            {{- if .Values.bizEcosystemApis.tmForum.customer }}
+            {{- if $tmForum.customer }}
             - name: BAE_LP_ENDPOINT_CUSTOMER_HOST
-              value: {{ .Values.bizEcosystemApis.tmForum.customer.host }}
+              value: {{ $tmForum.customer.host }}
             - name: BAE_LP_ENDPOINT_CUSTOMER_PATH
-              value: {{ .Values.bizEcosystemApis.tmForum.customer.path }}
+              value: {{ $tmForum.customer.path }}
             - name: BAE_LP_ENDPOINT_CUSTOMER_PORT
-              value: {{  .Values.bizEcosystemApis.tmForum.customer.port | quote }}
-            {{- else }}
-            - name: BAE_LP_ENDPOINT_CUSTOMER_HOST
-              value: {{ include "bizEcosystemApis.hostnameonly" . }}
-            - name: BAE_LP_ENDPOINT_CUSTOMER_PORT
-              value: {{ .Values.bizEcosystemApis.service.port | quote }}
+              value: {{ $tmForum.customer.port | quote }}
+            {{- end }}
+            {{- if $tmForum.customerBill }}
+            - name: BAE_LP_ENDPOINT_CUSTOMER_BILL_HOST
+              value: {{ $tmForum.customerBill.host }}
+            - name: BAE_LP_ENDPOINT_CUSTOMER_BILL_PATH
+              value: {{ $tmForum.customerBill.path }}
+            - name: BAE_LP_ENDPOINT_CUSTOMER_BILL_PORT
+              value: {{ $tmForum.customerBill.port | quote }}
             {{- end }}
             - name: BAE_LP_ENDPOINT_CHARGING_HOST
               value: {{ include "bizEcosystemChargingBackend.hostnameonly" . }}
@@ -378,9 +325,10 @@ spec:
             - name: BAE_EORI
               value: {{ .Values.bizEcosystemLogicProxy.token.identifier | quote }}
             {{- end }}
-            {{- if .Values.siop.enabled }}
             - name: BAE_LP_SIOP_ENABLED
               value: {{ .Values.siop.enabled | quote }}
+            {{- if .Values.siop.enabled }}
+            {{- $siopPrivateKeySecret := .Values.siop.privateKeySecret | default (dict) }}
             - name: BAE_LP_SIOP_CLIENT_ID
               value: {{ .Values.siop.clientId | quote }}
             - name: BAE_LP_SIOP_VERIFIER_HOST
@@ -395,6 +343,94 @@ spec:
               value: {{ .Values.externalUrl }}{{ .Values.siop.callbackPath }}
             - name: BAE_LP_SIOP_ALLOWED_ROLES
               value: {{ join "," .Values.siop.allowedRoles }}
+            {{- if and $siopPrivateKeySecret.name $siopPrivateKeySecret.key }}
+            - name: BAE_LP_SIOP_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $siopPrivateKeySecret.name | quote }}
+                  key: {{ $siopPrivateKeySecret.key | quote }}
+            {{- else if .Values.siop.privateKey }}
+            - name: BAE_LP_SIOP_PRIVATE_KEY
+              value: {{ .Values.siop.privateKey | quote }}
+            {{- end }}
+            {{- if .Values.siop.privateKeyPem }}
+            - name: BAE_LP_SIOP_PRIVATE_KEY_PEM
+              value: {{ .Values.siop.privateKeyPem | quote }}
+            {{- end }}
+            {{- if .Values.siop.signAlgorithm }}
+            - name: BAE_LP_SIO_SIGN_ALGORITHM
+              value: {{ .Values.siop.signAlgorithm | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.siopIsRedirection }}
+            - name: BAE_LP_SIOP_IS_REDIRECTION
+              value: {{ .Values.bizEcosystemLogicProxy.siopIsRedirection | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.siopOperators }}
+            - name: BAE_LP_SIOP_OPERATORS
+              value: {{ .Values.bizEcosystemLogicProxy.siopOperators | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.chatUrl }}
+            - name: BAE_LP_CHAT_URL
+              value: {{ .Values.bizEcosystemLogicProxy.chatUrl | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.searchUrl }}
+            - name: BAE_LP_SEARCH_URL
+              value: {{ .Values.bizEcosystemLogicProxy.searchUrl | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.billingEngineUrl }}
+            - name: BAE_LP_BILLING_ENGINE_URL
+              value: {{ .Values.bizEcosystemLogicProxy.billingEngineUrl | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.contactUsNotificationUrl }}
+            - name: BAE_LP_CONTACT_US_NOTIFICATION_URL
+              value: {{ .Values.bizEcosystemLogicProxy.contactUsNotificationUrl | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.paymentGateway }}
+            - name: BAE_LP_PAYMENT_GATEWAY
+              value: {{ .Values.bizEcosystemLogicProxy.paymentGateway | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.endpointSearchHost }}
+            - name: BAE_LP_ENDPOINT_SEARCH_HOST
+              value: {{ .Values.bizEcosystemLogicProxy.endpointSearchHost | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.endpointQuoteHost }}
+            - name: BAE_LP_ENDPOINT_QUOTE_HOST
+              value: {{ .Values.bizEcosystemLogicProxy.endpointQuoteHost | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.endpointQuotePath }}
+            - name: BAE_LP_ENDPOINT_QUOTE_PATH
+              value: {{ .Values.bizEcosystemLogicProxy.endpointQuotePath | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.endpointQuotePort }}
+            - name: BAE_LP_ENDPOINT_QUOTE_PORT
+              value: {{ .Values.bizEcosystemLogicProxy.endpointQuotePort | quote }}
+            {{- end }}
+            - name: BAE_LP_QUOTE_ENABLED
+              value: {{ .Values.bizEcosystemLogicProxy.quoteEnabled | quote }}
+            - name: BAE_LP_TENDERING_ENABLED
+              value: {{ .Values.bizEcosystemLogicProxy.tenderingEnabled | quote }}
+            - name: BAE_LP_PURCHASE_ENABLED
+              value: {{ .Values.bizEcosystemLogicProxy.purchaseEnabled | quote }}
+            - name: BAE_LP_DATASPACE_ENABLED
+              value: {{ .Values.bizEcosystemLogicProxy.dataSpaceEnabled | quote }}
+            - name: BAE_LP_LAUNCH_VALIDATION_ENABLED
+              value: {{ .Values.bizEcosystemLogicProxy.launchValidationEnabled | quote }}
+            {{- if .Values.bizEcosystemLogicProxy.operatorId }}
+            - name: BAE_LP_OPERATOR_ID
+              value: {{ .Values.bizEcosystemLogicProxy.operatorId | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.priceCompSchema }}
+            - name: BAE_LP_PRICE_COMP_SCHEMA
+              value: {{ .Values.bizEcosystemLogicProxy.priceCompSchema | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.offeringSchema }}
+            - name: BAE_LP_OFFERING_SCHEMA
+              value: {{ .Values.bizEcosystemLogicProxy.offeringSchema | quote }}
+            {{- end }}
+            {{- if .Values.bizEcosystemLogicProxy.partyLocation }}
+            - name: BAE_LP_PARTY_LOCATION
+              value: {{ .Values.bizEcosystemLogicProxy.partyLocation | quote }}
             {{- end }}
             {{- with .Values.bizEcosystemLogicProxy.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
