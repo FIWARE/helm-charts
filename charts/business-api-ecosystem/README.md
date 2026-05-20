@@ -38,6 +38,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.backup.schedule | string | `"* 1 *  *  *"` |  |
 | bizEcosystemChargingBackend.backup.secretName | string | `"gcs-secret"` |  |
 | bizEcosystemChargingBackend.basePath | string | `"/business-ecosystem-charging-backend"` | Base app path of charging backend (for versions < 8.1.0: /business-ecosystem-charging-backend, for versions >= 8.1.0: /opt/business-ecosystem-charging-backend) |
+| bizEcosystemChargingBackend.billingUrl | string | `""` | Optional URL for billing service integration |
 | bizEcosystemChargingBackend.db.authMechanism | string | `""` | optional MongoDB auth mechanism (e.g. SCRAM-SHA-1, SCRAM-SHA-256) |
 | bizEcosystemChargingBackend.db.database | string | `"charging_db"` |  |
 | bizEcosystemChargingBackend.db.host | string | `"mongo"` |  |
@@ -69,17 +70,10 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` |  |
 | bizEcosystemChargingBackend.deployment.updateStrategy.type | string | `"RollingUpdate"` |  |
 | bizEcosystemChargingBackend.deployment.updateStrategyPVC.type | string | `"Recreate"` |  |
-| bizEcosystemChargingBackend.billingUrl | string | `""` | Optional URL for billing service integration |
 | bizEcosystemChargingBackend.dpas.clientApiUrl | string | `""` | DPAS payment start endpoint |
 | bizEcosystemChargingBackend.dpas.key | string | `""` | DPAS JWT verification key |
 | bizEcosystemChargingBackend.email.mail | string | `"charging@email.com"` |  |
-| bizEcosystemChargingBackend.email.smtp.password | string | `""` |  |
-| bizEcosystemChargingBackend.email.smtp.port | string | `""` |  |
-| bizEcosystemChargingBackend.email.smtp.server | string | `""` |  |
-| bizEcosystemChargingBackend.email.smtp.user | string | `""` |  |
 | bizEcosystemChargingBackend.enabled | bool | `true` |  |
-| bizEcosystemChargingBackend.existingCertSecret | string | `""` |  |
-| bizEcosystemChargingBackend.existingSecret | string | `""` |  |
 | bizEcosystemChargingBackend.extraEnvVars | list | `[]` | List of additional ENV vars to be set, e.g., to be used in asset plugins |
 | bizEcosystemChargingBackend.extraEnvVarsSecret | string | `""` | Name of existing Secret containing extra ENV vars to be set (in case of sensitive data) |
 | bizEcosystemChargingBackend.fullnameOverride | string | `""` |  |
@@ -93,8 +87,6 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.notificationRecipientEmail | string | `""` | Optional e-mail address receiving billing notifications |
 | bizEcosystemChargingBackend.operatorId | string | `""` | Optional identifier of the party operating the marketplace |
 | bizEcosystemChargingBackend.payment.method | string | `"None"` | method: paypal or None (testing mode payment disconected) |
-| bizEcosystemChargingBackend.paypal.clientId | string | `""` |  |
-| bizEcosystemChargingBackend.paypal.clientSecret | string | `""` |  |
 | bizEcosystemChargingBackend.plugins.annotations | object | `{}` |  |
 | bizEcosystemChargingBackend.plugins.enabled | bool | `false` |  |
 | bizEcosystemChargingBackend.plugins.idmPassword | string | `"admin-password"` |  |
@@ -115,7 +107,6 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.token.identifier | string | `""` | Identifier (e.g. EORI) of local marketplace instance |
 | bizEcosystemChargingBackend.token.key | string | `""` | String with private key in PEM format |
 | bizEcosystemChargingBackend.verifyRequests | bool | `true` | Whether or not the BAE validates SSL certificates on requests to external components |
-| bizEcosystemLogicProxy.additionalEnvVars | list | `[]` | Additional environment variables for the logic proxy container |
 | bizEcosystemLogicProxy.allowEditParty | bool | `true` | Allow users to edit party attributes |
 | bizEcosystemLogicProxy.allowLocalEORI | bool | `false` | Allow to use organisations from local IDP as participants when creating or acquiring offerings |
 | bizEcosystemLogicProxy.basePath | string | `"/business-ecosystem-logic-proxy"` | Base app path of logic proxy (for versions < 8.1.0: /business-ecosystem-logic-proxy, for versions >= 8.1.0: /opt/business-ecosystem-logic-proxy) |
@@ -139,17 +130,11 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.endpointQuotePath | string | `""` |  |
 | bizEcosystemLogicProxy.endpointQuotePort | string | `""` |  |
 | bizEcosystemLogicProxy.endpointSearchHost | string | `""` |  |
-| bizEcosystemLogicProxy.existingCertSecret | string | `""` |  |
-| bizEcosystemLogicProxy.existingSecret | string | `""` |  |
 | bizEcosystemLogicProxy.externalIdp.enabled | bool | `false` | Enable usage of external IDPs |
 | bizEcosystemLogicProxy.externalIdp.showLocalLogin | bool | `false` | Show login button for local IDP on login modal dialog with list of external IDPs |
-| bizEcosystemLogicProxy.extraContainerVolumes | list | `[]` | Additional pod volumes for custom containers and mounts |
-| bizEcosystemLogicProxy.extraContainers | list | `[]` | Additional sidecar containers injected in the pod |
-| bizEcosystemLogicProxy.extraInitContainers | list | `[]` | Additional init containers injected before the logic-proxy starts |
 | bizEcosystemLogicProxy.extraVolumeMounts | list | `[]` |  |
 | bizEcosystemLogicProxy.fullnameOverride | string | `""` |  |
 | bizEcosystemLogicProxy.ingress.annotations | object | `{}` | annotations to be added to the ingress |
-| bizEcosystemLogicProxy.ingress.className | string | `""` | ingress class name |
 | bizEcosystemLogicProxy.ingress.enabled | bool | `false` | should there be an ingress to connect the logic proxy with the public internet |
 | bizEcosystemLogicProxy.ingress.hosts | list | `[]` | all hosts to be provided |
 | bizEcosystemLogicProxy.ingress.tls | list | `[]` | configure the ingress' tls |
@@ -164,7 +149,6 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.port | int | `8004` | port that the logic proxy container uses |
 | bizEcosystemLogicProxy.priceCompSchema | string | `""` |  |
 | bizEcosystemLogicProxy.propagateToken | bool | `true` | Sets whether the logic proxy should propagate the user access token to the backend components |
-| bizEcosystemLogicProxy.proxyHost | string | `""` |  |
 | bizEcosystemLogicProxy.purchaseEnabled | bool | `false` |  |
 | bizEcosystemLogicProxy.quoteEnabled | bool | `false` | Optional feature flags |
 | bizEcosystemLogicProxy.revenueModel | int | `30` | Default market owner precentage for Revenue Sharing models |
@@ -210,14 +194,12 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.theme.imagePullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | bizEcosystemLogicProxy.theme.name | string | `"default"` | Name of the theme |
 | bizEcosystemLogicProxy.theme.sourcePath | string | `"/my-theme"` |  |
-| bizEcosystemLogicProxy.theme.url | string | `""` |  |
 | bizEcosystemLogicProxy.token.cert | string | `""` | String with certificate (chain) in PEM format |
 | bizEcosystemLogicProxy.token.enabled | bool | `false` | Enable storage of local key and certificate |
 | bizEcosystemLogicProxy.token.identifier | string | `""` | Identifier (e.g. EORI) of local marketplace instance |
 | bizEcosystemLogicProxy.token.key | string | `""` | String with private key in PEM format |
 | externalUrl | string | `"https://marketplace.fiware.org"` |  |
 | fullnameOverride | string | `""` |  |
-| global.namespaceOverride | string | `""` |  |
 | initContainer.apis.image | string | `"busybox"` |  |
 | initContainer.apis.imagePullPolicy | string | `"IfNotPresent"` |  |
 | initContainer.apis.maxRetries | int | `60` |  |
@@ -238,31 +220,24 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | nameOverride | string | `""` |  |
 | oauth.adminrole | string | `"admin"` | Admin role |
 | oauth.aggregatorrole | string | `"Aggregator"` | Aggregator role |
-| oauth.callbackPath | string | `""` | Callback URL path of frontend logic proxy for receiving the access tokens (callback URL would be e.g. externalUrl/auth/fiware/callback) |
 | oauth.certifierrole | string | `"certifier"` | Role defined in the IDM client app for organization certifiers of the BAE |
-| oauth.clientId | string | `""` | OAuth2 Client ID of the BAE application |
 | oauth.clientSecret | string | `""` | OAuth2 Client Secret of the BAE application. E.G., market-clientSecret |
 | oauth.customerrole | string | `"customer"` | Customer role |
-| oauth.defaultRole | string | `""` |  |
 | oauth.grantedrole | string | `"admin"` | Granted role |
 | oauth.isLegacy | bool | `false` | Whether the used FIWARE IDM is version 6 or lower |
 | oauth.oidc | bool | `false` | Set to true if OpenID Connect protocol should be used |
 | oauth.orgadminrole | string | `"orgAdmin"` | Role defined in the IDM client app for organization admins of the BAE |
 | oauth.provider | string | `"fiware"` | IDP provider for passport strategy (fiware, keycloak, github, ...) |
 | oauth.sellerrole | string | `"seller"` | Seller role |
-| oauth.server | string | `""` | External URL of the FIWARE IDM used for user authentication |
-| openshift | bool | `false` |  |
 | siop.allowedRoles[0] | string | `"seller"` |  |
 | siop.allowedRoles[1] | string | `"customer"` |  |
 | siop.callbackPath | string | `"/auth/vc/callback"` |  |
 | siop.ccs.defaultOidcScope | string | `"defaultScope"` | Default scope to be used from scopes below, if none is provided |
-| siop.ccs.enabeld | bool | `false` | is automatic credentials config registration enabled |
-| siop.ccs.enabled | bool | `false` | is automatic credentials config registration enabled (preferred key, `enabeld` kept for backward compatibility) |
+| siop.ccs.enabled | bool | `false` | is automatic credentials config registration enabled |
 | siop.ccs.endpoint | string | `"http://credentials-config-service:8080"` | Endpoint of the CCS |
-| siop.ccs.oidcScopes | object | `{}` | Optional map of scope -> credential configuration entries |
 | siop.clientId | string | `"marketplace-client"` |  |
 | siop.enabled | bool | `false` |  |
-| siop.privateKey | string | `""` |  |
+| siop.privateKey | string | `""` | Kubernetes Secret reference for BAE_LP_SIOP_PRIVATE_KEY (preferred over plain siop.privateKey) privateKeySecret:   name: bae-secret   key: privateKey |
 | siop.privateKeyPem | string | `""` |  |
 | siop.signAlgorithm | string | `"ES256"` |  |
 | siop.verifier.host | string | `"https://verifier.apps.fiware.fiware.dev"` |  |
