@@ -76,6 +76,18 @@ spec:
             - name: BUSPORT
               value: {{ .Values.kafka.busport | quote }}
             {{- end }}
+            - name: SCORPIO_HISTORY_AUTORECORDING
+              value: {{ .Values.config.history.enabled | quote }}
+            {{- if .Values.config.history.enabled }}
+            {{- if .Values.config.history.poolSize }}
+            - name: SCORPIO_HISTORY_AUTORECORDINGTHREADPOOLSIZE
+              value: {{ .Values.config.history.poolSize | quote }}
+            {{- end }}
+            {{- if .Values.config.history.bufferSize }}
+            - name: SCORPIO_HISTORY_AUTORECORDINGBUFFERSIZE
+              value: {{ .Values.config.history.bufferSize | quote }}
+            {{- end }}
+            {{- end }}
             - name: QUARKUS_LOG_LEVEL
               value: {{ .Values.logging.level | quote }}
             {{- if .Values.additionalEnvVars }}
