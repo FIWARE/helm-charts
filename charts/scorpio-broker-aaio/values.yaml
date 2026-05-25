@@ -8,7 +8,7 @@ replicaCount: 1
 ## configuration of the image to be used
 image:
   # -- scorpiobroker image name
-  #ref: https://hub.docker.com/r/scorpiobroker/scorpio      
+  #ref: https://hub.docker.com/r/scorpiobroker/scorpio
   repository: scorpiobroker/scorpio
   # -- specification of the image pull policy
   pullPolicy: IfNotPresent
@@ -45,7 +45,7 @@ securityContext: {}
 
 ## configuration for the k8s service to access scorpiobroker
 service:
-  # -- service type      
+  # -- service type
   type: NodePort
   # -- port to be used by the service
   port: 9090
@@ -60,19 +60,19 @@ livenessProbe:
   path: /actuator/health
   initialDelaySeconds: 40
   failureThreshold: 6
-  periodSeconds: 10 
+  periodSeconds: 10
 
-## ingress configuration  
+## ingress configuration
 ingress:
-  # -- should there be an ingress to connect scorpio with the public internet      
+  # -- should there be an ingress to connect scorpio with the public internet
   enabled: false
   # -- annotations to be added to the ingress
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
-  # -- all hosts to be provided  
+  # -- all hosts to be provided
   hosts:
-      # -- provide a hosts and the paths that should be available    
+      # -- provide a hosts and the paths that should be available
     - host: chart-example.local
       paths: []
   tls: []
@@ -87,6 +87,8 @@ db:
   user: ngb
   # -- password for connecting the database
   password: ngb
+  # -- name of the database to be used
+  name: ngb
   # -- existing secret to retrieve the db password
   existingSecret:
     # -- should an existing secret be used
@@ -109,7 +111,7 @@ kafka:
 logging:
   # -- Log level
   level: INFO
-  
+
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
