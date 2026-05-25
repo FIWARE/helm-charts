@@ -219,7 +219,7 @@ Template for MySQL initContainer check
   image: '{{ .ctx.Values.initContainer.mysql.image }}:{{ .ctx.Values.initContainer.mysql.imageTag }}'
   imagePullPolicy: {{ .ctx.Values.initContainer.mysql.imagePullPolicy | quote }}
   command: ['sh', '-c',
-    'while ! mysqladmin ping -h{{ .host | quote }} --silent; do echo "Waiting for MySQL"; ((i++)) && ((i=={{ .ctx.Values.initContainer.mysql.maxRetries }})) && break; sleep {{ .ctx.Values.initContainer.mysql.sleepInterval }}; done;']
+    'i=0; until mysqladmin ping -h{{ .host | quote }} --silent || [ "$((i+=1))" -ge {{ .ctx.Values.initContainer.mysql.maxRetries }} ]; do echo "Waiting for MySQL"; sleep {{ .ctx.Values.initContainer.mysql.sleepInterval }}; done']
 {{- end }}
 
 {{/*
@@ -230,7 +230,7 @@ Template for MySQL initContainer check
   image: '{{ .ctx.Values.initContainer.mongodb.image }}:{{ .ctx.Values.initContainer.mongodb.imageTag }}'
   imagePullPolicy: {{ .ctx.Values.initContainer.mongodb.imagePullPolicy | quote }}
   command: ['sh', '-c',
-    'while ! mongo --host {{ .host | quote }} --eval "printjson(db.serverStatus())"; do echo "Waiting for MongoDB"; ((i++)) && ((i=={{ .ctx.Values.initContainer.mongodb.maxRetries }})) && break; sleep {{ .ctx.Values.initContainer.mongodb.sleepInterval }}; done;']
+    'i=0; until mongo --host {{ .host | quote }} --eval "printjson(db.serverStatus())" || [ "$((i+=1))" -ge {{ .ctx.Values.initContainer.mongodb.maxRetries }} ]; do echo "Waiting for MongoDB"; sleep {{ .ctx.Values.initContainer.mongodb.sleepInterval }}; done']
 {{- end }}
 
 {{/*
@@ -241,7 +241,7 @@ Template for Charging Backend initContainer check
   image: "{{ .ctx.Values.initContainer.apis.image }}"
   imagePullPolicy: {{ .ctx.Values.initContainer.apis.imagePullPolicy | quote }}
   command: ['sh', '-c',
-    'while ! wget "http://{{ include "bizEcosystemChargingBackend.fullhostname" .ctx }}/{{ .path }}"; do echo "Waiting for APIs"; ((i++)) && ((i=={{ .ctx.Values.initContainer.apis.maxRetries }})) && break; sleep {{ .ctx.Values.initContainer.apis.sleepInterval }}; done;']
+    'i=0; until wget "http://{{ include "bizEcosystemChargingBackend.fullhostname" .ctx }}/{{ .path }}" || [ "$((i+=1))" -ge {{ .ctx.Values.initContainer.apis.maxRetries }} ]; do echo "Waiting for APIs"; sleep {{ .ctx.Values.initContainer.apis.sleepInterval }}; done']
 {{- end }}
 
 {{/*
