@@ -9588,6 +9588,36 @@ entries:
   - annotations:
       charts.openshift.io/name: tm-forum-api
     apiVersion: v2
+    appVersion: 1.12.2
+    created: "2026-05-26T08:33:02.051659465Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    - condition: redis.enabled
+      name: redis
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 18.1.2
+    description: A Helm chart for running the FIWARE TMForum-APIs
+    digest: e37bd5e19c53bf223c559a2f7f4bf7bb93d63c4a9f8c4fe30cbd1b8d1e9557c0
+    home: https://github.com/FIWARE/tmforum-api
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - tmforum
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: tm-forum-api
+    sources:
+    - https://github.com/FIWARE/tmforum-api
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/tm-forum-api-0.17.9/tm-forum-api-0.17.9.tgz
+    version: 0.17.9
+  - annotations:
+      charts.openshift.io/name: tm-forum-api
+    apiVersion: v2
     appVersion: 1.12.1
     created: "2026-05-25T13:54:53.430196324Z"
     dependencies:
@@ -13164,4 +13194,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-05-26T08:29:00.234859113Z"
+generated: "2026-05-26T08:33:02.30131629Z"
