@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![AppVersion: 2026.05.14](https://img.shields.io/badge/AppVersion-2026.05.14-informational?style=flat-square)
+![Version: 1.0.2](https://img.shields.io/badge/Version-1.0.2-informational?style=flat-square) ![AppVersion: 2026.05.14](https://img.shields.io/badge/AppVersion-2026.05.14-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -52,17 +52,17 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemChargingBackend.deployment.image.repository | string | `"fiware/biz-ecosystem-charging-backend"` |  |
 | bizEcosystemChargingBackend.deployment.image.tag | string | `"11.6.1"` |  |
-| bizEcosystemChargingBackend.deployment.livenessProbe.failureThreshold | int | `3` |  |
-| bizEcosystemChargingBackend.deployment.livenessProbe.initialDelaySeconds | int | `61` |  |
-| bizEcosystemChargingBackend.deployment.livenessProbe.periodSeconds | int | `30` |  |
+| bizEcosystemChargingBackend.deployment.livenessProbe.failureThreshold | int | `10` |  |
+| bizEcosystemChargingBackend.deployment.livenessProbe.initialDelaySeconds | int | `20` |  |
+| bizEcosystemChargingBackend.deployment.livenessProbe.periodSeconds | int | `5` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.successThreshold | int | `1` |  |
-| bizEcosystemChargingBackend.deployment.livenessProbe.timeoutSeconds | int | `30` |  |
+| bizEcosystemChargingBackend.deployment.livenessProbe.timeoutSeconds | int | `5` |  |
 | bizEcosystemChargingBackend.deployment.nodeSelector | object | `{}` |  |
-| bizEcosystemChargingBackend.deployment.readinessProbe.failureThreshold | int | `3` |  |
-| bizEcosystemChargingBackend.deployment.readinessProbe.initialDelaySeconds | int | `60` |  |
-| bizEcosystemChargingBackend.deployment.readinessProbe.periodSeconds | int | `30` |  |
+| bizEcosystemChargingBackend.deployment.readinessProbe.failureThreshold | int | `10` |  |
+| bizEcosystemChargingBackend.deployment.readinessProbe.initialDelaySeconds | int | `15` |  |
+| bizEcosystemChargingBackend.deployment.readinessProbe.periodSeconds | int | `5` |  |
 | bizEcosystemChargingBackend.deployment.readinessProbe.successThreshold | int | `1` |  |
-| bizEcosystemChargingBackend.deployment.readinessProbe.timeoutSeconds | int | `30` |  |
+| bizEcosystemChargingBackend.deployment.readinessProbe.timeoutSeconds | int | `5` |  |
 | bizEcosystemChargingBackend.deployment.replicaCount | int | `1` |  |
 | bizEcosystemChargingBackend.deployment.revisionHistoryLimit | int | `3` |  |
 | bizEcosystemChargingBackend.deployment.tolerations | list | `[]` |  |
@@ -173,17 +173,17 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.statefulset.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemLogicProxy.statefulset.image.repository | string | `"fiware/biz-ecosystem-logic-proxy"` |  |
 | bizEcosystemLogicProxy.statefulset.image.tag | string | `"11.19.2"` |  |
-| bizEcosystemLogicProxy.statefulset.livenessProbe.failureThreshold | int | `3` |  |
-| bizEcosystemLogicProxy.statefulset.livenessProbe.initialDelaySeconds | int | `61` |  |
-| bizEcosystemLogicProxy.statefulset.livenessProbe.periodSeconds | int | `30` |  |
+| bizEcosystemLogicProxy.statefulset.livenessProbe.failureThreshold | int | `10` |  |
+| bizEcosystemLogicProxy.statefulset.livenessProbe.initialDelaySeconds | int | `20` |  |
+| bizEcosystemLogicProxy.statefulset.livenessProbe.periodSeconds | int | `5` |  |
 | bizEcosystemLogicProxy.statefulset.livenessProbe.successThreshold | int | `1` |  |
-| bizEcosystemLogicProxy.statefulset.livenessProbe.timeoutSeconds | int | `30` |  |
+| bizEcosystemLogicProxy.statefulset.livenessProbe.timeoutSeconds | int | `5` |  |
 | bizEcosystemLogicProxy.statefulset.nodeSelector | object | `{}` |  |
-| bizEcosystemLogicProxy.statefulset.readinessProbe.failureThreshold | int | `3` |  |
-| bizEcosystemLogicProxy.statefulset.readinessProbe.initialDelaySeconds | int | `60` |  |
-| bizEcosystemLogicProxy.statefulset.readinessProbe.periodSeconds | int | `30` |  |
+| bizEcosystemLogicProxy.statefulset.readinessProbe.failureThreshold | int | `10` |  |
+| bizEcosystemLogicProxy.statefulset.readinessProbe.initialDelaySeconds | int | `15` |  |
+| bizEcosystemLogicProxy.statefulset.readinessProbe.periodSeconds | int | `5` |  |
 | bizEcosystemLogicProxy.statefulset.readinessProbe.successThreshold | int | `1` |  |
-| bizEcosystemLogicProxy.statefulset.readinessProbe.timeoutSeconds | int | `30` |  |
+| bizEcosystemLogicProxy.statefulset.readinessProbe.timeoutSeconds | int | `5` |  |
 | bizEcosystemLogicProxy.statefulset.replicaCount | int | `1` |  |
 | bizEcosystemLogicProxy.statefulset.revisionHistoryLimit | int | `3` |  |
 | bizEcosystemLogicProxy.statefulset.tolerations | list | `[]` |  |
