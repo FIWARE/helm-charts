@@ -157,7 +157,7 @@ common:
     enabled: false
 
   # -- a list of additional env vars to be set
-  additonalEnvVars: [ ]
+  additionalEnvVars: [ ]
 
   ## configuration for the actual edc instance - to be provided as properties file
   config:

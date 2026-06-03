@@ -1,6 +1,6 @@
 # fdsc-edc
 
-![Version: 0.2.4](https://img.shields.io/badge/Version-0.2.4-informational?style=flat-square) ![AppVersion: 0.1.7](https://img.shields.io/badge/AppVersion-0.1.7-informational?style=flat-square)
+![Version: 0.2.5](https://img.shields.io/badge/Version-0.2.5-informational?style=flat-square) ![AppVersion: 0.1.7](https://img.shields.io/badge/AppVersion-0.1.7-informational?style=flat-square)
 
 A Helm chart for running the fdsc-edc on kubernetes.
 
@@ -24,7 +24,7 @@ A Helm chart for running the fdsc-edc on kubernetes.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| common.additonalEnvVars | list | `[]` | a list of additional env vars to be set |
+| common.additionalEnvVars | list | `[]` | a list of additional env vars to be set |
 | common.autoscaling.enabled | bool | `false` |  |
 | common.config.dcp.enabled | bool | `false` |  |
 | common.config.dcp.scopes.catalog | string | `nil` |  |
