@@ -12460,6 +12460,31 @@ entries:
     version: 0.0.1
   vcverifier:
   - apiVersion: v2
+    appVersion: 6.12.10
+    created: "2026-06-04T12:12:44.784261011Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the FIWARE VCVerifier.
+    digest: be7c33aec53d7b60d5098da0af9f802179adcdf45df9123fbcfdc376733f588e
+    home: https://github.com/fiware/vcverifier
+    keywords:
+    - FIWARE Data Space Connector
+    - FIWARE
+    - Verifiable Credentials
+    - OID4VP
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: vcverifier
+    sources:
+    - https://github.com/fiware/vcverifier
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-4.12.12/vcverifier-4.12.12.tgz
+    version: 4.12.12
+  - apiVersion: v2
     appVersion: 6.12.9
     created: "2026-06-01T07:40:58.089957798Z"
     dependencies:
@@ -13347,4 +13372,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-06-04T08:29:44.96818946Z"
+generated: "2026-06-04T12:12:44.785932114Z"
