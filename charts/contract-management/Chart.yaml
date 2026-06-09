@@ -1,6 +1,6 @@
 apiVersion: v2
 name: contract-management
-version: 3.5.30
+version: 3.5.31
 appVersion: 3.3.9
 kubeVersion: '>= 1.19-0'
 description: A Helm chart for running the contract-management on kubernetes.
