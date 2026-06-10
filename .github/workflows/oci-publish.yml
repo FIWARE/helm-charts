@@ -1,0 +1,121 @@
+name: OCI Publish
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  HELM_VERSION: "4.0.4"
+  OCI_REGISTRY: "quay.io"
+  OCI_NAMESPACE: "oci://quay.io/fiware/helm-charts"
+
+jobs:
+  oci-publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: azure/setup-helm@v4
+        with:
+          version: '${{ env.HELM_VERSION }}'
+
+      # Install yq for robust YAML parsing of Chart.yaml fields
+      - uses: actions/setup-go@v4
+
+      - name: Install yq
+        run: |
+          go install github.com/mikefarah/yq/v4@latest
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+
+      - name: Login to quay.io OCI registry
+        run: |
+          helm registry login "$OCI_REGISTRY" \
+            --username '${{ secrets.QUAY_USERNAME }}' \
+            --password '${{ secrets.QUAY_PASSWORD }}'
+
+      - name: Update chart dependencies
+        run: ./build.sh
+
+      - name: Package and push charts
+        run: |
+          PUSH_COUNT=0
+          SKIP_COUNT=0
+          FAIL_COUNT=0
+
+          for chart_dir in charts/*/; do
+            # Skip directories without a Chart.yaml
+            if [ ! -f "${chart_dir}Chart.yaml" ]; then
+              continue
+            fi
+
+            CHART_NAME=$(yq e '.name' "${chart_dir}Chart.yaml")
+            CHART_VERSION=$(yq e '.version' "${chart_dir}Chart.yaml")
+
+            if [ -z "$CHART_NAME" ] || [ "$CHART_NAME" = "null" ]; then
+              echo "::warning::Skipping ${chart_dir}: no 'name' field in Chart.yaml"
+              continue
+            fi
+
+            if [ -z "$CHART_VERSION" ] || [ "$CHART_VERSION" = "null" ]; then
+              echo "::warning::Skipping ${chart_dir}: no 'version' field in Chart.yaml"
+              continue
+            fi
+
+            echo "::group::${CHART_NAME} (${CHART_VERSION})"
+
+            # Check whether this version already exists in the OCI registry
+            if helm show chart "${OCI_NAMESPACE}/${CHART_NAME}" --version "$CHART_VERSION" > /dev/null 2>&1; then
+              echo "Skipping ${CHART_NAME}-${CHART_VERSION}: already published"
+              SKIP_COUNT=$((SKIP_COUNT + 1))
+              echo "::endgroup::"
+              continue
+            fi
+
+            echo "Publishing ${CHART_NAME}-${CHART_VERSION}..."
+
+            # Package the chart
+            if ! helm package "$chart_dir" --destination /tmp/helm-packages; then
+              echo "::error::Failed to package ${CHART_NAME}-${CHART_VERSION}"
+              FAIL_COUNT=$((FAIL_COUNT + 1))
+              echo "::endgroup::"
+              continue
+            fi
+
+            PACKAGE_FILE="/tmp/helm-packages/${CHART_NAME}-${CHART_VERSION}.tgz"
+            if [ ! -f "$PACKAGE_FILE" ]; then
+              echo "::error::Expected package file not found: ${PACKAGE_FILE}"
+              FAIL_COUNT=$((FAIL_COUNT + 1))
+              echo "::endgroup::"
+              continue
+            fi
+
+            # Push the chart to the OCI registry
+            if ! helm push "$PACKAGE_FILE" "$OCI_NAMESPACE"; then
+              echo "::error::Failed to push ${CHART_NAME}-${CHART_VERSION}"
+              FAIL_COUNT=$((FAIL_COUNT + 1))
+              echo "::endgroup::"
+              continue
+            fi
+
+            echo "Successfully published ${CHART_NAME}-${CHART_VERSION}"
+            PUSH_COUNT=$((PUSH_COUNT + 1))
+            echo "::endgroup::"
+          done
+
+          echo ""
+          echo "=== OCI Publish Summary ==="
+          echo "Pushed:  ${PUSH_COUNT}"
+          echo "Skipped: ${SKIP_COUNT} (already published)"
+          echo "Failed:  ${FAIL_COUNT}"
+
+          if [ "$FAIL_COUNT" -gt 0 ]; then
+            echo "::error::${FAIL_COUNT} chart(s) failed to publish"
+            exit 1
+          fi
+
+      - name: Logout from OCI registry
+        if: always()
+        run: helm registry logout "$OCI_REGISTRY"
