@@ -45,6 +45,34 @@ After the repo is added all charts can be installed via:
 helm install <RELEASE_NAME> fiware/<CHART_NAME>
 ```
 
+## OCI Registry (quay.io)
+
+All charts are also published as OCI artifacts to quay.io. To pull or install
+a chart from the OCI registry:
+
+### Pull a chart archive
+
+```console
+helm pull oci://quay.io/fiware/helm-charts/<chart-name> --version <version>
+```
+
+### Install directly from OCI
+
+```console
+helm install my-release oci://quay.io/fiware/helm-charts/<chart-name> --version <version>
+```
+
+### Example
+
+```console
+helm install orion oci://quay.io/fiware/helm-charts/orion --version 1.6.11
+```
+
+### Available charts
+
+All charts published to https://fiware.github.io/helm-charts are also available
+in the OCI registry at `oci://quay.io/fiware/helm-charts/<chart-name>`.
+
 ## Configuration
 
 If you are searching for some configurations that can be used in a production environment, we recommend our [Loadtest Repository](https://github.com/FIWARE/orion-loadtest). It provides values for different sizes of environments and the configuration for [Orion-LD](https://github.com/FIWARE/context.Orion-LD) and [Mongo-DB](https://www.mongodb.com/).

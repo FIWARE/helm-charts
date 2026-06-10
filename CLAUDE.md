@@ -36,12 +36,13 @@ https://fiware.github.io/helm-charts and indexed on Artifact Hub.
 └── eval.sh                       # helm template | kubeconform across all charts
 ```
 
-Charts in the repo (as of 2026-04): api-umbrella, apollo, bae-activation-service,
-business-api-ecosystem, canis-major, contract-management, credentials-config-service,
-did-helper, dsba-pdp, dss-validation-service, endpoint-auth-service, fdsc-edc,
-iotagent-json, iotagent-ul, ishare-satellite, keyrock, mintaka, odrl-pap,
-onboarding-portal, orion, scorpio-broker, scorpio-broker-aaio, tm-forum-api,
-trusted-issuers-list, trusted-issuers-registry, vcverifier.
+Charts in the repo (as of 2026-06): api-umbrella, apollo, bae-activation-service,
+business-api-ecosystem, canis-major, common (library), contract-management,
+credentials-config-service, did-helper, dsba-pdp, dss-validation-service,
+endpoint-auth-service, fdsc-dashboard, fdsc-edc, iotagent-json, iotagent-ul,
+ishare-satellite, keyrock, mintaka, odrl-pap, onboarding-portal, orion,
+scorpio-broker, scorpio-broker-aaio, tm-forum-api, trusted-issuers-list,
+trusted-issuers-registry, vcverifier (28 total, 27 application + 1 library).
 
 ## Build & Test
 ```bash
@@ -76,12 +77,24 @@ helm template charts/<chart> | kubeconform -strict -ignore-missing-schemas
 - `Chart.yaml` annotation `charts.openshift.io/name` is used where charts ship an
   OpenShift route.
 
+## CI/CD Workflows
+- `.github/workflows/deploy.yml` — publishes charts to GitHub Pages via
+  `helm/chart-releaser-action@v1.5.0` on push to `main`
+- `.github/workflows/check.yml` — PR checks: lint, eval (kubeconform), common-tests,
+  label check, version bump, helm-docs generation
+- `.github/workflows/check-labels.yml` — enforces `major`/`minor`/`patch` label on PRs
+- `.github/workflows/check-chart-updates.yml` — weekly cron checking upstream releases
+- `.github/actions/bump-chart-version/` — composite action for semver bumping
+- Helm version pinned in CI: `4.0.4` (env var `HELM_VERSION` in `check.yml`)
+
 ## Important Files
 - `charts/orion/templates/_helpers.tpl` — canonical helper pattern
 - `charts/keyrock/templates/_helpers.tpl` — includes `existingSecret` + `certSecret`
   helpers
 - `charts/scorpio-broker/templates/` — multi-service chart with per-component
   deployments/services/HPAs (good test case for helpers that take a component name)
-- `build.sh`, `lint.sh`, `eval.sh` — CI entry points, must keep passing after refactor
-- `.github/workflows/` (upstream) — Chart Test workflow runs `helm lint` and
-  `kubeconform` on PRs
+- `charts/common/` — library chart (`type: library`) used as dependency by all charts
+- `build.sh`, `lint.sh`, `eval.sh` — CI entry points, must keep passing after changes
+- `.github/workflows/deploy.yml` — GitHub Pages chart publishing (must not be modified
+  when adding OCI publishing)
+- `.github/workflows/check.yml` — PR validation workflow
