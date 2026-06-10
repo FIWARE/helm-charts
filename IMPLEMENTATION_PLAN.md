@@ -2,17 +2,19 @@
 
 ## Overview
 
-Create a GitHub Actions workflow that publishes all FIWARE Helm charts as OCI artifacts
-to `quay.io/fiware/helm-charts/<chart-name>` on every push to `main`. This is purely
-additive — the existing GitHub Pages publishing via `chart-releaser-action` in
-`deploy.yml` remains untouched.
+Create a GitHub Actions workflow that publishes changed FIWARE Helm charts as OCI
+artifacts to `quay.io/fiware/helm-charts/<chart-name>` on every push to `main`. Only
+charts whose version has been bumped since the last release are pushed — existing
+versions are never overwritten. This is purely additive — the existing GitHub Pages
+publishing via `chart-releaser-action` in `deploy.yml` remains untouched.
 
 ## Steps
 
 ### Step 1: Create the OCI publish GitHub Actions workflow
 
-**Goal:** Add a new workflow file `.github/workflows/oci-publish.yml` that packages and
-pushes every chart to the quay.io OCI registry whenever a commit lands on `main`.
+**Goal:** Add a new workflow file `.github/workflows/oci-publish.yml` that checks for
+chart version changes and pushes only new versions to the quay.io OCI registry whenever
+a commit lands on `main`.
 
 **File to create:** `.github/workflows/oci-publish.yml`
 
@@ -32,16 +34,21 @@ pushes every chart to the quay.io OCI registry whenever a commit lands on `main`
   4. **Update chart dependencies** — run `./build.sh` so that charts with sub-chart
      dependencies (e.g., `tm-forum-api` depending on `redis` from Bitnami OCI, and all
      charts depending on `common`) are fully resolved before packaging.
-  5. **Package and push every chart** — iterate over `charts/*/` and, for each directory
-     that contains a `Chart.yaml`:
+  5. **Package and push only changed charts** — iterate over `charts/*/` and, for each
+     directory that contains a `Chart.yaml`:
      - Read the chart name and version from `Chart.yaml` using `yq` or `grep`/`awk`.
-     - Run `helm package charts/<chart-name>` to produce `<name>-<version>.tgz`.
-     - Run `helm push <name>-<version>.tgz oci://quay.io/fiware/helm-charts`.
-     - **Handle already-existing versions:** quay.io returns an error if the exact
-       tag already exists. The script must catch this gracefully (log a warning and
-       continue) so that unchanged charts do not fail the entire workflow. Use
-       `|| echo "Already exists or push failed for <chart-name>, skipping"` or
-       check the exit code and only fail on unexpected errors.
+     - **Check whether this version already exists in the OCI registry** by running
+       `helm show chart oci://quay.io/fiware/helm-charts/<chart-name> --version <version>`.
+       If this succeeds (exit code 0), the version is already published — skip it with
+       a log message (`echo "Skipping <chart-name>-<version>: already published"`).
+     - Only if the version does **not** exist in the registry:
+       - Run `helm package charts/<chart-name>` to produce `<name>-<version>.tgz`.
+       - Run `helm push <name>-<version>.tgz oci://quay.io/fiware/helm-charts`.
+       - If push fails, fail the workflow (do not silently swallow errors).
+     - **Existing versions are never overwritten.** Only new chart versions
+       (bumped in `Chart.yaml`) are published. This ensures reproducibility — a
+       given version tag in the OCI registry always corresponds to exactly one
+       artifact.
      - **Library charts:** The `common` chart (`type: library`) **should** be pushed.
        Library charts are valid OCI artifacts and consumer charts may reference them
        as OCI dependencies in the future. There is no need to skip them.
@@ -49,10 +56,11 @@ pushes every chart to the quay.io OCI registry whenever a commit lands on `main`
 
 **Design decisions:**
 
-- Push **all** charts on every `main` push, not only changed ones. The `helm push`
-  call for an already-existing version is a harmless no-op (after error handling).
-  This avoids the complexity of diffing chart versions in CI and ensures the OCI
-  registry is always in sync with the repository.
+- Push **only charts whose version has changed** since the last release. Before
+  packaging, the workflow checks whether the chart version already exists in the OCI
+  registry. If it does, the chart is skipped. This avoids unnecessary pushes and
+  ensures that existing versions are never overwritten, preserving artifact
+  immutability and reproducibility.
 - Do **not** modify `deploy.yml`. The two workflows run independently on the same
   trigger.
 - Use `yq` (installed via `actions/setup-go` + `go install`) for robust YAML parsing
@@ -70,8 +78,9 @@ pushes every chart to the quay.io OCI registry whenever a commit lands on `main`
 
 - `.github/workflows/oci-publish.yml` exists and is valid YAML.
 - The workflow triggers on push to `main`.
-- All 28 charts (27 application + 1 library) are iterated, packaged, and pushed.
-- Already-existing versions do not cause a workflow failure.
+- All 28 charts (27 application + 1 library) are iterated.
+- Only charts with a version not yet present in the OCI registry are packaged and
+  pushed. Already-published versions are skipped (not overwritten).
 - `deploy.yml` is not modified.
 - `./lint.sh` passes without errors (no chart breakage introduced).
 - `helm lint` and `helm template` on a sample chart (e.g., `orion`) still succeed.
