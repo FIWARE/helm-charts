@@ -230,7 +230,7 @@ bizEcosystemChargingBackend:
       ## ref: https://hub.docker.com/r/fiware/biz-ecosystem-charging-backend
       repository: fiware/biz-ecosystem-charging-backend
       ## -- tag of the image to be used
-      tag: 11.6.1
+      tag: 11.7.0
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
     ## -- additional labels for the deployment, if required
@@ -453,7 +453,7 @@ bizEcosystemLogicProxy:
       ## ref: https://hub.docker.com/r/fiware/biz-ecosystem-logic-proxy
       repository: fiware/biz-ecosystem-logic-proxy
       ## -- tag of the image to be used
-      tag: 11.19.2
+      tag: 11.20.3
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
     ## -- additional labels for the deployment, if required
