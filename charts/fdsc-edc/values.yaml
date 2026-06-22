@@ -297,6 +297,22 @@ common:
       ## -- address to the trusted issuers list
       tilAddress: 
 
+    ## -- configuration for the ODRL PAP policy enforcement
+    odrlPap:
+      policy:
+        ## -- should ODRL policy enforcement be enabled
+        enabled: false
+        ## -- host of the ODRL PAP
+        host:
+        ## -- path where additional contexts file will be mounted
+        additionalContextsPath: /etc/edc/additional-contexts.json
+        ## -- path where scope mappings file will be mounted
+        scopeMappingsPath: /etc/edc/scope-mappings.json
+        ## -- additional JSON-LD contexts for ODRL policy evaluation, rendered as JSON and mounted as a ConfigMap
+        additionalContexts: []
+        ## -- scope mappings for ODRL constraint-to-scope resolution, rendered as JSON and mounted as a ConfigMap
+        scopeMappings: {}
+
     ## -- configuration for dcp based authn/z
     dcp:
       ## -- should it be enabled

@@ -71,6 +71,11 @@ data:
     ebsiTir.enabled={{ $cfg.config.ebsiTir.enabled }}
     ebsiTir.tilAddress={{ $cfg.config.ebsiTir.tilAddress }}
 
+    odrlPap.policy.enabled={{ $cfg.config.odrlPap.policy.enabled }}
+    odrlPap.host={{ $cfg.config.odrlPap.policy.host }}
+    odrlPap.policy.additionalContextsPath={{ $cfg.config.odrlPap.policy.additionalContextsPath }}
+    odrlPap.policy.scopeMappingsPath={{ $cfg.config.odrlPap.policy.scopeMappingsPath }}
+
     dcp.enabled={{ $cfg.config.dcp.enabled }}
     dcp.scopes.catalog={{ $cfg.config.dcp.scopes.catalog }}
     dcp.scopes.negotiation={{ $cfg.config.dcp.scopes.negotiation }}
