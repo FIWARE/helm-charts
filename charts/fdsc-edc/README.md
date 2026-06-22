@@ -1,6 +1,6 @@
 # fdsc-edc
 
-![Version: 0.2.11](https://img.shields.io/badge/Version-0.2.11-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![AppVersion: 1.1.0](https://img.shields.io/badge/AppVersion-1.1.0-informational?style=flat-square)
 
 A Helm chart for running the fdsc-edc on kubernetes.
 
@@ -61,6 +61,12 @@ A Helm chart for running the fdsc-edc on kubernetes.
 | common.config.oauth.clientId | string | `nil` | client id to be used |
 | common.config.oauth.secretAlias | string | `nil` | alias of the secret used to access the token service |
 | common.config.oauth.tokenUrl | string | `nil` | address of the token service |
+| common.config.odrlPap.policy.additionalContexts | list | `[]` |  |
+| common.config.odrlPap.policy.additionalContextsPath | string | `"/etc/edc/additional-contexts.json"` |  |
+| common.config.odrlPap.policy.enabled | bool | `false` |  |
+| common.config.odrlPap.policy.host | string | `nil` |  |
+| common.config.odrlPap.policy.scopeMappings | object | `{}` |  |
+| common.config.odrlPap.policy.scopeMappingsPath | string | `"/etc/edc/scope-mappings.json"` |  |
 | common.config.oid4vp | object | `{"clientId":"dsp","credentialsFolder":null,"enabled":false,"holder":{"id":null,"key":{"path":null,"type":"EC"},"kid":null,"signatureAlgorithm":"ECDH-ES"},"organizationClaim":"verifiableCredential.issuer","proxy":{"enabled":false,"host":null,"port":null},"scope":"openid","trustAll":false,"trustAnchorsFolder":null}` | configuration for the OID4VP extension |
 | common.config.oid4vp.clientId | string | `"dsp"` | client id to be used for OID4VP |
 | common.config.oid4vp.credentialsFolder | string | `nil` | folder of the credentials to be used for authentication  |
