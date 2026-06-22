@@ -114,6 +114,16 @@ spec:
             - name: config-properties
               mountPath: /config/dataspaceconnector-configuration.properties
               subPath: dataspaceconnector-configuration.properties
+            {{- if $cfg.config.odrlPap.policy.additionalContexts }}
+            - name: additional-contexts
+              mountPath: {{ $cfg.config.odrlPap.policy.additionalContextsPath }}
+              subPath: additional-contexts.json
+            {{- end }}
+            {{- if $cfg.config.odrlPap.policy.scopeMappings }}
+            - name: scope-mappings
+              mountPath: {{ $cfg.config.odrlPap.policy.scopeMappingsPath }}
+              subPath: scope-mappings.json
+            {{- end }}
 
             {{- with $cfg.deployment.additionalVolumeMounts }}
             {{- toYaml . | nindent 12 }}
@@ -126,6 +136,16 @@ spec:
         - name: config-properties
           configMap:
             name: {{ $fullName }}-{{ $name }}
+        {{- if $cfg.config.odrlPap.policy.additionalContexts }}
+        - name: additional-contexts
+          configMap:
+            name: {{ $fullName }}-{{ $name }}-additional-contexts
+        {{- end }}
+        {{- if $cfg.config.odrlPap.policy.scopeMappings }}
+        - name: scope-mappings
+          configMap:
+            name: {{ $fullName }}-{{ $name }}-scope-mappings
+        {{- end }}
 
         {{- with $cfg.deployment.additionalVolumes }}
         {{- toYaml . | nindent 8 }}

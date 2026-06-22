@@ -1,0 +1,37 @@
+{{- $fullName := include "fdsc-edc.fullname" . -}}
+{{- range $name, $deployment := .Values.deployment }}
+{{- $cfg := mergeOverwrite (deepCopy $.Values.common) $deployment }}
+
+{{- if $cfg.config.odrlPap.policy.additionalContexts }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}-{{ $name }}-additional-contexts
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    app.kubernetes.io/name: {{ $fullName }}-{{ $name }}
+    app.kubernetes.io/component: {{ $fullName }}-{{ $name }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+data:
+  additional-contexts.json: |-
+{{ $cfg.config.odrlPap.policy.additionalContexts | toPrettyJson | indent 4 }}
+{{- end }}
+
+{{- if $cfg.config.odrlPap.policy.scopeMappings }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}-{{ $name }}-scope-mappings
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    app.kubernetes.io/name: {{ $fullName }}-{{ $name }}
+    app.kubernetes.io/component: {{ $fullName }}-{{ $name }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+data:
+  scope-mappings.json: |-
+{{ $cfg.config.odrlPap.policy.scopeMappings | toPrettyJson | indent 4 }}
+{{- end }}
+
+{{- end }}
