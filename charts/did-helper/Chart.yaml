@@ -2,8 +2,8 @@ apiVersion: v2
 name: did-helper
 description: A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
 type: application
-version: 0.1.20
-appVersion: "0.5.0"
+version: 0.1.21
+appVersion: "0.5.1"
 sources:
   - https://github.com/SEAMWARE/did-helper
 # The `common` library chart ships every shared helper
