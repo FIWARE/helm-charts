@@ -11,6 +11,9 @@ metadata:
   labels:
     {{- include "bizEcosystemChargingBackend.labels" . | nindent 4 }}
 spec:
+  {{- if .Values.bizEcosystemChargingBackend.media.storageClass }}
+  storageClassName: {{ .Values.bizEcosystemChargingBackend.media.storageClass | quote }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
@@ -28,6 +31,9 @@ metadata:
   labels:
     {{- include "bizEcosystemChargingBackend.labels" . | nindent 4 }}
 spec:
+  {{- if .Values.bizEcosystemChargingBackend.media.storageClass }}
+  storageClassName: {{ .Values.bizEcosystemChargingBackend.media.storageClass | quote }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:

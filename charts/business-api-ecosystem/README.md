@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 1.0.4](https://img.shields.io/badge/Version-1.0.4-informational?style=flat-square) ![AppVersion: 2026.05.14](https://img.shields.io/badge/AppVersion-2026.05.14-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![AppVersion: 2026.05.14](https://img.shields.io/badge/AppVersion-2026.05.14-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -83,6 +83,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.media.annotations | object | `{}` | Annotations |
 | bizEcosystemChargingBackend.media.enabled | bool | `true` | Enable the PVC for media storage |
 | bizEcosystemChargingBackend.media.size | string | `"8Gi"` | Size of the PVC |
+| bizEcosystemChargingBackend.media.storageClass | string | `""` | StorageClass for the PVC. If empty, the cluster default StorageClass is used |
 | bizEcosystemChargingBackend.name | string | `"biz-ecosystem-charging-backend"` |  |
 | bizEcosystemChargingBackend.notificationRecipientEmail | string | `""` | Optional e-mail address receiving billing notifications |
 | bizEcosystemChargingBackend.operatorId | string | `""` | Optional identifier of the party operating the marketplace |
@@ -92,6 +93,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.plugins.idmPassword | string | `"admin-password"` |  |
 | bizEcosystemChargingBackend.plugins.idmUser | string | `"admin"` |  |
 | bizEcosystemChargingBackend.plugins.size | string | `"4Gi"` |  |
+| bizEcosystemChargingBackend.plugins.storageClass | string | `""` |  |
 | bizEcosystemChargingBackend.port | int | `8006` | port that the charging backend container uses |
 | bizEcosystemChargingBackend.propagateToken | bool | `true` | Sets whether to expect the user access token in each request from the logic proxy |
 | bizEcosystemChargingBackend.relatedPartySchemaLocation | string | `""` | Optional schema URL used to extend entities that miss a relatedParty object |

@@ -267,6 +267,8 @@ bizEcosystemChargingBackend:
     enabled: false
     ## -- Size of the PVC
     size: 4Gi
+    ## -- StorageClass for the PVC. If empty, the cluster default StorageClass is used
+    storageClass: ''
     ## -- Annotations
     annotations: {}
     ## -- IDM Admin username
@@ -280,6 +282,8 @@ bizEcosystemChargingBackend:
     enabled: true
     # -- Size of the PVC
     size: 8Gi
+    # -- StorageClass for the PVC. If empty, the cluster default StorageClass is used
+    storageClass: ''
     # -- Annotations
     annotations: {}
 
