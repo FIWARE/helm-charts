@@ -155,7 +155,13 @@ grafana:
   # -- configuration of the panels to be included
   panelsJson: |
     [{"title":"Example Panel","path":"/d/apisix-routes/apisix-routes?orgId=1&from=now-1h&to=now&timezone=browser&var-datasource=PBFA97CFB590B2093&var-route=$__all&var-service=$__all&refresh=30s","span":12}]
-
+    
+# -- configuration to enable the tracing dashboard. Requires grafana to be enabled.
+tracing:
+  # -- should tracing inclusion be enabled
+  enabled: false
+  # -- uid of the tempo datasource to be used
+  tempoDatasourceId: 
 
 # -- a list of additional env vars to be set on the dashboard container, in
 # native env-var form. Useful for custom-built images that consume
