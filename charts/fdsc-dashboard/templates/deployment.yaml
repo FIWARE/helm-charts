@@ -103,6 +103,10 @@ spec:
               value: |
                 {{ .Values.grafana.panelsJson }}
             {{- end }}
+            {{- if .Values.tracing.enabled }}
+            - name: GRAFANA_TEMPO_DATASOURCE_UID
+              value: {{ .Values.tracing.tempoDatasourceId }}
+            {{- end }}
             {{- with .Values.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
