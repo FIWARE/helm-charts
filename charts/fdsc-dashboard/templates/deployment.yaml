@@ -107,6 +107,10 @@ spec:
             - name: GRAFANA_TEMPO_DATASOURCE_UID
               value: {{ .Values.tracing.tempoDatasourceId }}
             {{- end }}
+            {{- if .Values.keycloak.url }}
+            - name: KEYCLOAK_URL
+              value: {{ .Values.keycloak.url }}
+            {{- end }}
             {{- with .Values.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
