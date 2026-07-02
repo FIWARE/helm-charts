@@ -5406,6 +5406,32 @@ entries:
     version: 0.0.1
   fdsc-dashboard:
   - apiVersion: v2
+    appVersion: 0.6.0
+    created: "2026-07-02T07:07:21.120518579Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the fdsc-dashboard on kubernetes.
+    digest: 2492591ab96bceee45a6e972d3cf10a3a7dd40fd6cfd2145dd57fab21510791d
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - data-space-connector
+    - dataspace
+    - dashboard
+    - ui
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.org
+      name: wistefan
+    name: fdsc-dashboard
+    sources:
+    - https://github.com/wistefan/fdsc-dashboard
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/fdsc-dashboard-0.6.8/fdsc-dashboard-0.6.8.tgz
+    version: 0.6.8
+  - apiVersion: v2
     appVersion: 0.5.2
     created: "2026-06-24T11:40:37.055078874Z"
     dependencies:
@@ -12982,6 +13008,31 @@ entries:
     version: 0.0.1
   vcverifier:
   - apiVersion: v2
+    appVersion: 6.15.1
+    created: "2026-07-02T07:07:21.289621943Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the FIWARE VCVerifier.
+    digest: a7c23ea2c9e7617bf3de03433956ac58de2d091f140dd2f4043b052ed0f85135
+    home: https://github.com/fiware/vcverifier
+    keywords:
+    - FIWARE Data Space Connector
+    - FIWARE
+    - Verifiable Credentials
+    - OID4VP
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: vcverifier
+    sources:
+    - https://github.com/fiware/vcverifier
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-4.12.16/vcverifier-4.12.16.tgz
+    version: 4.12.16
+  - apiVersion: v2
     appVersion: 6.14.0
     created: "2026-06-22T14:18:33.229859084Z"
     dependencies:
@@ -13944,4 +13995,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-07-01T06:46:37.126359988Z"
+generated: "2026-07-02T07:07:21.290499702Z"
