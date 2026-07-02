@@ -1,6 +1,6 @@
 # fdsc-dashboard
 
-![Version: 0.6.6](https://img.shields.io/badge/Version-0.6.6-informational?style=flat-square) ![AppVersion: 0.5.2](https://img.shields.io/badge/AppVersion-0.5.2-informational?style=flat-square)
+![Version: 0.6.7](https://img.shields.io/badge/Version-0.6.7-informational?style=flat-square) ![AppVersion: 0.6.0](https://img.shields.io/badge/AppVersion-0.6.0-informational?style=flat-square)
 
 A Helm chart for running the fdsc-dashboard on kubernetes.
 
@@ -82,6 +82,8 @@ Kubernetes: `>= 1.19-0`
 | ingress.enabled | bool | `false` | should there be an ingress to connect the fdsc-dashboard with the public internet |
 | ingress.hosts | list | `[]` | all hosts to be provided |
 | ingress.tls | list | `[]` | configure the ingress' tls |
+| keycloak | object | `{"url":null}` | configuration of the keycloak address to be used for integration with keycloaks status list endpoint |
+| keycloak.url | string | `nil` | url of keycloak to be used. It should be the same keycloak as used for authentication, realm will be extracted from the authentication info |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | port | int | `3000` | container port that the fdsc-dashboard (nginx) listens on |
 | route.annotations | object | `{}` | annotations to be added to the route |
