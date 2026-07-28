@@ -224,7 +224,14 @@ spec:
             - name: GENERAL_SERVER_HOST
               value: {{ $.Values.defaultConfig.serverHost | quote }}
             {{- end }}
-
+            {{- if $.Values.defaultConfig.countHeader }}
+            - name: GENERAL_COUNT_HEADER
+              value: {{ $.Values.defaultConfig.countHeader | quote }}
+            {{- end }}
+            {{- if $.Values.defaultConfig.replaceOnUpdate }}
+            - name: GENERAL_REPLACE_ON_UPDATE
+              value: {{ $.Values.defaultConfig.replaceOnUpdate | quote }}
+            {{- end }}
             {{- if $.Values.redis.enabled }}
             - name: MICRONAUT_ENVIRONMENTS
               value: redis

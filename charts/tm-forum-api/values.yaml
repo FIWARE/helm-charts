@@ -1,4 +1,4 @@
-## Default values for tmforum. 
+## Default values for tmforum.
 ## This is a YAML-formatted file.
 ## Declare variables to be passed into your templates.
 
@@ -7,7 +7,7 @@ nameOverride: ""
 # -- option to override the fullname config in the _helpers.tpl
 fullnameOverride: ""
 
-# -- if a tmforum specific service account should be used, it can be configured here 
+# -- if a tmforum specific service account should be used, it can be configured here
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
   # -- specifies if the account should be created
@@ -65,7 +65,7 @@ ingress:
     # kubernetes.io/tls-acme: "true"
     # ingress.kubernetes.io/ssl-redirect: "true"
   # -- all hosts to be provided
-  hosts: 
+  hosts:
     # -- provide a hosts and the paths that should be available
     - host: localhost
       # paths:
@@ -137,7 +137,7 @@ defaultConfig:
     failureThreshold: 3
     timeoutSeconds: 30
   # -- a list of additional env vars to be set, check the tm-forum api docu for all available options
-  additionalEnvVars: 
+  additionalEnvVars:
     - name: API_EXTENSION_ENABLED
       value: "true"
 
@@ -194,7 +194,10 @@ defaultConfig:
     # -- address of the broker
     url: http://context-broker:1026
 
-
+  # -- Name of the response header the target NGSI-LD broker uses to report the total number of entities matching a query. Default NGSILD-Results-Count
+  countHeader:
+  # -- When true, updateDomainEntity uses batchEntityUpsert replace (read-merge-write) instead of PATCH /attrs. Required for Scorpio 6.x which appends to array attributes on PATCH. Default false
+  replaceOnUpdate:
 ## configuration for the k8s service to access tmforum
 service:
   # -- service type
@@ -205,7 +208,7 @@ service:
   annotations: {}
 
 
-## configuration for the api proxy, to serve all apis through one kubernetes service 
+## configuration for the api proxy, to serve all apis through one kubernetes service
 apiProxy:
   # -- should the proxy be deployed?
   enabled: false
@@ -220,7 +223,7 @@ apiProxy:
   # -- configuration for the proxy service
   service:
     # -- name to be used for the proxy service.
-    nameOverride: 
+    nameOverride:
     # -- service type
     type: ClusterIP
     # -- port to be used by the service
