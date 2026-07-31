@@ -1,7 +1,7 @@
 apiVersion: v2
 name: tm-forum-api
-version: 0.17.12
-appVersion: 1.15.1
+version: 0.17.14
+appVersion: 1.16.2
 kubeVersion: '>= 1.19-0'
 home: https://github.com/FIWARE/tmforum-api
 description: A Helm chart for running the FIWARE TMForum-APIs
@@ -19,7 +19,7 @@ annotations:
 # The `common` library chart ships every shared helper
 # (names, labels, service-account resolution, existing-secret
 # resolution, service/ingress/route/HPA/secret/serviceaccount
-# bodies). 
+# bodies).
 dependencies:
   - name: common
     repository: "https://fiware.github.io/helm-charts"

@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.17.12](https://img.shields.io/badge/Version-0.17.12-informational?style=flat-square) ![AppVersion: 1.15.1](https://img.shields.io/badge/AppVersion-1.15.1-informational?style=flat-square)
+![Version: 0.17.14](https://img.shields.io/badge/Version-0.17.14-informational?style=flat-square) ![AppVersion: 1.16.2](https://img.shields.io/badge/AppVersion-1.16.2-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -112,6 +112,7 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.cache.subscriptions.expireAfterWrite | string | `"14d"` | how fast should the cache entry expire after it was written? |
 | defaultConfig.cache.subscriptions.maximumSize | int | `1000` | maximum size of the cache |
 | defaultConfig.contextUrl | string | `"https://smartdatamodels.org/context.jsonld"` | default context to be used when contacting the context broker |
+| defaultConfig.countHeader | string | `nil` | Name of the response header the target NGSI-LD broker uses to report the total number of entities matching a query. Default NGSILD-Results-Count |
 | defaultConfig.endpointsPort | int | `9090` | metrics and health port |
 | defaultConfig.image | object | `{"pullPolicy":"IfNotPresent","repository":"quay.io/fiware","tag":""}` | configuration to be used for the image of the container |
 | defaultConfig.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used |
@@ -139,6 +140,7 @@ For all untouched values, the customized deployement will still use the defaults
 | defaultConfig.readinessProbe.readinessPath | string | `"/health/readiness"` | path to be used for the health check |
 | defaultConfig.readinessProbe.successThreshold | int | `1` |  |
 | defaultConfig.readinessProbe.timeoutSeconds | int | `30` |  |
+| defaultConfig.replaceOnUpdate | string | `nil` | When true, updateDomainEntity uses batchEntityUpsert replace (read-merge-write) instead of PATCH /attrs. Required for Scorpio 6.x which appends to array attributes on PATCH. Default false |
 | defaultConfig.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | defaultConfig.resources | object | `{}` | tmforum resource requests and limits, we leave the default empty to make that a concious choice by the user. for the autoscaling to make sense, you should configure this. |
 | defaultConfig.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
@@ -178,7 +180,7 @@ For all untouched values, the customized deployement will still use the defaults
 | service.annotations | object | `{}` | addtional annotations, if required |
 | service.port | int | `8080` | port to be used by the service |
 | service.type | string | `"ClusterIP"` | service type |
-| serviceAccount | object | `{"create":false}` | if a tmforum specific service account should be used, it can be configured here  ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
+| serviceAccount | object | `{"create":false}` | if a tmforum specific service account should be used, it can be configured here ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | serviceAccount.create | bool | `false` | specifies if the account should be created |
 
 ----------------------------------------------
