@@ -125,7 +125,14 @@ config:
     outputFormat: "json_jwk"
     # URL to retrieve the public certificate
     # certUrl: ""
-    # Name of the secret containing the keystore password. 
+    # Path to a PEM certificate, as an alternative to provideKeystore/generateKey. Use this
+    # together with `volumes`/`volumeMounts` below to mount your own certificate Secret (e.g.
+    # a cert-manager-issued `kubernetes.io/tls` Secret). Mount the whole volume, not a
+    # subPath, so did-helper's live-reload watcher can observe rotations.
+    certPath: ""
+    # Path to the PEM private key matching certPath.
+    keyPath: ""
+    # Name of the secret containing the keystore password.
     # If provideKeystore is used, this is mandatory and needs to be set with the corresponding secret name containing the actual keystore password
     # If generateKey is used, this optional, but if provided it needs to be set with the secret name containing the password to be used for the created keystore
     keystorePasswordSecretName: ""
