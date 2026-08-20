@@ -60,8 +60,10 @@ spec:
             {{- end }}
             {{- if .Values.config.provideKeystore.enabled }}
             - name: keystore-volume
-              mountPath: "/etc/keystore/keystore.pfx"
-              subPath: "keystore.pfx"
+              # Mount the whole volume rather than a subPath: Kubernetes does not propagate
+              # Secret updates to subPath mounts, which would make did-helper's live-reload
+              # watcher unable to observe rotations of the keystore.
+              mountPath: "/etc/keystore"
               readOnly: true
             {{- end }}
           env:
