@@ -1,6 +1,6 @@
 # did-helper
 
-![Version: 0.1.21](https://img.shields.io/badge/Version-0.1.21-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.5.1](https://img.shields.io/badge/AppVersion-0.5.1-informational?style=flat-square)
+![Version: 0.1.22](https://img.shields.io/badge/Version-0.1.22-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.6.0](https://img.shields.io/badge/AppVersion-0.6.0-informational?style=flat-square)
 
 A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
 
@@ -30,9 +30,11 @@ A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
 | config.provideKeystore.keyType | string | `""` |  |
 | config.provideKeystore.keystoreSecretKey | string | `""` |  |
 | config.provideKeystore.keystoreSecretName | string | `""` |  |
+| config.server.certPath | string | `""` |  |
 | config.server.didType | string | `"web"` |  |
 | config.server.hostUrl | string | `"https://example.127.0.0.1.nip.io/did"` |  |
 | config.server.keyAlias | string | `"myAlias"` |  |
+| config.server.keyPath | string | `""` |  |
 | config.server.keystorePasswordSecretKey | string | `""` |  |
 | config.server.keystorePasswordSecretName | string | `""` |  |
 | config.server.outputFile | string | `""` |  |
