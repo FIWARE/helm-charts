@@ -3,7 +3,7 @@ name: did-helper
 description: A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
 type: application
 version: 0.1.21
-appVersion: "0.5.1"
+appVersion: 0.6.0
 sources:
   - https://github.com/SEAMWARE/did-helper
 # The `common` library chart ships every shared helper
