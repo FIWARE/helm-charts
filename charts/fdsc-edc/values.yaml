@@ -148,6 +148,8 @@ common:
     args: [ ]
     # -- command to be used for starting the container
     command: [ ]
+    # -- a list of additional env vars to be set on the container
+    additionalEnvVars: [ ]
     # -- individual ports and paths
 
 
@@ -155,9 +157,6 @@ common:
   autoscaling:
     #  -- should autoscaling be enabled for cp
     enabled: false
-
-  # -- a list of additional env vars to be set
-  additionalEnvVars: [ ]
 
   ## configuration for the actual edc instance - to be provided as properties file
   config:
@@ -379,8 +378,17 @@ common:
         enabled: false
         ## -- address to the hashicorp vault instance
         url:
-        ## -- token to be used when accessing vault - should not be used in production environments, provide the token as a secret env var 
-        token: 
+        # -- token to be used when accessing vault. Rendered into the ConfigMap, so anyone who can
+        # read ConfigMaps in the namespace can read it: acceptable for a dev deployment with a
+        # dev-mode vault, not for production. Use `existingSecret` instead, which injects it as an
+        # environment variable and keeps it out of the ConfigMap entirely.
+        token:
+        # -- name of a Secret holding the vault token. Takes precedence over `token`: the property is
+        # then omitted from the ConfigMap rather than left empty, which EDC would resolve as an empty
+        # token instead of falling through to the environment variable.
+        existingSecret: ""
+        # -- key within that Secret holding the token
+        existingSecretTokenKey: token
         ## -- timeout to be used when talking to vault
         timeout:
         ## configuration of healthCheck for vault

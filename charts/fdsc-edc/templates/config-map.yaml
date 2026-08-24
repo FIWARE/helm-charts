@@ -113,7 +113,9 @@ data:
 
     {{- if $cfg.config.vault.hashicorp.enabled }}
     edc.vault.hashicorp.url={{ tpl $cfg.config.vault.hashicorp.url $ }}
+    {{- if not $cfg.config.vault.hashicorp.existingSecret }}
     edc.vault.hashicorp.token={{ $cfg.config.vault.hashicorp.token }}
+    {{- end }}
     edc.vault.hashicorp.timeout.seconds={{ $cfg.config.vault.hashicorp.timeout }}
     edc.vault.hashicorp.health.check.enabled={{ $cfg.config.vault.hashicorp.healthCheck.enabled }}
     edc.vault.hashicorp.health.check.standby.ok={{ $cfg.config.vault.hashicorp.healthCheck.standbyOk }}
