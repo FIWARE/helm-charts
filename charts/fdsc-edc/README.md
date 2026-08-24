@@ -1,6 +1,6 @@
 # fdsc-edc
 
-![Version: 0.3.5](https://img.shields.io/badge/Version-0.3.5-informational?style=flat-square) ![AppVersion: 1.4.1](https://img.shields.io/badge/AppVersion-1.4.1-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![AppVersion: 1.4.1](https://img.shields.io/badge/AppVersion-1.4.1-informational?style=flat-square)
 
 A Helm chart for running the fdsc-edc on kubernetes.
 
@@ -24,7 +24,6 @@ A Helm chart for running the fdsc-edc on kubernetes.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| common.additionalEnvVars | list | `[]` | a list of additional env vars to be set |
 | common.autoscaling.enabled | bool | `false` |  |
 | common.config.dcp.enabled | bool | `false` |  |
 | common.config.dcp.scopes.catalog | string | `nil` |  |
@@ -104,12 +103,14 @@ A Helm chart for running the fdsc-edc on kubernetes.
 | common.config.tmfExtension.quoteApi | string | `nil` | address of the quote api to be used |
 | common.config.tmfExtension.usageManagementApi | string | `nil` | address of the usage management api to be used |
 | common.config.vault.hashicorp.enabled | bool | `false` |  |
+| common.config.vault.hashicorp.existingSecret | string | `""` | name of a Secret holding the vault token. Takes precedence over `token`: the property is then omitted from the ConfigMap rather than left empty, which EDC would resolve as an empty token instead of falling through to the environment variable. |
+| common.config.vault.hashicorp.existingSecretTokenKey | string | `"token"` | key within that Secret holding the token |
 | common.config.vault.hashicorp.healthCheck.enabled | bool | `true` |  |
 | common.config.vault.hashicorp.healthCheck.standbyOk | bool | `true` |  |
 | common.config.vault.hashicorp.paths.health | string | `"/v1/sys/health"` |  |
 | common.config.vault.hashicorp.paths.secret | string | `"/v1/secret"` |  |
 | common.config.vault.hashicorp.timeout | string | `nil` |  |
-| common.config.vault.hashicorp.token | string | `nil` |  |
+| common.config.vault.hashicorp.token | string | `nil` | token to be used when accessing vault. Rendered into the ConfigMap, so anyone who can read ConfigMaps in the namespace can read it: acceptable for a dev deployment with a dev-mode vault, not for production. Use `existingSecret` instead, which injects it as an environment variable and keeps it out of the ConfigMap entirely. |
 | common.config.vault.hashicorp.url | string | `nil` |  |
 | common.config.web.http.catalog.path | string | `"/api/catalog"` |  |
 | common.config.web.http.catalog.port | int | `8083` |  |
@@ -123,6 +124,7 @@ A Helm chart for running the fdsc-edc on kubernetes.
 | common.config.web.http.version.path | string | `"/api/version"` |  |
 | common.config.web.http.version.port | int | `8084` |  |
 | common.deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
+| common.deployment.additionalEnvVars | list | `[]` | a list of additional env vars to be set on the container |
 | common.deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | common.deployment.additionalVolumeMounts | list | `[]` | additional volume |
 | common.deployment.additionalVolumes | list | `[]` | additional volumes to be added for the containers |
