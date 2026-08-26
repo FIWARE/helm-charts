@@ -8839,6 +8839,30 @@ entries:
     version: 0.0.3
   onboarding-portal:
   - apiVersion: v2
+    appVersion: 0.2.0
+    created: "2026-08-26T11:34:41.936466117Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for the OnBoarding Portal
+    digest: 7ad1062bf921461b70c4497fb25ccc07c4dd9ecaa40affde1624953d3f54d335
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - onboarding
+    - FIWARE
+    - Data Space Connector
+    maintainers:
+    - email: miguel.ortega@seamware.com
+      name: Miguel Ortega
+    name: onboarding-portal
+    sources:
+    - https://github.com/SEAMWARE/On-Boarding-Portal
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/onboarding-portal-1.4.0/onboarding-portal-1.4.0.tgz
+    version: 1.4.0
+  - apiVersion: v2
     appVersion: 0.1.0
     created: "2026-05-11T07:28:17.926251955Z"
     dependencies:
@@ -14270,4 +14294,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-08-24T09:58:30.121604727Z"
+generated: "2026-08-26T11:34:41.93761249Z"
