@@ -1,6 +1,6 @@
 # onboarding-portal
 
-![Version: 1.3.5](https://img.shields.io/badge/Version-1.3.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 1.4.0](https://img.shields.io/badge/Version-1.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.2.0](https://img.shields.io/badge/AppVersion-0.2.0-informational?style=flat-square)
 
 A Helm chart for the OnBoarding Portal
 
@@ -25,7 +25,7 @@ A Helm chart for the OnBoarding Portal
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` | Affinity rules for pod scheduling |
-| config | object | `{"app":{"documentToSignUrl":"","keycloak":{"auth":{"clientId":"admin-cli","grantType":"password","password":"${APP_KEYCLOAK_PASSWORD}","username":"${APP_KEYCLOAK_USERNAME}"},"baseUrl":""},"login":{"clientId":"${APP_CLIENT_ID}","clientSecret":"${APP_CLIENT_SECRET}","codeChallenge":true,"openIdUrl":"","scope":"openid"},"tir":{"url":""}},"database":{"database":"","host":"","logging":false,"password":"${APP_DB_PASSWORD}","port":5432,"synchronize":true,"type":"postgres","username":"${APP_DB_USERNAME}"},"email":{"enabled":false,"type":"nodemailer"},"logging":{"level":"info"},"server":{"cors":{"allowedHeaders":["Content-Type","Authorization","X-Organization"],"credentials":true,"maxAge":600,"methods":["GET","POST","PUT","DELETE","OPTIONS"],"optionsSuccessStatus":204,"origin":"*"},"port":8080,"storage":{"destFolder":"files","maxSizeMB":5}}}` | Internal application configuration |
+| config | object | `{"app":{"documentToSignUrl":"","keycloak":{"auth":{"clientId":"admin-cli","grantType":"password","password":"${APP_KEYCLOAK_PASSWORD}","username":"${APP_KEYCLOAK_USERNAME}"},"baseUrl":""},"login":{"clientId":"${APP_CLIENT_ID}","clientSecret":"${APP_CLIENT_SECRET}","codeChallenge":true,"openIdUrl":"","scope":"openid"},"til":[],"tir":{"url":""}},"database":{"database":"","host":"","logging":false,"password":"${APP_DB_PASSWORD}","port":5432,"synchronize":true,"type":"postgres","username":"${APP_DB_USERNAME}"},"email":{"enabled":false,"type":"nodemailer"},"logging":{"level":"info"},"server":{"cors":{"allowedHeaders":["Content-Type","Authorization","X-Organization"],"credentials":true,"maxAge":600,"methods":["GET","POST","PUT","DELETE","OPTIONS"],"optionsSuccessStatus":204,"origin":"*"},"port":8080,"storage":{"destFolder":"files","maxSizeMB":5}}}` | Internal application configuration |
 | config.app.documentToSignUrl | string | `""` | URL that contains the pdf to be signed |
 | config.app.keycloak.auth | object | `{"clientId":"admin-cli","grantType":"password","password":"${APP_KEYCLOAK_PASSWORD}","username":"${APP_KEYCLOAK_USERNAME}"}` | Authentication information needed to create new realms |
 | config.app.keycloak.baseUrl | string | `""` | URL of the keycloak where new realms will be created |
@@ -34,6 +34,7 @@ A Helm chart for the OnBoarding Portal
 | config.app.login.codeChallenge | bool | `true` | Type of codeChallenge |
 | config.app.login.openIdUrl | string | `""` | URL of the OpenID server (e.g: keycloak) |
 | config.app.login.scope | string | `"openid"` | Scopes required in the openid request |
+| config.app.til | list | `[]` | Trusted Issuers Lists (optional): third-party registries notified alongside the TIR |
 | config.app.tir | object | `{"url":""}` | Trust Issuer Register where DID's will be registered |
 | config.database | object | `{"database":"","host":"","logging":false,"password":"${APP_DB_PASSWORD}","port":5432,"synchronize":true,"type":"postgres","username":"${APP_DB_USERNAME}"}` | Database configuration. See [TypeORM documentation](https://typeorm.io/docs/data-source/data-source-options) |
 | config.email | object | `{"enabled":false,"type":"nodemailer"}` | Email configuration using [Nodemailer](https://nodemailer.com/) |
