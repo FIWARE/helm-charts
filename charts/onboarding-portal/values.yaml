@@ -155,6 +155,8 @@ config:
     # -- Trust Issuer Register where DID's will be registered
     tir:
       url: ''
+    # -- Trusted Issuers Lists (optional): third-party registries notified alongside the TIR
+    til: []
   # -- Database configuration. See [TypeORM documentation](https://typeorm.io/docs/data-source/data-source-options)
   database:
     type: postgres
