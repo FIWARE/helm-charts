@@ -1,0 +1,25 @@
+apiVersion: v2
+name: consent-owner-resolver
+version: 0.1.1
+appVersion: 0.0.8
+kubeVersion: '>= 1.19-0'
+description: A Helm chart for running the consent-owner-resolver on kubernetes.
+icon: https://fiware.github.io/catalogue/img/fiware.png
+keywords:
+  - FIWARE
+  - consent-owner-resolver
+  - Consent
+  - DSBA
+  - NGSI-LD
+sources:
+  - https://github.com/wistefan/consent-owner-resolver
+maintainers:
+  - name: wistefan
+    email: stefan.wiedemann@seamware.com
+# The `common` library chart ships every shared helper (names, labels,
+# service-account resolution, existing-secret resolution, and the
+# service/ingress/route/HPA/serviceaccount bodies). See charts/common/README.md.
+dependencies:
+  - name: common
+    repository: "https://fiware.github.io/helm-charts"
+    version: "0.1.2"

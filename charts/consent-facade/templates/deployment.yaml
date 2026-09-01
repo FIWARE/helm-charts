@@ -1,0 +1,342 @@
+{{- $oid4vp := .Values.oid4vp }}
+{{- $truststore := .Values.truststore }}
+{{- $registry := .Values.providerRegistry }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "facade.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{ include "facade.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.deployment.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
+  strategy:
+  {{- with .Values.deployment.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "facade.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{ include "facade.labels" . | nindent 8 }}
+        {{- with .Values.deployment.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      annotations:
+        prometheus.io/scrape: {{ .Values.prometheus.enabled | quote }}
+        prometheus.io/path: {{ .Values.prometheus.path }}
+        prometheus.io/port: {{ .Values.prometheus.port | quote }}
+        {{- with .Values.deployment.additionalAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "facade.serviceAccountName" . }}
+      {{- with .Values.deployment.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if or (and $oid4vp.enabled $oid4vp.signingKey.convert) $truststore.enabled .Values.deployment.initContainers }}
+      initContainers:
+        {{- if and $oid4vp.enabled $oid4vp.signingKey.convert }}
+        # A cert-manager EC key is stored in SEC1 (`EC PRIVATE KEY`), while the holder
+        # signing service reads PKCS#8 (`PRIVATE KEY`).
+        - name: convert-signing-key
+          image: {{ $oid4vp.signingKey.convertImage | quote }}
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - openssl pkcs8 -topk8 -nocrypt -in /signing-key-raw/{{ $oid4vp.signingKey.secretKey }} -out {{ $oid4vp.holder.keyPath }} && chmod 640 {{ $oid4vp.holder.keyPath }}
+          {{- with .Values.deployment.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: signing-key-raw
+              mountPath: /signing-key-raw
+            - name: signing-key
+              mountPath: {{ dir $oid4vp.holder.keyPath }}
+        {{- end }}
+        {{- if $truststore.enabled }}
+        # Import the CA into a copy of the JVM truststore, which is mounted over the
+        # image's one below, so every client (the OID4VP java.net.http client and the
+        # Netty TM Forum clients) trusts a target using a private CA. Runs on the
+        # facade image because that is what ships `keytool`.
+        - name: import-ca
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          command: ["/bin/sh", "-c"]
+          args:
+            # The JDK location is resolved rather than hardcoded: it differs per base
+            # image (UBI keeps it under /usr/lib/jvm/java-21, temurin under
+            # /opt/java/openjdk), and a hardcoded path turns a base-image change into
+            # an init crashloop. The image's cacerts is read-only, so the copy is made
+            # writable for keytool and for a retry after a restart.
+            - |
+              set -e
+              JDK_DIR="{{ $truststore.javaHome }}"
+              if [ -z "$JDK_DIR" ]; then
+                JDK_DIR="${JAVA_HOME:-$(dirname "$(dirname "$(readlink -f "$(command -v keytool || command -v java)")")")}"
+              fi
+              echo "using JDK at $JDK_DIR"
+              cp "$JDK_DIR/lib/security/cacerts" /cacerts/cacerts
+              chmod 0644 /cacerts/cacerts
+              "$JDK_DIR/bin/keytool" -importcert -noprompt -alias additional-ca \
+                -file /additional-ca/{{ $truststore.caSecret.key }} -keystore /cacerts/cacerts -storepass changeit
+          {{- with .Values.deployment.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: additional-ca
+              mountPath: /additional-ca
+            - name: cacerts
+              mountPath: /cacerts
+        {{- end }}
+        {{- with .Values.deployment.initContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.deployment.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag | default .Chart.AppVersion }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.port }}
+              protocol: TCP
+            # the management endpoints (incl. /health) are served on their own port
+            - name: management
+              containerPort: {{ .Values.deployment.managementPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: management
+            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: management
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+          env:
+            - name: MICRONAUT_SERVER_PORT
+              value: {{ .Values.port | quote }}
+            - name: ENDPOINTS_ALL_PORT
+              value: {{ .Values.deployment.managementPort | quote }}
+            - name: ENDPOINTS_HEALTH_ENABLED
+              value: "true"
+            - name: ENDPOINTS_METRICS_ENABLED
+              value: {{ .Values.prometheus.enabled | quote }}
+            # the public base url the served ids are built from
+            - name: FACADE_SELF_URL
+              value: {{ include "facade.selfUrl" . | quote }}
+            {{- range $service := (list "PRODUCT_ORDER" "PRODUCT_CATALOG" "PRODUCT_INVENTORY" "PARTY" "AGREEMENT") }}
+            - name: {{ printf "MICRONAUT_HTTP_SERVICES_%s_URL" $service | quote }}
+              value: {{ index $.Values.tmForum.services (lower $service | replace "_" "-") | default $.Values.tmForum.url | quote }}
+            {{- end }}
+            {{- if $registry.persistent }}
+            # the PostgreSQL-backed provider registry, which also enables the
+            # /providers admin api. The schema is created by the facade's migration.
+            - name: FACADE_PROVIDER_REGISTRY_PERSISTENT
+              value: "true"
+            - name: DATASOURCES_DEFAULT_URL
+              value: {{ printf "jdbc:postgresql://%s:%v/%s" $registry.database.host (toString $registry.database.port) $registry.database.name | quote }}
+            - name: DATASOURCES_DEFAULT_USERNAME
+              value: {{ $registry.database.username | quote }}
+            - name: DATASOURCES_DEFAULT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "facade.databaseSecretName" . | quote }}
+                  key: {{ include "facade.databaseSecretKey" . | quote }}
+            - name: DATASOURCES_DEFAULT_DIALECT
+              value: "POSTGRES"
+            - name: FLYWAY_DATASOURCES_DEFAULT_ENABLED
+              value: "true"
+            {{- end }}
+            {{- if $oid4vp.enabled }}
+            - name: OID4VP_ENABLED
+              value: "true"
+            - name: OID4VP_HOLDER_HOLDER_ID
+              value: {{ $oid4vp.holder.id | quote }}
+            - name: OID4VP_HOLDER_KEY_TYPE
+              value: {{ $oid4vp.holder.keyType | quote }}
+            - name: OID4VP_HOLDER_KEY_PATH
+              value: {{ $oid4vp.holder.keyPath | quote }}
+            - name: OID4VP_HOLDER_SIGNATURE_ALGORITHM
+              value: {{ $oid4vp.holder.signatureAlgorithm | quote }}
+            - name: OID4VP_CREDENTIALS_FOLDER
+              value: {{ $oid4vp.credentialsFolder | quote }}
+            {{- with $oid4vp.clientId }}
+            - name: OID4VP_CLIENT_ID
+              value: {{ . | quote }}
+            {{- end }}
+            # comma-separated, because a list property would need bracketed env var
+            # names and kubernetes rejects brackets in a name
+            - name: OID4VP_SCOPES
+              value: {{ join "," $oid4vp.scopes | quote }}
+            {{- with $oid4vp.trustAnchors }}
+            - name: OID4VP_TRUST_ANCHORS
+              value: {{ join "," . | quote }}
+            {{- end }}
+            {{- if $oid4vp.proxy.enabled }}
+            - name: OID4VP_PROXY_HOST
+              value: {{ $oid4vp.proxy.host | quote }}
+            - name: OID4VP_PROXY_PORT
+              value: {{ $oid4vp.proxy.port | quote }}
+            {{- if $oid4vp.proxy.tmForumClients }}
+            {{- range $service := (list "PRODUCT_ORDER" "PRODUCT_CATALOG" "PRODUCT_INVENTORY" "PARTY" "AGREEMENT") }}
+            - name: {{ printf "MICRONAUT_HTTP_SERVICES_%s_PROXY_TYPE" $service | quote }}
+              value: "HTTP"
+            - name: {{ printf "MICRONAUT_HTTP_SERVICES_%s_PROXY_ADDRESS" $service | quote }}
+              value: {{ printf "%s:%v" $oid4vp.proxy.host (toString $oid4vp.proxy.port) | quote }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+            {{- $properties := "" }}
+            {{- if $truststore.enabled }}
+            {{- $properties = "-Djavax.net.ssl.trustStore=/opt/truststore/cacerts -Djavax.net.ssl.trustStorePassword=changeit" }}
+            {{- end }}
+            {{- if $oid4vp.enabled }}
+            {{- range $index, $target := $oid4vp.tokenTargets }}
+            {{- $properties = printf "%s -Doid4vp.token-targets[%d].audience=%s -Doid4vp.token-targets[%d].url=%s" $properties $index $target.audience $index $target.url }}
+            {{- with $target.clientId }}
+            {{- $properties = printf "%s -Doid4vp.token-targets[%d].client-id=%s" $properties $index . }}
+            {{- end }}
+            {{- with $target.discoveryPath }}
+            {{- $properties = printf "%s -Doid4vp.token-targets[%d].discovery-path=%s" $properties $index . }}
+            {{- end }}
+            {{- range $scopeIndex, $scope := ($target.scope | default list) }}
+            {{- $properties = printf "%s -Doid4vp.token-targets[%d].scope[%d]=%s" $properties $index $scopeIndex $scope }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+            {{- if $properties }}
+            # The token targets ride along as system properties rather than env vars:
+            # they are a list of objects, which needs bracketed property names, and
+            # kubernetes rejects brackets in an env var NAME (they are fine in a value).
+            # The truststore is pointed at here too, so it covers every client the JVM
+            # creates through the default SSLContext.
+            - name: JAVA_TOOL_OPTIONS
+              value: {{ $properties | trim | quote }}
+            {{- end }}
+            {{- range $key, $value := .Values.envValueFrom }}
+            - name: {{ $key | quote }}
+              valueFrom:
+                {{- tpl (toYaml $value) $ | nindent 16 }}
+            {{- end }}
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- with .Values.additionalEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+            # the JVM needs a writable /tmp while the root filesystem is read-only
+            - name: tmp
+              mountPath: /tmp
+            {{- if $oid4vp.enabled }}
+            - name: signing-key
+              mountPath: {{ dir $oid4vp.holder.keyPath }}
+              readOnly: {{ not $oid4vp.signingKey.convert }}
+            {{- if $oid4vp.credentials }}
+            - name: credential-repo
+              mountPath: {{ $oid4vp.credentialsFolder | quote }}
+              readOnly: true
+            {{- end }}
+            {{- end }}
+            {{- if $truststore.enabled }}
+            # Mounted as a plain directory: a subPath would make the kubelet
+            # pre-create a root-owned file the non-root init container cannot write.
+            - name: cacerts
+              mountPath: /opt/truststore
+              readOnly: true
+            {{- end }}
+            {{- with .Values.deployment.additionalVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        {{- if $oid4vp.enabled }}
+        {{- if $oid4vp.signingKey.convert }}
+        # the raw key from the secret, converted into the `signing-key` volume
+        - name: signing-key-raw
+          secret:
+            secretName: {{ $oid4vp.signingKey.secretName | quote }}
+            items:
+              - key: {{ $oid4vp.signingKey.secretKey | quote }}
+                path: {{ $oid4vp.signingKey.secretKey | quote }}
+            defaultMode: 0640
+        - name: signing-key
+          emptyDir: {}
+        {{- else }}
+        - name: signing-key
+          secret:
+            secretName: {{ $oid4vp.signingKey.secretName | quote }}
+            items:
+              - key: {{ $oid4vp.signingKey.secretKey | quote }}
+                path: {{ base $oid4vp.holder.keyPath | quote }}
+            defaultMode: 0640
+        {{- end }}
+        {{- if $oid4vp.credentials }}
+        # the credentials, projected from their own secrets into one folder
+        - name: credential-repo
+          projected:
+            sources:
+              {{- range $oid4vp.credentials }}
+              - secret:
+                  name: {{ .secretName | quote }}
+                  items:
+                    - key: {{ .secretKey | quote }}
+                      path: {{ .fileName | quote }}
+              {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if $truststore.enabled }}
+        - name: additional-ca
+          secret:
+            secretName: {{ $truststore.caSecret.name | quote }}
+            items:
+              - key: {{ $truststore.caSecret.key | quote }}
+                path: {{ $truststore.caSecret.key | quote }}
+        # the CA-augmented truststore built by the import-ca init container
+        - name: cacerts
+          emptyDir: {}
+        {{- end }}
+        {{- with .Values.deployment.additionalVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

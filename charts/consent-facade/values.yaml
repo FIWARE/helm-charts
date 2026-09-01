@@ -1,0 +1,317 @@
+## Default values for the consent-facade.
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+# -- option to override the name config in the _helpers.tpl
+nameOverride: ""
+# -- option to override the fullname config in the _helpers.tpl
+fullnameOverride: ""
+
+## configuration for the k8s service to access the consent-facade
+service:
+  # -- service type
+  type: ClusterIP
+  # -- port to be used by the service
+  port: 8080
+  # -- additional annotations, if required
+  annotations: {}
+
+# -- if a consent-facade specific service account should be used, it can be configured here
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # -- specifies if the account should be created
+  create: false
+
+# -- port that the consent-facade container uses
+port: 8080
+
+# -- the public base url the facade mints its ids with. It is written into the contracts,
+# catalog entries and participant self-descriptions it serves, and consumers (the
+# consent-manager, auditors, other participants) match participants on those exact
+# strings - so it has to be the address the facade is reachable at from outside the
+# cluster. Defaults to the in-cluster service address, which is only correct for a
+# deployment without external consumers. Templated, so `{{ .Release.Name }}` works.
+selfUrl: ""
+
+## the TM Forum APIs the facade projects into the contract-service API
+tmForum:
+  # -- base url of the TM Forum API. Every TM Forum client (product order, product
+  # catalog, product inventory, party, agreement) is pointed at it; the per-api paths
+  # are part of the image's configuration. Set `services` below to address them
+  # individually instead.
+  url: http://tm-forum-api:8080
+  # -- per-api base url overrides, keyed by the facade's service name
+  # (product-order, product-catalog, product-inventory, party, agreement). An entry
+  # here wins over `url`, for a deployment that spreads the TM Forum APIs over
+  # several hosts.
+  services: {}
+
+## the persistent provider registry. Off by default: the facade then keeps its
+## providers in memory, which is enough for a single-provider deployment but loses
+## them on restart. With it enabled the facade also serves the /providers admin API.
+providerRegistry:
+  # -- should the provider registry be persisted in PostgreSQL
+  persistent: false
+  ## the database holding the registry. Its schema is created by the facade's
+  ## Flyway migration on first start.
+  database:
+    # -- host of the database
+    host: postgresql
+    # -- port of the database
+    port: 5432
+    # -- name of the database
+    name: facade
+    # -- user to connect with
+    username: facade
+    # -- password to connect with. Prefer `existingSecret` over this: a password here
+    # ends up in the release's values.
+    password: ""
+    ## an already existing secret holding the password
+    existingSecret:
+      # -- name of the secret. Defaults to the chart's fullname, which is the secret
+      # this chart creates from `password`.
+      name: ""
+      # -- key of the password inside that secret
+      key: ""
+
+## OID4VP: the facade presents a verifiable credential to obtain an access token for
+## an OID4VP-protected TM Forum API. Off by default - a facade reading an unprotected
+## TM Forum API needs none of it.
+oid4vp:
+  # -- should the facade authenticate its outbound TM Forum reads over OID4VP
+  enabled: false
+  ## the holder identity presented
+  holder:
+    # -- the holder id, e.g. a did:web the credential was issued to
+    id: ""
+    # -- type of the signing key
+    keyType: EC
+    # -- path of the signing key inside the container. When `signingKey.convert` is
+    # enabled this is where the converted key is written.
+    keyPath: /signing-key/tls.key
+    # -- algorithm to sign the presentation with
+    signatureAlgorithm: ES256
+  ## the signing key, taken from a secret (usually a cert-manager tls secret)
+  signingKey:
+    # -- name of the secret holding the key
+    secretName: ""
+    # -- key inside that secret
+    secretKey: tls.key
+    # -- cert-manager stores an EC key in SEC1 (`EC PRIVATE KEY`), while the holder
+    # signing service needs PKCS#8 (`PRIVATE KEY`). With this enabled an init
+    # container converts it; disable it when the secret already holds PKCS#8.
+    convert: true
+    # -- image used for the conversion, needs an `openssl` binary
+    convertImage: alpine/openssl:3.3.2
+  # -- the credentials to present, each projected from its own secret into
+  # `credentialsFolder`. Entries: `secretName`, `secretKey`, `fileName`.
+  credentials: []
+  # - secretName: vc-facade-credential
+  #   secretKey: credential
+  #   fileName: credential.jwt
+  # -- folder the credentials are mounted into
+  credentialsFolder: /credentials
+  # -- client id used at the token endpoint
+  clientId: ""
+  # -- scopes to request
+  scopes:
+    - default
+  # -- PEM trust anchors used to identify the credential issuer, as paths inside the
+  # container
+  trustAnchors: []
+  # -- the services the facade obtains a token for. One entry per audience:
+  # `audience`, `url`, and optionally `clientId`, `scope` (list) and `discoveryPath`
+  # (a verifier that serves OIDC discovery per service rather than at the host root).
+  tokenTargets: []
+  # - audience: consent-manager
+  #   url: https://verifier.example.org
+  #   clientId: consent-manager
+  #   scope:
+  #     - participant
+  #   discoveryPath: /services/consent-manager
+  ## a forward proxy for reaching the token endpoint, for a cluster that has no direct
+  ## route to it
+  proxy:
+    # -- should the OID4VP client use a forward proxy
+    enabled: false
+    # -- host of the proxy
+    host: ""
+    # -- port of the proxy
+    port: 8888
+    # -- should the TM Forum clients use the proxy too. Only correct when the TM Forum
+    # API is external: a cluster-internal Service name cannot be resolved by the proxy.
+    tmForumClients: false
+
+## an additional certificate authority to trust. Needed when a target the facade calls
+## (the TM Forum ingress, the verifier) presents a certificate from a private CA: the
+## JVM truststore is copied and the CA imported into it by an init container.
+truststore:
+  # -- should an additional CA be imported into the JVM truststore
+  enabled: false
+  ## the secret holding the CA certificate
+  caSecret:
+    # -- name of the secret
+    name: ""
+    # -- key inside that secret
+    key: ca.crt
+  # -- explicit JDK home inside the image, used to locate `lib/security/cacerts` and
+  # `bin/keytool`. Empty resolves it at runtime from $JAVA_HOME, falling back to the
+  # keytool/java binary on PATH - so an image whose base image changed keeps working.
+  javaHome: ""
+
+## deployment specific configuration
+deployment:
+  # -- initial number of target replications, can be different if autoscaling is enabled
+  replicaCount: 1
+  # -- number of old replicas to be retained
+  revisionHistoryLimit: 3
+  ## configuration of the update strategy
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 1
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 0
+  ## configuration of the image to be used
+  image:
+    # -- consent-facade image name
+    # ref: https://quay.io/repository/seamware/consent-facade
+    repository: quay.io/seamware/consent-facade
+    # -- overrides the image tag whose default is the chart appVersion
+    tag: ""
+    # -- specification of the image pull policy
+    pullPolicy: IfNotPresent
+  # -- additional labels for the deployment, if required
+  additionalLabels: {}
+  # -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  # -- additional init containers, if required
+  initContainers: []
+  # -- additional volumes, if required
+  additionalVolumes: []
+  # -- additional volume mounts, if required
+  additionalVolumeMounts: []
+  # -- port the management endpoints (incl. /health) are served on. It is a separate
+  # port from the api, matching `endpoints.all.port` in the image's configuration.
+  managementPort: 9090
+  ## resource requests and limits, left empty to make that a conscious choice by the user.
+  ## for the autoscaling to make sense, you should configure this.
+  resources: {}
+    # limits:
+      # cpu: 100m
+      # memory: 512Mi
+    # requests:
+      # cpu: 100m
+      # memory: 512Mi
+  # -- security context for the pod
+  podSecurityContext:
+    runAsNonRoot: true
+  # -- security context for the containers
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+  # -- selector template
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  # -- tolerations template
+  # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  # -- affinity template
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+  ## liveness and readiness probes
+  # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  livenessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 20
+    successThreshold: 1
+    failureThreshold: 3
+    timeoutSeconds: 30
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+    timeoutSeconds: 30
+
+## pod autoscaling configuration, use for automatic scaling of the facade pods
+autoscaling:
+  # -- should autoscaling be enabled for the consent-facade
+  enabled: false
+  # -- version of the autoscaling api to be used
+  apiVersion: v2
+  # -- minimum number of running pods
+  minReplicas: 1
+  # -- maximum number of running pods
+  maxReplicas: 10
+  # -- metrics to react on
+  metrics: []
+  ## List of MetricSpecs to decide whether to scale
+  # See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#metricspec-v2beta2-autoscaling
+  # scaler targets to hold average cpu around 80%
+  #- type: Resource
+  #  resource:
+  #    name: cpu
+  #    target:
+  #      type: Utilization
+  #      averageUtilization: 80
+
+## configuration of the ingress to make the facade available outside the cluster.
+## Only the read-only /participants and /catalog paths need to be public - the ids the
+## facade mints have to be dereferenceable by consumers - while /verify and /bilaterals
+## are consumed in-cluster and are better left unexposed (see `paths`).
+ingress:
+  # -- should an ingress be created
+  enabled: false
+  # -- annotations to be added to the ingress
+  annotations: {}
+  # -- ingress class to be used
+  className: ""
+  # -- hosts to be used, each with a list of paths
+  hosts: []
+  # - host: consent-facade.127.0.0.1.nip.io
+  #   paths:
+  #     - /participants
+  #     - /catalog
+  # -- tls configuration
+  tls: []
+  # - secretName: consent-facade-tls
+  #   hosts:
+  #     - consent-facade.127.0.0.1.nip.io
+
+## configuration of an OpenShift route to make the facade available outside the cluster
+route:
+  # -- should a route be created
+  enabled: false
+  # -- annotations to be added to the route
+  annotations: {}
+  # -- host to be used
+  host: ""
+  # -- tls configuration
+  tls: {}
+
+## configuration for prometheus monitoring
+prometheus:
+  # -- should prometheus scrape be enabled
+  enabled: true
+  # -- path for prometheus scrape
+  path: /prometheus
+  # -- port prometheus scrape is available at
+  port: 9090
+
+# -- a map of additional env vars to be set, check the consent-facade documentation for
+# all available options
+env: {}
+
+# -- a map of additional env vars to be read from another source (secret, configmap,
+# field), keyed by the env var name
+envValueFrom: {}
+
+# -- a list of additional env vars to be set, in plain kubernetes shape
+additionalEnvVars: []
