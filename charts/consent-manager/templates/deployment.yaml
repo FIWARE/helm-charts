@@ -1,0 +1,225 @@
+{{- $secretName := include "consentManager.secretName" . }}
+{{- $external := .Values.externalIdp }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "consentManager.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{ include "consentManager.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.deployment.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
+  strategy:
+  {{- with .Values.deployment.updateStrategy }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "consentManager.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{ include "consentManager.labels" . | nindent 8 }}
+        {{- with .Values.deployment.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.deployment.additionalAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "consentManager.serviceAccountName" . }}
+      {{- with .Values.deployment.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.deployment.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag | default .Chart.AppVersion }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.port }}
+              protocol: TCP
+          {{- if .Values.deployment.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.deployment.livenessProbe.path }}
+              port: http
+            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- if .Values.deployment.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.deployment.readinessProbe.path }}
+              port: http
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+          {{- end }}
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: {{ .Values.port | quote }}
+            - name: API_PREFIX
+              value: {{ .Values.apiPrefix | quote }}
+            - name: APP_ENDPOINT
+              value: {{ include "consentManager.appEndpoint" . | quote }}
+            - name: URL
+              value: {{ include "consentManager.appEndpoint" . | quote }}
+            # the privacy notices are derived from the contract service (a consent-facade)
+            - name: CONTRACT_SERVICE_BASE_URL
+              value: {{ include "consentManager.contractServiceUrl" . | quote }}
+            - name: SESSION_COOKIE_NAME
+              value: {{ .Values.sessionCookieName | quote }}
+            - name: SALT_ROUNDS
+              value: {{ .Values.saltRounds | quote }}
+            - name: OAUTH_TOKEN_EXPIRES_IN
+              value: {{ .Values.oauthTokenExpiresIn | quote }}
+            # the session/jwt/oauth secrets and the consent key the gateway injects
+            - name: SESSION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName | quote }}
+                  key: {{ .Values.secret.keys.sessionSecret | quote }}
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName | quote }}
+                  key: {{ .Values.secret.keys.jwtSecret | quote }}
+            - name: OAUTH_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName | quote }}
+                  key: {{ .Values.secret.keys.oauthSecret | quote }}
+            - name: X_VISIONSTRUST_CONSENT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName | quote }}
+                  key: {{ .Values.secret.keys.consentKey | quote }}
+            # MongoDB - a replica set is required (the application uses transactions)
+            {{- if .Values.mongo.uri }}
+            - name: MONGO_URI
+              value: {{ .Values.mongo.uri | quote }}
+            {{- else }}
+            # the password is referenced rather than interpolated into MONGO_URI, so it
+            # does not appear in the pod spec
+            - name: CM_MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "consentManager.mongoSecretName" . | quote }}
+                  key: {{ include "consentManager.mongoSecretKey" . | quote }}
+            - name: MONGO_URI
+              value: "mongodb://{{ .Values.mongo.username }}:$(CM_MONGO_PASSWORD)@{{ .Values.mongo.host }}:{{ .Values.mongo.port }}/{{ .Values.mongo.database }}?replicaSet={{ .Values.mongo.replicaSet }}"
+            {{- end }}
+            {{- if $external.enabled }}
+            - name: EXTERNAL_OIDC_ISSUERS
+              value: {{ join "," $external.issuers | quote }}
+            - name: EXTERNAL_OIDC_AUDIENCE
+              value: {{ $external.audience | quote }}
+            - name: EXTERNAL_OIDC_ALGS
+              value: {{ $external.algorithms | quote }}
+            - name: EXTERNAL_OIDC_SUBJECT_CLAIM
+              value: {{ $external.subjectClaim | quote }}
+            - name: EXTERNAL_OIDC_DISCOVERY_TTL
+              value: {{ $external.discoveryTtl | quote }}
+            {{- with $external.discoveryPath }}
+            # discovery is fetched at <issuer><discoveryPath>, for a verifier that serves
+            # it under a per-service path while stamping the bare host as the token `iss`
+            - name: EXTERNAL_OIDC_DISCOVERY_PATH
+              value: {{ . | quote }}
+            {{- end }}
+            {{- with $external.proxy }}
+            # discovery + JWKS are plain http(s) fetches; route them through the proxy to
+            # reach an issuer whose ingress host does not resolve in-cluster
+            - name: HTTP_PROXY
+              value: {{ . | quote }}
+            - name: HTTPS_PROXY
+              value: {{ . | quote }}
+            - name: NO_PROXY
+              value: "localhost,127.0.0.1,.svc,.cluster.local"
+            {{- end }}
+            {{- if $external.caSecret.name }}
+            # extends Node's trust store, which is what its http client and `jose` read
+            - name: NODE_EXTRA_CA_CERTS
+              value: /etc/external-idp-ca/ca.crt
+            {{- end }}
+            {{- end }}
+            {{- range $key, $value := .Values.envValueFrom }}
+            - name: {{ $key | quote }}
+              valueFrom:
+                {{- tpl (toYaml $value) $ | nindent 16 }}
+            {{- end }}
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- if or .Values.envSecretNames .Values.envConfigMapNames }}
+          envFrom:
+            {{- range $value := .Values.envSecretNames }}
+            - secretRef:
+                name: {{ $value | quote }}
+            {{- end }}
+            {{- range $value := .Values.envConfigMapNames }}
+            - configMapRef:
+                name: {{ $value | quote }}
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+            {{- range $name, $path := .Values.deployment.writablePaths }}
+            - name: {{ $name | quote }}
+              mountPath: {{ $path | quote }}
+            {{- end }}
+            {{- if and $external.enabled $external.caSecret.name }}
+            - name: external-idp-ca
+              mountPath: /etc/external-idp-ca
+              readOnly: true
+            {{- end }}
+            {{- with .Values.deployment.additionalVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+      volumes:
+        {{- range $name, $path := .Values.deployment.writablePaths }}
+        - name: {{ $name | quote }}
+          emptyDir: {}
+        {{- end }}
+        {{- if and $external.enabled $external.caSecret.name }}
+        - name: external-idp-ca
+          secret:
+            secretName: {{ $external.caSecret.name | quote }}
+            items:
+              - key: {{ $external.caSecret.key | quote }}
+                path: ca.crt
+        {{- end }}
+        {{- with .Values.deployment.additionalVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
