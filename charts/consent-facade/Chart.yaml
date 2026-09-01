@@ -1,0 +1,26 @@
+apiVersion: v2
+name: consent-facade
+version: 0.1.0
+appVersion: 0.0.14
+kubeVersion: '>= 1.19-0'
+description: A Helm chart for running the consent-facade on kubernetes.
+icon: https://fiware.github.io/catalogue/img/fiware.png
+keywords:
+  - FIWARE
+  - consent-facade
+  - Consent
+  - DSBA
+  - VerifiableCredentials
+  - TMForum
+sources:
+  - https://github.com/wistefan/consent-facade
+maintainers:
+  - name: wistefan
+    email: stefan.wiedemann@seamware.com
+# The `common` library chart ships every shared helper (names, labels,
+# service-account resolution, existing-secret resolution, and the
+# service/ingress/route/HPA/serviceaccount bodies). See charts/common/README.md.
+dependencies:
+  - name: common
+    repository: "https://fiware.github.io/helm-charts"
+    version: "0.1.2"

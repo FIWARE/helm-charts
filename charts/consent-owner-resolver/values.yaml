@@ -1,0 +1,245 @@
+## Default values for the consent-owner-resolver.
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+# -- option to override the name config in the _helpers.tpl
+nameOverride: ""
+# -- option to override the fullname config in the _helpers.tpl
+fullnameOverride: ""
+
+## configuration for the k8s service to access the consent-owner-resolver
+service:
+  # -- service type
+  type: ClusterIP
+  # -- port to be used by the service
+  port: 8080
+  # -- additional annotations, if required
+  annotations: {}
+
+# -- if a consent-owner-resolver specific service account should be used, it can be
+# configured here
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # -- specifies if the account should be created
+  create: false
+
+# -- port that the consent-owner-resolver container uses
+port: 8080
+
+## authentication of the callers of /resolve. The endpoint answers who owns a piece of
+## data, so it must only be reachable by the consent enforcement point. Set a token
+## here, and restrict the reachability with `networkPolicy` as well: the resolver has no
+## other authorization.
+auth:
+  # -- shared token callers have to present. Empty leaves /resolve unauthenticated -
+  # the resolver logs a warning on start when that is the case.
+  token: ""
+  ## an already existing secret holding the token
+  existingSecret:
+    # -- name of the secret. Defaults to the chart's fullname, which is the secret this
+    # chart creates from `token`.
+    name: ""
+    # -- key of the token inside that secret
+    key: ""
+
+# -- maximum size of a request body the resolver examines, in bytes. A body above it is
+# rejected rather than parsed. Empty uses the service's own default.
+maxBodyBytes: ""
+
+# -- log level. `debug` makes the resolver log the requested path and the resolve error
+# verbatim instead of an error class - both can carry owner identifiers, so it is meant
+# to be temporary, and it is the switch to reach for when a request is denied and the
+# error class does not say which check failed.
+logLevel: ""
+
+## what applies to a request no rule matches
+defaults:
+  # -- whether data no rule matches needs a consent. `false` lets unmatched data pass
+  # the gate; `true` denies everything the rules do not describe.
+  consentRequired: false
+  # -- how the resolved owner is to be interpreted by the caller, e.g. `identifier`
+  scheme: identifier
+
+## the contract service (a consent-facade) the `contract` matcher reads the governing
+## contract from. Only needed by rules using that matcher.
+contractService:
+  # -- should a contract service be configured
+  enabled: false
+  # -- base url of the contract service. Templated, so `{{ .Release.Namespace }}` works.
+  url: http://consent-facade:8080
+  # -- the provider self-description contracts are looked up with. Usually supplied per
+  # request by the caller instead, because it embeds an id that is only known once the
+  # participant is registered. Templated.
+  providerSelfDescription: ""
+  # -- how long to wait for the contract service, in milliseconds
+  timeoutMs: 3000
+  # -- how long a contract's resolved data resources may be reused, in milliseconds.
+  # Empty uses the service's own default.
+  resourceCacheTtlMs: ""
+
+# -- the rules deciding, per request, whether a consent is required and where the data
+# owner is found. They are evaluated in order and the first match wins; a request no
+# rule matches falls back to `defaults`. Rendered verbatim into the configuration, so
+# every matcher the service supports can be expressed.
+#
+# A rule is `name`, `match` (`service`, `pathPattern`), `consentRequired` and a
+# `matcher`. The `matcher` is either
+#   * `type: json` — the owner is read from the payload at the `owner` JSON pointer, or
+#   * `type: contract` — additionally looks up the signed contract governing the object
+#     at `uriPointer` and takes the data resource to check the consent for from it
+#     (needs `contractService` above).
+# `items` selects the collection within the payload (empty = the whole body) and
+# `itemsIsArray` says whether it is an array.
+rules: []
+# - name: data-service-entity
+#   match:
+#     service: data-service
+#     pathPattern: "/entities/[^/]+$"
+#   consentRequired: true
+#   matcher:
+#     type: contract
+#     items: ""
+#     itemsIsArray: false
+#     owner: /dataOwner/value
+#     uriPointer: /id
+
+# -- the complete resolver configuration, written verbatim instead of assembling it from
+# `defaults` / `contractService` / `rules`. Use it for a shape this chart does not model.
+config: {}
+
+## a network policy restricting who may call /resolve. Strongly recommended: the
+## endpoint tells the caller who owns a piece of data, and the resolver itself only
+## checks the `auth` token.
+networkPolicy:
+  # -- should a network policy be created
+  enabled: false
+  # -- pod selectors of the clients allowed to call the resolver, in plain kubernetes
+  # shape. Usually just the consent enforcement point.
+  allowedClients: []
+  # - podSelector:
+  #     matchLabels:
+  #       app.kubernetes.io/name: apisix
+
+## deployment specific configuration
+deployment:
+  # -- initial number of target replications, can be different if autoscaling is enabled
+  replicaCount: 1
+  # -- number of old replicas to be retained
+  revisionHistoryLimit: 3
+  ## configuration of the update strategy
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 1
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 0
+  ## configuration of the image to be used
+  image:
+    # -- consent-owner-resolver image name
+    # ref: https://quay.io/repository/seamware/consent-owner-resolver
+    repository: quay.io/seamware/consent-owner-resolver
+    # -- overrides the image tag whose default is the chart appVersion
+    tag: ""
+    # -- specification of the image pull policy
+    pullPolicy: IfNotPresent
+  # -- additional labels for the deployment, if required
+  additionalLabels: {}
+  # -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  # -- additional volumes, if required
+  additionalVolumes: []
+  # -- additional volume mounts, if required
+  additionalVolumeMounts: []
+  # -- folder the configuration is mounted into
+  configFolder: /etc/owner-resolver
+  ## resource requests and limits. The resolver sits on the synchronous path of every
+  ## proxied request, so it is given a small guaranteed share by default.
+  resources:
+    requests:
+      cpu: 50m
+      memory: 32Mi
+    limits:
+      cpu: 250m
+      memory: 128Mi
+  # -- security context for the pod
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 10100
+    seccompProfile:
+      type: RuntimeDefault
+  # -- security context for the container
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+  # -- selector template
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  # -- tolerations template
+  # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  # -- affinity template
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+  ## liveness and readiness probes
+  # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  livenessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 20
+    successThreshold: 1
+    failureThreshold: 3
+    timeoutSeconds: 5
+  readinessProbe:
+    initialDelaySeconds: 2
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+    timeoutSeconds: 5
+
+## pod autoscaling configuration, use for automatic scaling of the resolver pods
+autoscaling:
+  # -- should autoscaling be enabled for the consent-owner-resolver
+  enabled: false
+  # -- version of the autoscaling api to be used
+  apiVersion: v2
+  # -- minimum number of running pods
+  minReplicas: 1
+  # -- maximum number of running pods
+  maxReplicas: 10
+  # -- metrics to react on
+  metrics: []
+  ## List of MetricSpecs to decide whether to scale
+  # See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#metricspec-v2beta2-autoscaling
+  # scaler targets to hold average cpu around 80%
+  #- type: Resource
+  #  resource:
+  #    name: cpu
+  #    target:
+  #      type: Utilization
+  #      averageUtilization: 80
+
+## configuration for prometheus monitoring. The resolver serves its metrics on the api
+## port at /metrics.
+prometheus:
+  # -- should prometheus scrape be enabled
+  enabled: true
+  # -- path for prometheus scrape
+  path: /metrics
+  # -- port prometheus scrape is available at
+  port: 8080
+
+# -- a map of additional env vars to be set, check the consent-owner-resolver
+# documentation for all available options
+env: {}
+
+# -- a map of additional env vars to be read from another source (secret, configmap,
+# field), keyed by the env var name
+envValueFrom: {}
+
+# -- a list of additional env vars to be set, in plain kubernetes shape
+additionalEnvVars: []
