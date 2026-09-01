@@ -2709,6 +2709,61 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/common-0.0.1/common-0.0.1.tgz
     version: 0.0.1
+  consent-facade:
+  - apiVersion: v2
+    appVersion: 0.0.14
+    created: "2026-09-01T10:55:55.664763954Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the consent-facade on kubernetes.
+    digest: 4eb7c242e0c276b61bd24fad1ede6abaff0d5008408c694f2199fc46828e9a74
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - consent-facade
+    - Consent
+    - DSBA
+    - VerifiableCredentials
+    - TMForum
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: consent-facade
+    sources:
+    - https://github.com/wistefan/consent-facade
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/consent-facade-0.1.1/consent-facade-0.1.1.tgz
+    version: 0.1.1
+  consent-owner-resolver:
+  - apiVersion: v2
+    appVersion: 0.0.8
+    created: "2026-09-01T10:55:55.872065708Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the consent-owner-resolver on kubernetes.
+    digest: 46054a45be81335002bbafdf03579c825f7f00caebb0ef75c6e3f01cc1ab0a27
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - consent-owner-resolver
+    - Consent
+    - DSBA
+    - NGSI-LD
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: consent-owner-resolver
+    sources:
+    - https://github.com/wistefan/consent-owner-resolver
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/consent-owner-resolver-0.1.1/consent-owner-resolver-0.1.1.tgz
+    version: 0.1.1
   contract-management:
   - apiVersion: v2
     appVersion: 3.3.10
@@ -14343,4 +14398,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-08-31T10:28:53.429855781Z"
+generated: "2026-09-01T10:55:56.283507973Z"
