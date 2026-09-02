@@ -2737,6 +2737,33 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/consent-facade-0.1.1/consent-facade-0.1.1.tgz
     version: 0.1.1
+  consent-manager:
+  - apiVersion: v2
+    appVersion: 0.0.6
+    created: "2026-09-02T05:59:39.823091095Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the consent-manager on kubernetes.
+    digest: b7bfddc367c59e563954d7ed72e44a9d1ad63e72a6afb83d1e14b5e2b2fd9e6c
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - consent-manager
+    - Consent
+    - ISO27560
+    - DSBA
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: consent-manager
+    sources:
+    - https://github.com/VisionsOfficial/consent-manager
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/consent-manager-0.1.2/consent-manager-0.1.2.tgz
+    version: 0.1.2
   consent-owner-resolver:
   - apiVersion: v2
     appVersion: 0.0.8
@@ -14398,4 +14425,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-09-01T10:55:56.283507973Z"
+generated: "2026-09-02T05:59:39.824619107Z"
