@@ -1,5 +1,27 @@
 # contract-management changelog
 
+## 3.5.33
+
+### Specification composition
+
+Exposes the two settings that let contract-management read the policy and
+credential configuration from the `ServiceSpecification`s a
+`ProductSpecification` is composed of, instead of only from the
+`ProductSpecification` itself.
+
+- `values.yaml` — added `enableSpecificationComposition` (default `false`) and
+  `specificationCompositionMaxDepth` (default `2`).
+- `templates/configmap.yaml` — renders both under `general`.
+
+Both are rendered unconditionally. An image that does not know them ignores the
+extra configuration, and the application default of `enableSpecificationComposition`
+is `false` as well, so the rendered ConfigMap changes but no behaviour does until
+the flag is switched on.
+
+Enabling it requires `enableTmForum` and a configured
+`services.service-catalog`, which the chart already defaults to the TMForum
+service-catalog API.
+
 ## 3.5.23
 
 ### Common library chart migration
