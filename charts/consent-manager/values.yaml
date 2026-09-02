@@ -1,0 +1,320 @@
+## Default values for the consent-manager.
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+# -- option to override the name config in the _helpers.tpl
+nameOverride: ""
+# -- option to override the fullname config in the _helpers.tpl
+fullnameOverride: ""
+
+## configuration for the k8s service to access the consent-manager
+service:
+  # -- service type. Keep it internal: the consent-manager authenticates callers with a
+  # shared consent key and participant tokens, and is meant to sit behind a gateway.
+  type: ClusterIP
+  # -- port to be used by the service
+  port: 3000
+  # -- additional annotations, if required
+  annotations: {}
+
+# -- if a consent-manager specific service account should be used, it can be configured here
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # -- specifies if the account should be created
+  create: false
+
+# -- port that the consent-manager container uses
+port: 3000
+
+# -- api prefix the consent-manager serves its api under
+apiPrefix: /v1
+
+# -- the application's own base url (APP_ENDPOINT / URL). It ends up in the links the
+# application emits, so a published deployment has to set the address it is reachable at.
+# Defaults to the in-cluster service. Templated, so `{{ .Release.Namespace }}` works.
+appEndpoint: ""
+
+## the contract service the privacy notices are derived from - a consent-facade, which
+## projects a provider's TM Forum agreements into the contract-service API this
+## application consumes.
+contractService:
+  # -- base url of the contract service. Templated, so a cross-namespace FQDN can carry
+  # `{{ .Release.Namespace }}`.
+  url: http://consent-facade:8080
+
+# -- name of the session cookie
+sessionCookieName: consentmanagersessid
+# -- bcrypt salt rounds used for stored credentials
+saltRounds: 10
+# -- lifetime of an issued OAuth token
+oauthTokenExpiresIn: 1h
+
+## MongoDB. The consent-manager needs a REPLICA SET (it uses transactions), so a
+## single-node mongo without one will fail at runtime.
+mongo:
+  # -- full connection string, including the replica set. When set it overrides every
+  # part below - use it for a connection this chart cannot express (TLS options, SRV
+  # records, multiple hosts).
+  uri: ""
+  # -- host of the mongodb service
+  host: mongodb-svc
+  # -- port of the mongodb service
+  port: 27017
+  # -- database to use
+  database: consent
+  # -- user to connect as
+  username: consent
+  # -- name of the replica set
+  replicaSet: mongodb
+  auth:
+    # -- password to connect with. Prefer `existingSecret`: a password here ends up in
+    # the release's values.
+    password: ""
+    ## an already existing secret holding the password - e.g. the one a managed MongoDB
+    ## created for this user
+    existingSecret:
+      # -- name of the secret. Empty => the secret this chart creates from `password`.
+      name: ""
+      # -- key of the password inside that secret
+      key: ""
+
+## The session / JWT / OAuth secrets and the shared consent key. The consent key is the
+## one the gateway in front of the consent-manager injects on behalf of callers, so both
+## sides have to agree on its value - which is why it is configured rather than generated.
+secret:
+  # -- create the secret. The session/JWT/OAuth secrets are generated on first install and
+  # kept across upgrades (`helm.sh/resource-policy: keep`), so sessions and issued tokens
+  # survive a redeploy. Set individual values below to pin them instead.
+  create: true
+  # -- name of an already existing secret to use instead. It has to carry the four keys
+  # named under `keys` below.
+  existingSecret: ""
+  ## keys within the secret
+  keys:
+    # -- key holding the session secret
+    sessionSecret: sessionSecret
+    # -- key holding the JWT secret
+    jwtSecret: jwtSecret
+    # -- key holding the OAuth secret
+    oauthSecret: oauthSecret
+    # -- key holding the consent key (X_VISIONSTRUST_CONSENT_KEY)
+    consentKey: consentKey
+  # -- the shared consent key (X_VISIONSTRUST_CONSENT_KEY). The gateway in front of the
+  # consent-manager injects this exact value and the consent-manager validates it, so both
+  # sides have to be configured with the same string - which is why it is not generated.
+  # Left empty a random key is generated: that fails closed (no caller can present a
+  # matching key) instead of deploying a blank shared secret, so a working deployment has
+  # to set it.
+  consentKey: ""
+  # -- session secret. Empty => generated on first install.
+  sessionSecret: ""
+  # -- JWT secret. Empty => generated on first install.
+  jwtSecret: ""
+  # -- OAuth secret. Empty => generated on first install.
+  oauthSecret: ""
+
+## External IDP / OID4VP token verification. With it enabled the consent-manager trusts
+## JWTs whose `iss` is listed, verifies them via OIDC discovery + JWKS, and maps the token
+## `sub` (a DID) to a local identity - which is what lets a data subject authenticate
+## directly with its own OID4VP access token, with no gateway translation.
+externalIdp:
+  # -- verify externally issued tokens
+  enabled: false
+  # -- trusted issuer urls. Each must equal the token's `iss` verbatim; discovery runs at
+  # `<issuer><discoveryPath>`.
+  issuers: []
+  # -- the expected `aud`. One value covers data subjects and participants alike: they
+  # present different credentials to the same relying party, which on a verifier is one
+  # service with a credential policy per scope, and every token it issues carries that
+  # service id as `aud`.
+  audience: ""
+  # -- accepted signing algorithms (asymmetric only)
+  algorithms: "RS256,ES256,EdDSA"
+  # -- token claim carrying the subject DID
+  subjectClaim: sub
+  # -- discovery + JWKS cache TTL in seconds
+  discoveryTtl: 3600
+  # -- path appended to each issuer to fetch its OIDC discovery document. Empty => the
+  # spec default `/.well-known/openid-configuration`. Needed for a verifier that serves
+  # discovery under a per-service path while still stamping its bare host as the token
+  # `iss` (the FIWARE VCVerifier does), e.g.
+  # `/services/consent-manager/.well-known/openid-configuration`.
+  discoveryPath: ""
+  # -- forward proxy for reaching the issuer from inside the cluster (exported as
+  # HTTP_PROXY/HTTPS_PROXY, with the cluster suffixes in NO_PROXY). Needed when the
+  # issuer's ingress host does not resolve in-cluster.
+  proxy: ""
+  ## the CA the consent-manager has to trust to fetch discovery + JWKS over TLS - usually
+  ## the issuer's cert-manager-issued ingress certificate. Mounted and exported as
+  ## NODE_EXTRA_CA_CERTS, which is what Node's http client and `jose` read.
+  caSecret:
+    # -- secret holding the CA certificate. Empty => rely on the system trust store.
+    name: ""
+    # -- key within the secret holding the PEM certificate
+    key: ca.crt
+
+## deployment specific configuration
+deployment:
+  # -- initial number of target replications, can be different if autoscaling is enabled
+  replicaCount: 1
+  # -- number of old replicas to be retained
+  revisionHistoryLimit: 3
+  ## configuration of the update strategy
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 1
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 0
+  ## configuration of the image to be used
+  image:
+    # -- consent-manager image name. A compiled, non-root, read-only-filesystem-safe build
+    # of VisionsOfficial/consent-manager.
+    # ref: https://quay.io/repository/wi_stefan/consent-manager
+    repository: quay.io/wi_stefan/consent-manager
+    # -- overrides the image tag whose default is the chart appVersion
+    tag: ""
+    # -- specification of the image pull policy
+    pullPolicy: IfNotPresent
+  # -- additional labels for the deployment, if required
+  additionalLabels: {}
+  # -- additional annotations for the deployment, if required
+  additionalAnnotations: {}
+  # -- additional volumes, if required
+  additionalVolumes: []
+  # -- additional volume mounts, if required
+  additionalVolumeMounts: []
+  # -- paths the application writes to, as `<volume name>: <path>`. The root filesystem is
+  # read-only, so each gets an emptyDir: the consent-manager writes rotating winston logs
+  # to two compiled paths, and they are part of the image layout rather than configurable -
+  # adjust them here if the image changes.
+  writablePaths:
+    tmp: /tmp
+    logs: /usr/src/app/dist/src/logs
+    logs-all: /usr/src/app/dist/src/libs/logs
+  ## cpu/memory resources
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  # -- security context for the pod. The image runs as uid/gid 10100.
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+    runAsUser: 10100
+    runAsGroup: 10100
+    fsGroup: 10100
+  # -- security context for the container
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    runAsUser: 10100
+  # -- selector template
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  # -- tolerations template
+  # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  # -- affinity template
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+  ## liveness and readiness probes. Off by default: the consent-manager serves no
+  ## dedicated health endpoint, so a probe has to be pointed at a real api path - which
+  ## answers only once the database is reachable. Enable it with a path that suits the
+  ## deployment.
+  # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  livenessProbe:
+    # -- enable the liveness probe
+    enabled: false
+    # -- path to probe
+    path: /
+    initialDelaySeconds: 30
+    periodSeconds: 20
+    successThreshold: 1
+    failureThreshold: 3
+    timeoutSeconds: 5
+  readinessProbe:
+    # -- enable the readiness probe
+    enabled: false
+    # -- path to probe
+    path: /
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+    timeoutSeconds: 5
+
+## pod autoscaling configuration
+autoscaling:
+  # -- should autoscaling be enabled for the consent-manager
+  enabled: false
+  # -- version of the autoscaling api to be used
+  apiVersion: v2
+  # -- minimum number of running pods
+  minReplicas: 1
+  # -- maximum number of running pods
+  maxReplicas: 10
+  # -- metrics to react on
+  metrics: []
+  ## List of MetricSpecs to decide whether to scale
+  # See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#metricspec-v2beta2-autoscaling
+  # scaler targets to hold average cpu around 80%
+  #- type: Resource
+  #  resource:
+  #    name: cpu
+  #    target:
+  #      type: Utilization
+  #      averageUtilization: 80
+
+## configuration of the ingress to make the consent-manager available outside the cluster.
+## Publishing it directly is rarely right - it has no authentication of its own for the
+## participant api, which is why deployments put an authenticating gateway in front.
+ingress:
+  # -- should an ingress be created
+  enabled: false
+  # -- annotations to be added to the ingress
+  annotations: {}
+  # -- ingress class to be used
+  className: ""
+  # -- hosts to be used, each with a list of paths
+  hosts: []
+  # - host: consent-manager.127.0.0.1.nip.io
+  #   paths:
+  #     - /
+  # -- tls configuration
+  tls: []
+
+## configuration of an OpenShift route
+route:
+  # -- should a route be created
+  enabled: false
+  # -- annotations to be added to the route
+  annotations: {}
+  # -- host to be used
+  host: ""
+  # -- tls configuration
+  tls: {}
+
+# -- a map of additional env vars to be set, check the consent-manager documentation for
+# all available options
+env: {}
+
+# -- a map of additional env vars to be read from another source (secret, configmap,
+# field), keyed by the env var name
+envValueFrom: {}
+
+# -- additional secrets to load as env in their entirety (list of secret names)
+envSecretNames: []
+
+# -- additional config maps to load as env in their entirety (list of config map names)
+envConfigMapNames: []

@@ -1,0 +1,25 @@
+apiVersion: v2
+name: consent-manager
+version: 0.1.2
+appVersion: 0.0.6
+kubeVersion: '>= 1.19-0'
+description: A Helm chart for running the consent-manager on kubernetes.
+icon: https://fiware.github.io/catalogue/img/fiware.png
+keywords:
+  - FIWARE
+  - consent-manager
+  - Consent
+  - ISO27560
+  - DSBA
+sources:
+  - https://github.com/VisionsOfficial/consent-manager
+maintainers:
+  - name: wistefan
+    email: stefan.wiedemann@seamware.com
+# The `common` library chart ships every shared helper (names, labels,
+# service-account resolution, existing-secret resolution, and the
+# service/ingress/route/HPA/serviceaccount bodies). See charts/common/README.md.
+dependencies:
+  - name: common
+    repository: "https://fiware.github.io/helm-charts"
+    version: "0.1.2"
