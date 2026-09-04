@@ -1,0 +1,16 @@
+Successfully deployed coraine.
+
+Connect at {{ include "coraine.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.service.port }}
+
+{{- if and .Values.apiPlugins.admin.enabled .Values.ingress.enabled .Values.ingress.exposeAdminPaths }}
+
+WARNING: ingress.exposeAdminPaths is true -- coraine's /admin and /metrics endpoints are
+reachable from outside the cluster on every host configured under ingress.hosts. Make sure
+the ingress itself is access-controlled (auth, allow-list, mTLS, ...).
+{{- end }}
+{{- if and .Values.distributed.enabled (not .Values.distributed.httpEndpoint) }}
+
+WARNING: distributed.enabled is true but distributed.httpEndpoint is empty -- coraine will
+auto-detect a base URL, which is usually a pod-internal address and not reachable by other
+Context Sources. Set distributed.httpEndpoint explicitly.
+{{- end }}
