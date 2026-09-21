@@ -237,6 +237,12 @@ bizEcosystemChargingBackend:
     additionalLabels: {}
     ## -- additional annotations for the deployment, if required
     additionalAnnotations: {}
+    # -- priority class to be assigned to the pods
+    # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+    priorityClassName: ""
+    # -- topology spread constraints template
+    # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+    topologySpreadConstraints: []
     ## -- selector template
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
     nodeSelector: {}
@@ -464,6 +470,12 @@ bizEcosystemLogicProxy:
     additionalLabels: {}
     ## -- additional annotations for the deployment, if required
     additionalAnnotations: {}
+    # -- priority class to be assigned to the pods
+    # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+    priorityClassName: ""
+    # -- topology spread constraints template
+    # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+    topologySpreadConstraints: []
     ## -- selector template
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
     nodeSelector: {}
