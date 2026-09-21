@@ -162,8 +162,13 @@ values are unset).
 
 Per chart: add both keys next to the existing `nodeSelector` in `values.yaml`, using the
 helm-docs `# --` comment style of its neighbours, and insert the rendered fields next to the
-`nodeSelector` block in each workload template. Then bump `version` in `Chart.yaml` —
-`chart-releaser` only publishes charts whose version changed.
+`nodeSelector` block in each workload template.
+
+Do NOT bump `Chart.yaml` by hand and do NOT run helm-docs by hand. The `prepare-release`
+job in `check.yml` collects every chart touched under `charts/`, bumps each one by the PR's
+semver label via `.github/actions/bump-chart-version`, regenerates the READMEs and pushes a
+commit named "Update helm documentation" back onto the PR branch. It skips itself when a
+commit with that name is already in the PR range, so a manual bump would be applied twice.
 
 ```yaml
   # -- priority class to be assigned to the pods
@@ -175,40 +180,40 @@ helm-docs `# --` comment style of its neighbours, and insert the rendered fields
 ```
 
 Charts to touch (29; template count in brackets where not 1):
-- [ ] api-umbrella
-- [ ] apollo
-- [ ] bae-activation-service
-- [ ] business-api-ecosystem [2]
-- [ ] canis-major
-- [ ] consent-facade
-- [ ] consent-manager
-- [ ] consent-owner-resolver
-- [ ] contract-management
-- [ ] credentials-config-service
-- [ ] did-helper
-- [ ] dsba-pdp
-- [ ] dss-validation-service
-- [ ] endpoint-auth-service [3]
-- [ ] fdsc-dashboard
-- [ ] fdsc-edc (family C, `$cfg`)
-- [ ] iotagent-json
-- [ ] iotagent-ul
-- [ ] ishare-satellite
-- [ ] keyrock
-- [ ] mintaka
-- [ ] odrl-pap
-- [ ] onboarding-portal
-- [ ] orion (also declare both keys in `values.schema.json`)
-- [ ] scorpio-broker-aaio
-- [ ] tm-forum-api [2] (family B, doubled guard)
-- [ ] trusted-issuers-list
-- [ ] trusted-issuers-registry
-- [ ] vcverifier
+- [x] api-umbrella
+- [x] apollo
+- [x] bae-activation-service
+- [x] business-api-ecosystem [2]
+- [x] canis-major
+- [x] consent-facade
+- [x] consent-manager
+- [x] consent-owner-resolver
+- [x] contract-management
+- [x] credentials-config-service
+- [x] did-helper
+- [x] dsba-pdp
+- [x] dss-validation-service
+- [x] endpoint-auth-service [3]
+- [x] fdsc-dashboard
+- [x] fdsc-edc (family C, `$cfg`)
+- [x] iotagent-json
+- [x] iotagent-ul
+- [x] ishare-satellite
+- [x] keyrock
+- [x] mintaka
+- [x] odrl-pap
+- [x] onboarding-portal
+- [x] orion (also declare both keys in `values.schema.json`)
+- [x] scorpio-broker-aaio
+- [x] tm-forum-api [2] (family B, doubled guard)
+- [x] trusted-issuers-list
+- [x] trusted-issuers-registry
+- [x] vcverifier
 
 Checks before opening:
-- [ ] Render-diff empty per chart with values unset: `helm template` before vs after
-- [ ] Renders when set: `helm template charts/vcverifier --set deployment.priorityClassName=x`
+- [x] Render-diff empty per chart with values unset: `helm template` before vs after
+- [x] Renders when set: `helm template charts/vcverifier --set deployment.priorityClassName=x`
       (`tm-forum-api` needs `--set defaultConfig.priorityClassName=x --set allInOne.enabled=true`)
-- [ ] `./lint.sh` and `./eval.sh` pass
-- [ ] Do NOT hand-edit `README.md` — CI regenerates them with helm-docs v1.14.2
+- [x] `./lint.sh` and `./eval.sh` pass
+- [x] Leave `Chart.yaml` versions and `README.md` to the `prepare-release` job
 - [ ] Warn the maintainer: this releases ~29 charts at once, no precedent in the repo
