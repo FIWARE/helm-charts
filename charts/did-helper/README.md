@@ -1,6 +1,6 @@
 # did-helper
 
-![Version: 0.1.22](https://img.shields.io/badge/Version-0.1.22-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.6.0](https://img.shields.io/badge/AppVersion-0.6.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.6.0](https://img.shields.io/badge/AppVersion-0.6.0-informational?style=flat-square)
 
 A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
 
@@ -63,6 +63,7 @@ A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
 | podAnnotations | object | `{}` |  |
 | podLabels | object | `{}` |  |
 | podSecurityContext | object | `{}` |  |
+| priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | readinessProbe.failureThreshold | int | `3` |  |
 | readinessProbe.initialDelaySeconds | int | `5` |  |
 | readinessProbe.periodSeconds | int | `10` |  |
@@ -75,6 +76,7 @@ A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
 | tolerations | list | `[]` |  |
+| topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | volumeMounts | list | `[]` |  |
 | volumes | list | `[]` |  |
 

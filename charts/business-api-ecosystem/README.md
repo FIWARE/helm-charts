@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![AppVersion: 2026.05.14](https://img.shields.io/badge/AppVersion-2026.05.14-informational?style=flat-square)
+![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![AppVersion: 2026.05.14](https://img.shields.io/badge/AppVersion-2026.05.14-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -58,6 +58,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.deployment.livenessProbe.successThreshold | int | `1` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.timeoutSeconds | int | `5` |  |
 | bizEcosystemChargingBackend.deployment.nodeSelector | object | `{}` |  |
+| bizEcosystemChargingBackend.deployment.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | bizEcosystemChargingBackend.deployment.readinessProbe.failureThreshold | int | `10` |  |
 | bizEcosystemChargingBackend.deployment.readinessProbe.initialDelaySeconds | int | `15` |  |
 | bizEcosystemChargingBackend.deployment.readinessProbe.periodSeconds | int | `5` |  |
@@ -66,6 +67,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.deployment.replicaCount | int | `1` |  |
 | bizEcosystemChargingBackend.deployment.revisionHistoryLimit | int | `3` |  |
 | bizEcosystemChargingBackend.deployment.tolerations | list | `[]` |  |
+| bizEcosystemChargingBackend.deployment.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | bizEcosystemChargingBackend.deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` |  |
 | bizEcosystemChargingBackend.deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` |  |
 | bizEcosystemChargingBackend.deployment.updateStrategy.type | string | `"RollingUpdate"` |  |
@@ -181,6 +183,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.statefulset.livenessProbe.successThreshold | int | `1` |  |
 | bizEcosystemLogicProxy.statefulset.livenessProbe.timeoutSeconds | int | `5` |  |
 | bizEcosystemLogicProxy.statefulset.nodeSelector | object | `{}` |  |
+| bizEcosystemLogicProxy.statefulset.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | bizEcosystemLogicProxy.statefulset.readinessProbe.failureThreshold | int | `10` |  |
 | bizEcosystemLogicProxy.statefulset.readinessProbe.initialDelaySeconds | int | `15` |  |
 | bizEcosystemLogicProxy.statefulset.readinessProbe.periodSeconds | int | `5` |  |
@@ -189,6 +192,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.statefulset.replicaCount | int | `1` |  |
 | bizEcosystemLogicProxy.statefulset.revisionHistoryLimit | int | `3` |  |
 | bizEcosystemLogicProxy.statefulset.tolerations | list | `[]` |  |
+| bizEcosystemLogicProxy.statefulset.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | bizEcosystemLogicProxy.statefulset.updateStrategy.type | string | `"RollingUpdate"` |  |
 | bizEcosystemLogicProxy.tenderingEnabled | bool | `false` |  |
 | bizEcosystemLogicProxy.theme.enabled | bool | `false` | Enable theme |

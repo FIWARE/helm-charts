@@ -1,6 +1,6 @@
 # consent-facade
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![AppVersion: 0.0.14](https://img.shields.io/badge/AppVersion-0.0.14-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![AppVersion: 0.0.14](https://img.shields.io/badge/AppVersion-0.0.14-informational?style=flat-square)
 
 A Helm chart for running the consent-facade on kubernetes.
 
@@ -49,6 +49,7 @@ Kubernetes: `>= 1.19-0`
 | deployment.managementPort | int | `9090` | port the management endpoints (incl. /health) are served on. It is a separate port from the api, matching `endpoints.all.port` in the image's configuration. |
 | deployment.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | deployment.podSecurityContext | object | `{"runAsNonRoot":true}` | security context for the pod |
+| deployment.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | deployment.readinessProbe.failureThreshold | int | `3` |  |
 | deployment.readinessProbe.initialDelaySeconds | int | `10` |  |
 | deployment.readinessProbe.periodSeconds | int | `10` |  |
@@ -59,6 +60,7 @@ Kubernetes: `>= 1.19-0`
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | deployment.securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}` | security context for the containers |
 | deployment.tolerations | list | `[]` | tolerations template ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| deployment.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
 | deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |

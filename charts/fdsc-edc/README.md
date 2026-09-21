@@ -1,6 +1,6 @@
 # fdsc-edc
 
-![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![AppVersion: 1.4.1](https://img.shields.io/badge/AppVersion-1.4.1-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![AppVersion: 1.4.1](https://img.shields.io/badge/AppVersion-1.4.1-informational?style=flat-square)
 
 A Helm chart for running the fdsc-edc on kubernetes.
 
@@ -142,6 +142,7 @@ A Helm chart for running the fdsc-edc on kubernetes.
 | common.deployment.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | common.deployment.path | string | `"/api"` | base path of the controlplane |
 | common.deployment.port | int | `8080` | port that the controlplane container uses as a base |
+| common.deployment.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | common.deployment.readinessProbe.failureThreshold | int | `3` |  |
 | common.deployment.readinessProbe.initialDelaySeconds | int | `31` |  |
 | common.deployment.readinessProbe.periodSeconds | int | `10` |  |
@@ -150,6 +151,7 @@ A Helm chart for running the fdsc-edc on kubernetes.
 | common.deployment.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | common.deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | common.deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| common.deployment.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | common.deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
 | common.deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | common.deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
