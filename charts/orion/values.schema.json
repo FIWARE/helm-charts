@@ -439,6 +439,30 @@
           "required": [],
           "additionalProperties": true
         },
+        "priorityClassName": {
+          "$id": "#/properties/deployment/properties/priorityClassName",
+          "type": "string",
+          "title": "The priorityClassName schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            ""
+          ]
+        },
+        "topologySpreadConstraints": {
+          "$id": "#/properties/deployment/properties/topologySpreadConstraints",
+          "type": "array",
+          "title": "The topologySpreadConstraints schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": [],
+          "examples": [
+            []
+          ],
+          "additionalItems": true,
+          "items": {
+            "$id": "#/properties/deployment/properties/topologySpreadConstraints/items"
+          }
+        },
         "nodeSelector": {
           "$id": "#/properties/deployment/properties/nodeSelector",
           "type": "object",
