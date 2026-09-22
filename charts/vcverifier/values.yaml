@@ -365,10 +365,16 @@ registration:
       tag: 8.1.2
       # -- Image pull policy for the registration job
       pullPolicy: IfNotPresent
-    # -- Annotations for the registration Job resource. Defaults configure it as a Helm post-install hook that is deleted on success.
+    # -- Annotations for the registration Job resource. Defaults run it on install AND upgrade, deleting any previous Job first.
+    # `post-install` alone made the registration effectively install-only: every `helm upgrade`
+    # skipped the Job, so a service added to `registration.services` afterwards never reached the
+    # config repo and the verifier answered requests for it with no presentation_definition.
+    # `before-hook-creation` is the other half - `hook-succeeded` only deletes the Job when it
+    # SUCCEEDS, so one failed run would leave it behind and the next upgrade would fail with
+    # `jobs.batch "<release>-job" already exists`.
     annotations:
-      "helm.sh/hook": post-install
-      "helm.sh/hook-delete-policy": hook-succeeded
+      "helm.sh/hook": post-install,post-upgrade
+      "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     # -- Additional labels to add to the registration Job resource
     additionalLabels: {}
     # -- Number of retries before marking the job as failed
