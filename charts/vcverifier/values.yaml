@@ -143,7 +143,31 @@ deployment:
       #  name: ''
       #  key: ''
 
-  else: {}
+  # -- eidas2.0 related configuration
+  eidas:
+    # -- should eidas 2.0 compliant verification be enabled
+    enabled: false
+    # -- URL of the List of Trusted Lists. Defaults to the official EU LOTL
+    lotUrl: 
+    # -- Seconds between background refreshes of the lotl
+    refreshInterval: 86400
+    # -- ISO 3166-1 alpha-2 country filter for the national lists to be included. If empty, all countries are included.
+    countries:
+    # -- Concurrent national list fetches
+    maxWorkers: 5
+    # -- HTTP timeout per trust list fetch, in seconds.
+    fetchTimeout: 30
+    # -- Accept lists past their `NextUpdate`.
+    allowStaleTrustLists: false
+    # -- StatusEvaluation selects the point in time at which a trust service's status is evaluated. Either current or issuance.
+    statusEvaluation: current
+    # -- selects how certificate revocation (OCSP/CRL) is handled during chain validation. Can be "soft", "hard" or "off"
+    revocationCheck: soft
+    # -- HTTP timeout per OCSP/CRL request, in seconds. 
+    revocationTimeout: 10
+    # -- Cache lifetime of a determined status, in seconds.
+    revocationCacheExpiry: 3600
+
   # -- config repo configuration
   configRepo:
     configEndpoint: http://credentials-config:8080/
