@@ -146,6 +146,12 @@ deployment:
   ## tir resource requests and limits, we leave the default empty to make that a concious choice by the user.
   ## for the autoscaling to make sense, you should configure this.
   resources: {}
+  # -- priority class to be assigned to the pods
+  # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+  priorityClassName: ""
+  # -- topology spread constraints template
+  # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+  topologySpreadConstraints: []
     # limits:
       # cpu: 100m
       # memory: 128Mi

@@ -162,6 +162,15 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
 
+      {{- with $cfg.deployment.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+
+      {{- with $cfg.deployment.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       {{- with $cfg.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

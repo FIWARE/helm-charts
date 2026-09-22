@@ -1,6 +1,6 @@
 # vcverifier
 
-![Version: 4.12.25](https://img.shields.io/badge/Version-4.12.25-informational?style=flat-square) ![AppVersion: 6.21.1](https://img.shields.io/badge/AppVersion-6.21.1-informational?style=flat-square)
+![Version: 4.14.0](https://img.shields.io/badge/Version-4.14.0-informational?style=flat-square) ![AppVersion: 6.21.2](https://img.shields.io/badge/AppVersion-6.21.2-informational?style=flat-square)
 
 A Helm chart for running the FIWARE VCVerifier.
 
@@ -76,6 +76,7 @@ Kubernetes: `>= 1.19-0`
 | deployment.m2m.verificationMethod | string | `nil` | verification method to be provided for the proof |
 | deployment.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | deployment.port | int | `3000` | port to run the container at |
+| deployment.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | deployment.readinessProbe.failureThreshold | int | `3` |  |
 | deployment.readinessProbe.initialDelaySeconds | int | `4` |  |
 | deployment.readinessProbe.periodSeconds | int | `10` |  |
@@ -103,6 +104,7 @@ Kubernetes: `>= 1.19-0`
 | deployment.serverCertificates.signingKey.key | string | `nil` | Key name inside the Secret containing the PEM |
 | deployment.serverCertificates.signingKey.secretName | string | `nil` | Name of the Kubernetes Secret that contains the signing key. |
 | deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| deployment.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
 | deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |

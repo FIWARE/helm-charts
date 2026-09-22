@@ -71,6 +71,12 @@ volumes: []
 # -- Additional volume mounts
 volumeMounts: []
 
+# -- priority class to be assigned to the pods
+# ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+priorityClassName: ""
+# -- topology spread constraints template
+# ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+topologySpreadConstraints: []
 # -- Node selector for pod scheduling
 nodeSelector: {}
 

@@ -1,6 +1,6 @@
 # odrl-pap
 
-![Version: 2.10.18](https://img.shields.io/badge/Version-2.10.18-informational?style=flat-square) ![AppVersion: 1.7.0](https://img.shields.io/badge/AppVersion-1.7.0-informational?style=flat-square)
+![Version: 2.12.0](https://img.shields.io/badge/Version-2.12.0-informational?style=flat-square) ![AppVersion: 1.7.0](https://img.shields.io/badge/AppVersion-1.7.0-informational?style=flat-square)
 
 A Helm chart for running the odrl-pap on kubernetes.
 
@@ -61,6 +61,7 @@ Kubernetes: `>= 1.19-0`
 | deployment.livenessProbe.timeoutSeconds | int | `30` |  |
 | deployment.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | deployment.port | int | `8080` | port that the pap container uses |
+| deployment.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | deployment.readinessProbe.failureThreshold | int | `3` |  |
 | deployment.readinessProbe.initialDelaySeconds | int | `31` |  |
 | deployment.readinessProbe.periodSeconds | int | `10` |  |
@@ -69,6 +70,7 @@ Kubernetes: `>= 1.19-0`
 | deployment.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| deployment.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
 | deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |

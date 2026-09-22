@@ -287,6 +287,13 @@ spec:
             - secretRef:
                 name: {{ tpl .Values.bizEcosystemChargingBackend.extraEnvVarsSecret . | quote }}
           {{- end }}
+      {{- with .Values.bizEcosystemChargingBackend.deployment.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- with .Values.bizEcosystemChargingBackend.deployment.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.bizEcosystemChargingBackend.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

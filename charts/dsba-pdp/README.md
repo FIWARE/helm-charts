@@ -1,6 +1,6 @@
 # dsba-pdp
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![AppVersion: 0.3.2](https://img.shields.io/badge/AppVersion-0.3.2-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![AppVersion: 0.3.2](https://img.shields.io/badge/AppVersion-0.3.2-informational?style=flat-square)
 
 A Helm chart for running the dsba-pdp on kubernetes.
 
@@ -65,6 +65,7 @@ A Helm chart for running the dsba-pdp on kubernetes.
 | deployment.livenessProbe.timeoutSeconds | int | `30` |  |
 | deployment.logLevel | string | `"INFO"` | loglevel to be used |
 | deployment.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| deployment.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | deployment.providerId | string | `"did:my:pdp"` | id of pdp as a dataprovider to verify on roles targeting the pdp |
 | deployment.readinessProbe.failureThreshold | int | `3` |  |
 | deployment.readinessProbe.initialDelaySeconds | int | `31` |  |
@@ -74,6 +75,7 @@ A Helm chart for running the dsba-pdp on kubernetes.
 | deployment.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| deployment.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
 | deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |

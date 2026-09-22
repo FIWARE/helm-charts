@@ -1,6 +1,6 @@
 # keyrock
 
-![Version: 0.8.7](https://img.shields.io/badge/Version-0.8.7-informational?style=flat-square) ![AppVersion: 8.3.3](https://img.shields.io/badge/AppVersion-8.3.3-informational?style=flat-square)
+![Version: 0.10.0](https://img.shields.io/badge/Version-0.10.0-informational?style=flat-square) ![AppVersion: 8.3.3](https://img.shields.io/badge/AppVersion-8.3.3-informational?style=flat-square)
 
 A Helm chart for running the fiware idm keyrock on kubernetes.
 
@@ -96,6 +96,7 @@ Kubernetes: `>= 1.19-0`
 | statefulset.livenessProbe.successThreshold | int | `1` |  |
 | statefulset.livenessProbe.timeoutSeconds | int | `30` |  |
 | statefulset.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| statefulset.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | statefulset.readinessProbe.failureThreshold | int | `3` |  |
 | statefulset.readinessProbe.initialDelaySeconds | int | `31` |  |
 | statefulset.readinessProbe.periodSeconds | int | `10` |  |
@@ -108,6 +109,7 @@ Kubernetes: `>= 1.19-0`
 | statefulset.startupProbe.periodSeconds | int | `5` |  |
 | statefulset.startupProbe.timeoutSeconds | int | `30` |  |
 | statefulset.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| statefulset.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | statefulset.updateStrategy.type | string | `"RollingUpdate"` | type of the update |
 | theme.enabled | bool | `false` | Enable theme |
 | theme.image | string | `"my-theme-image:latest"` | Image which holds the theme files |
