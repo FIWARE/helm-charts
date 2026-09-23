@@ -1,6 +1,6 @@
 apiVersion: v2
 name: vcverifier
-version: 4.15.1
+version: 4.15.2
 appVersion: 6.22.0
 kubeVersion: '>= 1.19-0'
 home: https://github.com/fiware/vcverifier
