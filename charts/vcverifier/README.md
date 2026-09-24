@@ -1,6 +1,6 @@
 # vcverifier
 
-![Version: 4.15.0](https://img.shields.io/badge/Version-4.15.0-informational?style=flat-square) ![AppVersion: 6.22.0](https://img.shields.io/badge/AppVersion-6.22.0-informational?style=flat-square)
+![Version: 4.15.2](https://img.shields.io/badge/Version-4.15.2-informational?style=flat-square) ![AppVersion: 6.22.0](https://img.shields.io/badge/AppVersion-6.22.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE VCVerifier.
 
@@ -52,12 +52,12 @@ Kubernetes: `>= 1.19-0`
 | deployment.database.sslMode | string | `"disable"` |  |
 | deployment.database.type | string | `"postgres"` |  |
 | deployment.database.user | string | `""` |  |
-| deployment.eidas | object | `{"allowStaleTrustLists":false,"countries":null,"enabled":false,"fetchTimeout":30,"lotUrl":null,"maxWorkers":5,"refreshInterval":86400,"revocationCacheExpiry":3600,"revocationCheck":"soft","revocationTimeout":10,"statusEvaluation":"current"}` | eidas2.0 related configuration |
+| deployment.eidas | object | `{"allowStaleTrustLists":false,"countries":null,"enabled":false,"fetchTimeout":30,"lotlUrl":null,"maxWorkers":5,"refreshInterval":86400,"revocationCacheExpiry":3600,"revocationCheck":"soft","revocationTimeout":10,"statusEvaluation":"current"}` | eidas2.0 related configuration |
 | deployment.eidas.allowStaleTrustLists | bool | `false` | Accept lists past their `NextUpdate`. |
 | deployment.eidas.countries | string | `nil` | ISO 3166-1 alpha-2 country filter for the national lists to be included. If empty, all countries are included. |
 | deployment.eidas.enabled | bool | `false` | should eidas 2.0 compliant verification be enabled |
 | deployment.eidas.fetchTimeout | int | `30` | HTTP timeout per trust list fetch, in seconds. |
-| deployment.eidas.lotUrl | string | `nil` | URL of the List of Trusted Lists. Defaults to the official EU LOTL |
+| deployment.eidas.lotlUrl | string | `nil` | URL of the List of Trusted Lists. Defaults to the official EU LOTL |
 | deployment.eidas.maxWorkers | int | `5` | Concurrent national list fetches |
 | deployment.eidas.refreshInterval | int | `86400` | Seconds between background refreshes of the lotl |
 | deployment.eidas.revocationCacheExpiry | int | `3600` | Cache lifetime of a determined status, in seconds. |

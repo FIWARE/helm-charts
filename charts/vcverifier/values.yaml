@@ -148,7 +148,7 @@ deployment:
     # -- should eidas 2.0 compliant verification be enabled
     enabled: false
     # -- URL of the List of Trusted Lists. Defaults to the official EU LOTL
-    lotUrl: 
+    lotlUrl: 
     # -- Seconds between background refreshes of the lotl
     refreshInterval: 86400
     # -- ISO 3166-1 alpha-2 country filter for the national lists to be included. If empty, all countries are included.
