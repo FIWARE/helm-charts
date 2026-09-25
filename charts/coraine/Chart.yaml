@@ -1,0 +1,31 @@
+apiVersion: v2
+name: coraine
+description: A Helm chart for running the SEAMWARE Coraine NGSI-LD context broker on kubernetes.
+type: application
+version: 0.1.1
+# Coraine has no semver releases upstream (only `latest` / git-sha image
+# tags), so `latest` is the closest match. Pin `image.tag` explicitly for
+# reproducible deployments.
+appVersion: "latest"
+icon: https://fiware.github.io/catalogue/img/fiware.png
+keywords:
+  - fiware
+  - coraine
+  - ngsi-ld
+  - context-broker
+sources:
+  - https://github.com/SEAMWARE/coraine
+maintainers:
+  - name: Miguel Ortega Moreno
+    email: miguel.ortega@seamware.com
+# The `common` library chart ships every shared helper
+# (names, labels, service-account resolution, existing-secret
+# resolution, service/ingress/route/HPA/secret/serviceaccount
+# bodies). It is consumed via a local `file://` dependency so
+# publishing workflows do not need a separate repository entry —
+# Helm packages the library alongside coraine in the resulting
+# `coraine-<version>.tgz`. See charts/common/README.md.
+dependencies:
+  - name: common
+    repository: "https://fiware.github.io/helm-charts"
+    version: "0.1.2"

@@ -17,6 +17,7 @@ jobs:
       matrix:
         chart:
           - contract-management
+          - coraine
           - credentials-config-service
           - did-helper
           - dss-validation-service

@@ -1,0 +1,180 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://fiware.github.io/helm-charts/coraine/values.schema.json",
+  "title": "coraine",
+  "description": "Values schema for the coraine chart. Only fields with a real constraint (enums, numeric ranges) are declared -- everything else is left unconstrained so the many optional toggles in values.yaml (and the extraEnvVars/extraVolumes/extraManifests escape hatches) don't have to be duplicated here.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "image": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "repository": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pullPolicy": {
+          "type": "string",
+          "enum": ["Always", "IfNotPresent", "Never"]
+        }
+      }
+    },
+    "replicaCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer", "ExternalName"]
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        }
+      }
+    },
+    "ingress": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "exposeAdminPaths": { "type": "boolean" }
+      }
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "tls": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "termination": {
+              "type": "string",
+              "enum": ["edge", "passthrough", "reencrypt"]
+            }
+          }
+        }
+      }
+    },
+    "autoscaling": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "apiVersion": {
+          "type": "string",
+          "enum": ["v1", "v2beta1", "v2beta2", "v2"]
+        },
+        "minReplicas": { "type": "integer", "minimum": 1 },
+        "maxReplicas": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "config": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "connectionPoolSize": { "type": "integer", "minimum": 1 },
+        "maxRequestSize": { "type": "integer", "minimum": 0 },
+        "subStatsFlushInterval": { "type": "integer", "minimum": 0 },
+        "distOpTimeout": { "type": "integer", "minimum": 0 },
+        "cooldownMillis": { "type": "integer", "minimum": 0 },
+        "cors": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "maxAge": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "distributed": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "noSplitEntities": { "type": "boolean" }
+      }
+    },
+    "database": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "\"mongo\"/\"memory\" are chart-level aliases for the upstream plugin names \"mongoc\"/\"corRamDB\", which also work directly. Any other value is rejected at render time -- dynamic loading of custom plugins is intentionally not supported.",
+          "enum": ["mongo", "mongoc", "memory", "corRamDB"]
+        },
+        "mongoc": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+            "timeout": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "troe": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["none", "ramdb", "timescale"]
+        },
+        "timescale": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+            "poolSize": { "type": "integer", "minimum": 1 },
+            "instanceCap": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    },
+    "ha": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" }
+      }
+    },
+    "apiPlugins": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "admin": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" }
+      }
+    }
+  }
+}
