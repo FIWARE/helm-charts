@@ -360,6 +360,45 @@ allInOne:
     # -- pull policy to be used
     pullPolicy: IfNotPresent
 
+## tmf-ui: a read-only web browser for the apis (https://github.com/FIWARE/tmforum-api/tree/main/ui).
+## With allInOne.enabled it runs as a sidecar of the all-in-one, otherwise as a deployment of its own
+## in front of the apiProxy, which then has to be enabled: it reads all apis from a single origin.
+ui:
+  # -- should the ui be deployed?
+  enabled: false
+  # -- configuration to be used for the image of the ui
+  image:
+    # -- repository to get the container from
+    repository: quay.io/fiware/tmforum-ui
+    # -- overrides the image tag whose default is the chart appVersion
+    tag: ""
+    # -- pull policy to be used
+    pullPolicy: IfNotPresent
+  # -- port the ui listens on. As a sidecar it shares the pod's network with the all-in-one, so it must differ from defaultConfig.port and defaultConfig.endpointsPort
+  port: 3000
+  # -- tmforum endpoint the ui reads from, the only one its proxy will reach. Defaults to the all-in-one on localhost, or to the apiProxy service
+  endpoint: ""
+  # -- ui resource requests and limits
+  resources: {}
+  # -- a list of additional env vars to be set, f.e. TMF_TIMEOUT_MS or TMF_INSECURE
+  additionalEnvVars: []
+  ## configuration for the k8s service to access the ui
+  service:
+    # -- service type
+    type: ClusterIP
+    # -- port to be used by the service
+    port: 8080
+    # -- addtional annotations, if required
+    annotations: {}
+  # -- number of replicas, only used when the ui runs as a deployment of its own
+  replicaCount: 1
+  # -- selector template, only used when the ui runs as a deployment of its own
+  nodeSelector: {}
+  # -- tolerations template, only used when the ui runs as a deployment of its own
+  tolerations: []
+  # -- affinity template, only used when the ui runs as a deployment of its own
+  affinity: {}
+
 ## configuration of redis caching. If it's disabled, the default in-memory cache will be used
 redis:
   # -- enable redis caching?

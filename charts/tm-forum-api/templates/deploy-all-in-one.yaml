@@ -184,6 +184,9 @@ spec:
           resources:
             {{- toYaml $.Values.defaultConfig.resources | nindent 12 }}
           {{- end }}
+        {{- if $.Values.ui.enabled }}
+        {{- include "tmforum.ui.container" $ | nindent 8 }}
+        {{- end }}
       {{- if $.Values.defaultConfig.nodeSelector }}
       {{- with $.Values.defaultConfig.nodeSelector }}
       nodeSelector:

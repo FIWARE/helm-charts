@@ -84,3 +84,62 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+{{/*
+tmf-ui: the endpoint its proxy is fixed to. The all-in-one on the pod's own loopback when the ui is
+its sidecar, the apiProxy (envoy) otherwise - the only single origin a split deployment has.
+*/}}
+{{- define "tmforum.ui.endpoint" -}}
+{{- if .Values.ui.endpoint -}}
+{{- .Values.ui.endpoint -}}
+{{- else if .Values.allInOne.enabled -}}
+{{- printf "http://localhost:%v" .Values.defaultConfig.port -}}
+{{- else -}}
+{{- printf "http://%s:%v" (.Values.apiProxy.service.nameOverride | default (printf "%s-envoy" (include "tmforum.fullname" .))) .Values.apiProxy.service.port -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+tmf-ui: fail early on a configuration that renders but cannot work.
+*/}}
+{{- define "tmforum.ui.validate" -}}
+{{- if and (not .Values.allInOne.enabled) (not .Values.apiProxy.enabled) (not .Values.ui.endpoint) -}}
+{{- fail "ui.enabled requires allInOne.enabled or apiProxy.enabled: the ui reads all apis from a single origin (or set ui.endpoint)" -}}
+{{- end -}}
+{{- if and .Values.allInOne.enabled (has (int .Values.ui.port) (list (int .Values.defaultConfig.port) (int .Values.defaultConfig.endpointsPort))) -}}
+{{- fail (printf "ui.port %v clashes with the all-in-one in the same pod: choose one other than defaultConfig.port and defaultConfig.endpointsPort" .Values.ui.port) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+tmf-ui: the container, the same as a sidecar of the all-in-one or in a deployment of its own.
+*/}}
+{{- define "tmforum.ui.container" -}}
+- name: ui
+  imagePullPolicy: {{ .Values.ui.image.pullPolicy }}
+  image: "{{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag | default .Chart.AppVersion }}"
+  ports:
+    - name: http-ui
+      containerPort: {{ .Values.ui.port }}
+      protocol: TCP
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: http-ui
+  readinessProbe:
+    httpGet:
+      path: /healthz
+      port: http-ui
+  env:
+    - name: PORT
+      value: {{ .Values.ui.port | quote }}
+    - name: TMF_ENDPOINT
+      value: {{ include "tmforum.ui.endpoint" . | quote }}
+    {{- with .Values.ui.additionalEnvVars }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.ui.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end -}}
