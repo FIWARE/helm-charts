@@ -29,7 +29,7 @@
         },
         "image": {
           "repository": "quay.io/fiware/orion-ld",
-          "tag": "1.0.1",
+          "tag": "1.12.0",
           "pullPolicy": "IfNotPresent"
         },
         "additionalLabels": {},
@@ -54,7 +54,7 @@
       },
       "autoscaling": {
         "enabled": false,
-        "apiVersion": "v2beta2",
+        "apiVersion": "v2",
         "minReplicas": 1,
         "maxReplicas": 10,
         "metrics": []
@@ -632,6 +632,46 @@
           "items": {
             "$id": "#/properties/deployment/properties/volumes/items"
           }
+        },
+        "extraEnv": {
+          "type": "array",
+          "title": "Additional environment variables of the broker container",
+          "default": [],
+          "items": {
+            "type": "object"
+          }
+        },
+        "topologySpreadConstraints": {
+          "type": "array",
+          "title": "Topology spread constraints of the broker pods",
+          "default": [],
+          "items": {
+            "type": "object"
+          }
+        },
+        "podDisruptionBudget": {
+          "type": "object",
+          "title": "Pod disruption budget of the broker pods",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "minAvailable": {
+              "type": [
+                "integer",
+                "string",
+                "null"
+              ]
+            },
+            "maxUnavailable": {
+              "type": [
+                "integer",
+                "string",
+                "null"
+              ]
+            }
+          }
         }
       },
       "additionalProperties": true
@@ -700,6 +740,14 @@
           "items": {
             "$id": "#/properties/autoscaling/properties/metrics/items"
           }
+        },
+        "apiVersion": {
+          "type": "string",
+          "title": "Version of the autoscaling API",
+          "default": "v2",
+          "examples": [
+            "v2"
+          ]
         }
       },
       "additionalProperties": true
@@ -1084,6 +1132,23 @@
               "examples": [
                 "orion"
               ]
+            },
+            "uri": {
+              "type": "string",
+              "title": "MongoDB connection URI (Orion >= 4.0.0)",
+              "default": ""
+            },
+            "existingSecret": {
+              "type": "object",
+              "title": "Existing secret containing the database password",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "key": {
+                  "type": "string"
+                }
+              }
             }
           },
           "additionalProperties": true
@@ -1118,6 +1183,41 @@
         }
       },
       "additionalProperties": true
+    },
+    "test": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "image": {
+          "type": "object",
+          "properties": {
+            "repository": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "initData": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "object",
+          "properties": {
+            "repository": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            }
+          }
+        }
+      }
     }
   },
   "additionalProperties": true
