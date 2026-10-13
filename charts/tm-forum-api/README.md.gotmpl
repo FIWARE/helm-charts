@@ -54,6 +54,31 @@ apis:
 ```
 For all untouched values, the customized deployement will still use the defaults, while the explicitly set once are overwritten.
 
+## UI
+
+[tmf-ui](https://github.com/FIWARE/tmforum-api/tree/main/ui) is a read-only web browser for the APIs: it lists the
+entities and follows the references between them as hyperlinks. It only ever issues `GET`. Enable it with
+`ui.enabled: true`:
+
+- With `allInOne.enabled: true` it runs as a **sidecar** of the all-in-one and reads from it on `localhost`.
+- Otherwise it runs as a **deployment of its own** and reads through the `apiProxy`, which has to be enabled: the
+  UI needs every API under a single origin. (`ui.endpoint` points it anywhere else.)
+
+Either way it is reachable through the `<fullname>-ui` service:
+
+```shell
+kubectl port-forward svc/<fullname>-ui 8080:8080
+# http://localhost:8080/
+```
+
+It has no authentication of its own: whoever reaches the service reads the APIs. Do not expose it publicly.
+The `tmforum-ui` image is only published by tmforum-api releases newer than 1.18.6; until `appVersion` points at one,
+set `ui.image.tag`.
+
+In split mode the UI only finds the APIs at the base paths of the all-in-one: the default `party-role` base path
+(`/tmf-api/partyRoleManagement/v4`) differs from it (`/tmf-api/partyRole/v4`), and `document-management` is not
+deployed, so both show up as unreachable.
+
 {{ template "chart.sourcesSection" . }}
 
 {{ template "chart.valuesSection" . }}
