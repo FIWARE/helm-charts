@@ -3,6 +3,25 @@ entries:
   api-umbrella:
   - apiVersion: v1
     appVersion: v0.18.0
+    created: "2026-10-13T07:03:30.217587345Z"
+    description: A Helm chart for running api-umbrella on kubernetes.
+    digest: 315e75f9e1c424711f668f79903164f4eab51d4ba995b8c5b21f4e2b9a7e432d
+    home: https://api-umbrella.readthedocs.io/en/latest/index.html
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - api-umbrella
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: api-umbrella
+    sources:
+    - https://github.com/NREL/api-umbrella
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/api-umbrella-0.2.0/api-umbrella-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v1
+    appVersion: v0.18.0
     created: "2024-05-02T13:26:30.759243344Z"
     description: A Helm chart for running api-umbrella on kubernetes.
     digest: 26ac765259c1f4b244499a4ff22ce8784d7ed62bac7e7107649b6eed50063f06
@@ -213,6 +232,26 @@ entries:
   apollo:
   - apiVersion: v1
     appVersion: 0.0.10
+    created: "2026-10-13T07:03:30.3796418Z"
+    description: A Helm chart for running apollo on kubernetes.
+    digest: aac8c709b4abb3e29ec05a6126a2da2b865a1b02990f2d035df04c18fcc107fc
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion
+    - orion-ld
+    - apollo
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: apollo
+    sources:
+    - https://github.com/fiware/apollo
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/apollo-0.2.0/apollo-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v1
+    appVersion: 0.0.10
     created: "2026-01-23T10:06:30.755871052Z"
     description: A Helm chart for running apollo on kubernetes.
     digest: 5b398895f2b81d739c73a89ea89a9721fb0aa8f85434d2ade19573467db12473
@@ -372,6 +411,26 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/apollo-0.0.1/apollo-0.0.1.tgz
     version: 0.0.1
   bae-activation-service:
+  - apiVersion: v1
+    appVersion: 0.0.3
+    created: "2026-10-13T07:03:30.516685953Z"
+    description: A Helm chart for running the fiware BAE activation service PoC on
+      kubernetes.
+    digest: 919c2e6582da81c135d7e04c038d3cbe943dfc15828711c54ade2cb4822b789d
+    home: https://github.com/FIWARE-AI-Marketplace/bae-activation-service
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - bae
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: bae-activation-service
+    sources:
+    - https://github.com/FIWARE-AI-Marketplace/bae-activation-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/bae-activation-service-0.2.0/bae-activation-service-0.2.0.tgz
+    version: 0.2.0
   - apiVersion: v1
     appVersion: 0.0.3
     created: "2026-01-23T10:06:30.975700989Z"
@@ -553,6 +612,36 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/bae-activation-service-0.0.1/bae-activation-service-0.0.1.tgz
     version: 0.0.1
   business-api-ecosystem:
+  - apiVersion: v2
+    appVersion: 2026.05.14
+    created: "2026-10-13T07:03:30.718256417Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the FIWARE business API ecosystem (FIWARE
+      Marketplace) on Kubernetes
+    digest: 2a148858c1c59a2a753b0cf9d1de55964f860bfbba0242a8949f04a24f5e2046
+    home: https://business-api-ecosystem.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - marketplace
+    - bae
+    - tmforum
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    - email: francisco.delavega@seamware.com
+      name: fdelavega
+    name: business-api-ecosystem
+    sources:
+    - https://github.com/FIWARE-TMForum/Business-API-Ecosystem
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/business-api-ecosystem-1.2.0/business-api-ecosystem-1.2.0.tgz
+    version: 1.2.0
   - apiVersion: v2
     appVersion: 2026.05.14
     created: "2026-06-23T10:25:45.466831518Z"
@@ -2350,6 +2439,31 @@ entries:
   canis-major:
   - apiVersion: v2
     appVersion: 1.5.15
+    created: "2026-10-13T07:03:30.888320619Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running canis major on kubernetes.
+    digest: 8d240f3172ad53e1597fdd6978b92f7a83f91b1fe4ba6c0e6c5159cb17c99a55
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - canismajor
+    - blockchain
+    - dlt
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: canis-major
+    sources:
+    - https://github.com/FIWARE/CanisMajor
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/canis-major-0.3.0/canis-major-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    appVersion: 1.5.15
     created: "2026-05-11T07:28:16.353314568Z"
     dependencies:
     - name: common
@@ -2712,6 +2826,33 @@ entries:
   consent-facade:
   - apiVersion: v2
     appVersion: 0.0.14
+    created: "2026-10-13T07:03:31.058690237Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the consent-facade on kubernetes.
+    digest: bf08b84ec45c421b44fd9313419798a7c8e7095854138fa559a2c019b1a6f09d
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - consent-facade
+    - Consent
+    - DSBA
+    - VerifiableCredentials
+    - TMForum
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: consent-facade
+    sources:
+    - https://github.com/wistefan/consent-facade
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/consent-facade-0.2.0/consent-facade-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.0.14
     created: "2026-09-01T10:55:55.664763954Z"
     dependencies:
     - name: common
@@ -2738,6 +2879,32 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/consent-facade-0.1.1/consent-facade-0.1.1.tgz
     version: 0.1.1
   consent-manager:
+  - apiVersion: v2
+    appVersion: 0.0.6
+    created: "2026-10-13T07:03:31.23841718Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the consent-manager on kubernetes.
+    digest: 5f8dd71c2d833c677f8f7d3725d2dd128f16c21b56d0d4817d66bff8d407d7d0
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - consent-manager
+    - Consent
+    - ISO27560
+    - DSBA
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: consent-manager
+    sources:
+    - https://github.com/VisionsOfficial/consent-manager
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/consent-manager-0.2.0/consent-manager-0.2.0.tgz
+    version: 0.2.0
   - apiVersion: v2
     appVersion: 0.0.6
     created: "2026-09-02T05:59:39.823091095Z"
@@ -2767,6 +2934,32 @@ entries:
   consent-owner-resolver:
   - apiVersion: v2
     appVersion: 0.0.8
+    created: "2026-10-13T07:03:31.381071941Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the consent-owner-resolver on kubernetes.
+    digest: e660fc07adea184241b37cc94973ed0eacb9d752514e5d5be0f3b17c59bc0b8d
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - consent-owner-resolver
+    - Consent
+    - DSBA
+    - NGSI-LD
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: consent-owner-resolver
+    sources:
+    - https://github.com/wistefan/consent-owner-resolver
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/consent-owner-resolver-0.2.0/consent-owner-resolver-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.0.8
     created: "2026-09-01T10:55:55.872065708Z"
     dependencies:
     - name: common
@@ -2792,6 +2985,34 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/consent-owner-resolver-0.1.1/consent-owner-resolver-0.1.1.tgz
     version: 0.1.1
   contract-management:
+  - apiVersion: v2
+    appVersion: 3.4.0
+    created: "2026-10-13T07:03:31.527979813Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the contract-management on kubernetes.
+    digest: cb07e33585aff712d0285950aa40fd757cbcbeccf9f2b66bbed9fc3f6aa775ec
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - contract-management
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: tim.smyth@fiware.org
+      name: pulledtim
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: contract-management
+    sources:
+    - https://github.com/fiware/contract-management
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/contract-management-3.6.0/contract-management-3.6.0.tgz
+    version: 3.6.0
   - apiVersion: v2
     appVersion: 3.4.0
     created: "2026-10-06T06:41:50.232831733Z"
@@ -3649,6 +3870,32 @@ entries:
   credentials-config-service:
   - apiVersion: v2
     appVersion: 3.4.3
+    created: "2026-10-13T07:03:31.656311271Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the credentials-config-service on kubernetes.
+    digest: c9ec6c445982acd5e51101e99577773ebe2cb2571e325fbc9459e56a18ebc213
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - credentials-config-service
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: credentials-config-service
+    sources:
+    - https://github.com/fiware/credentials-config-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/credentials-config-service-2.7.0/credentials-config-service-2.7.0.tgz
+    version: 2.7.0
+  - apiVersion: v2
+    appVersion: 3.4.3
     created: "2026-06-09T06:41:33.637476248Z"
     dependencies:
     - name: common
@@ -4384,6 +4631,22 @@ entries:
   did-helper:
   - apiVersion: v2
     appVersion: 0.6.0
+    created: "2026-10-13T07:03:31.797686716Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for DID helper (see https://github.com/wistefan/did-helper)
+    digest: 4d40675c156aa7616bfa3fb064ab8da9086d36372a6d56ccdb86127d27723665
+    name: did-helper
+    sources:
+    - https://github.com/SEAMWARE/did-helper
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/did-helper-0.2.0/did-helper-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.6.0
     created: "2026-08-20T10:07:54.223092628Z"
     dependencies:
     - name: common
@@ -4571,6 +4834,27 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/did-helper-0.1.0/did-helper-0.1.0.tgz
     version: 0.1.0
   dsba-pdp:
+  - apiVersion: v1
+    appVersion: 0.3.2
+    created: "2026-10-13T07:03:31.949151025Z"
+    description: A Helm chart for running the dsba-pdp on kubernetes.
+    digest: eda27f9fd4ead6e428fc3952daac570ea55c214064834f1a07c61dc977b77ecd
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - dsba
+    - verifiablecredentials
+    - ssi
+    - pdp
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: dsba-pdp
+    sources:
+    - https://github.com/wistefan/dsba-pdp
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/dsba-pdp-0.2.0/dsba-pdp-0.2.0.tgz
+    version: 0.2.0
   - apiVersion: v1
     appVersion: 0.3.2
     created: "2026-01-23T10:06:32.006877281Z"
@@ -4973,6 +5257,26 @@ entries:
   dss-validation-service:
   - apiVersion: v1
     appVersion: 0.0.1
+    created: "2026-10-13T07:03:32.107877602Z"
+    description: A Helm chart for running the dss-validation-service on kubernetes.
+    digest: bdf29598214e4e37de7c729084ab7c5006d9b6827fd0f1f6ffeeee3fa1979b3e
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - Data Space Connector
+    - Digital Signature Service
+    - JAdES Validation
+    maintainers:
+    - email: wistefan@googlemail.com
+      name: Stefan Wiedemann
+    name: dss-validation-service
+    sources:
+    - https://github.com/wistefan/dss-validation-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/dss-validation-service-0.1.0/dss-validation-service-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v1
+    appVersion: 0.0.1
     created: "2026-02-26T13:45:31.718286758Z"
     description: A Helm chart for running the dss-validation-service on kubernetes.
     digest: 9aaec3cad7a16a32cb7413bdc512e5b9e4a59ba13bfc1dba0c0f9c9954f21de3
@@ -5192,6 +5496,28 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/dss-validation-service-0.0.4/dss-validation-service-0.0.4.tgz
     version: 0.0.4
   endpoint-auth-service:
+  - apiVersion: v1
+    appVersion: 0.4.4
+    created: "2026-10-13T07:03:32.240797802Z"
+    description: A Helm chart for running the endpoint-auth-service on kubernetes.
+    digest: ad7d178ddc5a3564b8a418a2ae4d802eab814ea520d223df92c28fb6c1efb5ee
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - auth
+    - ishare
+    - envoy
+    - openshift
+    - openshift service mesh
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: endpoint-auth-service
+    sources:
+    - https://github.com/FIWARE/endpoint-auth-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/endpoint-auth-service-0.2.0/endpoint-auth-service-0.2.0.tgz
+    version: 0.2.0
   - apiVersion: v1
     appVersion: 0.4.4
     created: "2026-01-23T10:06:32.440744119Z"
@@ -5589,6 +5915,32 @@ entries:
   fdsc-dashboard:
   - apiVersion: v2
     appVersion: 0.6.6
+    created: "2026-10-13T07:03:32.411093904Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the fdsc-dashboard on kubernetes.
+    digest: 36591a3d6a39c1cd13e667a7b8b1bab93b59d43d774fb2a2983df1c1661a2bf0
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - data-space-connector
+    - dataspace
+    - dashboard
+    - ui
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.org
+      name: wistefan
+    name: fdsc-dashboard
+    sources:
+    - https://github.com/wistefan/fdsc-dashboard
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/fdsc-dashboard-0.7.0/fdsc-dashboard-0.7.0.tgz
+    version: 0.7.0
+  - apiVersion: v2
+    appVersion: 0.6.6
     created: "2026-10-01T11:47:58.223594363Z"
     dependencies:
     - name: common
@@ -5978,6 +6330,30 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/fdsc-dashboard-0.0.1/fdsc-dashboard-0.0.1.tgz
     version: 0.0.1
   fdsc-edc:
+  - apiVersion: v2
+    appVersion: 1.5.0
+    created: "2026-10-13T07:03:32.575707588Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the fdsc-edc on kubernetes.
+    digest: c4b934bb6e20265abbb02aa5af0d6c3a58b0d9a4c1f97176d8ebdcc12823e0ba
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - data-space-connector
+    - dataspace
+    - dataspace-protocol
+    maintainers:
+    - email: stefan.wiedemann@seamware.org
+      name: wistefan
+    name: fdsc-edc
+    sources:
+    - https://github.com/SEAMWARE/fdsc-edc
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/fdsc-edc-0.5.0/fdsc-edc-0.5.0.tgz
+    version: 0.5.0
   - apiVersion: v2
     appVersion: 1.5.0
     created: "2026-09-30T09:32:03.25716686Z"
@@ -6601,6 +6977,25 @@ entries:
   iotagent-json:
   - apiVersion: v1
     appVersion: 1.14.0
+    created: "2026-10-13T07:03:32.735424833Z"
+    description: A Helm chart for running the fiware iotagent-json on kubernetes.
+    digest: 66fb179c9a3a447ececb8821eb2b97531de134184bdfd5c6e7ee2047e76e3bb7
+    home: https://fiware-iotagent-json.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - iot-agent
+    maintainers:
+    - email: t_sunny.malik@india.nec.com
+      name: Sunny Malik
+    name: iotagent-json
+    sources:
+    - https://github.com/telefonicaid/iotagent-json
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/iotagent-json-0.2.0/iotagent-json-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v1
+    appVersion: 1.14.0
     created: "2026-01-23T10:06:32.610148502Z"
     description: A Helm chart for running the fiware iotagent-json on kubernetes.
     digest: 35332fb626c40c41f9cdfcc7bdec33beb5a66ae262b9e511e7c5446371a126fb
@@ -6695,6 +7090,27 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/iotagent-json-0.0.1/iotagent-json-0.0.1.tgz
     version: 0.0.1
   iotagent-ul:
+  - apiVersion: v1
+    appVersion: 1.14.0
+    created: "2026-10-13T07:03:32.953328178Z"
+    description: A Helm chart for running the fiware iot agent for the ultralight
+      2.0 protocol on kubernetes.
+    digest: 9b14eb3a0aed1e0cfcdb24bdd7e1d20d1faa93407c0ef49b0e60e53552e3991b
+    home: https://fiware-iotagent-ul.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - iot-agent
+    - ultralight-protocol
+    maintainers:
+    - email: stefan.wiedemann@fiware.org
+      name: wistefan
+    name: iotagent-ul
+    sources:
+    - https://github.com/telefonicaid/iotagent-ul
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/iotagent-ul-0.2.0/iotagent-ul-0.2.0.tgz
+    version: 0.2.0
   - apiVersion: v1
     appVersion: 1.14.0
     created: "2026-01-23T10:06:32.789515174Z"
@@ -6866,6 +7282,29 @@ entries:
   ishare-satellite:
   - apiVersion: v2
     appVersion: 1.2.0
+    created: "2026-10-13T07:03:33.210148825Z"
+    description: A Helm chart for running an implementation of the iSHARE Satellite
+    digest: 6729c8864e9c57e00fc13232767769c14088d40324579deed08e6c933ea2cc99
+    home: https://github.com/FIWARE/ishare-satellite
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - i4trust
+    - ishare
+    - trust anchor
+    - trust authority
+    - scheme owner
+    maintainers:
+    - email: dennis.wendland@fiware.org
+      name: dwendland
+    name: ishare-satellite
+    sources:
+    - https://github.com/FIWARE/ishare-satellite
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/ishare-satellite-1.4.0/ishare-satellite-1.4.0.tgz
+    version: 1.4.0
+  - apiVersion: v2
+    appVersion: 1.2.0
     created: "2026-01-23T10:06:33.006696699Z"
     description: A Helm chart for running an implementation of the iSHARE Satellite
     digest: 359bedc8f3337e7306fd4053fa89635ca1f822dc2e7d936c69a99be941159c88
@@ -6956,6 +7395,31 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/ishare-satellite-1.1.0/ishare-satellite-1.1.0.tgz
     version: 1.1.0
   keyrock:
+  - apiVersion: v2
+    appVersion: 8.3.3
+    created: "2026-10-13T07:03:33.440928175Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the fiware idm keyrock on kubernetes.
+    digest: a004ab9de0041c369e2d3afca4811e5d85b38321b7fdaee85c1b971a8ea49eb2
+    home: https://fiware-idm.readthedocs.io/en/latest/
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - keyrock
+    - idm
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: keyrock
+    sources:
+    - https://github.com/ging/fiware-idm
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/keyrock-0.9.0/keyrock-0.9.0.tgz
+    version: 0.9.0
   - apiVersion: v2
     appVersion: 8.3.3
     created: "2026-05-11T07:28:17.438910562Z"
@@ -7841,6 +8305,31 @@ entries:
   mintaka:
   - apiVersion: v2
     appVersion: 0.0.5
+    created: "2026-10-13T07:03:33.673676613Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running mintaka on kubernetes.
+    digest: aa5b376bad7dee10cd0006e1224b94d7f72144db97d3c5d012cf3496436a20b7
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion
+    - orion-ld
+    - mintaka
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: mintaka
+    sources:
+    - https://github.com/fiware/mintaka
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/mintaka-0.5.0/mintaka-0.5.0.tgz
+    version: 0.5.0
+  - apiVersion: v2
+    appVersion: 0.0.5
     created: "2026-05-11T07:28:17.608081079Z"
     dependencies:
     - name: common
@@ -8100,6 +8589,32 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/mintaka-0.0.1/mintaka-0.0.1.tgz
     version: 0.0.1
   odrl-pap:
+  - apiVersion: v2
+    appVersion: 1.7.1
+    created: "2026-10-13T07:03:33.911679937Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the odrl-pap on kubernetes.
+    digest: ab28c01366aabeaff2cadd773cc754d9dde9f674ddb0009ca8f51e4e0e889f47
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - Data Space Connector
+    - DSBA
+    - Authorization
+    - ODRL
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: Stefan Wiedemann
+    name: odrl-pap
+    sources:
+    - https://github.com/wistefan/odrl-pap
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/odrl-pap-2.11.0/odrl-pap-2.11.0.tgz
+    version: 2.11.0
   - apiVersion: v2
     appVersion: 1.7.1
     created: "2026-10-01T09:50:52.93009451Z"
@@ -9108,6 +9623,30 @@ entries:
   onboarding-portal:
   - apiVersion: v2
     appVersion: 0.2.2
+    created: "2026-10-13T07:03:34.158687424Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for the OnBoarding Portal
+    digest: a207cbe38cd1fe53eab06b7f01ae82861125955d9d8ec2a7c1be4a7bae1aa8fb
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - onboarding
+    - FIWARE
+    - Data Space Connector
+    maintainers:
+    - email: miguel.ortega@seamware.com
+      name: Miguel Ortega
+    name: onboarding-portal
+    sources:
+    - https://github.com/SEAMWARE/On-Boarding-Portal
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/onboarding-portal-1.5.0/onboarding-portal-1.5.0.tgz
+    version: 1.5.0
+  - apiVersion: v2
+    appVersion: 0.2.2
     created: "2026-09-07T08:37:00.945406859Z"
     dependencies:
     - name: common
@@ -9329,6 +9868,33 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/onboarding-portal-1.2.0/onboarding-portal-1.2.0.tgz
     version: 1.2.0
   orion:
+  - annotations:
+      charts.openshift.io/name: orion-ld
+    apiVersion: v2
+    appVersion: 1.0.1
+    created: "2026-10-13T07:03:34.402249842Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the fiware orion-ld context broker on kubernetes.
+    digest: f7cfea739777108a07406f27cea36f2e680d3bd0c8950e61cb36fd08f809aef1
+    home: https://github.com/FIWARE/context.Orion-LD
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - orion-ld
+    - orion
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: orion
+    sources:
+    - https://github.com/FIWARE/context.Orion-LD
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/orion-1.7.0/orion-1.7.0.tgz
+    version: 1.7.0
   - annotations:
       charts.openshift.io/name: orion-ld
     apiVersion: v2
@@ -10427,6 +10993,22 @@ entries:
   scorpio-broker-aaio:
   - apiVersion: v2
     appVersion: 2.1.0
+    created: "2026-10-13T07:03:34.600297033Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for Kubernetes in which all the microservices are deployed
+      under a single container and thus less effective for production environment
+      but serves well in testing and dev environment.
+    digest: f57c0c0592c4fe5dcad4fadd5f6d7d70c867699f1666725bd7e477cc5024262c
+    name: scorpio-broker-aaio
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/scorpio-broker-aaio-0.5.0/scorpio-broker-aaio-0.5.0.tgz
+    version: 0.5.0
+  - apiVersion: v2
+    appVersion: 2.1.0
     created: "2026-05-11T07:28:18.408984819Z"
     dependencies:
     - name: common
@@ -10651,6 +11233,36 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/scorpiobroker-0.1.2/scorpiobroker-0.1.2.tgz
     version: 0.1.2
   tm-forum-api:
+  - annotations:
+      charts.openshift.io/name: tm-forum-api
+    apiVersion: v2
+    appVersion: 1.19.0
+    created: "2026-10-13T07:03:34.884669076Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    - condition: redis.enabled
+      name: redis
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 18.1.2
+    description: A Helm chart for running the FIWARE TMForum-APIs
+    digest: 4a50e2f8712aa1dc9448249ca63056649449d942c3987276ac8b3724ec13e97c
+    home: https://github.com/FIWARE/tmforum-api
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - fiware
+    - tmforum
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: tm-forum-api
+    sources:
+    - https://github.com/FIWARE/tmforum-api
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/tm-forum-api-0.19.0/tm-forum-api-0.19.0.tgz
+    version: 0.19.0
   - annotations:
       charts.openshift.io/name: tm-forum-api
     apiVersion: v2
@@ -12672,6 +13284,31 @@ entries:
   trusted-issuers-list:
   - apiVersion: v2
     appVersion: 0.9.1
+    created: "2026-10-13T07:03:35.203880603Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the trusted-issuers-list on kubernetes.
+    digest: 2b71e2437886574694dcc2682be15dcf65c0dfe215b98d48794de6efe31ca6c8
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - trusted-issuers-list
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: trusted-issuers-list
+    sources:
+    - https://github.com/fiware/trusted-issuers-list
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-list-0.19.0/trusted-issuers-list-0.19.0.tgz
+    version: 0.19.0
+  - apiVersion: v2
+    appVersion: 0.9.1
     created: "2026-09-03T13:55:06.594681385Z"
     dependencies:
     - name: common
@@ -13424,6 +14061,27 @@ entries:
   trusted-issuers-registry:
   - apiVersion: v1
     appVersion: 0.11.1
+    created: "2026-10-13T07:03:35.402906054Z"
+    description: A Helm chart for running the trusted-issuers-registry on kubernetes.
+    digest: d07c84a01c6973aa66d6d0ef37d9da1b4545922ca4c19101d6572683dd3ea700
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - trusted-issuers-registry
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: tim.smyth@fiware.org
+      name: pulledtim
+    name: trusted-issuers-registry
+    sources:
+    - https://github.com/fiware/trusted-issuers-registry
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-registry-0.14.0/trusted-issuers-registry-0.14.0.tgz
+    version: 0.14.0
+  - apiVersion: v1
+    appVersion: 0.11.1
     created: "2026-03-02T09:21:45.324509945Z"
     description: A Helm chart for running the trusted-issuers-registry on kubernetes.
     digest: 4a75834b3d7fd728e2f0714e7afe34e3eec0e7246a80824ecf5239a4b28e25d4
@@ -13717,6 +14375,31 @@ entries:
     - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-registry-0.0.1/trusted-issuers-registry-0.0.1.tgz
     version: 0.0.1
   vcverifier:
+  - apiVersion: v2
+    appVersion: 6.24.0
+    created: "2026-10-13T07:03:35.60005317Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the FIWARE VCVerifier.
+    digest: 6f3ca42bf38baaaaa800a24ccee14e62b34209337a73fd06ea81a6dfcbb0914b
+    home: https://github.com/fiware/vcverifier
+    keywords:
+    - FIWARE Data Space Connector
+    - FIWARE
+    - Verifiable Credentials
+    - OID4VP
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: vcverifier
+    sources:
+    - https://github.com/fiware/vcverifier
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-4.16.0/vcverifier-4.16.0.tgz
+    version: 4.16.0
   - apiVersion: v2
     appVersion: 6.24.0
     created: "2026-09-30T09:31:33.31294219Z"
@@ -15005,4 +15688,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-10-13T06:58:10.28123077Z"
+generated: "2026-10-13T07:03:35.602653412Z"
