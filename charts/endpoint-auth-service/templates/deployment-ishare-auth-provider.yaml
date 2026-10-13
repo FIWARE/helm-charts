@@ -64,6 +64,13 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+      {{- with .Values.ishare.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- with .Values.ishare.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.ishare.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

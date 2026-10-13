@@ -1,6 +1,6 @@
 # tm-forum-api
 
-![Version: 0.18.2](https://img.shields.io/badge/Version-0.18.2-informational?style=flat-square) ![AppVersion: 1.18.6](https://img.shields.io/badge/AppVersion-1.18.6-informational?style=flat-square)
+![Version: 0.19.0](https://img.shields.io/badge/Version-0.19.0-informational?style=flat-square) ![AppVersion: 1.19.0](https://img.shields.io/badge/AppVersion-1.19.0-informational?style=flat-square)
 A Helm chart for running the FIWARE TMForum-APIs
 
 ## Maintainers
@@ -156,6 +156,7 @@ deployed, so both show up as unreachable.
 | defaultConfig.ngsiLd.url | string | `"http://context-broker:1026"` | address of the broker |
 | defaultConfig.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | defaultConfig.port | int | `8080` | port to be used for the app |
+| defaultConfig.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | defaultConfig.prometheus | object | `{"enabled":true,"path":"/prometheus"}` | configuration for proemtheus metrics |
 | defaultConfig.prometheus.enabled | bool | `true` | should it be enabled |
 | defaultConfig.prometheus.path | string | `"/prometheus"` | path to get the metrics from |
@@ -172,6 +173,7 @@ deployed, so both show up as unreachable.
 | defaultConfig.serverHost | string | `"http://tm-forum-api-svc:8080"` | host that the tm-forum api can be reached at |
 | defaultConfig.sidecars | list | `[]` | additional sidecars for the deployment, if required |
 | defaultConfig.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| defaultConfig.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | defaultConfig.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
 | defaultConfig.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | defaultConfig.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
