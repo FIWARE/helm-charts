@@ -1,6 +1,6 @@
 # onboarding-portal
 
-![Version: 1.4.3](https://img.shields.io/badge/Version-1.4.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.2.2](https://img.shields.io/badge/AppVersion-0.2.2-informational?style=flat-square)
+![Version: 1.5.0](https://img.shields.io/badge/Version-1.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.2.2](https://img.shields.io/badge/AppVersion-0.2.2-informational?style=flat-square)
 
 A Helm chart for the OnBoarding Portal
 
@@ -66,6 +66,7 @@ A Helm chart for the OnBoarding Portal
 | podAnnotations | object | `{}` | Annotations to add to the pod |
 | podLabels | object | `{}` | Labels to add to the pod |
 | podSecurityContext | object | `{}` | Pod-level security context |
+| priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | readinessProbe | object | `{"httpGet":{"path":"/health/ready","port":"http"}}` | Readiness probe configuration |
 | replicaCount | int | `1` | Number of replicas for the deployment |
 | resources | object | `{}` | Resource limits and requests for the pod |
@@ -77,6 +78,7 @@ A Helm chart for the OnBoarding Portal
 | service.port | int | `80` | Service port |
 | service.type | string | `"ClusterIP"` | Kubernetes Service type |
 | tolerations | list | `[]` | Tolerations for pod scheduling |
+| topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | volumeMounts | list | `[]` | Additional volume mounts |
 | volumes | list | `[]` | Additional volumes to mount |
 

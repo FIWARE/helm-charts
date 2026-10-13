@@ -291,6 +291,28 @@ spec:
           resources:
             {{- toYaml $.Values.defaultConfig.resources | nindent 12 }}
           {{- end }}
+      {{- if .priorityClassName }}
+      {{- with .priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- else if $.Values.defaultConfig.priorityClassName }}
+      {{- with $.Values.defaultConfig.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- end }}
+
+      {{- if .topologySpreadConstraints }}
+      {{- with .topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- else if $.Values.defaultConfig.topologySpreadConstraints }}
+      {{- with $.Values.defaultConfig.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+
       {{- if .nodeSelector }}
       {{- with .nodeSelector }}
       nodeSelector:
