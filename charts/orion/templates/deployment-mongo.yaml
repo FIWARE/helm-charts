@@ -10,14 +10,11 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.deployment.replicaCount }}
-  {{- end }}
+  # A single standalone instance without persistence, multiple replicas would be independent databases
+  replicas: 1
   revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
   strategy:
-  {{- with .Values.deployment.updateStrategy }}
-  {{- toYaml . | nindent 4 }}
-  {{- end }}
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "orion.name" . }}-mongo
@@ -45,6 +42,7 @@ spec:
           image: "{{ .Values.mongo.image.repository }}:{{ .Values.mongo.image.tag }}"
           securityContext:
             runAsUser: 999
+          args: ["--port", "{{ .Values.mongo.port }}"]
           ports:
             - name: mongo
               containerPort: {{ .Values.mongo.port}}
@@ -52,19 +50,21 @@ spec:
           livenessProbe:
             exec:
               command:
-                - bash
-                - -ec
-                - |
-                  mongo --eval 'db.runCommand("ping").ok' 127.0.0.1:27017/test && echo 0 || echo 1
+                - mongosh
+                - --quiet
+                - --eval
+                - 'db.runCommand("ping").ok'
+                - mongodb://127.0.0.1:{{ .Values.mongo.port }}/test
             initialDelaySeconds: 5
             periodSeconds: 5
           readinessProbe:
             exec:
               command:
-                - bash
-                - -ec
-                - |
-                  mongo --eval 'db.runCommand("ping").ok' 127.0.0.1:27017/test && echo 0 || echo 1
+                - mongosh
+                - --quiet
+                - --eval
+                - 'db.runCommand("ping").ok'
+                - mongodb://127.0.0.1:{{ .Values.mongo.port }}/test
             initialDelaySeconds: 5
             periodSeconds: 5
 {{- end }}
