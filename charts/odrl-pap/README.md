@@ -1,6 +1,6 @@
 # odrl-pap
 
-![Version: 2.11.0](https://img.shields.io/badge/Version-2.11.0-informational?style=flat-square) ![AppVersion: 1.7.1](https://img.shields.io/badge/AppVersion-1.7.1-informational?style=flat-square)
+![Version: 2.11.2](https://img.shields.io/badge/Version-2.11.2-informational?style=flat-square) ![AppVersion: 1.7.3](https://img.shields.io/badge/AppVersion-1.7.3-informational?style=flat-square)
 
 A Helm chart for running the odrl-pap on kubernetes.
 
