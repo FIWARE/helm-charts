@@ -55,12 +55,34 @@ readinessProbe:
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
+  # -- (int) seconds after which the probe times out. Unset, the Kubernetes default of 1 second
+  # applies, which a broker under load can exceed.
+  timeoutSeconds:
 
 livenessProbe:
   path: /actuator/health
   initialDelaySeconds: 40
   failureThreshold: 6
-  periodSeconds: 10 
+  periodSeconds: 10
+  # -- (int) seconds after which the probe times out. Unset, the Kubernetes default of 1 second
+  # applies, which a broker under load can exceed.
+  timeoutSeconds:
+
+## configuration of the startup probe. While it has not succeeded, the liveness and readiness
+## probes are not run, so a slow start does not get the container restarted.
+startupProbe:
+  # -- should the startup probe be configured
+  enabled: false
+  # -- path to be used for the startup probe, defaults to the path of the liveness probe
+  path:
+  # -- how often to probe, in seconds
+  periodSeconds: 10
+  # -- failures tolerated before the container is restarted. Together with periodSeconds, the
+  # time the broker is given to start.
+  failureThreshold: 30
+  # -- (int) seconds after which the probe times out. Unset, the Kubernetes default of 1 second
+  # applies.
+  timeoutSeconds:
 
 ## ingress configuration  
 ingress:
