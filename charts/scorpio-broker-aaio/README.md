@@ -62,7 +62,7 @@ A Helm chart for Kubernetes in which all the microservices are deployed under a 
 | service.port | int | `9090` | port to be used by the service |
 | service.type | string | `"NodePort"` | service type       |
 | serviceAccount | object | `{"annotations":{},"create":false,"name":""}` | if a scorpio specific service account should be used, it can be configured here ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
-| startupProbe.enabled | bool | `false` | should the startup probe be configured |
+| startupProbe.enabled | bool | `true` | should the startup probe be configured |
 | startupProbe.failureThreshold | int | `30` | failures tolerated before the container is restarted. Together with periodSeconds, the time the broker is given to start. |
 | startupProbe.path | string | `nil` | path to be used for the startup probe, defaults to the path of the liveness probe |
 | startupProbe.periodSeconds | int | `10` | how often to probe, in seconds |

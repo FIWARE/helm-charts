@@ -72,7 +72,7 @@ livenessProbe:
 ## probes are not run, so a slow start does not get the container restarted.
 startupProbe:
   # -- should the startup probe be configured
-  enabled: false
+  enabled: true
   # -- path to be used for the startup probe, defaults to the path of the liveness probe
   path:
   # -- how often to probe, in seconds
