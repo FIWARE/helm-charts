@@ -1,6 +1,6 @@
 # scorpio-broker-aaio
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.0](https://img.shields.io/badge/AppVersion-2.1.0-informational?style=flat-square)
+![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.0](https://img.shields.io/badge/AppVersion-2.1.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes in which all the microservices are deployed under a single container and thus less effective for production environment but serves well in testing and dev environment.
 
@@ -44,6 +44,7 @@ A Helm chart for Kubernetes in which all the microservices are deployed under a 
 | livenessProbe.initialDelaySeconds | int | `40` |  |
 | livenessProbe.path | string | `"/actuator/health"` |  |
 | livenessProbe.periodSeconds | int | `10` |  |
+| livenessProbe.timeoutSeconds | int | `nil` | seconds after which the probe times out. Unset, the Kubernetes default of 1 second applies, which a broker under load can exceed. |
 | logging.level | string | `"INFO"` | Log level |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
@@ -54,12 +55,18 @@ A Helm chart for Kubernetes in which all the microservices are deployed under a 
 | readinessProbe.initialDelaySeconds | int | `40` |  |
 | readinessProbe.path | string | `"/actuator/health"` |  |
 | readinessProbe.periodSeconds | int | `10` |  |
+| readinessProbe.timeoutSeconds | int | `nil` | seconds after which the probe times out. Unset, the Kubernetes default of 1 second applies, which a broker under load can exceed. |
 | replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | resources | object | `{}` |  |
 | securityContext | object | `{}` |  |
 | service.port | int | `9090` | port to be used by the service |
 | service.type | string | `"NodePort"` | service type       |
 | serviceAccount | object | `{"annotations":{},"create":false,"name":""}` | if a scorpio specific service account should be used, it can be configured here ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
+| startupProbe.enabled | bool | `true` | should the startup probe be configured |
+| startupProbe.failureThreshold | int | `30` | failures tolerated before the container is restarted. Together with periodSeconds, the time the broker is given to start. |
+| startupProbe.path | string | `nil` | path to be used for the startup probe, defaults to the path of the liveness probe |
+| startupProbe.periodSeconds | int | `10` | how often to probe, in seconds |
+| startupProbe.timeoutSeconds | int | `nil` | seconds after which the probe times out. Unset, the Kubernetes default of 1 second applies. |
 | tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 
