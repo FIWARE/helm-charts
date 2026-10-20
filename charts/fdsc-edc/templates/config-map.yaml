@@ -92,6 +92,11 @@ data:
     {{- if $cfg.config.edc.dspCallback }}
     edc.dsp.callback.address={{ $cfg.config.edc.dspCallback }}
     {{- end }}
+    {{- if $cfg.config.edc.controlEndpoint }}
+    edc.control.endpoint={{ $cfg.config.edc.controlEndpoint }}
+    {{- else }}
+    edc.control.endpoint=http://{{ $fullName }}-{{ $name }}.{{ $.Release.Namespace }}.svc.cluster.local:{{ $cfg.config.web.http.control.port }}{{ $cfg.config.web.http.control.path }}
+    {{- end }}
 
 
     web.http.port={{ $cfg.config.web.http.port }}

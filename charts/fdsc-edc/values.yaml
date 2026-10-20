@@ -351,6 +351,8 @@ common:
       # hostname:
       # -- address to be published for callbacks to the data space protocol
       # dspCallback: 
+      # -- address of the control api, used by the data plane for its callbacks to the control plane. Defaults to the in-cluster service of the deployment.
+      # controlEndpoint:
     ## -- endpoints to be provided by the edc
     web:
       http:
