@@ -1,0 +1,3 @@
+{{- include "fiwareCommon.hpa.tpl" (dict
+      "context"     $
+      "autoscaling" .Values.autoscaling) }}
