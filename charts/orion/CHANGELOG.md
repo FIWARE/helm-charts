@@ -1,6 +1,6 @@
 # orion changelog
 
-## 1.7.0
+## 1.8.0
 
 ### Breaking changes
 
@@ -15,7 +15,7 @@
    which were removed in Orion 4.0.0.  
    The password is provided via `broker.db.auth.password` or `broker.db.existingSecret` and replaces `${PWD}` in the URI.
 2. **`deployment.extraEnv`** - additional environment variables for the broker container.
-3. **`deployment.topologySpreadConstraints`** - without `labelSelector` the pods of the release are selected.
+3. **`deployment.topologySpreadConstraints`** (added in 1.7.0) - constraints without `labelSelector` now select the pods of the release (previously they selected no pods).
 4. **`deployment.podDisruptionBudget`** - optional PodDisruptionBudget (disabled by default).
 5. **`test.image` / `initData.image`** - configurable images for the helm test and the init data job.
 
@@ -30,7 +30,7 @@
    The log based health check wrapper was removed, the broker is started with `contextBroker -fg`.
 3. Orion (`envPrefix: ORION_`): Orion-LD only variables (`SOCKET_SERVICE`, `SOCKET_SERVICE_PORT`,
    `CACHED_CONTEXT_DIRECTORY`, `FORWARDING`, `MONGOCONLY`, `TROE*`) are no longer rendered,
-   the metrics are scraped from `/metrics` of the API port and only when `broker.metrics.enabled` is `"true"`.
+   no Prometheus scrape annotations are set (Orion provides its metrics as JSON at `/admin/metrics`, port 8000 only exists in Orion-LD).
 4. Orion (`envPrefix: ORION_`): `initData` uses the NGSIv2 endpoint `/v2/entities`,
    the init script exits with `exit` instead of `return`.
 5. Embedded MongoDB: always a single replica with `Recreate` strategy

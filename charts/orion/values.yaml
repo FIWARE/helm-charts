@@ -57,10 +57,7 @@ deployment:
   # -- priority class to be assigned to the pods
   # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
   priorityClassName: ""
-  # -- topology spread constraints template
-  # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
-  topologySpreadConstraints: []
-  # -- orion resource requests and limits, we leave the default empty to make that a concious choice by the user.
+  # -- orion resource requests and limits, we leave the default empty to make that a conscious choice by the user.
   # for the autoscaling to make sense, you should configure this.
   # resources:
     # limits:
@@ -212,7 +209,7 @@ broker:
   # httpTimeout: 5
   ## the timeout in seconds for REST connection
   # reqTimeout: 0
-  ## cross-Origin Resource Sharing, specifing the allowed origin (use __ALL for *).
+  ## cross-Origin Resource Sharing, specifying the allowed origin (use __ALL for *).
   ## ref: https://fiware-orion.readthedocs.io/en/master/user/cors/index.html
   # corsOrigin:
   ## maximum time (in seconds) preflight requests are allowed to be cached
@@ -242,7 +239,7 @@ broker:
   ## enables flow control mechanism
   ## ref: https://fiware-orion.readthedocs.io/en/master/admin/perf_tuning/index.html#updates-flow-control-mechanism
   # notificationFlowControl:
-  ## notifications are not sent, but recorded internally and shown in the statistics operation. only for debbuging
+  ## notifications are not sent, but recorded internally and shown in the statistics operation. only for debugging
   # simulatedNotification: false
   ## disabled NGSIv2 custom notifications
   # disableCustomNotifications:
@@ -266,7 +263,7 @@ broker:
     # summaryPeriod: 0
     ## to see every possible alarm-provoking failure in the log-file, even when an alarm is already active
     # relogAlarms: false
-    ## to make the traces to standard out formated for humans
+    ## to make the traces to standard out formatted for humans
     # forHumans: false
     ## log line maximum length
     # lineMaxSize: 

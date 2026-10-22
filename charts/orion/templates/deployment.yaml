@@ -1,6 +1,6 @@
 {{- $isLD := eq .Values.broker.envPrefix "ORIONLD_" -}}
-{{- /* Orion only provides /metrics when the metrics are enabled */ -}}
-{{- $scrape := and .Values.broker.prometheus.scrape (or $isLD (eq (toString .Values.broker.metrics.enabled) "true")) -}}
+{{- /* Only Orion-LD provides Prometheus metrics, Orion provides its metrics as JSON at /admin/metrics */ -}}
+{{- $scrape := and .Values.broker.prometheus.scrape $isLD -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -32,13 +32,7 @@ spec:
       annotations:
         {{- if $scrape }}
         prometheus.io/scrape: 'true'
-        {{- if $isLD }}
         prometheus.io/port: '8000'
-        {{- else }}
-        # Orion provides the metrics at /metrics of the API port
-        prometheus.io/port: {{ .Values.broker.port | quote }}
-        prometheus.io/path: /metrics
-        {{- end }}
         {{- end }}
         {{- with .Values.deployment.additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
@@ -382,10 +376,6 @@ spec:
       {{- end }}
       {{- with .Values.deployment.priorityClassName }}
       priorityClassName: {{ . }}
-      {{- end }}
-      {{- with .Values.deployment.topologySpreadConstraints }}
-      topologySpreadConstraints:
-        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.deployment.nodeSelector }}
       nodeSelector:

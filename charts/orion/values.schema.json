@@ -665,14 +665,6 @@
             "type": "object"
           }
         },
-        "topologySpreadConstraints": {
-          "type": "array",
-          "title": "Topology spread constraints of the broker pods",
-          "default": [],
-          "items": {
-            "type": "object"
-          }
-        },
         "podDisruptionBudget": {
           "type": "object",
           "title": "Pod disruption budget of the broker pods",
