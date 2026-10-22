@@ -18,6 +18,8 @@
 3. **`deployment.topologySpreadConstraints`** (added in 1.7.0) - constraints without `labelSelector` now select the pods of the release (previously they selected no pods).
 4. **`deployment.podDisruptionBudget`** - optional PodDisruptionBudget (disabled by default).
 5. **`test.image` / `initData.image`** - configurable images for the helm test and the init data job.
+6. **`deployment.annotations`** - annotations of the Deployment resource itself, e.g. for [Reloader](https://github.com/stakater/Reloader)
+   to restart the pods when the database secret changes (`deployment.additionalAnnotations` are set on the pods).
 
 ### Fixes
 

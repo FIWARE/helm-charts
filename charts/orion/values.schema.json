@@ -34,6 +34,14 @@
         },
         "additionalLabels": {},
         "additionalAnnotations": {},
+        "annotations": {
+          "type": "object",
+          "title": "Annotations of the Deployment resource",
+          "default": {},
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
         "nodeSelector": {},
         "tolerations": [],
         "affinity": {},
