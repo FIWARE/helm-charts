@@ -18,7 +18,11 @@ data:
 {{- range $d := .Values.initData.entities }}
       IDX=$(( $IDX + 1));
       echo -e "---\n(Try $TRY.$IDX) Deploying FILE /data/{{ $d.name }}..."
+      {{- if eq $.Values.broker.envPrefix "ORIONLD_" }}
       RESPONSE=$(curl --silent -X POST ${ORION_HOST}:${ORION_PORT}/ngsi-ld/v1/entities --header "Content-Type: application/ld+json" -d @/data/{{ $d.name }} )
+      {{- else }}
+      RESPONSE=$(curl --silent -X POST ${ORION_HOST}:${ORION_PORT}/v2/entities --header "Content-Type: application/json" -d @/data/{{ $d.name }} )
+      {{- end }}
       RC=$?;
       if [ "$RC" -eq 0 ]; then 
         if [ ${#RESPONSE} -ne 0 ]; then
@@ -40,7 +44,7 @@ data:
     if [ $NFILES_WITH_MSG -gt 0 ]; then
       echo "$NFILES_WITH_MSG/$NFILES with message (review them for potential errors)"
     fi
-    return $RC
+    exit $RC
   {{ range $d := .Values.initData.entities }}
   {{ $d.name }}: |
     {{- $d.data | nindent 4 }}
