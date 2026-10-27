@@ -2,6 +2,9 @@
 {{- if .Values.deployment.configServer.enabled -}}
   {{- $ports = append $ports (dict "port" .Values.deployment.configServer.port "targetPort" "admin" "name" "admin") -}}
 {{- end -}}
+{{- with .Values.deployment.server.metricsPort -}}
+  {{- $ports = append $ports (dict "port" . "targetPort" "metrics" "name" "metrics") -}}
+{{- end -}}
 {{- include "fiwareCommon.service.tpl" (dict
       "context" $
       "service" .Values.service
