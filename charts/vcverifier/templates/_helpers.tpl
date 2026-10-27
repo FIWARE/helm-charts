@@ -53,3 +53,15 @@ Common labels. Delegates to `fiwareCommon.labels.standard`.
 {{- define "vcverifier.labels" -}}
 {{- include "fiwareCommon.labels.standard" . -}}
 {{- end -}}
+
+{{/*
+Port the verifier serves /metrics on when it is a separate one, empty when the metrics stay on the main
+port (deployment.server.metricsPort unset or equal to deployment.server.port).
+*/}}
+{{- define "vcverifier.separateMetricsPort" -}}
+{{- with .Values.deployment.server -}}
+{{- if and .metricsPort (ne (toString .metricsPort) (toString .port)) -}}
+{{- .metricsPort -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}

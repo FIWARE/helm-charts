@@ -1,6 +1,6 @@
 # vcverifier
 
-![Version: 4.18.0](https://img.shields.io/badge/Version-4.18.0-informational?style=flat-square) ![AppVersion: 6.27.0](https://img.shields.io/badge/AppVersion-6.27.0-informational?style=flat-square)
+![Version: 4.17.0](https://img.shields.io/badge/Version-4.17.0-informational?style=flat-square) ![AppVersion: 6.27.0](https://img.shields.io/badge/AppVersion-6.27.0-informational?style=flat-square)
 
 A Helm chart for running the FIWARE VCVerifier.
 
@@ -95,9 +95,9 @@ Kubernetes: `>= 1.19-0`
 | deployment.readinessProbe.timeoutSeconds | int | `30` |  |
 | deployment.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
-| deployment.server | object | `{"host":"my-verifier.org","metricsPort":0,"port":3000,"staticDir":"views/static","templateDir":"views/"}` | configuration for server |
+| deployment.server | object | `{"host":"my-verifier.org","metricsPort":null,"port":3000,"staticDir":"views/static","templateDir":"views/"}` | configuration for server |
 | deployment.server.host | string | `"my-verifier.org"` | host of the verifier |
-| deployment.server.metricsPort | int | `0` | when set, /metrics and a copy of /health are served on this port instead of the main one, which then no longer answers /metrics. The port is added to the container and the Service, not to the Ingress. Requires VCVerifier 6.27.0 or later; 0 keeps the metrics on the main port. |
+| deployment.server.metricsPort | string | `nil` | port to serve /metrics on; empty means the same as `port`. A different port serves /metrics, and a copy of /health, on its own, and the main port no longer answers /metrics: it is added to the container and the Service as `metrics`, not to the Ingress. A separate port requires VCVerifier 6.27.0 or later. |
 | deployment.server.port | int | `3000` | port to bind the server to |
 | deployment.server.staticDir | string | `"views/static"` | directory to be used for static content, f.e. images referenced from the templates |
 | deployment.server.templateDir | string | `"views/"` | directory to be used for retrieving the templates. |

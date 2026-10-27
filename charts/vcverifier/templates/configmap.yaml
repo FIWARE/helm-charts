@@ -15,9 +15,14 @@ metadata:
 data:
   server.yaml: |-
     server:
+      {{- $metricsPort := include "vcverifier.separateMetricsPort" . }}
       {{- with .Values.deployment.server }}
-      {{- /* metricsPort 0 is the verifier's default: leave it out so that the configuration does not change */}}
-      {{- toYaml (ternary . (omit . "metricsPort") (not (empty .metricsPort))) | nindent 6 }}
+      {{- /* the verifier only gets metricsPort when it is a separate port: on the main port it would try to bind it twice */}}
+      {{- $server := omit . "metricsPort" }}
+      {{- if $metricsPort }}
+      {{- $_ := set $server "metricsPort" (atoi $metricsPort) }}
+      {{- end }}
+      {{- toYaml $server | nindent 6 }}
       {{- end }}
 
     m2m:

@@ -75,7 +75,7 @@ spec:
             - containerPort: {{ .Values.deployment.configServer.port }}
               name: admin
             {{- end }}
-            {{- with .Values.deployment.server.metricsPort }}
+            {{- with (include "vcverifier.separateMetricsPort" .) }}
             - containerPort: {{ . }}
               name: metrics
             {{- end }}

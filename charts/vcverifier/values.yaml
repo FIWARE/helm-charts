@@ -49,10 +49,10 @@ deployment:
     templateDir: views/
     # -- port to bind the server to
     port: 3000
-    # -- when set, /metrics and a copy of /health are served on this port instead of the main one, which then
-    # no longer answers /metrics. The port is added to the container and the Service, not to the Ingress.
-    # Requires VCVerifier 6.27.0 or later; 0 keeps the metrics on the main port.
-    metricsPort: 0
+    # -- port to serve /metrics on; empty means the same as `port`. A different port serves /metrics, and a
+    # copy of /health, on its own, and the main port no longer answers /metrics: it is added to the container
+    # and the Service as `metrics`, not to the Ingress. A separate port requires VCVerifier 6.27.0 or later.
+    metricsPort:
   # -- logging configuration
   logging:
     # -- the log level, can be DEBUG, INFO, WARN, ERROR
