@@ -12,6 +12,13 @@ on:
     branches:
       - main
 
+# One run per pull request: opening a pull request with a label fires `opened` and `labeled` at the same
+# time, and each run of prepare-release bumped the chart version on top of the other's bump. A newer run
+# cancels the one in progress.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
 
   # lint the charts
