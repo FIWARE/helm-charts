@@ -1,0 +1,21 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # Publishes every new chart version as a GitHub release, in the Helm repository index on GitHub
+  # Pages and to quay.io, failing first when a chart changed without a new version.
+  # See https://github.com/FIWARE/github-workflows
+  chart-release:
+    uses: FIWARE/github-workflows/.github/workflows/chart-release.yml@v1
+    permissions:
+      contents: write
+    with:
+      helm-version: v4.0.4
+      oci-registry: quay.io/fiware/helm-charts
+    secrets:
+      oci-username: ${{ secrets.QUAY_USERNAME }}
+      oci-password: ${{ secrets.QUAY_PASSWORD }}
