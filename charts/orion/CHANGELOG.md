@@ -6,7 +6,7 @@
 
 1. `autoscaling.apiVersion` defaults to `v2`, `v2beta2` was removed in Kubernetes 1.26 (see #278), `kubeVersion` is now `>= 1.23-0`.
 2. Embedded MongoDB `docker.io/mongo:8.0.32` (amd64 and arm64, see #415) instead of `quay.io/opencloudio/ibm-mongodb:4.0.24`.
-
+ 
 ### New features
 
 1. **MongoDB connection URI for Orion >= 4.0.0**
