@@ -16,6 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         chart:
+          - consent-facade
           - contract-management
           - credentials-config-service
           - did-helper
