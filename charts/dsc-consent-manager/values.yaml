@@ -44,9 +44,9 @@ deployment:
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional annotations for the pods, if required
-  podAnnotations: {}
+  additionalAnnotations: {}
   # -- additional labels for the pods, if required
-  podLabels: {}
+  additionalLabels: {}
   # -- cpu/memory resources. The JVM sizes its heap at 75% of the container memory limit
   # (-XX:MaxRAMPercentage in the image), so raising limits.memory raises the heap.
   resources:
