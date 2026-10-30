@@ -62,10 +62,21 @@ Create `charts/dsc-consent-manager/` containing:
     Copy them from the source with their comments converted to `# --`. Step 2 wires them.
     Do not copy the source's header comment ("These defaults do not install on their own...")
     or its stale `quay.io/fiware/consent-manager` repository; Step 2 writes a new header.
-- Single-include templates: `service.yaml` (API service on `service.port` → `http`, plus the
-  always-ClusterIP management Service via `fiwareCommon.service.tpl` with `nameOverride`
-  and port name `management`), `ingress.yaml`, `route.yaml`, `serviceaccount.yaml`,
+- Single-include templates: `service.yaml` (API Service on `service.port` → `http` via
+  `fiwareCommon.service.tpl`), `ingress.yaml`, `route.yaml`, `serviceaccount.yaml`,
   `deployment-hpa.yaml`.
+- `templates/service-management.yaml`: a small inline `v1/Service`, not
+  `fiwareCommon.service.tpl`. Common 0.1.2 reads `nameOverride` but never applies it
+  (`metadata.name` is always `fiwareCommon.names.fullname`), so the include would emit a second
+  Service named `<fullname>`. Passing `component: management` does not work either: it adds
+  `app.kubernetes.io/component` to the selector, which then matches no pods.
+  - `name: {{ include "dscConsentManager.managementServiceName" . }}`, namespace and
+    `dscConsentManager.labels` as on the other resources.
+  - `type: ClusterIP`, one port named `management` on `managementService.port` →
+    `targetPort: management`.
+  - `selector: dscConsentManager.selectorLabels`.
+  - The common bug (it already gives scorpio-broker duplicate Service names) is out of scope;
+    track it separately.
 - `templates/deployment.yaml`, ported from the source:
   - Image and pull secrets via `fiwareCommon.images.*`. `replicas` is omitted when
     `autoscaling.enabled`.
@@ -85,7 +96,9 @@ Create `charts/dsc-consent-manager/` containing:
 
 Acceptance: `helm dependency update charts/dsc-consent-manager && helm lint charts/dsc-consent-manager`
 passes. `helm template` renders Deployment, both Services, and (when enabled) Ingress, Route,
-HPA and ServiceAccount. Steps 1 and 2 can land on the work branch one after the other; the
+HPA and ServiceAccount. kubeconform checks each document on its own, so also check that
+`helm template t charts/dsc-consent-manager | yq 'select(.kind=="Service") | .metadata.name'`
+prints two distinct names, `t-dsc-consent-manager` and `t-dsc-consent-manager-management`. Steps 1 and 2 can land on the work branch one after the other; the
 chart is validated as a whole in Step 2. If the Deployment references to the ConfigMap/Secret
 break `kubeconform` before Step 2, that is acceptable because kubeconform does not resolve
 references.
@@ -136,6 +149,8 @@ Add to `charts/dsc-consent-manager/templates/`:
     note the `dscConsentManager.*` helper prefix under Key Conventions.
   - Update "Pod Scheduling Fields": 46 workload templates across 31 charts, 34 of them in 30
     charts carrying a scheduling block; the `deployment.*` prefix count goes from 21 to 22.
+  - In the `common` helper list under Key Conventions, mark `service.tpl`'s `nameOverride` as
+    accepted but not applied in 0.1.2, so later charts do not rely on it.
 - Optional: add `dsc-consent-manager` to the matrix in `.github/workflows/check-chart-updates.yml`.
   Its `sources[0]` must point at the upstream GitHub repo that publishes releases.
 
@@ -147,5 +162,7 @@ Acceptance:
   `--set secrets.existingSecret=foo` (no Secret rendered, `envFrom` points at `foo`).
 - `./lint.sh` and `./eval.sh` stay green.
 - Two consecutive `helm template` runs with defaults produce the same `checksum/secret`.
+- Rendered Service names are unique, with defaults and with `-f ci/all-enabled-values.yaml`
+  (same `yq` check as Step 1).
 - `git ls-files charts/dsc-consent-manager/README.md` lists the file.
 - `git diff main -- charts/consent-manager` is empty.
