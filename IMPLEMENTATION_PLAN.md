@@ -152,7 +152,7 @@ Add to `charts/dsc-consent-manager/templates/`:
   for manual validation.
 - `README.md`: run `jnorwood/helm-docs:v1.14.2` once on the chart (same image as
   `check.yml`) and commit the result, so the `chart-version` job tracks it from then on.
-- AGENTS.md:
+- AGENTS.md (deferred to a plan-mode agent: step agents must not edit AGENTS.md):
   - Add `dsc-consent-manager` to the chart list (32 total, 31 application + 1 library) and
     note the `dscConsentManager.*` helper prefix under Key Conventions.
   - Update "Pod Scheduling Fields": 46 workload templates across 31 charts, 34 of them in 30

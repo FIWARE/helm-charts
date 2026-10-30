@@ -22,10 +22,14 @@ spec:
       {{- include "dscConsentManager.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.deployment.additionalAnnotations }}
       annotations:
+        {{- /* checksum/secret hashes the values, not the rendered Secret, whose generated
+        fallback keys differ per render. */}}
+        checksum/config: {{ printf "%s%s" (include (print $.Template.BasePath "/configmap.yaml") .) (include (print $.Template.BasePath "/configmap-identity-providers.yaml") .) | sha256sum }}
+        checksum/secret: {{ .Values.secrets | toJson | sha256sum }}
+        {{- with .Values.deployment.additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "dscConsentManager.labels" . | nindent 8 }}
         {{- with .Values.deployment.additionalLabels }}

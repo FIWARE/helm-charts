@@ -1,6 +1,15 @@
 ## Default values for the dsc-consent-manager.
-## This is a YAML-formatted file.
-## Declare variables to be passed into your templates.
+##
+## MUST OVERRIDE FOR PRODUCTION. The defaults install, but the pods crash-loop against the
+## placeholders idp.example.org and postgres:5432 until these are set:
+##   - identityProviders.primary.{issuer,discoveryUrl,audience}
+##   - config.database.url
+##   - secrets.{dbUser,dbPassword,logPseudonymKey,erasureVerificationSecret}, or
+##     secrets.existingSecret
+##   - the signing-key Secret, created out of band (see signingKeys)
+## NOTES.txt repeats this notice while any placeholder is still in use. It detects them by
+## comparing against the `dscConsentManager.placeholder*` helpers in templates/_helpers.tpl:
+## change both together.
 
 # -- option to override the name config in the _helpers.tpl
 nameOverride: ""
@@ -214,8 +223,8 @@ config:
   # -- prefix the API controllers are served under
   apiPrefix: /v1
   database:
-    # -- JDBC URL, e.g. jdbc:postgresql://postgres:5432/consent_manager
-    url: ""
+    # -- JDBC URL of the database. Placeholder: must be overridden for production.
+    url: jdbc:postgresql://postgres:5432/consent_manager
   smtp:
     # -- SMTP host. Leave empty to disable notifications. With a host set, fromAddress is
     # required by the app.
@@ -308,12 +317,12 @@ config:
 ## Changing either rolls the pods.
 identityProviders:
   primary:
-    # -- issuer of the primary IdP
-    issuer: ""
-    # -- OIDC discovery URL of the primary IdP
-    discoveryUrl: ""
-    # -- expected token audience
-    audience: ""
+    # -- issuer of the primary IdP. Placeholder: must be overridden for production.
+    issuer: https://idp.example.org/realms/consent-manager
+    # -- OIDC discovery URL of the primary IdP. Placeholder: must be overridden for production.
+    discoveryUrl: https://idp.example.org/realms/consent-manager/.well-known/openid-configuration
+    # -- expected token audience. Placeholder: must be overridden for production.
+    audience: consent-manager
     # -- permits an http issuer or discovery URL; local development only
     allowInsecureTransport: false
     # -- tolerated clock skew when validating tokens
@@ -335,25 +344,32 @@ identityProviders:
   # -- further providers, keyed by name, with entries shaped like `primary`
   additional: {}
 
-## Rendered into a chart-owned Secret unless existingSecret is set. With existingSecret, that
-## Secret must hold DB_USER, DB_PASSWORD, LOG_PSEUDONYM_KEY and ERASURE_VERIFICATION_SECRET, and
-## may hold SMTP_USER and SMTP_PASSWORD.
+## Rendered into a chart-owned Secret unless existingSecret is set. The chart-owned Secret is
+## kept on uninstall (helm.sh/resource-policy: keep). With existingSecret, that Secret must hold
+## DB_USER, DB_PASSWORD, LOG_PSEUDONYM_KEY and ERASURE_VERIFICATION_SECRET, and may hold
+## SMTP_USER and SMTP_PASSWORD. Pods do not roll when its contents change; restart them.
 secrets:
   # -- name of an already existing secret to use instead. Prefer it in production.
   existingSecret: ""
   # -- database user
-  dbUser: ""
-  # -- database password
+  dbUser: consent_manager
+  # -- database password. Must be set for production, unless existingSecret is used.
   dbPassword: ""
   # -- SMTP user
   smtpUser: ""
   # -- SMTP password
   smtpPassword: ""
   # -- key pseudonymising user identifiers in logs. Rotating it breaks pseudonym linkage;
-  # generate it once with `openssl rand -base64 32` and keep it.
+  # generate it once with `openssl rand -base64 32` and keep it. Empty => reused from the live
+  # Secret, else generated. WARNING: helm template, --dry-run, Argo CD and Flux cannot read the
+  # live Secret, so there an empty value rotates on every render; GitOps users must set it or use
+  # existingSecret.
   logPseudonymKey: ""
   # -- secret of erasure verifications. Rotating it breaks outstanding erasure verifications;
-  # generate it once with `openssl rand -base64 32` and keep it.
+  # generate it once with `openssl rand -base64 32` and keep it. Empty => reused from the live
+  # Secret, else generated. WARNING: helm template, --dry-run, Argo CD and Flux cannot read the
+  # live Secret, so there an empty value rotates on every render; GitOps users must set it or use
+  # existingSecret.
   erasureVerificationSecret: ""
 
 ## Receipt signing keys, mounted read-only at /etc/consent-manager/keys. The chart never creates
