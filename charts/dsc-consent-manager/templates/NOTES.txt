@@ -1,6 +1,21 @@
 {{- $fullname := include "dscConsentManager.fullname" . -}}
 {{- $signingSecret := include "dscConsentManager.signingKeysSecretName" . -}}
 Consent Manager {{ .Chart.AppVersion }} is deployed as "{{ $fullname }}" in namespace "{{ .Release.Namespace }}".
+{{- with include "dscConsentManager.placeholdersInUse" . }}
+
+WARNING: placeholder defaults are still in use. The pods crash-loop until these are set for
+production (see the header of values.yaml):
+{{- range splitList "\n" . }}
+  - {{ . }}
+{{- end }}
+{{- end }}
+{{- if include "dscConsentManager.secretKeysFallback" . }}
+
+WARNING: secrets.logPseudonymKey or secrets.erasureVerificationSecret is empty, so the chart
+reuses the value of the live Secret or generates one. helm template, --dry-run, Argo CD and Flux
+cannot read the live Secret and generate a new value on every render, which breaks log pseudonym
+linkage and outstanding erasure verifications. Set both values or use secrets.existingSecret.
+{{- end }}
 
 1. Create the receipt signing-key Secret if it does not exist yet. The chart never creates it,
    and the pods cannot start without it:

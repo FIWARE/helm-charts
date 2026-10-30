@@ -7,6 +7,7 @@ metadata:
   namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{- include "dscConsentManager.labels" . | nindent 4 }}
+    {{- include "dscConsentManager.managementComponentLabel" . | nindent 4 }}
 spec:
   type: ClusterIP
   ports:

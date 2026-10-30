@@ -1,0 +1,49 @@
+{{- /* Same guard as the identity-providers volume in deployment.yaml; keep them identical. */}}
+{{- if .Values.identityProviders.additional }}
+{{- $defaults := include "dscConsentManager.additionalProviderDefaults" . | fromYaml }}
+{{- $roles := include "dscConsentManager.roles" . | splitList " " }}
+{{- $defaultClockSkew := include "dscConsentManager.defaultClockSkew" . }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "dscConsentManager.identityProvidersConfigMapName" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "dscConsentManager.labels" . | nindent 4 }}
+data:
+  {{ include "dscConsentManager.identityProvidersFile" . }}: |
+    # Rendered by the dsc-consent-manager Helm chart from identityProviders.additional.
+    # The `primary` provider is configured through the IDP_* env vars instead.
+    consent-manager:
+      identity-providers:
+    {{- range $name, $entry := .Values.identityProviders.additional }}
+    {{- if eq $name "primary" }}
+    {{- fail "identityProviders.additional must not declare 'primary'; it would merge silently into the env-configured primary provider. Configure it under identityProviders.primary." }}
+    {{- end }}
+    {{- if not (regexMatch "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$" $name) }}
+    {{- fail (printf "identityProviders.additional key '%s' must be lower-case letters, digits and inner hyphens" $name) }}
+    {{- end }}
+    {{- $path := printf "identityProviders.additional.%s" $name }}
+    {{- include "dscConsentManager.validateProvider" (dict "name" (printf "additional.%s" $name) "entry" $entry) }}
+    {{- $claims := mergeOverwrite (deepCopy $defaults.claims) ($entry.claims | default dict) }}
+    {{- $roleMapping := $entry.roleMapping | default $defaults.roleMapping }}
+        {{ $name }}:
+          issuer: {{ required (printf "%s.issuer is required" $path) $entry.issuer | quote }}
+          discovery-url: {{ required (printf "%s.discoveryUrl is required" $path) $entry.discoveryUrl | quote }}
+          audience: {{ required (printf "%s.audience is required" $path) $entry.audience | quote }}
+          allow-insecure-transport: {{ $entry.allowInsecureTransport | default false }}
+          clock-skew: {{ $entry.clockSkew | default $defaultClockSkew | quote }}
+          claims:
+            user-identifier: {{ $claims.userIdentifier | toJson }}
+            {{- with $claims.participantIdentifier }}
+            participant-identifier: {{ . | toJson }}
+            {{- end }}
+            roles: {{ $claims.roles | toJson }}
+          role-mapping:
+            {{- range $role := $roles }}
+            {{- with (get $roleMapping $role) }}
+            {{ $role }}: {{ . | quote }}
+            {{- end }}
+            {{- end }}
+    {{- end }}
+{{- end }}
