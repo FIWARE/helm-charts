@@ -86,8 +86,12 @@ Create `charts/dsc-consent-manager/` containing:
     this Secret: a missing one keeps the pod in ContainerCreating with a clear
     `secret not found` event, rather than starting the app with a dangling
     `RECEIPTS_SIGNING_KEY_FILE` path.
-  - `envFrom` the ConfigMap and the Secret, and the identity-providers volume. Both point at
-    resources that Step 2 adds; template the names via the helpers now.
+  - `envFrom` the ConfigMap and the Secret. Both point at resources that Step 2 adds;
+    template the names via the helpers now.
+  - The identity-providers ConfigMap volume, its volumeMount and the `MICRONAUT_CONFIG_FILES`
+    env var, all behind `{{- if .Values.identityProviders.additional }}`, the same guard as
+    the ConfigMap in Step 2 (the source does the same). Unguarded, a default install mounts a
+    ConfigMap that is never rendered and the pod stays in ContainerCreating.
   - `serviceAccountName`.
   - Scheduling block in the canonical `{{- with .Values.deployment.X }}` form (AGENTS.md,
     "Pod Scheduling Fields").
@@ -98,7 +102,10 @@ Acceptance: `helm dependency update charts/dsc-consent-manager && helm lint char
 passes. `helm template` renders Deployment, both Services, and (when enabled) Ingress, Route,
 HPA and ServiceAccount. kubeconform checks each document on its own, so also check that
 `helm template t charts/dsc-consent-manager | yq 'select(.kind=="Service") | .metadata.name'`
-prints two distinct names, `t-dsc-consent-manager` and `t-dsc-consent-manager-management`. Steps 1 and 2 can land on the work branch one after the other; the
+prints two distinct names, `t-dsc-consent-manager` and `t-dsc-consent-manager-management`.
+The default render has no `identity-providers` volume, volumeMount or `MICRONAUT_CONFIG_FILES`
+env var (`helm template t charts/dsc-consent-manager | grep -c -e identity-providers -e MICRONAUT_CONFIG_FILES`
+prints `0`). Steps 1 and 2 can land on the work branch one after the other; the
 chart is validated as a whole in Step 2. If the Deployment references to the ConfigMap/Secret
 break `kubeconform` before Step 2, that is acceptable because kubeconform does not resolve
 references.
@@ -116,7 +123,8 @@ Add to `charts/dsc-consent-manager/templates/`:
     `fromAddress` when `smtp.host` is set). Those only trigger on non-default input.
 - `configmap-identity-providers.yaml`: rendered only when `identityProviders.additional` is
   non-empty. Keep its `required`/`fail` checks, which only apply to user-supplied entries. Keep
-  the `checksum/*` pod annotations in the Deployment so config changes roll the pods.
+  the `checksum/*` pod annotations in the Deployment so config changes roll the pods. The
+  ConfigMap's guard must stay identical to the Deployment's volume guard from Step 1.
 - `secret.yaml`: rendered unless `secrets.existingSecret` is set.
   - Remove the `required` on `dbUser`/`dbPassword`; default them to `consent_manager`/empty.
   - `logPseudonymKey`/`erasureVerificationSecret` must never rotate (rotation breaks log
@@ -164,5 +172,8 @@ Acceptance:
 - Two consecutive `helm template` runs with defaults produce the same `checksum/secret`.
 - Rendered Service names are unique, with defaults and with `-f ci/all-enabled-values.yaml`
   (same `yq` check as Step 1).
+- With defaults, neither the identity-providers ConfigMap nor its volume renders. With
+  `-f ci/all-enabled-values.yaml`, the volume's `configMap.name` equals the rendered
+  ConfigMap's `metadata.name`.
 - `git ls-files charts/dsc-consent-manager/README.md` lists the file.
 - `git diff main -- charts/consent-manager` is empty.
