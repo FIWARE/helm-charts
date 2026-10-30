@@ -5380,6 +5380,34 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/dsba-pdp-0.0.1/dsba-pdp-0.0.1.tgz
     version: 0.0.1
+  dsc-consent-manager:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2026-10-30T13:33:16.815176992Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the dsc-consent-manager, consent lifecycle
+      management as a stateless OAuth2 resource server, on kubernetes.
+    digest: 737534ee9202d04cf864bbfda944a3b6aab003e6801564aaee1d370e3d7ff1c9
+    home: https://github.com/wistefan/dsc-consent-manager
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - consent-manager
+    - Consent
+    - DSBA
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: dsc-consent-manager
+    sources:
+    - https://github.com/wistefan/dsc-consent-manager
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/dsc-consent-manager-0.1.0/dsc-consent-manager-0.1.0.tgz
+    version: 0.1.0
   dss-validation-service:
   - apiVersion: v1
     appVersion: 0.0.1
@@ -16340,4 +16368,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-10-29T12:58:05.797031784Z"
+generated: "2026-10-30T13:33:16.816623253Z"
