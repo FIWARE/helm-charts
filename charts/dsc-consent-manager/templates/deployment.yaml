@@ -1,0 +1,146 @@
+{{- $additionalIdps := .Values.identityProviders.additional }}
+{{- $signingKeysDir := include "dscConsentManager.signingKeysDir" . }}
+{{- $identityProvidersDir := include "dscConsentManager.identityProvidersDir" . }}
+{{- $probes := .Values.deployment.probes }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dscConsentManager.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "dscConsentManager.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.deployment.replicaCount }}
+  {{- end }}
+  {{- with .Values.deployment.updateStrategy }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "dscConsentManager.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.deployment.additionalAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "dscConsentManager.labels" . | nindent 8 }}
+        {{- with .Values.deployment.additionalLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with (include "fiwareCommon.images.pullSecrets" (dict "pullSecrets" .Values.imagePullSecrets)) }}
+      {{- . | nindent 6 }}
+      {{- end }}
+      serviceAccountName: {{ include "dscConsentManager.serviceAccountName" . }}
+      # The service never calls the Kubernetes API.
+      automountServiceAccountToken: false
+      {{- with .Values.deployment.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ include "fiwareCommon.images.image" (dict "context" $ "image" .Values.deployment.image) | quote }}
+          imagePullPolicy: {{ include "fiwareCommon.images.pullPolicy" (dict "image" .Values.deployment.image) }}
+          {{- with .Values.deployment.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.deployment.containerPorts.http }}
+              protocol: TCP
+            - name: management
+              containerPort: {{ .Values.deployment.containerPorts.management }}
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: {{ include "dscConsentManager.fullname" . }}
+            - secretRef:
+                name: {{ include "dscConsentManager.secretName" . }}
+          env:
+            - name: RECEIPTS_SIGNING_KEY_FILE
+              value: {{ printf "%s/%s" $signingKeysDir .Values.signingKeys.signingKeyFile | quote }}
+            {{- if .Values.signingKeys.retiredVerificationKeys.enabled }}
+            - name: RECEIPTS_RETIRED_VERIFICATION_KEYS_FILE
+              value: {{ printf "%s/%s" $signingKeysDir .Values.signingKeys.retiredVerificationKeysFile | quote }}
+            {{- end }}
+            {{- if $additionalIdps }}
+            - name: MICRONAUT_CONFIG_FILES
+              value: {{ printf "%s/%s" $identityProvidersDir (include "dscConsentManager.identityProvidersFile" .) | quote }}
+            {{- end }}
+          startupProbe:
+            httpGet:
+              path: {{ $probes.startup.path }}
+              port: management
+            periodSeconds: {{ $probes.startup.periodSeconds }}
+            failureThreshold: {{ $probes.startup.failureThreshold }}
+            timeoutSeconds: {{ $probes.startup.timeoutSeconds }}
+          livenessProbe:
+            httpGet:
+              path: {{ $probes.liveness.path }}
+              port: management
+            initialDelaySeconds: {{ $probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ $probes.liveness.periodSeconds }}
+            failureThreshold: {{ $probes.liveness.failureThreshold }}
+            timeoutSeconds: {{ $probes.liveness.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: {{ $probes.readiness.path }}
+              port: management
+            initialDelaySeconds: {{ $probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ $probes.readiness.periodSeconds }}
+            failureThreshold: {{ $probes.readiness.failureThreshold }}
+            timeoutSeconds: {{ $probes.readiness.timeoutSeconds }}
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: {{ include "dscConsentManager.tmpDir" . }}
+            - name: signing-keys
+              mountPath: {{ $signingKeysDir }}
+              readOnly: true
+            {{- if $additionalIdps }}
+            - name: identity-providers
+              mountPath: {{ $identityProvidersDir }}
+              readOnly: true
+            {{- end }}
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: {{ .Values.deployment.tmp.sizeLimit }}
+        - name: signing-keys
+          secret:
+            secretName: {{ include "dscConsentManager.signingKeysSecretName" . }}
+            # 0400 as written; with fsGroup set the kubelet makes the files root:<fsGroup> and adds
+            # group read, so the pod sees 0440. Only the app's group can read them; without fsGroup
+            # the non-root UID could not read a root-owned 0400 file at all.
+            defaultMode: {{ include "dscConsentManager.signingKeysMode" . }}
+        {{- if $additionalIdps }}
+        - name: identity-providers
+          configMap:
+            name: {{ include "dscConsentManager.identityProvidersConfigMapName" . }}
+        {{- end }}
+      {{- with .Values.deployment.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- with .Values.deployment.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

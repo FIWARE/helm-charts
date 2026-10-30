@@ -1,0 +1,372 @@
+## Default values for the dsc-consent-manager.
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+# -- option to override the name config in the _helpers.tpl
+nameOverride: ""
+# -- option to override the fullname config in the _helpers.tpl
+fullnameOverride: ""
+# -- secrets to pull the image with, as names or `{name: <secret>}` maps
+imagePullSecrets: []
+
+# -- if a dsc-consent-manager specific service account should be used, it can be configured here
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # -- specifies if the account should be created
+  create: false
+  # -- annotations to add to the service account
+  annotations: {}
+  # -- name of the service account to use. Empty => the fullname when created, else `default`
+  name: ""
+
+## deployment specific configuration
+deployment:
+  # -- initial number of target replications, ignored when autoscaling is enabled: the HPA owns
+  # the replica count then
+  replicaCount: 2
+  ## configuration of the update strategy
+  updateStrategy:
+    # -- type of the update
+    type: RollingUpdate
+    # -- new pods will be added gradually
+    rollingUpdate:
+      # -- number of pods that can be created above the desired amount while updating
+      maxSurge: 1
+      # -- number of pods that can be unavailable while updating
+      maxUnavailable: 0
+  ## configuration of the image to be used
+  image:
+    # -- dsc-consent-manager image name
+    # ref: https://quay.io/repository/seamware/dsc-consent-manager
+    repository: quay.io/seamware/dsc-consent-manager
+    # -- overrides the image tag whose default is the chart appVersion
+    tag: ""
+    # -- specification of the image pull policy
+    pullPolicy: IfNotPresent
+  # -- additional annotations for the pods, if required
+  additionalAnnotations: {}
+  # -- additional labels for the pods, if required
+  additionalLabels: {}
+  # -- cpu/memory resources. The JVM sizes its heap at 75% of the container memory limit
+  # (-XX:MaxRAMPercentage in the image), so raising limits.memory raises the heap.
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  ## ports the application listens on
+  containerPorts:
+    # -- port of the API
+    http: 8080
+    # -- port of health, metrics and Prometheus
+    management: 9090
+  ## Every probe targets the management port. timeoutSeconds is explicit, because the Kubernetes
+  ## default of 1s lets a GC pause under a tight CPU limit restart a healthy pod.
+  # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  probes:
+    liveness:
+      # -- path to probe
+      path: /health/liveness
+      initialDelaySeconds: 30
+      periodSeconds: 30
+      failureThreshold: 3
+      timeoutSeconds: 5
+    readiness:
+      # -- path to probe
+      path: /health/readiness
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      failureThreshold: 3
+      timeoutSeconds: 5
+    startup:
+      # -- path to probe
+      path: /health/liveness
+      periodSeconds: 5
+      failureThreshold: 30
+      timeoutSeconds: 5
+  # -- security context for the pod. fsGroup also makes the 0400 signing-key files readable by
+  # the app's group; see deployment.yaml.
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 10001
+    runAsGroup: 10001
+    fsGroup: 10001
+    seccompProfile:
+      type: RuntimeDefault
+  # -- security context for the container
+  securityContext:
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+  ## the writable /tmp on the otherwise read-only root filesystem
+  tmp:
+    # -- size limit of the /tmp emptyDir
+    sizeLimit: 256Mi
+  # -- priority class to be assigned to the pods
+  # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+  priorityClassName: ""
+  # -- topology spread constraints template
+  # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+  topologySpreadConstraints: []
+  # -- selector template
+  # ref: https://kubernetes.io/docs/user-guide/node-selection/
+  nodeSelector: {}
+  # -- tolerations template
+  # ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  # -- affinity template
+  # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+
+## configuration for the k8s service of the API. Ingress and route target this one.
+service:
+  # -- service type
+  type: ClusterIP
+  # -- port to be used by the service
+  port: 8080
+
+## Health, metrics and Prometheus. This Service is always ClusterIP, whatever service.type is.
+## Metrics need no token here (METRICS_AUTHENTICATION_ENABLED is fixed to "false"), so this
+## Service must never be routed by an ingress or exposed outside the cluster.
+managementService:
+  # -- port to be used by the management service
+  port: 9090
+
+## configuration of the ingress to make the API available outside the cluster. Every path's
+## backend is the API Service's port; the management port is never a backend. Path / also
+## covers the origin-root routes (/.well-known/jwks.json, Swagger UI, /openapi.yaml).
+ingress:
+  # -- should an ingress be created
+  enabled: false
+  # -- annotations to be added to the ingress
+  annotations: {}
+  # -- ingress class to be used
+  className: ""
+  # -- hosts to be used, each with a list of paths
+  hosts:
+    - host: consent-manager.local
+      paths:
+        - /
+  # -- tls configuration
+  tls: []
+  # - secretName: consent-manager-tls
+  #   hosts:
+  #     - consent-manager.local
+
+## configuration of an OpenShift route
+route:
+  # -- should a route be created
+  enabled: false
+  # -- annotations to be added to the route
+  annotations: {}
+  # -- host to be used
+  host: ""
+  # -- tls configuration
+  tls: {}
+
+## pod autoscaling configuration. Targets are percentages of resources.requests. The JVM keeps
+## its heap, so memory use rarely falls after a load peak; a memory target can therefore hold
+## the replica count at its peak, and none is set by default.
+autoscaling:
+  # -- should autoscaling be enabled for the dsc-consent-manager
+  enabled: false
+  # -- version of the autoscaling api to be used
+  apiVersion: v2
+  # -- minimum number of running pods, must not exceed maxReplicas
+  minReplicas: 2
+  # -- maximum number of running pods
+  maxReplicas: 5
+  # -- metrics to react on
+  # ref: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/horizontal-pod-autoscaler-v2/#HorizontalPodAutoscalerSpec
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 75
+
+## Prometheus Operator ServiceMonitor. It scrapes /prometheus on the management Service, without
+## credentials, because metrics authentication is off and the scrape stays inside the cluster.
+## Requires the monitoring.coreos.com/v1 CRD; without it, the install fails with "no matches for
+## kind ServiceMonitor".
+serviceMonitor:
+  # -- should a ServiceMonitor be created
+  enabled: false
+  # -- scrape interval
+  interval: 30s
+  # -- scrape timeout. Empty means Prometheus's default; must not exceed interval.
+  scrapeTimeout: ""
+  # -- extra labels, e.g. the release label your Prometheus selects ServiceMonitors by
+  labels: {}
+
+## Non-sensitive settings, rendered into the ConfigMap. An empty value is omitted, so the
+## application default from application.yml applies. Never put a credential here.
+config:
+  # -- public base URL of this service
+  consentManagerUrl: ""
+  # -- base URL of the contract service
+  contractServiceUrl: ""
+  # -- prefix the API controllers are served under
+  apiPrefix: /v1
+  database:
+    # -- JDBC URL, e.g. jdbc:postgresql://postgres:5432/consent_manager
+    url: ""
+  smtp:
+    # -- SMTP host. Leave empty to disable notifications. With a host set, fromAddress is
+    # required by the app.
+    host: ""
+    # -- SMTP port
+    port: 587
+    # -- whether to use STARTTLS
+    startTls: true
+    # -- sender address of notifications
+    fromAddress: ""
+    # -- sender name of notifications
+    fromName: ""
+  # -- URL of the notification client
+  notificationClientUrl: ""
+  ## signed consent-change webhooks to participants
+  participantNotifications:
+    # -- timeout of a webhook host lookup
+    resolveTimeout: 2s
+    # -- concurrent webhook host lookups; a stalled host holds at most one
+    resolverThreads: 8
+    # -- connect timeout of a webhook call
+    connectTimeout: 2s
+    # -- read timeout of a webhook call
+    readTimeout: 5s
+    # -- operator-only: listed hosts are the only webhook targets and skip the private-address check
+    allowedHosts: []
+    # -- whether these replicas deliver; the age and retention sweeps run either way
+    enabled: true
+    # -- interval of the delivery poll
+    pollInterval: 5s
+    # -- notifications fetched per poll
+    batchSize: 50
+    # -- notifications per participant and batch; must stay below concurrency
+    perParticipantBatchLimit: 5
+    # -- concurrent webhook deliveries
+    concurrency: 16
+    # -- delivery lease; startup refuses a lease too short for a whole batch to send
+    lease: 60s
+    # -- retry schedule
+    backoff: [1m, 5m, 15m, 1h, 6h, 24h]
+    # -- jitter applied to the retry schedule, as a fraction
+    jitter: 0.1
+    # -- undelivered rows older than this are abandoned and redacted; must cover the retry schedule
+    maxAge: 36h
+    # -- interval of the age and retention sweeps
+    sweepInterval: 1m
+    # -- how long delivered notifications are kept
+    retention: 30d
+  # -- jurisdiction stated in consent receipts
+  receiptsJurisdiction: EU
+  cache:
+    # -- TTL of the cached IdP JWKS
+    idpJwksTtl: 60s
+    # -- TTL of cached contract-service responses
+    contractServiceTtl: 60s
+    # -- maximum number of cached contract-service responses
+    contractServiceMaxSize: 1000
+    # -- TTL of cached self descriptions
+    selfDescriptionTtl: 10m
+    # -- maximum number of cached self descriptions
+    selfDescriptionMaxSize: 1000
+  pagination:
+    # -- default page size of the participants list
+    participantsDefaultSize: 20
+    # -- maximum page size of the participants list
+    participantsMaxSize: 100
+    # -- default page size of the consents list
+    consentsDefaultSize: 20
+    # -- maximum page size of the consents list
+    consentsMaxSize: 100
+    # -- default page size of the notifications list
+    notificationsDefaultSize: 20
+    # -- maximum page size of the notifications list
+    notificationsMaxSize: 100
+  # -- any other non-sensitive variable from .env.sample, e.g. SELF_DESCRIPTION_ALLOWED_HOSTS.
+  # Credentials and the variables the deployment sets are refused.
+  extraEnv: {}
+
+## The trust list.
+##
+## `primary` is always present: application.yml declares it, and Micronaut merges maps across
+## property sources, so no file can remove it. Its settings are rendered into the IDP_* env vars
+## of the ConfigMap. Each claim is a list of segments ([realm_access, roles] is nested).
+##
+## `additional` maps further provider names to entries of the same shape. They are rendered into
+## identity-providers.yml in a separate ConfigMap, mounted read-only and loaded through
+## MICRONAUT_CONFIG_FILES. An entry may not be named `primary`. claims fall back per key to the
+## defaults below; roleMapping, when given, replaces the default mapping whole, so an additional
+## provider can leave a role unmapped. primary cannot: each of its three roles must be non-empty.
+## Changing either rolls the pods.
+identityProviders:
+  primary:
+    # -- issuer of the primary IdP
+    issuer: ""
+    # -- OIDC discovery URL of the primary IdP
+    discoveryUrl: ""
+    # -- expected token audience
+    audience: ""
+    # -- permits an http issuer or discovery URL; local development only
+    allowInsecureTransport: false
+    # -- tolerated clock skew when validating tokens
+    clockSkew: 30s
+    claims:
+      # -- claim path of the user identifier
+      userIdentifier: [sub]
+      # -- claim path of the participant identifier
+      participantIdentifier: [participant_id]
+      # -- claim path of the roles
+      roles: [realm_access, roles]
+    roleMapping:
+      # -- IdP role mapped to the user role
+      user: consent-user
+      # -- IdP role mapped to the participant role
+      participant: consent-participant
+      # -- IdP role mapped to the catalog role
+      catalog: consent-catalog
+  # -- further providers, keyed by name, with entries shaped like `primary`
+  additional: {}
+
+## Rendered into a chart-owned Secret unless existingSecret is set. With existingSecret, that
+## Secret must hold DB_USER, DB_PASSWORD, LOG_PSEUDONYM_KEY and ERASURE_VERIFICATION_SECRET, and
+## may hold SMTP_USER and SMTP_PASSWORD.
+secrets:
+  # -- name of an already existing secret to use instead. Prefer it in production.
+  existingSecret: ""
+  # -- database user
+  dbUser: ""
+  # -- database password
+  dbPassword: ""
+  # -- SMTP user
+  smtpUser: ""
+  # -- SMTP password
+  smtpPassword: ""
+  # -- key pseudonymising user identifiers in logs. Rotating it breaks pseudonym linkage;
+  # generate it once with `openssl rand -base64 32` and keep it.
+  logPseudonymKey: ""
+  # -- secret of erasure verifications. Rotating it breaks outstanding erasure verifications;
+  # generate it once with `openssl rand -base64 32` and keep it.
+  erasureVerificationSecret: ""
+
+## Receipt signing keys, mounted read-only at /etc/consent-manager/keys. The chart never creates
+## this Secret; create it out of band, e.g.
+##   kubectl create secret generic <release>-signing-keys \
+##     --from-file=signing-key.jwk=./signing-key.jwk
+signingKeys:
+  # -- name of the signing-key Secret. Empty => "<release>-signing-keys".
+  secretName: ""
+  # -- key of the signing key within that Secret
+  signingKeyFile: signing-key.jwk
+  retiredVerificationKeys:
+    # -- mount retired verification keys, so receipts signed with a rotated key still verify
+    enabled: false
+  # -- key of the retired verification keys within that Secret
+  retiredVerificationKeysFile: retired-verification-keys.jwks
