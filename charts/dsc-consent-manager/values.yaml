@@ -7,7 +7,9 @@
 ##   - secrets.{dbUser,dbPassword,logPseudonymKey,erasureVerificationSecret}, or
 ##     secrets.existingSecret
 ##   - the signing-key Secret, created out of band (see signingKeys)
-## NOTES.txt repeats this notice while any placeholder is still in use.
+## NOTES.txt repeats this notice while any placeholder is still in use. It detects them by
+## comparing against the `dscConsentManager.placeholder*` helpers in templates/_helpers.tpl:
+## change both together.
 
 # -- option to override the name config in the _helpers.tpl
 nameOverride: ""
@@ -345,7 +347,7 @@ identityProviders:
 ## Rendered into a chart-owned Secret unless existingSecret is set. The chart-owned Secret is
 ## kept on uninstall (helm.sh/resource-policy: keep). With existingSecret, that Secret must hold
 ## DB_USER, DB_PASSWORD, LOG_PSEUDONYM_KEY and ERASURE_VERIFICATION_SECRET, and may hold
-## SMTP_USER and SMTP_PASSWORD.
+## SMTP_USER and SMTP_PASSWORD. Pods do not roll when its contents change; restart them.
 secrets:
   # -- name of an already existing secret to use instead. Prefer it in production.
   existingSecret: ""

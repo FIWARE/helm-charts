@@ -151,27 +151,38 @@ SMTP_USER SMTP_PASSWORD
 {{- end -}}
 
 {{/*
-Placeholder defaults of values.yaml. Production installs must replace them; NOTES.txt warns while
-any is still in use.
+Placeholder default of `identityProviders.primary.issuer`; must match values.yaml.
 */}}
 {{- define "dscConsentManager.placeholderIssuer" -}}
 https://idp.example.org/realms/consent-manager
 {{- end -}}
 
 {{/*
-Placeholder default of `config.database.url`.
+Placeholder default of `identityProviders.primary.discoveryUrl`; must match values.yaml.
+*/}}
+{{- define "dscConsentManager.placeholderDiscoveryUrl" -}}
+{{- include "dscConsentManager.placeholderIssuer" . }}/.well-known/openid-configuration
+{{- end -}}
+
+{{/*
+Placeholder default of `config.database.url`; must match values.yaml.
 */}}
 {{- define "dscConsentManager.placeholderDatabaseUrl" -}}
 jdbc:postgresql://postgres:5432/consent_manager
 {{- end -}}
 
 {{/*
-Value paths still holding a placeholder, one per line; empty when none.
+Value paths still holding a placeholder, one per line; empty when none. NOTES.txt warns while
+any is listed. `audience` is not checked: its default is a plausible real value.
 */}}
 {{- define "dscConsentManager.placeholdersInUse" -}}
 {{- $inUse := list }}
-{{- if eq .Values.identityProviders.primary.issuer (include "dscConsentManager.placeholderIssuer" .) }}
-{{- $inUse = append $inUse "identityProviders.primary.*" }}
+{{- $primary := .Values.identityProviders.primary }}
+{{- if eq $primary.issuer (include "dscConsentManager.placeholderIssuer" .) }}
+{{- $inUse = append $inUse "identityProviders.primary.issuer" }}
+{{- end }}
+{{- if eq $primary.discoveryUrl (include "dscConsentManager.placeholderDiscoveryUrl" .) }}
+{{- $inUse = append $inUse "identityProviders.primary.discoveryUrl" }}
 {{- end }}
 {{- if eq .Values.config.database.url (include "dscConsentManager.placeholderDatabaseUrl" .) }}
 {{- $inUse = append $inUse "config.database.url" }}
