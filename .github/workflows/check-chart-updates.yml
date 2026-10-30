@@ -20,6 +20,7 @@ jobs:
           - contract-management
           - credentials-config-service
           - did-helper
+          - dsc-consent-manager
           - dss-validation-service
           - fdsc-edc
           - odrl-pap

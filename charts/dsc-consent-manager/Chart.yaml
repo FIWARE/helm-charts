@@ -1,0 +1,25 @@
+apiVersion: v2
+name: dsc-consent-manager
+version: 0.1.0
+appVersion: "0.0.1"
+kubeVersion: '>= 1.19-0'
+description: A Helm chart for running the dsc-consent-manager, consent lifecycle management as a stateless OAuth2 resource server, on kubernetes.
+icon: https://fiware.github.io/catalogue/img/fiware.png
+keywords:
+  - FIWARE
+  - consent-manager
+  - Consent
+  - DSBA
+home: https://github.com/wistefan/dsc-consent-manager
+sources:
+  - https://github.com/wistefan/dsc-consent-manager
+maintainers:
+  - name: wistefan
+    email: stefan.wiedemann@seamware.com
+# The `common` library chart ships every shared helper (names, labels,
+# service-account resolution, existing-secret resolution, and the
+# service/ingress/route/HPA/serviceaccount bodies). See charts/common/README.md.
+dependencies:
+  - name: common
+    repository: "https://fiware.github.io/helm-charts"
+    version: "0.1.2"

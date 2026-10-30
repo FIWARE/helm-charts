@@ -77,6 +77,16 @@ helm template charts/<chart> | kubeconform -strict -ignore-missing-schemas
 - ServiceAccount created only when `.Values.serviceAccount.create` is true.
 - `Chart.yaml` annotation `charts.openshift.io/name` is used where charts ship an
   OpenShift route.
+- Migrated charts depend on `common` (`version: "0.1.2"`, repo
+  `https://fiware.github.io/helm-charts`). Its helpers are prefixed `fiwareCommon.*`
+  (`names.{name,fullname,chart}`, `labels.{standard,matchLabels}`, `serviceAccount.{name,tpl}`,
+  `secrets.name`, `images.{image,pullPolicy,pullSecrets}`, `service.tpl` (multi-port,
+  `nameOverride`), `ingress.tpl`, `route.tpl`, `hpa.tpl` (takes a `metrics` list),
+  `secret.tpl`). Chart `_helpers.tpl` keeps thin `<chart>.*` wrappers over them; standard
+  templates are a single `include` each. Reference: `charts/consent-manager/templates/`.
+- Doc-comment density: one `{{/* ... */}}` block above each `define` in `_helpers.tpl`
+  (1-6 lines); templates themselves are mostly uncommented. `values.yaml` uses helm-docs
+  `# --` one-liners per key, sometimes with a `# ref:` line.
 
 ## Pod Scheduling Fields
 - Scheduling fields live in each workload template's podSpec, never in the `common` library
