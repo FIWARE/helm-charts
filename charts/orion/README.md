@@ -1,8 +1,8 @@
 # orion
 
-![Version: 1.7.0](https://img.shields.io/badge/Version-1.7.0-informational?style=flat-square) ![AppVersion: 1.0.1](https://img.shields.io/badge/AppVersion-1.0.1-informational?style=flat-square)
+![Version: 1.8.0](https://img.shields.io/badge/Version-1.8.0-informational?style=flat-square) ![AppVersion: 1.12.0](https://img.shields.io/badge/AppVersion-1.12.0-informational?style=flat-square)
 
-A Helm chart for running the fiware orion-ld context broker on kubernetes.
+A Helm chart for running the fiware orion-ld (NGSI-LD) or orion (NGSIv2) context broker on kubernetes.
 
 **Homepage:** <https://github.com/FIWARE/context.Orion-LD>
 
@@ -18,7 +18,7 @@ A Helm chart for running the fiware orion-ld context broker on kubernetes.
 
 ## Requirements
 
-Kubernetes: `>= 1.19-0`
+Kubernetes: `>= 1.23-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -28,15 +28,16 @@ Kubernetes: `>= 1.19-0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| autoscaling.apiVersion | string | `"v2beta2"` | version of the autoscaling API |
+| autoscaling.apiVersion | string | `"v2"` | version of the autoscaling API |
 | autoscaling.enabled | bool | `false` | should autoscaling be enabled for the context broker |
 | autoscaling.maxReplicas | int | `10` | maximum number of running pods |
 | autoscaling.metrics | list | `[]` | metrics to react on |
 | autoscaling.minReplicas | int | `1` | minimum number of running pods |
 | broker.cachedContextFolder | string | `"/opt/orion/ldcontexts"` |  |
-| broker.db.hosts | list | `[]` | configuration of the mongo-db hosts. if multiple hosts are inserted, its assumed that mongo is running as a replica set |
+| broker.db.hosts | list | `[]` | configuration of the mongo-db hosts. if multiple hosts are inserted, its assumed that mongo is running as a replica set. Not supported by Orion >= 4.0.0, use `uri` instead. |
 | broker.db.mongocOnly | bool | `true` | enable experimental implementation + turn off mongo legacy driver |
 | broker.db.name | string | `"orion"` | the db to use. if running in multiservice mode, its used as a prefix. |
+| broker.db.uri | string | `""` | configuration of the mongo-db hosts. if multiple hosts are inserted, its assumed that mongo is running as a replica set Not supported by Orion-LD. With `envPrefix: ORION_` and the embedded MongoDB (`mongo.enabled`) the URI is generated, which requires Orion >= 3.12.0. ref: https://github.com/telefonicaid/fiware-orion/blob/master/doc/manuals/admin/database_admin.md#database-authorization |
 | broker.envPrefix | string | `"ORIONLD_"` | Prefix to be used for env-vars in orion. Must be ORION_ for orion and ORIONLD_ for orion-ld |
 | broker.ipv4enabled | bool | `false` | set to true if only ipv4 should be used, do not set both options to true |
 | broker.ipv6enabled | bool | `false` | set to true if only ipv6 should be used, do not set both options to true |
@@ -55,15 +56,20 @@ Kubernetes: `>= 1.19-0`
 | deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |
+| deployment.annotations | object | `{}` | additional annotations for the Deployment resource, if required |
+| deployment.extraEnv | list | `[]` | additional environment variables for the broker container, e.g. for options not covered by the chart |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
-| deployment.image.repository | string | `"quay.io/fiware/orion-ld"` | orion image name ref: https://hub.docker.com/r/fiware/orion/ ref: https://quay.io/repository/fiware/orion-ld |
-| deployment.image.tag | string | `"1.10.0"` | tag of the image to be used |
+| deployment.image.repository | string | `"quay.io/fiware/orion-ld"` | orion image name ref: https://hub.docker.com/r/fiware/orion/ ref: https://quay.io/repository/fiware/orion-ld For Orion (NGSIv2) use `telefonicaiot/fiware-orion` together with `broker.envPrefix: ORION_` |
+| deployment.image.tag | string | `"1.12.0"` | tag of the image to be used |
 | deployment.livenessProbe.failureThreshold | int | `3` |  |
 | deployment.livenessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.livenessProbe.periodSeconds | int | `10` |  |
 | deployment.livenessProbe.successThreshold | int | `1` |  |
 | deployment.livenessProbe.timeoutSeconds | int | `30` |  |
 | deployment.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| deployment.podDisruptionBudget.enabled | bool | `false` | should a pod disruption budget be created |
+| deployment.podDisruptionBudget.maxUnavailable | int | `1` | maximum number of unavailable pods |
+| deployment.podDisruptionBudget.minAvailable | string | `nil` | minimum number of available pods, takes precedence over maxUnavailable |
 | deployment.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | deployment.readinessProbe.failureThreshold | int | `3` |  |
 | deployment.readinessProbe.initialDelaySeconds | int | `30` |  |
@@ -74,7 +80,7 @@ Kubernetes: `>= 1.19-0`
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | deployment.sidecars | list | `[]` | additional sidepods for the deployment, if required |
 | deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
-| deployment.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
+| deployment.topologySpreadConstraints | list | `[]` | topology spread constraints of the broker pods, without `labelSelector` the pods of this release are selected ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
 | deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
@@ -89,12 +95,14 @@ Kubernetes: `>= 1.19-0`
 | initData.entities | list | `[]` | Array of entities to be created |
 | initData.hook | string | `"post-install,post-upgrade"` | Annotation value for the Hook |
 | initData.hookDeletePolicy | string | `"before-hook-creation"` | Annotation value for the Hook hook-delete-policy. hook-succeeded removes the job on success, leaving it (and its pods) in case of error for perusal hookDeletePolicy: before-hook-creation, hook-succeeded |
+| initData.image.repository | string | `"docker.io/curlimages/curl"` | init data image name |
+| initData.image.tag | string | `"8.22.0"` | init data image tag |
 | initData.initEnabled | bool | `false` | should the creation of initial entities be enabled |
 | initData.numberDeploymentTries | int | `20` |  |
 | mongo.enabled | bool | `true` | should mongodb be enabled |
 | mongo.image.pullPolicy | string | `"IfNotPresent"` | pull policy to be used for mongo |
-| mongo.image.repository | string | `"quay.io/opencloudio/ibm-mongodb"` | mongo image name |
-| mongo.image.tag | string | `"4.0.24"` | version of mongo |
+| mongo.image.repository | string | `"docker.io/mongo"` | mongo image name |
+| mongo.image.tag | string | `"8.0.32"` | version of mongo, Orion-LD requires `broker.db.mongocOnly` for MongoDB > 5.x |
 | mongo.port | int | `27017` | port to make mongo accessible at |
 | nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | route.annotations | object | `{}` | annotations to be added to the route |
@@ -106,6 +114,8 @@ Kubernetes: `>= 1.19-0`
 | serviceAccount | object | `{"create":false}` | if a orion specific service account should be used, it can be configured here ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | serviceAccount.create | bool | `false` | specifies if the account should be created |
 | test.enabled | bool | `true` | should the test be enabled? |
+| test.image.repository | string | `"docker.io/curlimages/curl"` | test image name |
+| test.image.tag | string | `"8.22.0"` | test image tag |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)

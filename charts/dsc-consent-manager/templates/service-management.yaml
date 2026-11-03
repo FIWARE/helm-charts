@@ -1,0 +1,19 @@
+# Always ClusterIP: metrics on this port need no token, so it must stay inside the cluster.
+# Inline rather than fiwareCommon.service.tpl, whose nameOverride is not applied in common 0.1.2.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dscConsentManager.managementServiceName" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "dscConsentManager.labels" . | nindent 4 }}
+    {{- include "dscConsentManager.managementComponentLabel" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: management
+      port: {{ .Values.managementService.port }}
+      targetPort: management
+      protocol: TCP
+  selector:
+    {{- include "dscConsentManager.selectorLabels" . | nindent 4 }}

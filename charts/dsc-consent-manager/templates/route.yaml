@@ -1,0 +1,3 @@
+{{- include "fiwareCommon.route.tpl" (dict
+      "context" $
+      "route"   .Values.route) }}
