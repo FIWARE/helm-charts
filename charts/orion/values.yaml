@@ -43,23 +43,23 @@ deployment:
     # -- orion image name
     # ref: https://hub.docker.com/r/fiware/orion/
     # ref: https://quay.io/repository/fiware/orion-ld
+    # For Orion (NGSIv2) use `telefonicaiot/fiware-orion` together with `broker.envPrefix: ORION_`
     repository: quay.io/fiware/orion-ld
-    #repository: fiware/orion
+    #repository: telefonicaiot/fiware-orion
     # -- tag of the image to be used
-    tag: 1.10.0
+    tag: 1.12.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
   # -- additional labels for the deployment, if required
   additionalLabels: {}
   # -- additional annotations for the deployment, if required
   additionalAnnotations: {}
+  # -- additional annotations for the Deployment resource, if required
+  annotations: {}
   # -- priority class to be assigned to the pods
   # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
   priorityClassName: ""
-  # -- topology spread constraints template
-  # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
-  topologySpreadConstraints: []
-  # -- orion resource requests and limits, we leave the default empty to make that a concious choice by the user.
+  # -- orion resource requests and limits, we leave the default empty to make that a conscious choice by the user.
   # for the autoscaling to make sense, you should configure this.
   # resources:
     # limits:
@@ -95,13 +95,31 @@ deployment:
   sidecars: []
   # -- additional volumes for the deployment, if required
   volumes: []
+  # -- additional environment variables for the broker container, e.g. for options not covered by the chart
+  extraEnv: []
+  # - name: ORION_MQTT_MAX_AGE
+  #   value: "60"
+  # -- topology spread constraints of the broker pods, without `labelSelector` the pods of this release are selected
+  # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+  topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/hostname
+  #   whenUnsatisfiable: ScheduleAnyway
+  ## pod disruption budget of the broker pods
+  podDisruptionBudget:
+    # -- should a pod disruption budget be created
+    enabled: false
+    # -- minimum number of available pods, takes precedence over maxUnavailable
+    minAvailable:
+    # -- maximum number of unavailable pods
+    maxUnavailable: 1
 
 ## pod autoscaling configuration, use for automatic scaling of the broker pods
 autoscaling:
   # -- should autoscaling be enabled for the context broker
   enabled: false
   # -- version of the autoscaling API
-  apiVersion: "v2beta2"
+  apiVersion: "v2"
   # -- minimum number of running pods
   minReplicas: 1
   # -- maximum number of running pods
@@ -109,7 +127,7 @@ autoscaling:
   # -- metrics to react on
   metrics: []
   # -- List of MetricSpecs to decide whether to scale
-  # See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#metricspec-v2beta2-autoscaling
+  # See https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/horizontal-pod-autoscaler-v2/
   # scaler targets to hold average cpu around 80%
   #- type: Resource
   #  resource:
@@ -193,7 +211,7 @@ broker:
   # httpTimeout: 5
   ## the timeout in seconds for REST connection
   # reqTimeout: 0
-  ## cross-Origin Resource Sharing, specifing the allowed origin (use __ALL for *).
+  ## cross-Origin Resource Sharing, specifying the allowed origin (use __ALL for *).
   ## ref: https://fiware-orion.readthedocs.io/en/master/user/cors/index.html
   # corsOrigin:
   ## maximum time (in seconds) preflight requests are allowed to be cached
@@ -223,7 +241,7 @@ broker:
   ## enables flow control mechanism
   ## ref: https://fiware-orion.readthedocs.io/en/master/admin/perf_tuning/index.html#updates-flow-control-mechanism
   # notificationFlowControl:
-  ## notifications are not sent, but recorded internally and shown in the statistics operation. only for debbuging
+  ## notifications are not sent, but recorded internally and shown in the statistics operation. only for debugging
   # simulatedNotification: false
   ## disabled NGSIv2 custom notifications
   # disableCustomNotifications:
@@ -247,7 +265,7 @@ broker:
     # summaryPeriod: 0
     ## to see every possible alarm-provoking failure in the log-file, even when an alarm is already active
     # relogAlarms: false
-    ## to make the traces to standard out formated for humans
+    ## to make the traces to standard out formatted for humans
     # forHumans: false
     ## log line maximum length
     # lineMaxSize: 
@@ -257,6 +275,16 @@ broker:
   ## database configuration
   db:
     # -- configuration of the mongo-db hosts. if multiple hosts are inserted, its assumed that mongo is running as a replica set
+    # Not supported by Orion-LD. With `envPrefix: ORION_` and the embedded MongoDB (`mongo.enabled`) the URI is generated, which requires Orion >= 3.12.0.
+    # ref: https://github.com/telefonicaid/fiware-orion/blob/master/doc/manuals/admin/database_admin.md#database-authorization
+    uri: ""
+    # uri: "mongodb://orion:${PWD}@mongodb-0.mongodb,mongodb-1.mongodb,mongodb-2.mongodb/admin?replicaSet=rs0"
+    # -- existing secret containing the database password, alternative to `auth.password`
+    # existingSecret:
+    #   name: orion-db
+    #   key: password
+    # -- configuration of the mongo-db hosts. if multiple hosts are inserted, its assumed that mongo is running as a replica set.
+    # Not supported by Orion >= 4.0.0, use `uri` instead.
     hosts: []
     # - mongodb
     # -- the db to use. if running in multiservice mode, its used as a prefix.
@@ -275,7 +303,8 @@ broker:
     #replicaSetEnabled: false
     # -- name of the replicaset
     #replicaSet: rs0
-    # -- enable SSL in the connection to MongoDB. needs to correspond with the mongoDB setting
+    # -- enable SSL in the connection to MongoDB. needs to correspond with the mongoDB setting.
+    # Only supported by Orion < 4.0.0 (use `tls=true` in `uri` instead), Orion-LD supports it since 1.1.0 (https://github.com/FIWARE/context.Orion-LD/pull/1156)
     # sslEnabled: true
     # -- specifies the timeout in milliseconds for connections to the replica set
     # timeout: 
@@ -311,9 +340,9 @@ mongo:
     # -- pull policy to be used for mongo
     pullPolicy: IfNotPresent
     # -- mongo image name
-    repository: quay.io/opencloudio/ibm-mongodb
-    # -- version of mongo
-    tag: 4.0.24
+    repository: docker.io/mongo
+    # -- version of mongo, Orion-LD requires `broker.db.mongocOnly` for MongoDB > 5.x
+    tag: 8.0.32
   # -- port to make mongo accessible at
   port: 27017
 
@@ -321,6 +350,12 @@ mongo:
 test:
   # -- should the test be enabled?
   enabled: true
+  ## image to be used for the test
+  image:
+    # -- test image name
+    repository: docker.io/curlimages/curl
+    # -- test image tag
+    tag: 8.22.0
 
 ## Configuration for the creation of initial entities
 initData:
@@ -334,6 +369,12 @@ initData:
   hookDeletePolicy: before-hook-creation
   # -- Number of retries before considering a Job as failed
   backoffLimit: 1
+  ## image to be used for the creation of the initial entities, requires curl and sh
+  image:
+    # -- init data image name
+    repository: docker.io/curlimages/curl
+    # -- init data image tag
+    tag: 8.22.0
   # initData.numberDeploymentTries customizes the number of tries before deployment of initial data fails.
   # This solves the issue in low resourced k8s environments that some pods can take some time to be fully deployed
   numberDeploymentTries: 20

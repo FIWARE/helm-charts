@@ -77,6 +77,16 @@ helm template charts/<chart> | kubeconform -strict -ignore-missing-schemas
 - ServiceAccount created only when `.Values.serviceAccount.create` is true.
 - `Chart.yaml` annotation `charts.openshift.io/name` is used where charts ship an
   OpenShift route.
+- Migrated charts depend on `common` (`version: "0.1.2"`, repo
+  `https://fiware.github.io/helm-charts`). Its helpers are prefixed `fiwareCommon.*`
+  (`names.{name,fullname,chart}`, `labels.{standard,matchLabels}`, `serviceAccount.{name,tpl}`,
+  `secrets.name`, `images.{image,pullPolicy,pullSecrets}`, `service.tpl` (multi-port,
+  `nameOverride`), `ingress.tpl`, `route.tpl`, `hpa.tpl` (takes a `metrics` list),
+  `secret.tpl`). Chart `_helpers.tpl` keeps thin `<chart>.*` wrappers over them; standard
+  templates are a single `include` each. Reference: `charts/consent-manager/templates/`.
+- Doc-comment density: one `{{/* ... */}}` block above each `define` in `_helpers.tpl`
+  (1-6 lines); templates themselves are mostly uncommented. `values.yaml` uses helm-docs
+  `# --` one-liners per key, sometimes with a `# ref:` line.
 
 ## Pod Scheduling Fields
 - Scheduling fields live in each workload template's podSpec, never in the `common` library
@@ -130,14 +140,19 @@ helm template charts/<chart> | kubeconform -strict -ignore-missing-schemas
   `kubeVersion: '>= 1.19-0'` (14 charts) or nothing, so it needs no version gate.
 
 ## CI/CD Workflows
-- `.github/workflows/deploy.yml` — publishes charts to GitHub Pages via
-  `helm/chart-releaser-action@v1.5.0` on push to `main`
-- `.github/workflows/check.yml` — PR checks: lint, eval (kubeconform), common-tests,
-  label check, version bump, helm-docs generation
-- `.github/workflows/check-labels.yml` — enforces `major`/`minor`/`patch` label on PRs
+Version bump and publishing use the reusable workflows of
+[FIWARE/github-workflows](https://github.com/FIWARE/github-workflows).
+- `.github/workflows/check.yml` — PR checks: lint, eval (kubeconform), common-tests, then
+  `chart-version` (`chart-pr.yml`): requires the `major`/`minor`/`patch` label, bumps every
+  changed chart from its version on `main` and regenerates its README with helm-docs
+- `.github/workflows/release.yml` — on push to `main` (`chart-release.yml`): fails if a
+  changed chart has no new version, then publishes to GitHub Pages (chart-releaser) and to
+  `oci://quay.io/fiware/helm-charts`
 - `.github/workflows/check-chart-updates.yml` — weekly cron checking upstream releases
-- `.github/actions/bump-chart-version/` — composite action for semver bumping
-- Helm version pinned in CI: `4.0.4` (env var `HELM_VERSION` in `check.yml`)
+  and opening appVersion PRs (charts listed in its matrix)
+- `.github/actions/bump-chart-version/` — composite action the appVersion bot bumps with
+- Helm version pinned in CI: `4.0.4` (env var `HELM_VERSION` in `check.yml`,
+  `helm-version` in `release.yml`)
 
 ## Important Files
 - `charts/orion/templates/_helpers.tpl` — canonical helper pattern
@@ -147,8 +162,7 @@ helm template charts/<chart> | kubeconform -strict -ignore-missing-schemas
   deployments/services/HPAs (good test case for helpers that take a component name)
 - `charts/common/` — library chart (`type: library`) used as dependency by all charts
 - `build.sh`, `lint.sh`, `eval.sh` — CI entry points, must keep passing after changes
-- `.github/workflows/deploy.yml` — GitHub Pages chart publishing (must not be modified
-  when adding OCI publishing)
+- `.github/workflows/release.yml` — chart publishing (GitHub Pages and OCI)
 - `.github/workflows/check.yml` — PR validation workflow
 
 ## In-flight: scheduling fields PR
@@ -164,11 +178,11 @@ Per chart: add both keys next to the existing `nodeSelector` in `values.yaml`, u
 helm-docs `# --` comment style of its neighbours, and insert the rendered fields next to the
 `nodeSelector` block in each workload template.
 
-Do NOT bump `Chart.yaml` by hand and do NOT run helm-docs by hand. The `prepare-release`
+Do NOT bump `Chart.yaml` by hand and do NOT run helm-docs by hand. The `chart-version`
 job in `check.yml` collects every chart touched under `charts/`, bumps each one by the PR's
-semver label via `.github/actions/bump-chart-version`, regenerates the READMEs and pushes a
-commit named "Update helm documentation" back onto the PR branch. It skips itself when a
-commit with that name is already in the PR range, so a manual bump would be applied twice.
+semver label from its version on `main`, regenerates their READMEs and pushes the result
+back onto the PR branch. A version already at the expected value is kept, so a manual bump
+is not applied twice.
 
 ```yaml
   # -- priority class to be assigned to the pods
@@ -215,5 +229,5 @@ Checks before opening:
 - [x] Renders when set: `helm template charts/vcverifier --set deployment.priorityClassName=x`
       (`tm-forum-api` needs `--set defaultConfig.priorityClassName=x --set allInOne.enabled=true`)
 - [x] `./lint.sh` and `./eval.sh` pass
-- [x] Leave `Chart.yaml` versions and `README.md` to the `prepare-release` job
+- [x] Leave `Chart.yaml` versions and `README.md` to the `chart-version` job
 - [ ] Warn the maintainer: this releases ~29 charts at once, no precedent in the repo

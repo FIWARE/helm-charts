@@ -1,0 +1,7 @@
+{{- $scaling := .Values.autoscaling }}
+{{- if and $scaling.enabled (gt (int $scaling.minReplicas) (int $scaling.maxReplicas)) }}
+{{- fail (printf "autoscaling.minReplicas (%d) exceeds autoscaling.maxReplicas (%d)" (int $scaling.minReplicas) (int $scaling.maxReplicas)) }}
+{{- end }}
+{{- include "fiwareCommon.hpa.tpl" (dict
+      "context"     $
+      "autoscaling" $scaling) }}
