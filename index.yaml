@@ -13813,6 +13813,31 @@ entries:
     version: 0.0.1
   trusted-issuers-list:
   - apiVersion: v2
+    appVersion: 0.10.3
+    created: "2026-11-03T08:12:09.673667838Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the trusted-issuers-list on kubernetes.
+    digest: e058b28a71beda645146d5c310bf64c10afba80842798acca75c260997b3118a
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - trusted-issuers-list
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: trusted-issuers-list
+    sources:
+    - https://github.com/fiware/trusted-issuers-list
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-list-0.19.2/trusted-issuers-list-0.19.2.tgz
+    version: 0.19.2
+  - apiVersion: v2
     appVersion: 0.10.0
     created: "2026-10-15T08:30:46.782324601Z"
     dependencies:
@@ -16368,4 +16393,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-10-30T13:33:16.816623253Z"
+generated: "2026-11-03T08:12:09.675220532Z"
