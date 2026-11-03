@@ -1,0 +1,358 @@
+## Default values for coraine.
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+##
+## Coraine (https://github.com/SEAMWARE/coraine) is a lightweight NGSI-LD
+## context broker configured entirely through CLI flags (there is no
+## env-var based configuration in the broker itself). This chart turns
+## every upstream flag into a `values.yaml` toggle and builds the
+## container `args:` list from it.
+
+# -- option to override the name config in the _helpers.tpl
+nameOverride: ""
+# -- option to override the fullname config in the _helpers.tpl
+fullnameOverride: ""
+
+image:
+  # -- coraine image name
+  # ref: https://quay.io/repository/seamware/coraine
+  repository: quay.io/seamware/coraine
+  # -- tag of the image to be used, defaults to the chart's appVersion ("latest") when empty.
+  # Coraine ships no semver releases upstream (only `latest` or a git-sha tag) -- pin a
+  # git-sha tag here for reproducible deployments.
+  tag: ""
+  # -- specification of the image pull policy
+  pullPolicy: IfNotPresent
+
+# -- secrets to use for pulling the (private) coraine image
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+imagePullSecrets: []
+
+# -- if a coraine specific service account should be used, it can be configured here
+serviceAccount:
+  # -- specifies if the account should be created
+  create: false
+  # -- name of the service account to use, defaults to the fullname template when create is true
+  name: ""
+  # -- additional annotations for the service account
+  annotations: {}
+
+# -- number of coraine replicas. Only combine with `ha.enabled` when running against a
+# shared MongoDB replica set -- otherwise each replica has its own inconsistent state.
+replicaCount: 1
+
+# -- additional labels for the pod
+podLabels: {}
+# -- additional annotations for the pod
+podAnnotations: {}
+
+# -- pod-level security context
+podSecurityContext: {}
+  # fsGroup: 2000
+
+# -- container-level security context
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+# -- resource requests/limits for the coraine container. Left empty so that setting them
+# (e.g. for autoscaling) is a conscious choice by the user.
+resources: {}
+  # limits:
+  #   cpu: 500m
+  #   memory: 256Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+## liveness/readiness probes. `/ngsi-ld/v1/types` needs no parameters or request body and,
+## with the mongoc backend, round-trips to the database -- so it doubles as a DB-reachability
+## check (matches the Dockerfile's own HEALTHCHECK).
+livenessProbe:
+  httpGet:
+    path: /ngsi-ld/v1/types
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+readinessProbe:
+  httpGet:
+    path: /ngsi-ld/v1/types
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
+
+## configuration for the k8s service in front of coraine
+service:
+  # -- service type
+  type: ClusterIP
+  # -- port to be used by the service
+  port: 1026
+  # -- additional annotations, if required
+  annotations: {}
+
+## ingress configuration. Disabled by default -- when enabling it, only route the NGSI-LD
+## API paths you actually want to be public (e.g. `/ngsi-ld`). Do NOT add `/` or `/admin` to
+## `hosts[].paths` unless you mean to expose coraine's ops/admin API to the internet; use
+## `exposeAdminPaths` below instead, which makes that an explicit, auditable opt-in.
+ingress:
+  # -- should there be an ingress to connect coraine with the public internet
+  enabled: false
+  # -- ingress class to use
+  className: ""
+  # -- annotations to be added to the ingress
+  annotations: {}
+    # kubernetes.io/tls-acme: "true"
+  # -- all hosts to be provided
+  hosts: []
+    # - host: coraine.example.org
+    #   paths:
+    #   - /ngsi-ld
+  # -- configure the ingress' tls
+  tls: []
+    # - secretName: coraine-tls
+    #   hosts:
+    #     - coraine.example.org
+  # -- ADVANCED / SECURITY-SENSITIVE: also route `/admin` and `/metrics` through this
+  # ingress, for every host in `hosts` above. These paths let a caller read tenant names,
+  # broker version/plugin info and mutate log verbosity at runtime (see coraine's admin
+  # plugin docs) -- keep this false unless the ingress itself is otherwise access-controlled
+  # (auth annotations, allow-list, mTLS, ...).
+  exposeAdminPaths: false
+
+## openshift specific route definition. Will not work on plain k8s. Same admin-path caveat
+## as `ingress.exposeAdminPaths` applies -- a Route has no path-based exposure control here,
+## so only enable this once `apiPlugins.admin.enabled` is false or the route is otherwise
+## access-controlled.
+route:
+  # -- should the deployment create an openshift route
+  enabled: false
+  # -- annotations to be added to the route
+  annotations: {}
+  # -- host to be used
+  # host: coraine.example.org
+  # -- tls configuration for the route
+  tls: {}
+    # termination: edge
+
+## pod autoscaling configuration
+autoscaling:
+  # -- should autoscaling be enabled for coraine
+  enabled: false
+  # -- apiVersion of the HorizontalPodAutoscaler resource
+  apiVersion: "v2"
+  # -- minimum number of running pods
+  minReplicas: 1
+  # -- maximum number of running pods
+  maxReplicas: 10
+  # -- list of MetricSpecs to decide whether to scale
+  metrics: []
+    # - type: Resource
+    #   resource:
+    #     name: cpu
+    #     target:
+    #       type: Utilization
+    #       averageUtilization: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+## general broker/server configuration (coraine core CLI flags)
+config:
+  # -- port coraine listens on (also used as the container port and default probe port)
+  port: 1026
+  # -- indent JSON responses (--pretty-print)
+  prettyPrint: false
+  # -- libmicrohttpd connection pool size (--connectionPoolSize)
+  connectionPoolSize: 32
+  # -- maximum accepted request body size in MiB, 0 = uncapped (--maxRequestSize)
+  maxRequestSize: 2
+  # -- default @context URL to use when a request supplies none (--defaultUserContext)
+  defaultUserContext: ""
+  # -- trace level string, e.g. "1-10" (--traceLevels)
+  traceLevels: ""
+  # -- suppress notifications whose payload did not actually change (--notifyValueChangeOnly)
+  notifyValueChangeOnly: false
+  # -- use nanosecond (9-digit) timestamps instead of microsecond (6-digit) ones (--high-precision)
+  highPrecision: false
+  # -- run snapshot queries in a background thread (--asyncSnapshot)
+  asyncSnapshot: false
+  # -- seconds between periodic subscription-stats flushes, 0 = disabled (--subStatsFlushInterval)
+  subStatsFlushInterval: 60
+  # -- HTTP client timeout in ms for distributed ops / notifications / context downloads (--distOpTimeout)
+  distOpTimeout: 5000
+  # -- default endpoint cooldown in ms after a failed notify/forward (--cooldownMillis)
+  cooldownMillis: 30000
+  # -- accept self-signed TLS certs on outbound notifications/forwards (--insecureNotif)
+  insecureNotif: false
+  cors:
+    # -- enable CORS by setting an allowed origin (--corsOrigin). Use "__ALL" to allow any origin.
+    enabled: false
+    # -- allowed origin, or "__ALL" for any origin
+    origin: "__ALL"
+    # -- seconds a CORS preflight response may be cached (--corsMaxAge)
+    maxAge: 86400
+
+## distributed operations ("federation" across registered Context Sources). Off by default --
+## registrations are always stored/discoverable, nothing forwards without `enabled: true`.
+distributed:
+  # -- enable forwarding requests to registered Context Sources (--distributed)
+  enabled: false
+  # -- this broker's externally-reachable base URL, embedded in Link headers/callbacks
+  # (--httpEndpoint). Leave empty to fall back to coraine's own auto-detection (which picks a
+  # pod-internal address and is almost never what you want in kubernetes) -- set it explicitly,
+  # e.g. "http://<release>-coraine.<namespace>.svc.cluster.local:1026" or your public ingress URL.
+  httpEndpoint: ""
+  # -- identity used for federation loop detection, derived from httpEndpoint when empty (--csourceAlias)
+  csourceAlias: ""
+  # -- disable splitting a single entity's attributes across multiple sources (--noSplitEntities)
+  noSplitEntities: false
+  # -- render a custom JSON document at /ngsi-ld/v1/info/sourceIdentity (--contextSourceExtras)
+  contextSourceExtras:
+    # -- if true, render `content` below into a ConfigMap and pass it via --contextSourceExtras.
+    # Leave false to use the image's built-in file (git sha / version / build time).
+    enabled: false
+    # -- arbitrary JSON content rendered verbatim at /ngsi-ld/v1/info/sourceIdentity
+    content: {}
+
+## database backend (--database). "mongoc" is the default and requires an external MongoDB;
+## "corRamDB" is a zero-dependency, non-persistent in-memory store useful for a quickstart/dev
+## deployment.
+database:
+  # -- database plugin to load: "mongo" (alias for "mongoc") or "memory" (alias for "corRamDB").
+  # The upstream plugin names "mongoc"/"corRamDB" also work directly; any other value is
+  # rejected -- see the note on dynamic plugin loading above.
+  type: mongo
+  mongoc:
+    # -- mongo host (--dbHost)
+    host: mongodb
+    # -- mongo port (--dbPort)
+    port: 27017
+    # -- mongo database name (--dbName)
+    name: cor
+    # -- reserved mongo database for global/non-tenant state, e.g. cached JSON-LD contexts (--globalDb)
+    globalDb: coraine
+    # -- mongo connection timeout in seconds (--dbTimeout)
+    timeout: 30
+    auth:
+      # -- enable mongo authentication (--dbUser / --dbPwd)
+      enabled: false
+      # -- mongo username (--dbUser)
+      user: ""
+      # -- mongo password (--dbPwd), ignored when existingSecret is set. Passed to coraine via an
+      # env var + `$(...)` substitution so it is not baked in plaintext into the pod's args spec --
+      # note this is still visible in `ps`/`/proc` inside the container, coraine has no other way
+      # to receive it.
+      password: ""
+      # -- reference an existing secret instead of `password` above.
+      # existingSecret:
+      #   name: coraine-db-credentials
+      #   key: dbPassword
+      existingSecret: {}
+    uri:
+      # -- use a full mongo connection URI instead of host/port/user/pwd (--dbURI). Overrides all
+      # other mongoc.* settings above when enabled.
+      enabled: false
+      # -- the connection URI, ignored when existingSecret is set
+      value: ""
+      # -- reference an existing secret instead of `value` above.
+      # existingSecret:
+      #   name: coraine-db-credentials
+      #   key: dbURI
+      existingSecret: {}
+
+## temporal history / TRoE (--troe). "none" disables it; "ramdb" is in-memory/dev-only;
+## "timescale" persists to an external TimescaleDB/postgres instance.
+troe:
+  # -- temporal history plugin to load: "none", "ramdb" or "timescale"
+  type: none
+  timescale:
+    # -- timescale/postgres host (--troeHost)
+    host: timescaledb
+    # -- timescale/postgres port (--troePort)
+    port: 5432
+    # -- timescale/postgres database name (--troeName)
+    name: corh
+    # -- timescale/postgres user (--troeUser)
+    user: postgres
+    # -- timescale/postgres password (--troePwd), ignored when existingSecret is set. Same
+    # `$(...)` env-var substitution caveat as database.mongoc.auth.password applies.
+    password: ""
+    # -- reference an existing secret instead of `password` above.
+    # existingSecret:
+    #   name: coraine-troe-credentials
+    #   key: troePassword
+    existingSecret: {}
+    # -- connection pool size (--troePoolSize)
+    poolSize: 10
+    # -- max number of temporal instances kept in memory before eviction (--troeInstanceCap)
+    instanceCap: 1000000
+
+## high availability. Only "mongo" is implemented upstream today (syncs broker instance
+## caches across replicas via MongoDB change streams; requires database.type=mongoc against
+## a real replica set). Any other upstream value is explicitly rejected by coraine itself.
+ha:
+  # -- enable multi-replica cache sync via MongoDB change streams (--ha mongo)
+  enabled: false
+
+## API plugins (--apiPlugins). Only "admin" ships upstream today; it adds the ops/admin
+## endpoints (see ingress.exposeAdminPaths above for public-exposure control) plus the
+## /metrics and /admin/metrics Prometheus scrape endpoints.
+apiPlugins:
+  admin:
+    # -- load the admin/ops API plugin (--apiPlugins admin). Required for /metrics,
+    # /admin/tenants, /admin/plugins, /admin/log, etc. The k8s Service always exposes these
+    # cluster-internally when enabled; see `ingress.exposeAdminPaths` to also expose them
+    # externally.
+    enabled: true
+
+## prometheus scrape annotations for the pod. Requires apiPlugins.admin.enabled.
+metrics:
+  # -- add prometheus.io/scrape annotations to the pod (served at /metrics by the admin plugin)
+  enabled: false
+
+# -- additional environment variables to set on the coraine container
+# ref: https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
+extraEnvVars: []
+  # - name: SOME_VAR
+  #   value: "some-value"
+
+# -- name of an existing Secret to load as additional environment variables (envFrom)
+extraEnvVarsSecret: ""
+
+# -- extra command-line flags appended verbatim after the ones generated from `config`/
+# `database`/`troe`/etc above, for coraine options this chart does not (yet) model directly
+extraArgs: []
+  # - "--traceLevels"
+  # - "1-10"
+
+# -- additional volumes on the coraine pod
+extraVolumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+
+# -- additional volumeMounts on the coraine container
+extraVolumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+# -- additional Kubernetes manifests to render alongside this chart's own resources. Each
+# entry is rendered with `tpl`, so it may reference `.Release`, `.Values`, etc.
+extraManifests: []
+  # - apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: coraine-extra
+  #   data:
+  #     foo: bar
