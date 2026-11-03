@@ -1,0 +1,58 @@
+{{- $fullname := include "dscConsentManager.fullname" . -}}
+{{- $signingSecret := include "dscConsentManager.signingKeysSecretName" . -}}
+Consent Manager {{ .Chart.AppVersion }} is deployed as "{{ $fullname }}" in namespace "{{ .Release.Namespace }}".
+{{- with include "dscConsentManager.placeholdersInUse" . }}
+
+WARNING: placeholder defaults are still in use. The pods crash-loop until these are set for
+production (see the header of values.yaml):
+{{- range splitList "\n" . }}
+  - {{ . }}
+{{- end }}
+{{- end }}
+{{- if include "dscConsentManager.secretKeysFallback" . }}
+
+WARNING: secrets.logPseudonymKey or secrets.erasureVerificationSecret is empty, so the chart
+reuses the value of the live Secret or generates one. helm template, --dry-run, Argo CD and Flux
+cannot read the live Secret and generate a new value on every render, which breaks log pseudonym
+linkage and outstanding erasure verifications. Set both values or use secrets.existingSecret.
+{{- end }}
+
+1. Create the receipt signing-key Secret if it does not exist yet. The chart never creates it,
+   and the pods cannot start without it:
+
+     kubectl -n {{ .Release.Namespace }} create secret generic {{ $signingSecret }} \
+       --from-file={{ .Values.signingKeys.signingKeyFile }}=./signing-key.jwk
+{{- if .Values.signingKeys.retiredVerificationKeys.enabled }} \
+       --from-file={{ .Values.signingKeys.retiredVerificationKeysFile }}=./retired-verification-keys.jwks
+{{- end }}
+
+   Editing that Secret later does not roll the pods. Run
+     kubectl -n {{ .Release.Namespace }} rollout restart deployment/{{ $fullname }}
+
+2. Reach the API (controllers under {{ .Values.config.apiPrefix | default "/v1" }}; /.well-known/jwks.json at the root):
+{{- if .Values.ingress.enabled }}
+{{- range .Values.ingress.hosts }}
+{{- $host := .host }}
+{{- range .paths }}
+     http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host }}{{ . }}
+{{- end }}
+{{- end }}
+{{- else if .Values.route.enabled }}
+     oc -n {{ .Release.Namespace }} get route {{ $fullname }} -o jsonpath='{.spec.host}'
+{{- else if eq .Values.service.type "LoadBalancer" }}
+     kubectl -n {{ .Release.Namespace }} get service {{ $fullname }} -o jsonpath='{.status.loadBalancer.ingress[0]}'
+     then http://<that address>:{{ .Values.service.port }}
+{{- else if eq .Values.service.type "NodePort" }}
+     kubectl -n {{ .Release.Namespace }} get service {{ $fullname }} -o jsonpath='{.spec.ports[0].nodePort}'
+     then http://<node address>:<that port>
+{{- else }}
+     kubectl -n {{ .Release.Namespace }} port-forward service/{{ $fullname }} {{ .Values.service.port }}:{{ .Values.service.port }}
+     then http://localhost:{{ .Values.service.port }}
+{{- end }}
+
+3. Health and metrics are on the cluster-internal Service {{ include "dscConsentManager.managementServiceName" . }}
+   (port {{ .Values.managementService.port }}: /health/liveness, /health/readiness, /prometheus).
+   Metrics need no token there, so never expose that Service outside the cluster.
+{{- if .Values.serviceMonitor.enabled }}
+   A ServiceMonitor scrapes /prometheus every {{ .Values.serviceMonitor.interval }}.
+{{- end }}
