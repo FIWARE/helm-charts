@@ -3040,6 +3040,34 @@ entries:
     version: 0.1.1
   contract-management:
   - apiVersion: v2
+    appVersion: 3.5.3
+    created: "2026-11-13T07:07:08.023785878Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the contract-management on kubernetes.
+    digest: eab2672576f6a8a337db03315e06bd839b2196670f588b18f1eca15526d73761
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - contract-management
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: tim.smyth@fiware.org
+      name: pulledtim
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: contract-management
+    sources:
+    - https://github.com/fiware/contract-management
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/contract-management-3.6.5/contract-management-3.6.5.tgz
+    version: 3.6.5
+  - apiVersion: v2
     appVersion: 3.5.1
     created: "2026-11-10T09:04:02.467925884Z"
     dependencies:
@@ -16556,4 +16584,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-11-10T09:04:02.468618422Z"
+generated: "2026-11-13T07:07:08.024895786Z"
