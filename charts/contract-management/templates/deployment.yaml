@@ -1,3 +1,4 @@
+{{- $events := include "contract.dataspaceEvents.enabled" . }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,13 +26,18 @@ spec:
         {{- with .Values.deployment.additionalLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if .Values.deployment.additionalAnnotations }}
+      {{- if or .Values.deployment.additionalAnnotations $events }}
       annotations:
+        {{- if .Values.deployment.additionalAnnotations }}
         prometheus.io/scrape: {{ .Values.prometheus.enabled | quote }}
         prometheus.io/path: {{ .Values.prometheus.path }}
         prometheus.io/port: {{ .Values.prometheus.port | quote }}
         {{- with .Values.deployment.additionalAnnotations }}
         {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+        {{- if $events }}
+        checksum/dataspace-events-startup: {{ include "contract.dataspaceEvents.startupChecksum" . }}
         {{- end }}
       {{- end }}
     spec: 
@@ -81,7 +87,11 @@ spec:
             - name: ENDPOINTS_METRICS_ENABLED
               value: {{ .Values.prometheus.enabled | quote }}
             - name: MICRONAUT_CONFIG_FILES
+              {{- if $events }}
+              value: "/application.yaml,{{ include "contract.dataspaceEvents.mountPath" . }}/{{ include "contract.dataspaceEvents.fileName" . }}"
+              {{- else }}
               value: "/application.yaml"
+              {{- end }}
             {{- with .Values.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -89,6 +99,11 @@ spec:
             - name: application-yaml
               mountPath: /application.yaml
               subPath: application.yaml
+            {{- if $events }}
+            - name: dataspace-events
+              mountPath: {{ include "contract.dataspaceEvents.mountPath" . }}
+              readOnly: true
+            {{- end }}
             {{- if .Values.deployment.additionalVolumeMounts }}
             {{- with .Values.deployment.additionalVolumeMounts }}
             {{- toYaml . | nindent 12 }}
@@ -103,6 +118,11 @@ spec:
             items:
               - key: application.yaml
                 path: application.yaml
+        {{- if $events }}
+        - name: dataspace-events
+          configMap:
+            name: {{ include "contract.dataspaceEvents.configMapName" . }}
+        {{- end }}
         {{- if .Values.deployment.additionalVolumes }}
         {{- with .Values.deployment.additionalVolumes }}
         {{- toYaml . | nindent 8 }}
