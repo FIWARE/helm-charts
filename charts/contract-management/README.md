@@ -1,6 +1,6 @@
 # contract-management
 
-![Version: 3.6.5](https://img.shields.io/badge/Version-3.6.5-informational?style=flat-square) ![AppVersion: 3.5.3](https://img.shields.io/badge/AppVersion-3.5.3-informational?style=flat-square)
+![Version: 3.6.6](https://img.shields.io/badge/Version-3.6.6-informational?style=flat-square) ![AppVersion: 3.5.3](https://img.shields.io/badge/AppVersion-3.5.3-informational?style=flat-square)
 
 A Helm chart for running the contract-management on kubernetes.
 
@@ -34,6 +34,7 @@ Kubernetes: `>= 1.19-0`
 | autoscaling.minReplicas | int | `1` | minimum number of running pods |
 | basePath | string | `"/"` |  |
 | config | object | `{}` |  |
+| dataspace.events | object | `{}` | the `dataspace.events` property tree; every feature is off by default |
 | deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
 | deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | deployment.affinity | object | `{}` | affinity template ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity |

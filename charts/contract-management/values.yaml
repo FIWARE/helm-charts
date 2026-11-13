@@ -269,5 +269,34 @@ notification:
   ## host of contract-management to receive the notifications at
   host:
 
+## Data space eventing (CM >= 3.5.3). The tree is passed verbatim as the Micronaut `dataspace.events`
+## properties (kebab-case keys, see the contract-management README). When listener, publisher or subscriber
+## is enabled, it is rendered into its own ConfigMap `<fullname>-dataspace-events`, mounted as a directory
+## (no `subPath`) and appended to MICRONAUT_CONFIG_FILES. `listener.watch` defaults to that directory,
+## so changed publishers reach the running pod; a change to a startup-only key rolls the pod.
+dataspace:
+  # -- the `dataspace.events` property tree; every feature is off by default
+  events: {}
+  # Participant example: listen to the removals announced by a trust anchor and only report them.
+  # events:
+  #   # falls back to general.did
+  #   own-participant-id: "did:web:provider.org"
+  #   listener:
+  #     enabled: true
+  #   subscriber:
+  #     enabled: true
+  #     sink: "https://cm.provider.org/events"
+  #   publishers:
+  #     - id: "did:web:trust-anchor.org"
+  #       origin: "cm.trust-anchor.org"
+  #       types: [ "org.fiware.dataspace.participant.removed" ]
+  #       subscriptions-url: "https://cm.trust-anchor.org/subscriptions"
+  #       client-id: "contract-management"
+  #       scopes: [ "default" ]
+  #       on-participant-removed:
+  #         # report (writes nothing), dataspace, granted or full; writing modes require registry-url
+  #         mode: report
+  #         registry-url: "https://tir.trust-anchor.org"
+
 #-- custom configuration
 config: {}

@@ -1,5 +1,32 @@
 # contract-management changelog
 
+## 3.7.0
+
+### Data space eventing
+
+Lets contract-management (CM >= 3.5.3) be configured for data space eventing
+(listener, subscriber, publisher) through the chart, with publishers that change
+at runtime.
+
+- `values.yaml` — added `dataspace.events` (default `{}`), passed verbatim as the
+  Micronaut `dataspace.events` property tree (kebab-case keys, see the
+  contract-management README).
+- `templates/dataspace-events-configmap.yaml` — when `listener`, `publisher` or
+  `subscriber` is enabled, renders the tree into the ConfigMap
+  `<fullname>-dataspace-events` (key `dataspace-events.yaml`).
+- `templates/deployment.yaml` — mounts that ConfigMap as the directory
+  `/dataspace-events`, **without** `subPath` so kubelet updates it, and appends the
+  file to `MICRONAUT_CONFIG_FILES`. `listener.watch.enabled` defaults to `true` and
+  `listener.watch.path` to the mount, so CM reloads on a change; user-set values win.
+  The checksum annotation `checksum/dataspace-events-startup` covers only the
+  startup-only keys (the `enabled` flags, `listener.watch`,
+  `publisher.sink-connect-timeout`/`sink-read-timeout`): changing them rolls the pod,
+  changing e.g. `publishers` does not.
+
+`additionalEnvVars`, `deployment.additionalVolumes` and
+`deployment.additionalVolumeMounts` are appended to, never replaced. With eventing
+off the rendered manifests are byte-identical to 3.6.5.
+
 ## 3.5.33
 
 ### Specification composition
