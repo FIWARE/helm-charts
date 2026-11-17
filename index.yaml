@@ -11683,6 +11683,22 @@ entries:
   scorpio-broker-aaio:
   - apiVersion: v2
     appVersion: 2.1.0
+    created: "2026-11-17T16:18:43.752953385Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for Kubernetes in which all the microservices are deployed
+      under a single container and thus less effective for production environment
+      but serves well in testing and dev environment.
+    digest: 64c6e5e29aa2caee539e272c75306bd0ba22d3fc5c396d16ced7a2b8992d3705
+    name: scorpio-broker-aaio
+    type: application
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/scorpio-broker-aaio-0.6.0/scorpio-broker-aaio-0.6.0.tgz
+    version: 0.6.0
+  - apiVersion: v2
+    appVersion: 2.1.0
     created: "2026-10-19T14:11:27.541484717Z"
     dependencies:
     - name: common
@@ -16769,4 +16785,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-11-16T09:00:20.055385538Z"
+generated: "2026-11-17T16:18:43.753626373Z"
