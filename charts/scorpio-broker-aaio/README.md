@@ -1,6 +1,6 @@
 # scorpio-broker-aaio
 
-![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.0](https://img.shields.io/badge/AppVersion-2.1.0-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.0](https://img.shields.io/badge/AppVersion-2.1.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes in which all the microservices are deployed under a single container and thus less effective for production environment but serves well in testing and dev environment.
 
@@ -25,7 +25,9 @@ A Helm chart for Kubernetes in which all the microservices are deployed under a 
 | db.existingSecret.enabled | bool | `false` | should an existing secret be used |
 | db.existingSecret.key | string | `"password"` | key to retrieve the password from |
 | db.existingSecret.name | string | `"the-secret"` | name of the secret |
+| db.name | string | `""` | name of the database; empty for Scorpio's default, ngb |
 | db.password | string | `"ngb"` | password for connecting the database |
+| db.port | string | `""` | port of the database; empty for Scorpio's default, 5432 |
 | db.user | string | `"ngb"` | user for connecting the database |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
