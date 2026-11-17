@@ -105,6 +105,10 @@ ingress:
 db:
   # -- host of the database to be used
   dbhost: ngb
+  # -- port of the database; empty for Scorpio's default, 5432
+  port: ""
+  # -- name of the database; empty for Scorpio's default, ngb
+  name: ""
   # -- user for connecting the database
   user: ngb
   # -- password for connecting the database
