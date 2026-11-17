@@ -78,6 +78,14 @@ spec:
           env:
             - name: DBHOST
               value: {{ .Values.db.dbhost }}
+            {{- with .Values.db.port }}
+            - name: DBPORT
+              value: {{ . | quote }}
+            {{- end }}
+            {{- with .Values.db.name }}
+            - name: DBNAME
+              value: {{ . | quote }}
+            {{- end }}
             - name: DBPASS
               valueFrom:
                 secretKeyRef:
