@@ -1,0 +1,15 @@
+apiVersion: v1
+name: lepus
+version: 0.5.0
+appVersion: 0.0.1
+description: A Helm chart for running lepus on kubernetes.
+icon: https://fiware.github.io/catalogue/img/fiware.png
+keywords:
+  - fiware
+  - orion
+  - lepus
+sources:
+  - https://github.com/jason-fox/lepus
+maintainers:
+  - name: jason-fox
+    email: jason.fox@fiware.org
