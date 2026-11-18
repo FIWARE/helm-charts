@@ -46,7 +46,7 @@ spec:
         {{- if .Values.bizEcosystemLogicProxy.initContainers }}
         {{- include "business-api-ecosystem.initContainer.charging" ( dict "ctx" . "name" (printf "%s-%s-charging" .Values.bizEcosystemLogicProxy.name .Values.initContainer.apis.name) "path" "charging/api/health/" ) | nindent 8 }}
         {{- end }}
-        {{- if .Values.bizEcosystemLogicProxy.theme.enabled }}
+        {{- if and .Values.bizEcosystemLogicProxy.theme.enabled (not .Values.bizEcosystemLogicProxy.theme.url)}}
         - name: {{ .Values.bizEcosystemLogicProxy.name }}-theme-init
           image: {{ .Values.bizEcosystemLogicProxy.theme.image }}
           imagePullPolicy: {{ .Values.bizEcosystemLogicProxy.theme.imagePullPolicy }}
