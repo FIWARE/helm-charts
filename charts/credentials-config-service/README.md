@@ -67,9 +67,9 @@ Kubernetes: `>= 1.19-0`
 | deployment.resources | object | `{}` |  |
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | deployment.startupProbe.enabled | bool | `true` | should the startup probe be configured |
-| deployment.startupProbe.failureThreshold | int | `30` | failures tolerated before the container is restarted. Together with periodSeconds, the time the service is given to start. |
-| deployment.startupProbe.periodSeconds | int | `10` | how often to probe, in seconds |
-| deployment.startupProbe.timeoutSeconds | int | `30` | seconds after which the probe times out |
+| deployment.startupProbe.failureThreshold | int | `36` | failures tolerated before the container is restarted. Together with periodSeconds, the time the service is given to start (3 minutes by default). |
+| deployment.startupProbe.periodSeconds | int | `5` | how often to probe, in seconds |
+| deployment.startupProbe.timeoutSeconds | int | `5` | seconds after which the probe times out |
 | deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | deployment.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |

@@ -1,6 +1,6 @@
 # odrl-pap
 
-![Version: 2.12.0](https://img.shields.io/badge/Version-2.12.0-informational?style=flat-square) ![AppVersion: 1.9.1](https://img.shields.io/badge/AppVersion-1.9.1-informational?style=flat-square)
+![Version: 2.11.5](https://img.shields.io/badge/Version-2.11.5-informational?style=flat-square) ![AppVersion: 1.9.1](https://img.shields.io/badge/AppVersion-1.9.1-informational?style=flat-square)
 
 A Helm chart for running the odrl-pap on kubernetes.
 
@@ -69,10 +69,6 @@ Kubernetes: `>= 1.19-0`
 | deployment.readinessProbe.timeoutSeconds | int | `30` |  |
 | deployment.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
-| deployment.startupProbe.enabled | bool | `true` | should the startup probe be configured |
-| deployment.startupProbe.failureThreshold | int | `30` | failures tolerated before the container is restarted. Together with periodSeconds, the time the service is given to start. |
-| deployment.startupProbe.periodSeconds | int | `10` | how often to probe, in seconds |
-| deployment.startupProbe.timeoutSeconds | int | `30` | seconds after which the probe times out |
 | deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
 | deployment.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |

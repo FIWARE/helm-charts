@@ -83,12 +83,12 @@ deployment:
     # -- should the startup probe be configured
     enabled: true
     # -- how often to probe, in seconds
-    periodSeconds: 10
+    periodSeconds: 5
     # -- failures tolerated before the container is restarted. Together with periodSeconds, the
-    # time the service is given to start.
-    failureThreshold: 30
+    # time the service is given to start (3 minutes by default).
+    failureThreshold: 36
     # -- seconds after which the probe times out
-    timeoutSeconds: 30
+    timeoutSeconds: 5
   ## liveness and readiness probes
   # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   livenessProbe:
