@@ -91,6 +91,8 @@ deployment:
     timeoutSeconds: 5
   ## liveness and readiness probes
   # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## Their initialDelaySeconds only apply with the startup probe disabled: with it enabled, they
+  ## start when it succeeds, and a further delay would only hold back the readiness of the service.
   livenessProbe:
     initialDelaySeconds: 30
     periodSeconds: 10
