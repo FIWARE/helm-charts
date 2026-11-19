@@ -4091,6 +4091,32 @@ entries:
   credentials-config-service:
   - apiVersion: v2
     appVersion: 3.5.0
+    created: "2026-11-19T10:13:44.948520196Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the credentials-config-service on kubernetes.
+    digest: 6977d31b78c2e9d102d38f45883c7b1b402bf1bfb3313680a219f2b9cfc29f0d
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - credentials-config-service
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: credentials-config-service
+    sources:
+    - https://github.com/fiware/credentials-config-service
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/credentials-config-service-2.8.1/credentials-config-service-2.8.1.tgz
+    version: 2.8.1
+  - apiVersion: v2
+    appVersion: 3.5.0
     created: "2026-11-19T09:19:37.145791002Z"
     dependencies:
     - name: common
@@ -14208,6 +14234,31 @@ entries:
   trusted-issuers-list:
   - apiVersion: v2
     appVersion: 0.10.4
+    created: "2026-11-19T10:13:45.078560184Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the trusted-issuers-list on kubernetes.
+    digest: 9cd2d58b86c807cdb0c22cc477bc394fed6397e1da95a79f95cb3efad4b40137
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - trusted-issuers-list
+    - DSBA
+    - VerifiableCredentials
+    - IAM
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: trusted-issuers-list
+    sources:
+    - https://github.com/fiware/trusted-issuers-list
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/trusted-issuers-list-0.20.1/trusted-issuers-list-0.20.1.tgz
+    version: 0.20.1
+  - apiVersion: v2
+    appVersion: 0.10.4
     created: "2026-11-19T09:19:37.310681464Z"
     dependencies:
     - name: common
@@ -16862,4 +16913,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-11-19T10:08:04.306172835Z"
+generated: "2026-11-19T10:13:45.07995987Z"
