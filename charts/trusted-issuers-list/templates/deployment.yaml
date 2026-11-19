@@ -50,6 +50,15 @@ spec:
             - name: http-health
               containerPort: {{ .Values.deployment.healthPort }}
               protocol: TCP
+          {{- if .Values.deployment.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http-health
+            periodSeconds: {{ .Values.deployment.startupProbe.periodSeconds }}
+            failureThreshold: {{ .Values.deployment.startupProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.deployment.startupProbe.timeoutSeconds }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /health

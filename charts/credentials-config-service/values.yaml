@@ -77,6 +77,18 @@ deployment:
   affinity: {}
   # -- port to request health information at
   healthPort: 9090
+  ## startup probe. While it has not succeeded, the liveness and readiness probes are not run,
+  ## so a slow start (little CPU, the database migrations of a first start) is not killed half way.
+  startupProbe:
+    # -- should the startup probe be configured
+    enabled: true
+    # -- how often to probe, in seconds
+    periodSeconds: 10
+    # -- failures tolerated before the container is restarted. Together with periodSeconds, the
+    # time the service is given to start.
+    failureThreshold: 30
+    # -- seconds after which the probe times out
+    timeoutSeconds: 30
   ## liveness and readiness probes
   # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   livenessProbe:
