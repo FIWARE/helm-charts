@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![AppVersion: 2026.10.20](https://img.shields.io/badge/AppVersion-2026.10.20-informational?style=flat-square)
+![Version: 1.3.1](https://img.shields.io/badge/Version-1.3.1-informational?style=flat-square) ![AppVersion: 2026.10.20](https://img.shields.io/badge/AppVersion-2026.10.20-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
