@@ -1,6 +1,6 @@
 # business-api-ecosystem
 
-![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![AppVersion: 2026.05.14](https://img.shields.io/badge/AppVersion-2026.05.14-informational?style=flat-square)
+![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![AppVersion: 2026.10.20](https://img.shields.io/badge/AppVersion-2026.10.20-informational?style=flat-square)
 
 A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) on Kubernetes
 
@@ -51,7 +51,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemChargingBackend.deployment.affinity | object | `{}` |  |
 | bizEcosystemChargingBackend.deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemChargingBackend.deployment.image.repository | string | `"fiware/biz-ecosystem-charging-backend"` |  |
-| bizEcosystemChargingBackend.deployment.image.tag | string | `"11.7.0"` |  |
+| bizEcosystemChargingBackend.deployment.image.tag | string | `"11.9.1"` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.failureThreshold | int | `10` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.initialDelaySeconds | int | `20` |  |
 | bizEcosystemChargingBackend.deployment.livenessProbe.periodSeconds | int | `5` |  |
@@ -176,7 +176,7 @@ A Helm chart for running the FIWARE business API ecosystem (FIWARE Marketplace) 
 | bizEcosystemLogicProxy.statefulset.affinity | object | `{}` |  |
 | bizEcosystemLogicProxy.statefulset.image.pullPolicy | string | `"IfNotPresent"` |  |
 | bizEcosystemLogicProxy.statefulset.image.repository | string | `"fiware/biz-ecosystem-logic-proxy"` |  |
-| bizEcosystemLogicProxy.statefulset.image.tag | string | `"11.20.3"` |  |
+| bizEcosystemLogicProxy.statefulset.image.tag | string | `"11.25.3"` |  |
 | bizEcosystemLogicProxy.statefulset.livenessProbe.failureThreshold | int | `10` |  |
 | bizEcosystemLogicProxy.statefulset.livenessProbe.initialDelaySeconds | int | `20` |  |
 | bizEcosystemLogicProxy.statefulset.livenessProbe.periodSeconds | int | `5` |  |
