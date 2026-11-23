@@ -2825,6 +2825,33 @@ entries:
     version: 0.0.1
   consent-facade:
   - apiVersion: v2
+    appVersion: 0.4.5
+    created: "2026-11-23T09:48:43.160043455Z"
+    dependencies:
+    - name: common
+      repository: https://fiware.github.io/helm-charts
+      version: 0.1.2
+    description: A Helm chart for running the consent-facade on kubernetes.
+    digest: 88d7a93d64fdbcecbd74a7c3553c62a27c1b94458b79ccf6c105645ab67fd93d
+    icon: https://fiware.github.io/catalogue/img/fiware.png
+    keywords:
+    - FIWARE
+    - consent-facade
+    - Consent
+    - DSBA
+    - VerifiableCredentials
+    - TMForum
+    kubeVersion: '>= 1.19-0'
+    maintainers:
+    - email: stefan.wiedemann@seamware.com
+      name: wistefan
+    name: consent-facade
+    sources:
+    - https://github.com/wistefan/consent-facade
+    urls:
+    - https://github.com/FIWARE/helm-charts/releases/download/consent-facade-0.2.4/consent-facade-0.2.4.tgz
+    version: 0.2.4
+  - apiVersion: v2
     appVersion: 0.4.4
     created: "2026-11-16T09:00:20.053468564Z"
     dependencies:
@@ -16993,4 +17020,4 @@ entries:
     urls:
     - https://github.com/FIWARE/helm-charts/releases/download/vcverifier-2.3.0/vcverifier-2.3.0.tgz
     version: 2.3.0
-generated: "2026-11-23T09:48:29.492479198Z"
+generated: "2026-11-23T09:48:43.160821831Z"
