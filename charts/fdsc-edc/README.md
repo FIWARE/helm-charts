@@ -1,6 +1,6 @@
 # fdsc-edc
 
-![Version: 0.7.10](https://img.shields.io/badge/Version-0.7.10-informational?style=flat-square) ![AppVersion: 1.8.7](https://img.shields.io/badge/AppVersion-1.8.7-informational?style=flat-square)
+![Version: 0.7.11](https://img.shields.io/badge/Version-0.7.11-informational?style=flat-square) ![AppVersion: 2.1.1](https://img.shields.io/badge/AppVersion-2.1.1-informational?style=flat-square)
 
 A Helm chart for running the fdsc-edc on kubernetes.
 
