@@ -18,6 +18,7 @@ jobs:
         chart:
           - consent-facade
           - contract-management
+          - coraine
           - credentials-config-service
           - did-helper
           - dsc-consent-manager

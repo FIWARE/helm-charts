@@ -1,0 +1,258 @@
+{{- $dbAliases := dict "mongo" "mongoc" "memory" "corRamDB" -}}
+{{- $dbType := default .Values.database.type (index $dbAliases .Values.database.type) -}}
+{{- $needsDbURIEnv := and (eq $dbType "mongoc") .Values.database.mongoc.uri.enabled -}}
+{{- $needsDbPwdEnv := and (eq $dbType "mongoc") (not .Values.database.mongoc.uri.enabled) .Values.database.mongoc.auth.enabled -}}
+{{- $needsTroePwdEnv := eq .Values.troe.type "timescale" -}}
+{{- $hasEnv := or $needsDbURIEnv $needsDbPwdEnv $needsTroePwdEnv .Values.extraEnvVars -}}
+{{- $allowedDatabases := list "mongoc" "corRamDB" -}}
+{{- if not (has $dbType $allowedDatabases) }}
+{{- fail (printf "coraine: database.type %q is not a plugin bundled with the image (allowed: %s, or the aliases mongo/memory). Dynamic loading of third-party/custom plugins is intentionally not supported by this chart." .Values.database.type (join ", " $allowedDatabases)) }}
+{{- end }}
+{{- $allowedTroe := list "none" "ramdb" "timescale" -}}
+{{- if not (has .Values.troe.type $allowedTroe) }}
+{{- fail (printf "coraine: troe.type %q is not a plugin bundled with the image (allowed: %s). Dynamic loading of third-party/custom plugins is intentionally not supported by this chart." .Values.troe.type (join ", " $allowedTroe)) }}
+{{- end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "coraine.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "coraine.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "coraine.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "coraine.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if or (and .Values.apiPlugins.admin.enabled .Values.metrics.enabled) .Values.podAnnotations }}
+      annotations:
+        {{- if and .Values.apiPlugins.admin.enabled .Values.metrics.enabled }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: {{ .Values.config.port | int64 | quote }}
+        prometheus.io/path: "/metrics"
+        {{- end }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "coraine.serviceAccountName" . }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.config.port }}
+              protocol: TCP
+          args:
+            - "--port"
+            - {{ .Values.config.port | int64 | quote }}
+            - "--connectionPoolSize"
+            - {{ .Values.config.connectionPoolSize | int64 | quote }}
+            - "--maxRequestSize"
+            - {{ .Values.config.maxRequestSize | int64 | quote }}
+            - "--subStatsFlushInterval"
+            - {{ .Values.config.subStatsFlushInterval | int64 | quote }}
+            - "--distOpTimeout"
+            - {{ .Values.config.distOpTimeout | int64 | quote }}
+            - "--cooldownMillis"
+            - {{ .Values.config.cooldownMillis | int64 | quote }}
+            {{- if .Values.config.prettyPrint }}
+            - "--pretty-print"
+            - "1"
+            {{- end }}
+            {{- if .Values.config.notifyValueChangeOnly }}
+            - "--notifyValueChangeOnly"
+            {{- end }}
+            {{- if .Values.config.highPrecision }}
+            - "--high-precision"
+            {{- end }}
+            {{- if .Values.config.asyncSnapshot }}
+            - "--asyncSnapshot"
+            {{- end }}
+            {{- if .Values.config.insecureNotif }}
+            - "--insecureNotif"
+            {{- end }}
+            {{- with .Values.config.defaultUserContext }}
+            - "--defaultUserContext"
+            - {{ . | quote }}
+            {{- end }}
+            {{- with .Values.config.traceLevels }}
+            - "--traceLevels"
+            - {{ . | quote }}
+            {{- end }}
+            {{- if .Values.config.cors.enabled }}
+            - "--corsOrigin"
+            - {{ .Values.config.cors.origin | quote }}
+            - "--corsMaxAge"
+            - {{ .Values.config.cors.maxAge | int64 | quote }}
+            {{- end }}
+            {{- if .Values.distributed.enabled }}
+            - "--distributed"
+            {{- with .Values.distributed.httpEndpoint }}
+            - "--httpEndpoint"
+            - {{ . | quote }}
+            {{- end }}
+            {{- with .Values.distributed.csourceAlias }}
+            - "--csourceAlias"
+            - {{ . | quote }}
+            {{- end }}
+            {{- if .Values.distributed.noSplitEntities }}
+            - "--noSplitEntities"
+            {{- end }}
+            {{- end }}
+            {{- if .Values.distributed.contextSourceExtras.enabled }}
+            - "--contextSourceExtras"
+            - "/etc/coraine/contextSourceExtras.json"
+            {{- end }}
+            - "--database"
+            - {{ $dbType | quote }}
+            {{- if eq $dbType "mongoc" }}
+            - "--dbHost"
+            - {{ .Values.database.mongoc.host | quote }}
+            - "--dbPort"
+            - {{ .Values.database.mongoc.port | int64 | quote }}
+            - "--dbName"
+            - {{ .Values.database.mongoc.name | quote }}
+            - "--globalDb"
+            - {{ .Values.database.mongoc.globalDb | quote }}
+            - "--dbTimeout"
+            - {{ .Values.database.mongoc.timeout | int64 | quote }}
+            {{- if .Values.database.mongoc.uri.enabled }}
+            - "--dbURI"
+            - "$(CORAINE_DB_URI)"
+            {{- else if .Values.database.mongoc.auth.enabled }}
+            - "--dbUser"
+            - {{ .Values.database.mongoc.auth.user | quote }}
+            - "--dbPwd"
+            - "$(CORAINE_DB_PWD)"
+            {{- end }}
+            {{- end }}
+            - "--troe"
+            - {{ .Values.troe.type | quote }}
+            {{- if eq .Values.troe.type "timescale" }}
+            - "--troeHost"
+            - {{ .Values.troe.timescale.host | quote }}
+            - "--troePort"
+            - {{ .Values.troe.timescale.port | int64 | quote }}
+            - "--troeName"
+            - {{ .Values.troe.timescale.name | quote }}
+            - "--troeUser"
+            - {{ .Values.troe.timescale.user | quote }}
+            - "--troePwd"
+            - "$(CORAINE_TROE_PWD)"
+            - "--troePoolSize"
+            - {{ .Values.troe.timescale.poolSize | int64 | quote }}
+            - "--troeInstanceCap"
+            - {{ .Values.troe.timescale.instanceCap | int64 | quote }}
+            {{- end }}
+            {{- if .Values.ha.enabled }}
+            - "--ha"
+            - "mongo"
+            {{- end }}
+            {{- if .Values.apiPlugins.admin.enabled }}
+            - "--apiPlugins"
+            - "admin"
+            {{- end }}
+            {{- with .Values.extraArgs }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- if $hasEnv }}
+          env:
+            {{- if $needsDbURIEnv }}
+            - name: CORAINE_DB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "fiwareCommon.secrets.name" (dict "context" $ "existingSecret" .Values.database.mongoc.uri.existingSecret) }}
+                  key: {{ include "fiwareCommon.secrets.key" (dict "context" $ "existingSecret" .Values.database.mongoc.uri.existingSecret "defaultKey" "dbURI") }}
+            {{- else if $needsDbPwdEnv }}
+            - name: CORAINE_DB_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "fiwareCommon.secrets.name" (dict "context" $ "existingSecret" .Values.database.mongoc.auth.existingSecret) }}
+                  key: {{ include "fiwareCommon.secrets.key" (dict "context" $ "existingSecret" .Values.database.mongoc.auth.existingSecret "defaultKey" "dbPassword") }}
+            {{- end }}
+            {{- if $needsTroePwdEnv }}
+            - name: CORAINE_TROE_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "fiwareCommon.secrets.name" (dict "context" $ "existingSecret" .Values.troe.timescale.existingSecret) }}
+                  key: {{ include "fiwareCommon.secrets.key" (dict "context" $ "existingSecret" .Values.troe.timescale.existingSecret "defaultKey" "troePassword") }}
+            {{- end }}
+            {{- with .Values.extraEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.extraEnvVarsSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ tpl .Values.extraEnvVarsSecret . | quote }}
+          {{- end }}
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.extraVolumeMounts .Values.distributed.contextSourceExtras.enabled }}
+          volumeMounts:
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.distributed.contextSourceExtras.enabled }}
+            - name: context-source-extras
+              mountPath: /etc/coraine
+              readOnly: true
+            {{- end }}
+          {{- end }}
+      {{- if or .Values.extraVolumes .Values.distributed.contextSourceExtras.enabled }}
+      volumes:
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.distributed.contextSourceExtras.enabled }}
+        - name: context-source-extras
+          configMap:
+            name: {{ include "coraine.fullname" . }}-context-source-extras
+        {{- end }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

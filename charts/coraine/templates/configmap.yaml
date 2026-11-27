@@ -1,0 +1,12 @@
+{{- if .Values.distributed.contextSourceExtras.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "coraine.fullname" . }}-context-source-extras
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "coraine.labels" . | nindent 4 }}
+data:
+  contextSourceExtras.json: |
+    {{- toJson .Values.distributed.contextSourceExtras.content | nindent 4 }}
+{{- end }}
