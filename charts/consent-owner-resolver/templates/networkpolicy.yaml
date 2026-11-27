@@ -1,0 +1,32 @@
+{{- if .Values.networkPolicy.enabled }}
+{{/*
+/resolve answers who owns a piece of data, and the resolver's only other
+protection is the shared `auth` token - so the set of clients that can reach it
+is restricted here rather than left to the namespace.
+*/}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "resolver.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "resolver.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "resolver.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+  ingress:
+    {{- if .Values.networkPolicy.allowedClients }}
+    - from:
+        {{- toYaml .Values.networkPolicy.allowedClients | nindent 8 }}
+      ports:
+        - port: {{ .Values.port }}
+    {{- else }}
+    # No client declared: an empty `from` would admit everything, so nothing is
+    # admitted instead - the resolver is only reachable once its callers are named.
+    []
+    {{- end }}
+{{- end }}

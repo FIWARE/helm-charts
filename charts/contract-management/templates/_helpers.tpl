@@ -85,3 +85,68 @@ pre-migration helper because it uses a chart-specific `.enabled` gate
         {{- printf "password" -}}
     {{- end -}}
 {{- end -}}
+
+{{/*
+Directory the data space events ConfigMap is mounted at. Mounted without subPath, so updates reach the pod.
+*/}}
+{{- define "contract.dataspaceEvents.mountPath" -}}
+/dataspace-events
+{{- end -}}
+
+{{/*
+Key and file name of the data space events configuration inside the ConfigMap and the mount.
+*/}}
+{{- define "contract.dataspaceEvents.fileName" -}}
+dataspace-events.yaml
+{{- end -}}
+
+{{/*
+Name of the data space events ConfigMap.
+*/}}
+{{- define "contract.dataspaceEvents.configMapName" -}}
+{{- printf "%s-dataspace-events" (include "contract.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+"true" when listener, publisher or subscriber is enabled, otherwise empty; gates every eventing resource.
+*/}}
+{{- define "contract.dataspaceEvents.enabled" -}}
+{{- $events := .Values.dataspace.events | default dict -}}
+{{- if or (dig "listener" "enabled" false $events) (dig "publisher" "enabled" false $events) (dig "subscriber" "enabled" false $events) -}}
+true
+{{- end -}}
+{{- end -}}
+
+{{/*
+The `dataspace.events` tree as rendered, as YAML. `listener.watch.enabled` and `.path` default to the mount;
+user-set keys win, including `false` (hasKey, since merge/mergeOverwrite drop zero values).
+*/}}
+{{- define "contract.dataspaceEvents.config" -}}
+{{- $events := deepCopy (.Values.dataspace.events | default dict) -}}
+{{- $listener := get $events "listener" | default dict -}}
+{{- $watch := get $listener "watch" | default dict -}}
+{{- if not (hasKey $watch "enabled") -}}
+{{- $_ := set $watch "enabled" true -}}
+{{- end -}}
+{{- if not (hasKey $watch "path") -}}
+{{- $_ := set $watch "path" (include "contract.dataspaceEvents.mountPath" .) -}}
+{{- end -}}
+{{- $_ := set $listener "watch" $watch -}}
+{{- $_ := set $events "listener" $listener -}}
+{{- toYaml $events -}}
+{{- end -}}
+
+{{/*
+Checksum over the startup-only keys: the enabled flags, `listener.watch` and the publisher's sink timeouts.
+A change to them rolls the pod; every other key reaches the running pod through the watch.
+*/}}
+{{- define "contract.dataspaceEvents.startupChecksum" -}}
+{{- $events := include "contract.dataspaceEvents.config" . | fromYaml -}}
+{{- $publisher := get $events "publisher" | default dict -}}
+{{- $startup := dict
+      "listener" (pick (get $events "listener") "enabled" "watch")
+      "publisher" (pick $publisher "enabled" "sink-connect-timeout" "sink-read-timeout")
+      "subscriber" (pick (get $events "subscriber" | default dict) "enabled")
+      "tir-watcher" (pick (get $events "tir-watcher" | default dict) "enabled") -}}
+{{- toYaml $startup | sha256sum -}}
+{{- end -}}

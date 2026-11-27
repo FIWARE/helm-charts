@@ -71,6 +71,12 @@ volumes: []
 # -- Additional volume mounts
 volumeMounts: []
 
+# -- priority class to be assigned to the pods
+# ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+priorityClassName: ""
+# -- topology spread constraints template
+# ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+topologySpreadConstraints: []
 # -- Node selector for pod scheduling
 nodeSelector: {}
 
@@ -155,6 +161,8 @@ config:
     # -- Trust Issuer Register where DID's will be registered
     tir:
       url: ''
+    # -- Trusted Issuers Lists (optional): third-party registries notified alongside the TIR
+    til: []
   # -- Database configuration. See [TypeORM documentation](https://typeorm.io/docs/data-source/data-source-options)
   database:
     type: postgres

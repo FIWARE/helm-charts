@@ -53,6 +53,12 @@ deployment:
   additionalLabels: {}
   # -- additional annotations for the deployment, if required
   additionalAnnotations: {}
+  # -- priority class to be assigned to the pods
+  # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+  priorityClassName: ""
+  # -- topology spread constraints template
+  # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+  topologySpreadConstraints: []
   ## til resource requests and limits, we leave the default empty to make that a concious choice by the user.
   ## for the autoscaling to make sense, you should configure this.
   # resources:
@@ -73,8 +79,22 @@ deployment:
   affinity: {}
   # -- port to request health information at
   healthPort: 9090
+  ## startup probe. While it has not succeeded, the liveness and readiness probes are not run,
+  ## so a slow start (little CPU, the database migrations of a first start) is not killed half way.
+  startupProbe:
+    # -- should the startup probe be configured
+    enabled: true
+    # -- how often to probe, in seconds
+    periodSeconds: 5
+    # -- failures tolerated before the container is restarted. Together with periodSeconds, the
+    # time the service is given to start (3 minutes by default).
+    failureThreshold: 36
+    # -- seconds after which the probe times out
+    timeoutSeconds: 5
   ## liveness and readiness probes
   # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## Their initialDelaySeconds only apply with the startup probe disabled: with it enabled, they
+  ## start when it succeeds, and a further delay would only hold back the readiness of the service.
   livenessProbe:
     initialDelaySeconds: 30
     periodSeconds: 10

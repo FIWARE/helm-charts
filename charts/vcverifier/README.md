@@ -1,6 +1,6 @@
 # vcverifier
 
-![Version: 4.12.20](https://img.shields.io/badge/Version-4.12.20-informational?style=flat-square) ![AppVersion: 6.18.0](https://img.shields.io/badge/AppVersion-6.18.0-informational?style=flat-square)
+![Version: 4.17.2](https://img.shields.io/badge/Version-4.17.2-informational?style=flat-square) ![AppVersion: 6.31.1](https://img.shields.io/badge/AppVersion-6.31.1-informational?style=flat-square)
 
 A Helm chart for running the FIWARE VCVerifier.
 
@@ -52,7 +52,18 @@ Kubernetes: `>= 1.19-0`
 | deployment.database.sslMode | string | `"disable"` |  |
 | deployment.database.type | string | `"postgres"` |  |
 | deployment.database.user | string | `""` |  |
-| deployment.else | object | `{}` |  |
+| deployment.eidas | object | `{"allowStaleTrustLists":false,"countries":null,"enabled":false,"fetchTimeout":30,"lotlUrl":null,"maxWorkers":5,"refreshInterval":86400,"revocationCacheExpiry":3600,"revocationCheck":"soft","revocationTimeout":10,"statusEvaluation":"current"}` | eidas2.0 related configuration |
+| deployment.eidas.allowStaleTrustLists | bool | `false` | Accept lists past their `NextUpdate`. |
+| deployment.eidas.countries | string | `nil` | ISO 3166-1 alpha-2 country filter for the national lists to be included. If empty, all countries are included. |
+| deployment.eidas.enabled | bool | `false` | should eidas 2.0 compliant verification be enabled |
+| deployment.eidas.fetchTimeout | int | `30` | HTTP timeout per trust list fetch, in seconds. |
+| deployment.eidas.lotlUrl | string | `nil` | URL of the List of Trusted Lists. Defaults to the official EU LOTL |
+| deployment.eidas.maxWorkers | int | `5` | Concurrent national list fetches |
+| deployment.eidas.refreshInterval | int | `86400` | Seconds between background refreshes of the lotl |
+| deployment.eidas.revocationCacheExpiry | int | `3600` | Cache lifetime of a determined status, in seconds. |
+| deployment.eidas.revocationCheck | string | `"soft"` | selects how certificate revocation (OCSP/CRL) is handled during chain validation. Can be "soft", "hard" or "off" |
+| deployment.eidas.revocationTimeout | int | `10` | HTTP timeout per OCSP/CRL request, in seconds.  |
+| deployment.eidas.statusEvaluation | string | `"current"` | StatusEvaluation selects the point in time at which a trust service's status is evaluated. Either current or issuance. |
 | deployment.image.pullPolicy | string | `"IfNotPresent"` | specification of the image pull policy |
 | deployment.image.repository | string | `"quay.io/fiware/vcverifier"` | image name |
 | deployment.image.tag | string | `""` | tag of the image to be used |
@@ -76,6 +87,7 @@ Kubernetes: `>= 1.19-0`
 | deployment.m2m.verificationMethod | string | `nil` | verification method to be provided for the proof |
 | deployment.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | deployment.port | int | `3000` | port to run the container at |
+| deployment.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | deployment.readinessProbe.failureThreshold | int | `3` |  |
 | deployment.readinessProbe.initialDelaySeconds | int | `4` |  |
 | deployment.readinessProbe.periodSeconds | int | `10` |  |
@@ -83,8 +95,9 @@ Kubernetes: `>= 1.19-0`
 | deployment.readinessProbe.timeoutSeconds | int | `30` |  |
 | deployment.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
-| deployment.server | object | `{"host":"my-verifier.org","port":3000,"staticDir":"views/static","templateDir":"views/"}` | configuration for server |
+| deployment.server | object | `{"host":"my-verifier.org","metricsPort":null,"port":3000,"staticDir":"views/static","templateDir":"views/"}` | configuration for server |
 | deployment.server.host | string | `"my-verifier.org"` | host of the verifier |
+| deployment.server.metricsPort | string | `nil` | port to serve /metrics on; empty means the same as `port`. A different port serves /metrics, and a copy of /health, on its own, and the main port no longer answers /metrics: it is added to the container and the Service as `metrics`, not to the Ingress. A separate port requires VCVerifier 6.27.0 or later. |
 | deployment.server.port | int | `3000` | port to bind the server to |
 | deployment.server.staticDir | string | `"views/static"` | directory to be used for static content, f.e. images referenced from the templates |
 | deployment.server.templateDir | string | `"views/"` | directory to be used for retrieving the templates. |
@@ -103,6 +116,7 @@ Kubernetes: `>= 1.19-0`
 | deployment.serverCertificates.signingKey.key | string | `nil` | Key name inside the Secret containing the PEM |
 | deployment.serverCertificates.signingKey.secretName | string | `nil` | Name of the Kubernetes Secret that contains the signing key. |
 | deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| deployment.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
 | deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
@@ -136,12 +150,12 @@ Kubernetes: `>= 1.19-0`
 | ingress.hosts | list | `[]` | all hosts to be provided |
 | ingress.tls | list | `[]` | configure the ingress' tls |
 | nameOverride | string | `""` |  |
-| registration | object | `{"enabled":false,"host":"","job":{"activeDeadlineSeconds":300,"additionalLabels":{},"annotations":{"helm.sh/hook":"post-install","helm.sh/hook-delete-policy":"hook-succeeded"},"backoffLimit":10,"extraEnv":[],"extraInitContainers":[],"image":{"pullPolicy":"IfNotPresent","registry":"quay.io/curl/curl","tag":"8.1.2"},"imagePullSecrets":[],"initContainers":{"waitForHost":{"enabled":"enable","image":{"pullPolicy":"IfNotPresent","repository":"quay.io/curl/curl","tag":"8.1.2"},"interval":5,"path":"/health"}},"resources":{},"serviceAccountName":"","ttlSecondsAfterFinished":120},"prepScript":"","services":[]}` | Configuration for the post-install registration job. Requires one of: deployment.configServer.enabled=true, deployment.configRepo.configEndpoint, or registration.host to be set. |
+| registration | object | `{"enabled":false,"host":"","job":{"activeDeadlineSeconds":300,"additionalLabels":{},"annotations":{"helm.sh/hook":"post-install,post-upgrade","helm.sh/hook-delete-policy":"before-hook-creation,hook-succeeded"},"backoffLimit":10,"extraEnv":[],"extraInitContainers":[],"image":{"pullPolicy":"IfNotPresent","registry":"quay.io/curl/curl","tag":"8.1.2"},"imagePullSecrets":[],"initContainers":{"waitForHost":{"enabled":"enable","image":{"pullPolicy":"IfNotPresent","repository":"quay.io/curl/curl","tag":"8.1.2"},"interval":5,"path":"/health"}},"resources":{},"serviceAccountName":"","ttlSecondsAfterFinished":120},"prepScript":"","services":[]}` | Configuration for the post-install registration job. Requires one of: deployment.configServer.enabled=true, deployment.configRepo.configEndpoint, or registration.host to be set. |
 | registration.enabled | bool | `false` | Enable the registration job |
 | registration.host | string | `""` | Override the host used for registration HTTP requests. If empty, falls back to deployment.configServer (when enabled) or deployment.configRepo.configEndpoint. |
 | registration.job.activeDeadlineSeconds | int | `300` | Maximum duration in seconds for the job to run before it is terminated |
 | registration.job.additionalLabels | object | `{}` | Additional labels to add to the registration Job resource |
-| registration.job.annotations | object | `{"helm.sh/hook":"post-install","helm.sh/hook-delete-policy":"hook-succeeded"}` | Annotations for the registration Job resource. Defaults configure it as a Helm post-install hook that is deleted on success. |
+| registration.job.annotations | object | `{"helm.sh/hook":"post-install,post-upgrade","helm.sh/hook-delete-policy":"before-hook-creation,hook-succeeded"}` | Annotations for the registration Job resource. Defaults run it on install AND upgrade, deleting any previous Job first. `post-install` alone made the registration effectively install-only: every `helm upgrade` skipped the Job, so a service added to `registration.services` afterwards never reached the config repo and the verifier answered requests for it with no presentation_definition. `before-hook-creation` is the other half - `hook-succeeded` only deletes the Job when it SUCCEEDS, so one failed run would leave it behind and the next upgrade would fail with `jobs.batch "<release>-job" already exists`. |
 | registration.job.backoffLimit | int | `10` | Number of retries before marking the job as failed |
 | registration.job.extraEnv | list | `[]` | Extra environment variables to add to the registration job container |
 | registration.job.extraInitContainers | list | `[]` | extra init containers appended verbatim to the pod spec (after waitForHost) |

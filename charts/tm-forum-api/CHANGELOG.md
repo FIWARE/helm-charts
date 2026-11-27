@@ -1,5 +1,23 @@
 # tm-forum-api changelog
 
+## 0.18.0
+
+### Optional tmf-ui
+
+New `ui` block (off by default) that deploys [tmf-ui](https://github.com/FIWARE/tmforum-api/tree/main/ui), the
+read-only browser for the APIs, from the `quay.io/fiware/tmforum-ui` image:
+
+- `allInOne.enabled: true` — a `ui` sidecar container in the all-in-one pod, with
+  `TMF_ENDPOINT=http://localhost:<defaultConfig.port>`.
+- split mode — a `<fullname>-ui` Deployment reading through the `apiProxy` (envoy) service. Rendering fails
+  unless `apiProxy.enabled` (or `ui.endpoint`) is set, since the UI needs every API under one origin.
+- Both modes: a `<fullname>-ui` Service on `ui.service.port` → container port `ui.port` (3000 by default;
+  rendering fails if it clashes with `defaultConfig.port` / `endpointsPort` in the sidecar case). Probes on
+  `/healthz`.
+
+Nothing is rendered unless `ui.enabled: true`. The image tag defaults to `appVersion`, but only tmforum-api
+releases newer than 1.18.6 publish the image, so set `ui.image.tag` until `appVersion` points at one.
+
 ## 0.17.0
 
 ### Common library chart migration

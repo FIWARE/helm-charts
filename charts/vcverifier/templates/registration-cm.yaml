@@ -60,7 +60,19 @@ data:
     {{- $_ := set $body "authorizationType" .authorizationType }}
     {{- end }}
 
-    register_service "{{ .id }}" '{{ $body | toJson }}'
+    # The body goes through an UNQUOTED heredoc on purpose. `prepScript` exports shell
+    # variables - `export DID=did:web:...` is the established idiom - and the service ids
+    # reference them as ${DID}, so the shell has to expand them here. Passing the JSON as a
+    # single-quoted argument instead registered the service under the literal id "${DID}",
+    # and nothing failed: the verifier answers a request for the real DID with an empty
+    # scope list and no presentation_definition, which a wallet reports as "Could not
+    # process the information request". A heredoc also keeps the JSON's own double quotes
+    # intact, so nothing needs escaping.
+    service_body=$(cat <<EOF
+    {{ $body | toJson }}
+    EOF
+    )
+    register_service "{{ .id }}" "${service_body}"
     {{- end }}
 
 {{- end }}

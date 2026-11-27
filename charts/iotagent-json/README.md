@@ -1,6 +1,6 @@
 # iotagent-json
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![AppVersion: 1.14.0](https://img.shields.io/badge/AppVersion-1.14.0-informational?style=flat-square)
 
 A Helm chart for running the fiware iotagent-json on kubernetes.
 
@@ -42,6 +42,7 @@ A Helm chart for running the fiware iotagent-json on kubernetes.
 | deployment.livenessProbe.timeoutSeconds | int | `30` |  |
 | deployment.mqttPort | int | `1883` | port to be used by the service for mqtt communication |
 | deployment.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| deployment.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | deployment.readinessProbe.failureThreshold | int | `3` |  |
 | deployment.readinessProbe.initialDelaySeconds | int | `30` |  |
 | deployment.readinessProbe.periodSeconds | int | `10` |  |
@@ -51,6 +52,7 @@ A Helm chart for running the fiware iotagent-json on kubernetes.
 | deployment.resources | object | `{}` | iotagent resource requests and limits, we leave the default empty to make that a concious choice by the user. for the autoscaling to make sense, you should configure this. |
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| deployment.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | deployment.updateStrategy | object | `{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"}` | configuration of the iotagent update strategy |
 | deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
 | deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |

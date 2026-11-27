@@ -16,7 +16,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: {{ include "orion.fullname" . }}-init-data
-          image: alpine/curl
+          image: "{{ .Values.initData.image.repository }}:{{ .Values.initData.image.tag }}"
           command:
             - /bin/sh
             - /data/entrypoint.sh

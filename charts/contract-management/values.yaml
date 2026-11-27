@@ -51,6 +51,12 @@ deployment:
   additionalLabels: {}
   # -- additional annotations for the deployment, if required
   additionalAnnotations: {}
+  # -- priority class to be assigned to the pods
+  # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+  priorityClassName: ""
+  # -- topology spread constraints template
+  # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+  topologySpreadConstraints: []
   ## til resource requests and limits, we leave the default empty to make that a concious choice by the user.
   ## for the autoscaling to make sense, you should configure this.
   # resources:
@@ -217,6 +223,10 @@ enableTmForum: true
 enableRainbow: true
 ## Enable integration with a central marketplace. Requires OdrlPap and TrustedIssuersList integration to be enabled.
 enableCentralMarketplace: false
+## Enables reading the policy and credential configuration from the ServiceSpecifications a ProductSpecification is composed of, in addition to the ProductSpecification itself. Requires TMForum integration and http.services.service-catalog to be configured. Off by default: it adds one TMForum read per referenced ServiceSpecification to the activation of an order, and it changes which configuration an order activates.
+enableSpecificationComposition: false
+## How many specification levels below the ordered ProductSpecification are resolved when composition is enabled. The default of 2 covers a ProductSpecification and the ServiceSpecifications it references; bundled ProductSpecifications consume the same budget. References below the limit are skipped with a warning.
+specificationCompositionMaxDepth: 2
 
 ## Organization configuration
 organization:
@@ -258,6 +268,35 @@ notification:
   enabled: true
   ## host of contract-management to receive the notifications at
   host:
+
+## Data space eventing (CM >= 3.5.3). The tree is passed verbatim as the Micronaut `dataspace.events`
+## properties (kebab-case keys, see the contract-management README). When listener, publisher or subscriber
+## is enabled, it is rendered into its own ConfigMap `<fullname>-dataspace-events`, mounted as a directory
+## (no `subPath`) and appended to MICRONAUT_CONFIG_FILES. `listener.watch` defaults to that directory,
+## so changed publishers reach the running pod; a change to a startup-only key rolls the pod.
+dataspace:
+  # -- the `dataspace.events` property tree; every feature is off by default
+  events: {}
+  # Participant example: listen to the removals announced by a trust anchor and only report them.
+  # events:
+  #   # falls back to general.did
+  #   own-participant-id: "did:web:provider.org"
+  #   listener:
+  #     enabled: true
+  #   subscriber:
+  #     enabled: true
+  #     sink: "https://cm.provider.org/events"
+  #   publishers:
+  #     - id: "did:web:trust-anchor.org"
+  #       origin: "cm.trust-anchor.org"
+  #       types: [ "org.fiware.dataspace.participant.removed" ]
+  #       subscriptions-url: "https://cm.trust-anchor.org/subscriptions"
+  #       client-id: "contract-management"
+  #       scopes: [ "default" ]
+  #       on-participant-removed:
+  #         # report (writes nothing), dataspace, granted or full; writing modes require registry-url
+  #         mode: report
+  #         registry-url: "https://tir.trust-anchor.org"
 
 #-- custom configuration
 config: {}

@@ -1,6 +1,6 @@
 # endpoint-auth-service
 
-![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![AppVersion: 0.4.4](https://img.shields.io/badge/AppVersion-0.4.4-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![AppVersion: 0.4.4](https://img.shields.io/badge/AppVersion-0.4.4-informational?style=flat-square)
 A Helm chart for running the endpoint-auth-service on kubernetes.
 
 ## Maintainers
@@ -150,6 +150,7 @@ for that.
 | configService.nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | configService.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | configService.port | int | `8080` | port that the endpoint-configuration-service container uses |
+| configService.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | configService.prometheus.enabled | bool | `true` | should prometheus scrape be enabled |
 | configService.prometheus.path | string | `"/prometheus"` | path for prometheus scrape |
 | configService.prometheus.port | int | `9090` | port prometheus scrape is available at |
@@ -170,6 +171,7 @@ for that.
 | configService.serviceAccount | object | `{"create":false}` | if a configService configService service account should be used, it can be configured here ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | configService.serviceAccount.create | bool | `false` | specifies if the account should be created |
 | configService.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| configService.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | configService.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
 | configService.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | configService.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
@@ -194,6 +196,7 @@ for that.
 | ishare.nameOverride | string | `""` | option to override the name config in the _helpers.tpl |
 | ishare.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | ishare.port | int | `8080` | port that the ishare authprovider container uses |
+| ishare.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | ishare.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | ishare.resources | object | `{}` |  |
 | ishare.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
@@ -213,6 +216,7 @@ for that.
 | ishare.storage.enabled | bool | `true` | should the config be persisted inside a pvc |
 | ishare.storage.size | string | `"8G"` | how big should the pvc be |
 | ishare.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| ishare.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | ishare.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
 | ishare.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | ishare.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |
@@ -262,6 +266,7 @@ for that.
 | sidecarInjector.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | sidecarInjector.overrideSidecarconfig | object | `{}` | override the generated config for the sidecar, if not sufficient |
 | sidecarInjector.port | int | `8443` | port that the injector listens to |
+| sidecarInjector.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | sidecarInjector.readinessProbe.failureThreshold | int | `3` |  |
 | sidecarInjector.readinessProbe.initialDelaySeconds | int | `31` |  |
 | sidecarInjector.readinessProbe.periodSeconds | int | `10` |  |
@@ -281,6 +286,7 @@ for that.
 | sidecarInjector.serviceAccount | object | `{"create":true}` | if a sidecarInjector specific service account should be used, it can be configured here ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ |
 | sidecarInjector.serviceAccount.create | bool | `true` | specifies if the account should be created |
 | sidecarInjector.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| sidecarInjector.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)

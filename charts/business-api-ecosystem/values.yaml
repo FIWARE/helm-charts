@@ -230,13 +230,19 @@ bizEcosystemChargingBackend:
       ## ref: https://hub.docker.com/r/fiware/biz-ecosystem-charging-backend
       repository: fiware/biz-ecosystem-charging-backend
       ## -- tag of the image to be used
-      tag: 11.7.0
+      tag: 11.9.1
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
     ## -- additional labels for the deployment, if required
     additionalLabels: {}
     ## -- additional annotations for the deployment, if required
     additionalAnnotations: {}
+    # -- priority class to be assigned to the pods
+    # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+    priorityClassName: ""
+    # -- topology spread constraints template
+    # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+    topologySpreadConstraints: []
     ## -- selector template
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
     nodeSelector: {}
@@ -457,13 +463,19 @@ bizEcosystemLogicProxy:
       ## ref: https://hub.docker.com/r/fiware/biz-ecosystem-logic-proxy
       repository: fiware/biz-ecosystem-logic-proxy
       ## -- tag of the image to be used
-      tag: 11.20.3
+      tag: 11.25.3
       ## -- specification of the image pull policy
       pullPolicy: IfNotPresent
     ## -- additional labels for the deployment, if required
     additionalLabels: {}
     ## -- additional annotations for the deployment, if required
     additionalAnnotations: {}
+    # -- priority class to be assigned to the pods
+    # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+    priorityClassName: ""
+    # -- topology spread constraints template
+    # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+    topologySpreadConstraints: []
     ## -- selector template
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
     nodeSelector: {}

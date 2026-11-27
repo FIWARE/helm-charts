@@ -50,11 +50,22 @@ spec:
             - name: http-health
               containerPort: {{ .Values.deployment.healthPort }}
               protocol: TCP
+          {{- if .Values.deployment.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http-health
+            periodSeconds: {{ .Values.deployment.startupProbe.periodSeconds }}
+            failureThreshold: {{ .Values.deployment.startupProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.deployment.startupProbe.timeoutSeconds }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /health
               port: http-health
+            {{- if not .Values.deployment.startupProbe.enabled }}
             initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+            {{- end }}
             periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
@@ -63,7 +74,9 @@ spec:
             httpGet:
               path: /health
               port: http-health
+            {{- if not .Values.deployment.startupProbe.enabled }}
             initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+            {{- end }}
             periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
@@ -95,6 +108,13 @@ spec:
               - key: application.yaml
                 path: application.yaml
             defaultMode: 0644
+      {{- with .Values.deployment.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- with .Values.deployment.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

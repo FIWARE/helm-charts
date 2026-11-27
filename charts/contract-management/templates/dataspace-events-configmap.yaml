@@ -1,0 +1,14 @@
+{{- if include "contract.dataspaceEvents.enabled" . }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "contract.dataspaceEvents.configMapName" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "contract.labels" . | nindent 4 }}
+data:
+  {{ include "contract.dataspaceEvents.fileName" . }}: |
+    dataspace:
+      events:
+        {{- include "contract.dataspaceEvents.config" . | nindent 8 }}
+{{- end }}

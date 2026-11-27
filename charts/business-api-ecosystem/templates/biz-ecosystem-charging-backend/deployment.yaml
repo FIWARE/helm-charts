@@ -121,6 +121,13 @@ spec:
               subPath: cert.pem
             {{- end }}
           env:
+            # The Django settings and where they are (the image's source directory), for whatever
+            # loads them before the application does, such as the Django instrumentation that the
+            # OpenTelemetry Operator injects
+            - name: DJANGO_SETTINGS_MODULE
+              value: settings
+            - name: PYTHONPATH
+              value: /opt/business-ecosystem-charging-backend/src
             - name: BAE_CB_PAYMENT_METHOD
               value: {{ .Values.bizEcosystemChargingBackend.payment.method | quote }}
             {{- if or $paypal.clientId $paypal.clientSecret }}
@@ -287,6 +294,13 @@ spec:
             - secretRef:
                 name: {{ tpl .Values.bizEcosystemChargingBackend.extraEnvVarsSecret . | quote }}
           {{- end }}
+      {{- with .Values.bizEcosystemChargingBackend.deployment.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- with .Values.bizEcosystemChargingBackend.deployment.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.bizEcosystemChargingBackend.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

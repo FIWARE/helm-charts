@@ -1,0 +1,71 @@
+# Every optional feature on, plus one additional identity provider. For `helm lint` and
+# `helm template`; all values are placeholders.
+serviceAccount:
+  create: true
+
+identityProviders:
+  additional:
+    partner:
+      issuer: https://partner-idp.example.org/realms/dataspace
+      discoveryUrl: https://partner-idp.example.org/realms/dataspace/.well-known/openid-configuration
+      audience: consent-manager
+      clockSkew: 10s
+      claims:
+        participantIdentifier: [participant]
+        roles: [groups]
+      roleMapping:
+        user: partner-user
+        participant: partner-participant
+
+config:
+  consentManagerUrl: https://consent.example.org
+  contractServiceUrl: http://contract-service:8080
+  smtp:
+    host: smtp.example.org
+    fromAddress: noreply@example.org
+    fromName: Consent Manager
+  notificationClientUrl: https://wallet.example.org
+  participantNotifications:
+    allowedHosts: [webhooks.example.org]
+  extraEnv:
+    SELF_DESCRIPTION_ALLOWED_HOSTS: catalog.example.org
+
+secrets:
+  dbPassword: change-me
+  smtpUser: mailer
+  smtpPassword: change-me-too
+  logPseudonymKey: ci-placeholder-log-pseudonym-key
+  erasureVerificationSecret: ci-placeholder-erasure-verification-secret
+
+signingKeys:
+  retiredVerificationKeys:
+    enabled: true
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 1m
+  hosts:
+    - host: consent.example.org
+      paths:
+        - /
+  tls:
+    - secretName: consent-example-org-tls
+      hosts:
+        - consent.example.org
+
+route:
+  enabled: true
+  host: consent.example.org
+
+autoscaling:
+  enabled: true
+  maxReplicas: 6
+
+serviceMonitor:
+  enabled: true
+  interval: 15s
+  scrapeTimeout: 10s
+  labels:
+    release: kube-prometheus-stack

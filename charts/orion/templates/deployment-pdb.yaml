@@ -1,0 +1,21 @@
+{{- with .Values.deployment.podDisruptionBudget }}
+{{- if .enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "orion.fullname" $ }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{ include "orion.labels" $ | nindent 4 }}
+spec:
+  {{- if .minAvailable }}
+  minAvailable: {{ .minAvailable }}
+  {{- else }}
+  maxUnavailable: {{ .maxUnavailable | default 1 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "orion.name" $ }}
+      app.kubernetes.io/instance: {{ $.Release.Name }}
+{{- end }}
+{{- end }}

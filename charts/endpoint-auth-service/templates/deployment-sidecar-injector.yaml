@@ -70,6 +70,13 @@ spec:
           resources:
             {{- toYaml .Values.sidecarInjector.resources | nindent 12 }}
           {{- end }}
+      {{- with .Values.sidecarInjector.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- with .Values.sidecarInjector.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.sidecarInjector.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

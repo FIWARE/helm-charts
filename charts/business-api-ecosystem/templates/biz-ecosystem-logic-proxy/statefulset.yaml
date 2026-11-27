@@ -435,6 +435,13 @@ spec:
             {{- with .Values.bizEcosystemLogicProxy.additionalEnvVars }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+      {{- with .Values.bizEcosystemLogicProxy.statefulset.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- with .Values.bizEcosystemLogicProxy.statefulset.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.bizEcosystemLogicProxy.statefulset.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

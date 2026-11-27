@@ -1,0 +1,105 @@
+{{- $idp := .Values.identityProviders.primary }}
+{{- include "dscConsentManager.validateProvider" (dict "name" "primary" "entry" $idp) }}
+{{- $cfg := .Values.config }}
+{{- $optional := dict
+  "CONSENT_MANAGER_URL" $cfg.consentManagerUrl
+  "CONTRACT_SERVICE_URL" $cfg.contractServiceUrl
+  "API_PREFIX" $cfg.apiPrefix
+  "NOTIFICATION_CLIENT_URL" $cfg.notificationClientUrl
+  "RECEIPTS_JURISDICTION" $cfg.receiptsJurisdiction
+  "PARTICIPANT_NOTIFICATIONS_RESOLVE_TIMEOUT" $cfg.participantNotifications.resolveTimeout
+  "PARTICIPANT_NOTIFICATIONS_RESOLVER_THREADS" $cfg.participantNotifications.resolverThreads
+  "PARTICIPANT_NOTIFICATIONS_CONNECT_TIMEOUT" $cfg.participantNotifications.connectTimeout
+  "PARTICIPANT_NOTIFICATIONS_READ_TIMEOUT" $cfg.participantNotifications.readTimeout
+  "PARTICIPANT_NOTIFICATIONS_ALLOWED_HOSTS" (join "," ($cfg.participantNotifications.allowedHosts | default list))
+  "PARTICIPANT_NOTIFICATIONS_POLL_INTERVAL" $cfg.participantNotifications.pollInterval
+  "PARTICIPANT_NOTIFICATIONS_BATCH_SIZE" $cfg.participantNotifications.batchSize
+  "PARTICIPANT_NOTIFICATIONS_PER_PARTICIPANT_BATCH_LIMIT" $cfg.participantNotifications.perParticipantBatchLimit
+  "PARTICIPANT_NOTIFICATIONS_CONCURRENCY" $cfg.participantNotifications.concurrency
+  "PARTICIPANT_NOTIFICATIONS_LEASE" $cfg.participantNotifications.lease
+  "PARTICIPANT_NOTIFICATIONS_BACKOFF" (join "," ($cfg.participantNotifications.backoff | default list))
+  "PARTICIPANT_NOTIFICATIONS_MAX_AGE" $cfg.participantNotifications.maxAge
+  "PARTICIPANT_NOTIFICATIONS_SWEEP_INTERVAL" $cfg.participantNotifications.sweepInterval
+  "PARTICIPANT_NOTIFICATIONS_RETENTION" $cfg.participantNotifications.retention
+  "IDP_JWKS_CACHE_TTL" $cfg.cache.idpJwksTtl
+  "CONTRACT_SERVICE_CACHE_TTL" $cfg.cache.contractServiceTtl
+  "CONTRACT_SERVICE_CACHE_MAX_SIZE" $cfg.cache.contractServiceMaxSize
+  "SELF_DESCRIPTION_CACHE_TTL" $cfg.cache.selfDescriptionTtl
+  "SELF_DESCRIPTION_CACHE_MAX_SIZE" $cfg.cache.selfDescriptionMaxSize
+  "PARTICIPANTS_PAGE_DEFAULT_SIZE" $cfg.pagination.participantsDefaultSize
+  "PARTICIPANTS_PAGE_MAX_SIZE" $cfg.pagination.participantsMaxSize
+  "CONSENTS_PAGE_DEFAULT_SIZE" $cfg.pagination.consentsDefaultSize
+  "CONSENTS_PAGE_MAX_SIZE" $cfg.pagination.consentsMaxSize
+  "PARTICIPANT_NOTIFICATIONS_PAGE_DEFAULT_SIZE" $cfg.pagination.notificationsDefaultSize
+  "PARTICIPANT_NOTIFICATIONS_PAGE_MAX_SIZE" $cfg.pagination.notificationsMaxSize
+  "IDP_CLOCK_SKEW" $idp.clockSkew
+}}
+{{- /* An omitted role would fall back to application.yml's default, and a blank one fails startup,
+  so the primary provider cannot unmap a role; refuse rather than map it implicitly. */}}
+{{- range $role := include "dscConsentManager.roles" . | splitList " " }}
+{{- $value := get ($idp.roleMapping | default dict) $role }}
+{{- if empty $value }}
+{{- fail (printf "identityProviders.primary.roleMapping.%s is required: the primary provider cannot unmap a role, and an empty value would silently fall back to the application default" $role) }}
+{{- end }}
+{{- $_ := set $optional (printf "IDP_ROLE_%s" (upper $role)) $value }}
+{{- end }}
+{{- with $idp.claims }}
+{{- $_ := set $optional "IDP_CLAIM_USER_IDENTIFIER" (join "," (.userIdentifier | default list)) }}
+{{- $_ := set $optional "IDP_CLAIM_PARTICIPANT_IDENTIFIER" (join "," (.participantIdentifier | default list)) }}
+{{- $_ := set $optional "IDP_CLAIM_ROLES" (join "," (.roles | default list)) }}
+{{- end }}
+{{- if $cfg.smtp.host }}
+{{- $_ := set $optional "SMTP_HOST" $cfg.smtp.host }}
+{{- $_ := set $optional "SMTP_PORT" $cfg.smtp.port }}
+{{- $_ := set $optional "SMTP_FROM_ADDRESS" (required "config.smtp.fromAddress is required when config.smtp.host is set" $cfg.smtp.fromAddress) }}
+{{- $_ := set $optional "SMTP_FROM_NAME" $cfg.smtp.fromName }}
+{{- end }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "dscConsentManager.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "dscConsentManager.labels" . | nindent 4 }}
+data:
+  PORT: {{ .Values.deployment.containerPorts.http | quote }}
+  MANAGEMENT_PORT: {{ .Values.deployment.containerPorts.management | quote }}
+  DB_URL: {{ $cfg.database.url | quote }}
+  # Fixed: metrics are reachable only through the in-cluster management Service, so the chart
+  # holds no metrics credential. Health detail is a separate setting and stays authenticated.
+  METRICS_AUTHENTICATION_ENABLED: "false"
+  IDP_ISSUER: {{ $idp.issuer | quote }}
+  IDP_DISCOVERY_URL: {{ $idp.discoveryUrl | quote }}
+  IDP_AUDIENCE: {{ $idp.audience | quote }}
+  IDP_ALLOW_INSECURE_TRANSPORT: {{ $idp.allowInsecureTransport | default false | quote }}
+  {{- /* Rendered outside the empty-omitting loop below, where false and 0 would be dropped. */}}
+  PARTICIPANT_NOTIFICATIONS_ENABLED: {{ ne (toString $cfg.participantNotifications.enabled) "false" | quote }}
+  {{- if not (kindIs "invalid" $cfg.participantNotifications.jitter) }}
+  PARTICIPANT_NOTIFICATIONS_JITTER: {{ include "dscConsentManager.envValue" $cfg.participantNotifications.jitter }}
+  {{- end }}
+  {{- if $cfg.smtp.host }}
+  SMTP_STARTTLS: {{ $cfg.smtp.startTls | quote }}
+  {{- end }}
+  {{- /* An empty env var would override the application.yml default, so empty values are omitted. */}}
+  {{- range $key, $value := $optional }}
+  {{- if not (empty $value) }}
+  {{ $key }}: {{ include "dscConsentManager.envValue" $value }}
+  {{- end }}
+  {{- end }}
+  {{- /* Keys set only under a condition (claims, SMTP) are listed explicitly, so extraEnv cannot
+    bypass their guards when the condition is off. */}}
+  {{- $rendered := concat (keys $optional) (list "PORT" "MANAGEMENT_PORT" "DB_URL" "METRICS_AUTHENTICATION_ENABLED" "IDP_ISSUER" "IDP_DISCOVERY_URL" "IDP_AUDIENCE" "IDP_ALLOW_INSECURE_TRANSPORT" "PARTICIPANT_NOTIFICATIONS_ENABLED" "PARTICIPANT_NOTIFICATIONS_JITTER" "IDP_CLAIM_USER_IDENTIFIER" "IDP_CLAIM_PARTICIPANT_IDENTIFIER" "IDP_CLAIM_ROLES" "SMTP_HOST" "SMTP_PORT" "SMTP_FROM_ADDRESS" "SMTP_FROM_NAME" "SMTP_STARTTLS") }}
+  {{- $credentials := concat (splitList " " (include "dscConsentManager.mandatorySecretKeys" .)) (splitList " " (include "dscConsentManager.optionalSecretKeys" .)) (list "RECEIPTS_SIGNING_KEY" "RECEIPTS_RETIRED_VERIFICATION_KEYS") }}
+  {{- $deploymentOwned := list "RECEIPTS_SIGNING_KEY_FILE" "RECEIPTS_RETIRED_VERIFICATION_KEYS_FILE" "MICRONAUT_CONFIG_FILES" }}
+  {{- range $key, $value := $cfg.extraEnv }}
+  {{- if has $key $rendered }}
+  {{- fail (printf "config.extraEnv.%s is set by a dedicated chart value; set that value instead" $key) }}
+  {{- end }}
+  {{- if has $key $credentials }}
+  {{- fail (printf "config.extraEnv.%s is a credential and must never reach a ConfigMap; set it through secrets.* (or secrets.existingSecret), and mount signing keys through signingKeys" $key) }}
+  {{- end }}
+  {{- if has $key $deploymentOwned }}
+  {{- fail (printf "config.extraEnv.%s is set by the deployment; configure signingKeys or identityProviders.additional instead" $key) }}
+  {{- end }}
+  {{ $key }}: {{ include "dscConsentManager.envValue" $value }}
+  {{- end }}

@@ -25,6 +25,8 @@ data:
       enableTmForum: {{ .Values.enableTmForum }}
       enableRainbow: {{ .Values.enableRainbow }}
       enableCentralMarketplace: {{ .Values.enableCentralMarketplace }}
+      enableSpecificationComposition: {{ .Values.enableSpecificationComposition }}
+      specificationCompositionMaxDepth: {{ .Values.specificationCompositionMaxDepth }}
       {{- with .Values.organization }}
       organization:
         {{- toYaml . | nindent 8 }}

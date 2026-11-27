@@ -1,6 +1,6 @@
 # fdsc-edc
 
-![Version: 0.3.5](https://img.shields.io/badge/Version-0.3.5-informational?style=flat-square) ![AppVersion: 1.4.1](https://img.shields.io/badge/AppVersion-1.4.1-informational?style=flat-square)
+![Version: 0.7.11](https://img.shields.io/badge/Version-0.7.11-informational?style=flat-square) ![AppVersion: 2.1.1](https://img.shields.io/badge/AppVersion-2.1.1-informational?style=flat-square)
 
 A Helm chart for running the fdsc-edc on kubernetes.
 
@@ -24,7 +24,6 @@ A Helm chart for running the fdsc-edc on kubernetes.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| common.additionalEnvVars | list | `[]` | a list of additional env vars to be set |
 | common.autoscaling.enabled | bool | `false` |  |
 | common.config.dcp.enabled | bool | `false` |  |
 | common.config.dcp.scopes.catalog | string | `nil` |  |
@@ -104,12 +103,14 @@ A Helm chart for running the fdsc-edc on kubernetes.
 | common.config.tmfExtension.quoteApi | string | `nil` | address of the quote api to be used |
 | common.config.tmfExtension.usageManagementApi | string | `nil` | address of the usage management api to be used |
 | common.config.vault.hashicorp.enabled | bool | `false` |  |
+| common.config.vault.hashicorp.existingSecret | string | `""` | name of a Secret holding the vault token. Takes precedence over `token`: the property is then omitted from the ConfigMap rather than left empty, which EDC would resolve as an empty token instead of falling through to the environment variable. |
+| common.config.vault.hashicorp.existingSecretTokenKey | string | `"token"` | key within that Secret holding the token |
 | common.config.vault.hashicorp.healthCheck.enabled | bool | `true` |  |
 | common.config.vault.hashicorp.healthCheck.standbyOk | bool | `true` |  |
 | common.config.vault.hashicorp.paths.health | string | `"/v1/sys/health"` |  |
 | common.config.vault.hashicorp.paths.secret | string | `"/v1/secret"` |  |
 | common.config.vault.hashicorp.timeout | string | `nil` |  |
-| common.config.vault.hashicorp.token | string | `nil` |  |
+| common.config.vault.hashicorp.token | string | `nil` | token to be used when accessing vault. Rendered into the ConfigMap, so anyone who can read ConfigMaps in the namespace can read it: acceptable for a dev deployment with a dev-mode vault, not for production. Use `existingSecret` instead, which injects it as an environment variable and keeps it out of the ConfigMap entirely. |
 | common.config.vault.hashicorp.url | string | `nil` |  |
 | common.config.web.http.catalog.path | string | `"/api/catalog"` |  |
 | common.config.web.http.catalog.port | int | `8083` |  |
@@ -123,6 +124,7 @@ A Helm chart for running the fdsc-edc on kubernetes.
 | common.config.web.http.version.path | string | `"/api/version"` |  |
 | common.config.web.http.version.port | int | `8084` |  |
 | common.deployment.additionalAnnotations | object | `{}` | additional annotations for the deployment, if required |
+| common.deployment.additionalEnvVars | list | `[]` | a list of additional env vars to be set on the container |
 | common.deployment.additionalLabels | object | `{}` | additional labels for the deployment, if required |
 | common.deployment.additionalVolumeMounts | list | `[]` | additional volume |
 | common.deployment.additionalVolumes | list | `[]` | additional volumes to be added for the containers |
@@ -140,6 +142,7 @@ A Helm chart for running the fdsc-edc on kubernetes.
 | common.deployment.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
 | common.deployment.path | string | `"/api"` | base path of the controlplane |
 | common.deployment.port | int | `8080` | port that the controlplane container uses as a base |
+| common.deployment.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | common.deployment.readinessProbe.failureThreshold | int | `3` |  |
 | common.deployment.readinessProbe.initialDelaySeconds | int | `31` |  |
 | common.deployment.readinessProbe.periodSeconds | int | `10` |  |
@@ -148,6 +151,7 @@ A Helm chart for running the fdsc-edc on kubernetes.
 | common.deployment.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | common.deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
 | common.deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| common.deployment.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | common.deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
 | common.deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | common.deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |

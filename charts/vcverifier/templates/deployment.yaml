@@ -75,6 +75,10 @@ spec:
             - containerPort: {{ .Values.deployment.configServer.port }}
               name: admin
             {{- end }}
+            {{- with (include "vcverifier.separateMetricsPort" .) }}
+            - containerPort: {{ . }}
+              name: metrics
+            {{- end }}
           env:
           {{- if .Values.deployment.alternativeConfig }}
             - name: CONFIG_FILE
@@ -207,6 +211,13 @@ spec:
       - name: static-volume
         emptyDir:
           sizeLimit: 500Mi
+      {{- end }}
+      {{- with .Values.deployment.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- with .Values.deployment.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.deployment.nodeSelector }}
       nodeSelector:

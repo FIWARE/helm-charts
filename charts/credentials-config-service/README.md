@@ -1,6 +1,6 @@
 # credentials-config-service
 
-![Version: 2.6.4](https://img.shields.io/badge/Version-2.6.4-informational?style=flat-square) ![AppVersion: 3.4.3](https://img.shields.io/badge/AppVersion-3.4.3-informational?style=flat-square)
+![Version: 2.8.1](https://img.shields.io/badge/Version-2.8.1-informational?style=flat-square) ![AppVersion: 3.5.0](https://img.shields.io/badge/AppVersion-3.5.0-informational?style=flat-square)
 
 A Helm chart for running the credentials-config-service on kubernetes.
 
@@ -57,6 +57,7 @@ Kubernetes: `>= 1.19-0`
 | deployment.livenessProbe.successThreshold | int | `1` |  |
 | deployment.livenessProbe.timeoutSeconds | int | `30` |  |
 | deployment.nodeSelector | object | `{}` | selector template ref: https://kubernetes.io/docs/user-guide/node-selection/ |
+| deployment.priorityClassName | string | `""` | priority class to be assigned to the pods ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/ |
 | deployment.readinessProbe.failureThreshold | int | `3` |  |
 | deployment.readinessProbe.initialDelaySeconds | int | `31` |  |
 | deployment.readinessProbe.periodSeconds | int | `10` |  |
@@ -65,7 +66,12 @@ Kubernetes: `>= 1.19-0`
 | deployment.replicaCount | int | `1` | initial number of target replications, can be different if autoscaling is enabled |
 | deployment.resources | object | `{}` |  |
 | deployment.revisionHistoryLimit | int | `3` | number of old replicas to be retained |
+| deployment.startupProbe.enabled | bool | `true` | should the startup probe be configured |
+| deployment.startupProbe.failureThreshold | int | `36` | failures tolerated before the container is restarted. Together with periodSeconds, the time the service is given to start (3 minutes by default). |
+| deployment.startupProbe.periodSeconds | int | `5` | how often to probe, in seconds |
+| deployment.startupProbe.timeoutSeconds | int | `5` | seconds after which the probe times out |
 | deployment.tolerations | list | `[]` | tolerations template ref: ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/ |
+| deployment.topologySpreadConstraints | list | `[]` | topology spread constraints template ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | deployment.updateStrategy.rollingUpdate | object | `{"maxSurge":1,"maxUnavailable":0}` | new pods will be added gradually |
 | deployment.updateStrategy.rollingUpdate.maxSurge | int | `1` | number of pods that can be created above the desired amount while updating |
 | deployment.updateStrategy.rollingUpdate.maxUnavailable | int | `0` | number of pods that can be unavailable while updating |

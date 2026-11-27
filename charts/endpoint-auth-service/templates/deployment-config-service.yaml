@@ -160,6 +160,13 @@ spec:
           emptyDir: {}
         - name: mesh-config
           emptyDir: {}
+      {{- with .Values.configService.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- with .Values.configService.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.configService.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

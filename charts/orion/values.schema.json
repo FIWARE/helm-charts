@@ -29,11 +29,19 @@
         },
         "image": {
           "repository": "quay.io/fiware/orion-ld",
-          "tag": "1.0.1",
+          "tag": "1.12.0",
           "pullPolicy": "IfNotPresent"
         },
         "additionalLabels": {},
         "additionalAnnotations": {},
+        "annotations": {
+          "type": "object",
+          "title": "Annotations of the Deployment resource",
+          "default": {},
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
         "nodeSelector": {},
         "tolerations": [],
         "affinity": {},
@@ -54,7 +62,7 @@
       },
       "autoscaling": {
         "enabled": false,
-        "apiVersion": "v2beta2",
+        "apiVersion": "v2",
         "minReplicas": 1,
         "maxReplicas": 10,
         "metrics": []
@@ -439,6 +447,30 @@
           "required": [],
           "additionalProperties": true
         },
+        "priorityClassName": {
+          "$id": "#/properties/deployment/properties/priorityClassName",
+          "type": "string",
+          "title": "The priorityClassName schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            ""
+          ]
+        },
+        "topologySpreadConstraints": {
+          "$id": "#/properties/deployment/properties/topologySpreadConstraints",
+          "type": "array",
+          "title": "The topologySpreadConstraints schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": [],
+          "examples": [
+            []
+          ],
+          "additionalItems": true,
+          "items": {
+            "$id": "#/properties/deployment/properties/topologySpreadConstraints/items"
+          }
+        },
         "nodeSelector": {
           "$id": "#/properties/deployment/properties/nodeSelector",
           "type": "object",
@@ -632,6 +664,38 @@
           "items": {
             "$id": "#/properties/deployment/properties/volumes/items"
           }
+        },
+        "extraEnv": {
+          "type": "array",
+          "title": "Additional environment variables of the broker container",
+          "default": [],
+          "items": {
+            "type": "object"
+          }
+        },
+        "podDisruptionBudget": {
+          "type": "object",
+          "title": "Pod disruption budget of the broker pods",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "minAvailable": {
+              "type": [
+                "integer",
+                "string",
+                "null"
+              ]
+            },
+            "maxUnavailable": {
+              "type": [
+                "integer",
+                "string",
+                "null"
+              ]
+            }
+          }
         }
       },
       "additionalProperties": true
@@ -700,6 +764,14 @@
           "items": {
             "$id": "#/properties/autoscaling/properties/metrics/items"
           }
+        },
+        "apiVersion": {
+          "type": "string",
+          "title": "Version of the autoscaling API",
+          "default": "v2",
+          "examples": [
+            "v2"
+          ]
         }
       },
       "additionalProperties": true
@@ -1084,6 +1156,23 @@
               "examples": [
                 "orion"
               ]
+            },
+            "uri": {
+              "type": "string",
+              "title": "MongoDB connection URI (Orion >= 4.0.0)",
+              "default": ""
+            },
+            "existingSecret": {
+              "type": "object",
+              "title": "Existing secret containing the database password",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "key": {
+                  "type": "string"
+                }
+              }
             }
           },
           "additionalProperties": true
@@ -1118,6 +1207,41 @@
         }
       },
       "additionalProperties": true
+    },
+    "test": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "image": {
+          "type": "object",
+          "properties": {
+            "repository": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "initData": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "object",
+          "properties": {
+            "repository": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            }
+          }
+        }
+      }
     }
   },
   "additionalProperties": true
